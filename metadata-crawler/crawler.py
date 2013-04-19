@@ -12,11 +12,11 @@ def parse_datafile(file_name):
 
 def url_exists(url):
   try:
-    r = urllib2.urlopen(url)
-  except urllib2.URLError as e:
-    r = e
+    response = urllib2.urlopen(url)
+  except urllib2.URLError as error:
+    response = error
     return False
-  return r.code == 200
+  return response.code == 200
 
 def main():
   # import configuration
