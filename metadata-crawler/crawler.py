@@ -20,6 +20,7 @@ import urllib2
 import flickrapi
 import time
 import pprint
+import json
 
 def parse_datafile(file_name):
   data = {}
@@ -37,87 +38,22 @@ def url_exists(url):
     return False
   return response.code == 200
 
-def build_flickr_query(api_key, photo_id, method):
-  return ('http://api.flickr.com/services/rest/'
-    '?method=' + method +
-    '&api_key=' + api_key +
-    '&photo_id=' + photo_id +
-    '&format=json')
-
-def flickr_photos_getInfo_title(flickr_result_info):
-  #title
-  if flickr_result_info.find('photo').find('title').text is None:
-    return ""
-  else:
-    return flickr_result_info.find('photo').find('title').text.strip()
-
-def flickr_photos_getInfo_description(flickr_result_info):
-  #description
-  if flickr_result_info.find('photo').find('description').text is None:
-    return None
-  else:
-    return flickr_result_info.find('photo').find('description').text.strip()
-
-def flickr_photos_getInfo_dates(flickr_result_info):
-  if flickr_result_info.find('photo').find('dates') is None:
-    return None
-  else:
-    return flickr_result_info.find('photo').find('dates')
-
-def flickr_photos_getInfo_tags_and_machine_tags(flickr_result_info):
-  tags = set()
-  machine_tags = set()
-  for tag in flickr_result_info.find('photo').getiterator('tag'):
-    tags.add(tag.attrib['raw'].strip())
-    machine_tags.add(tag.attrib['machine_tag'].strip())
-  return list(tags), list(machine_tags)
-
-def flickr_photos_getInfo_notes(flickr_result_info):
-  notes = []
-  for note in flickr_result_info.find('photo').getiterator('note'):
-    notes.append((int(note.attrib['x']), int(note.attrib['y']), int(note.attrib['w']), int(note.attrib['h']), note.text.strip()))
-
-def flickr_photos_getInfo_comments(flickr_result_info, flickrAPI, photo_id):
-  comments = set()
-  numcomments = int(flickr_result_info.find('photo').find('comments').text)
-  if numcomments > 0:
-    print "\nFetching comments (API-call! Will wait 1sec until continue)..."
-    time.sleep(1)
-
-    result_comments = flickrAPI.photos_comments_getList(photo_id=photo_id)
-    for comment in result_comments.getiterator('comment'):
-      comments.add(comment.text.strip())
-    print "Done fetching comments."
-  return list(comments)
-
-def flickr_photos_getInfo_url(flickrAPI, photo_id):
-  sizes = flickrAPI.photos_getSizes(photo_id = photo_id)
-  max_width = 0
-  url = ''
-  for size in sizes.getiterator('size'):
-    if int(size.attrib['width']) > max_width:
-      max_width = int(size.attrib['width'])
-      url = size.attrib['source']
-  return url
+def flickr_photos_getInfo(flickrAPI, photo_id):
+  flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id, format='json')
+  photos_getInfo = json.loads(flickr_result_info[14:-1])
+  return photos_getInfo
 
 def query_flickr(flickrAPI, photo_id):
-  metadata={}
+  result = {}
+  result['id'] = photo_id
 
+  result['metadata'] = {}
   print "Fetching metadata for photo_id={0} (API-call! Will wait 1sec until continue)...".format(photo_id),
   time.sleep(1)
-  flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id)
+  result['metadata']['info'] = flickr_photos_getInfo(flickrAPI, photo_id)
 
-  metadata['photo_id'] = int(photo_id)
-  metadata['title'] = flickr_photos_getInfo_title(flickr_result_info)
-  metadata['description'] = flickr_photos_getInfo_description(flickr_result_info)
-  metadata['dates'] = flickr_photos_getInfo_dates(flickr_result_info)
-  metadata['tags'], metadata['machine_tags'] = flickr_photos_getInfo_tags_and_machine_tags(flickr_result_info)
-  metadata['notes'] = flickr_photos_getInfo_notes(flickr_result_info)
-  metadata['comments'] = flickr_photos_getInfo_comments(flickr_result_info, flickrAPI, photo_id)
-  metadata['url'] = flickr_photos_getInfo_url(flickrAPI, photo_id)
+  return json.dumps(result)
 
-  print "Done."
-  return metadata
 
 def main():
   # import configuration
