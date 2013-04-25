@@ -50,29 +50,41 @@ def flickr_photos_getInfo(flickrAPI, photo_id):
 def query_flickr(flickrAPI, photo_id):
   result = {}
   result['id'] = photo_id
-  result['status_code'] = 200
-  result['status_message'] = "Success"
 
-  result['metadata'] = {}
   print "Fetching photos_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
-  time.sleep(1)
-  result['metadata']['info'] = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
+  info = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
   print "Done."
 
-  print "Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
-  time.sleep(1)
-  result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
-  print "Done."
+  if info['stat'] == 'ok':
+    result['status_code'] = 200
+    result['stat'] = "ok"
+    result['message'] = "Success"
 
-  print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
-  time.sleep(1)
-  result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes']['size']
-  print "Done."
+    result['metadata'] = {}
+    time.sleep(1)
+    result['metadata']['info'] = info['photo']
 
-  print "Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
-  time.sleep(1)
-  result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))['comments']['comment']
-  print "Done."
+    print "Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
+    print "Done."
+
+    print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes']['size']
+    print "Done."
+
+    print "Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))['comments']['comment']
+    print "Done."
+
+    print "Metadata for photo {0} sucessfully crawled".format(photo_id)
+  else:
+    result['status_code'] = 403
+    result['stat'] = "fail"
+    result['message'] = "Photo is private"
+    print "Photo {0} is private, cannot be crawled".format(photo_id)
 
   return result
 
@@ -101,12 +113,11 @@ def main():
     if url_exists(metafile.get('Web url')):
       try:
         photo_data = query_flickr(pyFlickrAPI, photo_id)
-        print "Metadata for photo {0} sucessfully crawled".format(photo_id)
       except flickrapi.FlickrError as e:
         print "Cannot retrieve metadata for photo_id: {0} ({1})".format(photo_id,e.message)
     else:
       print "Photo {0} has been deleted".format(photo_id)
-      photo_data = {"id": photo_id, "status_code": 404, "status_message": "Not Found"}
+      photo_data = {"id": photo_id, "status_code": 404, "stat": "fail", "message": "Photo not found"}
     output_path = metafile_path[:-4] + '.json'
     print "Writing data to output file {0}".format(output_path)
     with open(output_path, 'w') as outfile:
