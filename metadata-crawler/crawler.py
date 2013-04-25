@@ -38,19 +38,20 @@ def url_exists(url):
     return False
   return response.code == 200
 
-def flickr_photos_getInfo(flickrAPI, photo_id):
-  flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id, format='json')
-  photos_getInfo = json.loads(flickr_result_info[14:-1])
-  return photos_getInfo
+def flickr_parse_json(jsonString):
+  return json.loads(jsonString[14:-1])
 
 def query_flickr(flickrAPI, photo_id):
   result = {}
   result['id'] = photo_id
 
   result['metadata'] = {}
-  print "Fetching metadata for photo_id={0} (API-call! Will wait 1sec until continue)...".format(photo_id),
+  print "Fetching photo_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)...\n".format(photo_id),
   time.sleep(1)
-  result['metadata']['info'] = flickr_photos_getInfo(flickrAPI, photo_id)
+  result['metadata']['info'] = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
+  print "Fetching photo_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)...\n".format(photo_id),
+  time.sleep(1)
+  result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
 
   return json.dumps(result)
 
@@ -71,7 +72,7 @@ def main():
   if url_exists(metadata_file.get('Web url')):
     try:
       photo_meta_data = query_flickr(pyFlickrAPI, metadata_file.get('Photo id'))
-      print "Found the following metedata:\n___________________________________________________________________________\n\n"
+      print "Found the following metadata:\n___________________________________________________________________________\n\n"
       pp = pprint.PrettyPrinter(indent=3)
       pp.pprint(photo_meta_data)
     except flickrapi.FlickrError as e:
