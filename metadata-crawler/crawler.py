@@ -21,6 +21,7 @@ import flickrapi
 import time
 import pprint
 import json
+import glob
 
 def parse_datafile(file_name):
   data = {}
@@ -43,9 +44,16 @@ def flickr_photos_getInfo(flickrAPI, photo_id):
   photos_getInfo = json.loads(flickr_result_info[14:-1])
   return photos_getInfo
 
+def flickr_photos_getInfo(flickrAPI, photo_id):
+  flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id, format='json')
+  photos_getInfo = json.loads(flickr_result_info[14:-1])
+  return photos_getInfo
+
 def query_flickr(flickrAPI, photo_id):
   result = {}
   result['id'] = photo_id
+  result['status_code'] = 200
+  result['status_message'] = "Success"
 
   result['metadata'] = {}
   print "Fetching metadata for photo_id={0} (API-call! Will wait 1sec until continue)...".format(photo_id),
@@ -54,6 +62,10 @@ def query_flickr(flickrAPI, photo_id):
 
   return json.dumps(result)
 
+def find_metafiles_to_process(metadata_path):
+  txt_files  = glob.glob(metadata_path + '/*/*/*.txt')
+  json_files = glob.glob(metadata_path + '/metadata/*/*/*.json')
+  return [txt_file for txt_file in txt_files if (txt_file[:-3] + 'json') not in json_files]
 
 def main():
   # import configuration
@@ -66,16 +78,24 @@ def main():
   # initialize pyFlickrAPI
   pyFlickrAPI = flickrapi.FlickrAPI(api_key)
 
-  # open metadata file
-  metadata_file = parse_datafile(metadata_dir + '/10-19/10/100000.txt')
-  if url_exists(metadata_file.get('Web url')):
-    try:
-      photo_meta_data = query_flickr(pyFlickrAPI, metadata_file.get('Photo id'))
-      print "Found the following metedata:\n___________________________________________________________________________\n\n"
-      pp = pprint.PrettyPrinter(indent=3)
-      pp.pprint(photo_meta_data)
-    except flickrapi.FlickrError as e:
-      print "Cannot retrieve metadata for photo_id: {0} ({1})".format(photo_id,e.message)
+  metafiles_paths = find_metafiles_to_process(metadata_dir)
+
+  for metafile_path in metafiles_paths:
+    print "Parsing file: {0}".format(metafile_path)
+    metafile = parse_datafile(metafile_path)
+    photo_id = metafile.get('Photo id')
+    if url_exists(metafile.get('Web url')):
+      try:
+        photo_metadata = query_flickr(pyFlickrAPI, photo_id)
+        print "Metadata for photo {0} sucessfully crawled".format(photo_id)
+      except flickrapi.FlickrError as e:
+        print "Cannot retrieve metadata for photo_id: {0} ({1})".format(photo_id,e.message)
+    else:
+      print "Photo {0} has been deleted".format(photo_id)
+      photo_metadata = json.dumps({"id": photo_id, "status_code": 404, "status_message": "Not Found"})
+
+    pp = pprint.PrettyPrinter(indent=3)
+    pp.pprint(json.loads(photo_metadata))
 
     print "\n\nFinished: ",time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
 
