@@ -52,6 +52,9 @@ def query_flickr(flickrAPI, photo_id):
   print "Fetching photo_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)...\n".format(photo_id),
   time.sleep(1)
   result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
+  print "Fetching photo_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)...\n".format(photo_id),
+  time.sleep(1)
+  result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes']['size']
 
   return json.dumps(result)
 
