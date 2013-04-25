@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+################################################################################
+# Script crawls available metadata from Flickr for given metadata files.
+#
+# Specify the FlickrAPI-Key as well as folder for metadata in the
+# config file: ../config.cfg
+#
+# Use config.cfg.template as template for this file
+#
+#
+# author: nicolas fricke
+# mail: nicolas.fricke@student.hpi.uni-potsdam.de
+################################################################################
+
 import ConfigParser
 import sys
 import urllib2
