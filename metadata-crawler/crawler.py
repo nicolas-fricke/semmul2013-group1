@@ -68,7 +68,7 @@ def query_flickr(flickrAPI, photo_id):
 
 def find_metafiles_to_process(metadata_path):
   txt_files  = glob.glob(metadata_path + '/*/*/*.txt')
-  json_files = glob.glob(metadata_path + '/metadata/*/*/*.json')
+  json_files = glob.glob(metadata_path + '/*/*/*.json')
   return [txt_file for txt_file in txt_files if (txt_file[:-3] + 'json') not in json_files]
 
 def main():
