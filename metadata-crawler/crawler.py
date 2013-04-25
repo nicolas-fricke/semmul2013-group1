@@ -39,10 +39,8 @@ def url_exists(url):
     return False
   return response.code == 200
 
-def flickr_photos_getInfo(flickrAPI, photo_id):
-  flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id, format='json')
-  photos_getInfo = json.loads(flickr_result_info[14:-1])
-  return photos_getInfo
+def flickr_parse_json(jsonString):
+  return json.loads(jsonString[14:-1])
 
 def flickr_photos_getInfo(flickrAPI, photo_id):
   flickr_result_info = flickrAPI.photos_getInfo(photo_id=photo_id, format='json')
@@ -56,9 +54,14 @@ def query_flickr(flickrAPI, photo_id):
   result['status_message'] = "Success"
 
   result['metadata'] = {}
-  print "Fetching metadata for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+  print "Fetching photo_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
   time.sleep(1)
-  result['metadata']['info'] = flickr_photos_getInfo(flickrAPI, photo_id)
+  result['metadata']['info'] = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
+  print "Done."
+
+  print "Fetching photo_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)...".format(photo_id),
+  time.sleep(1)
+  result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
   print "Done."
 
   return result
