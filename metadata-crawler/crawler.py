@@ -71,7 +71,7 @@ def query_flickr(flickrAPI, photo_id):
 
     print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
     time.sleep(1)
-    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes']['size']
+    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes'].get('size', [])
     print "Done."
 
     if info['photo']['comments']['_content'] != '0':
