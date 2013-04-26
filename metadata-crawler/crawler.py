@@ -77,7 +77,7 @@ def query_flickr(flickrAPI, photo_id):
     if info['photo']['comments']['_content'] != '0':
       print "Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
       time.sleep(1)
-      result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))['comments']['comment']
+      result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))['comments'].get('comment', [])
     else:
       result['metadata']['comments'] = []
     print "Done."
