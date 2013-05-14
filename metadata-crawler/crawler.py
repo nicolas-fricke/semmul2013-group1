@@ -57,7 +57,15 @@ def query_flickr(flickrAPI, photo_id):
   result['id'] = photo_id
 
   print_status("Fetching photos_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-  info = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
+  attempts = 0
+  while True:
+    attempts += 1
+    try:
+      time.sleep(1)
+      info = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
+      break
+    except urllib2.URLError as e:
+      print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
   print "Done."
 
   if info['stat'] == 'ok':
@@ -70,31 +78,66 @@ def query_flickr(flickrAPI, photo_id):
     result['metadata']['info'] = info['photo']
 
     print_status("Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-    time.sleep(1)
-    result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
+    attempts = 0
+    while True:
+      attempts += 1
+      try:
+        time.sleep(1)
+        result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
+        break
+      except urllib2.URLError as e:
+        print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
     if info['photo']['comments']['_content'] != '0':
       print_status("Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-      time.sleep(1)
-      result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))
+      attempts = 0
+      while True:
+        attempts += 1
+        try:
+          time.sleep(1)
+          result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))
+          break
+        except urllib2.URLError as e:
+          print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     else:
       result['metadata']['comments'] = []
     print "Done."
 
     print_status("Fetching photos_getExif for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-    time.sleep(1)
-    result['metadata']['exif'] = flickr_parse_json(flickrAPI.photos_getExif(photo_id=photo_id, format='json'))
+    attempts = 0
+    while True:
+      attempts += 1
+      try:
+        time.sleep(1)
+        result['metadata']['exif'] = flickr_parse_json(flickrAPI.photos_getExif(photo_id=photo_id, format='json'))
+        break
+      except urllib2.URLError as e:
+        print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
     print_status("Fetching photos_geo_getLocation for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-    time.sleep(1)
-    result['metadata']['geo'] = flickr_parse_json(flickrAPI.photos_geo_getLocation(photo_id=photo_id, format='json'))
+    attempts = 0
+    while True:
+      attempts += 1
+      try:
+        time.sleep(1)
+        result['metadata']['geo'] = flickr_parse_json(flickrAPI.photos_geo_getLocation(photo_id=photo_id, format='json'))
+        break
+      except urllib2.URLError as e:
+        print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
     print_status("Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
-    time.sleep(1)
-    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))
+    attempts = 0
+    while True:
+      attempts += 1
+      try:
+        time.sleep(1)
+        result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))
+        break
+      except urllib2.URLError as e:
+        print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
     print_status("Metadata for photo {0} sucessfully crawled".format(photo_id))
