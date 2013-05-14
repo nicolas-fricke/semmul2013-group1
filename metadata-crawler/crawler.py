@@ -74,7 +74,6 @@ def query_flickr(flickrAPI, photo_id):
     result['message'] = "Success"
 
     result['metadata'] = {}
-    time.sleep(1)
     result['metadata']['info'] = info['photo']
 
     print_status("Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
@@ -140,7 +139,7 @@ def query_flickr(flickrAPI, photo_id):
         print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
-    print_status("Metadata for photo {0} sucessfully crawled".format(photo_id))
+    print_status("Metadata for photo {0} sucessfully crawled\n".format(photo_id))
   else:
     result['status_code'] = 403
     result['stat'] = "fail"
