@@ -47,11 +47,16 @@ def flickr_photos_getInfo(flickrAPI, photo_id):
   photos_getInfo = json.loads(flickr_result_info[14:-1])
   return photos_getInfo
 
+def print_status(message):
+  sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
+  sys.stdout.write(message)
+  sys.stdout.flush()
+
 def query_flickr(flickrAPI, photo_id):
   result = {}
   result['id'] = photo_id
 
-  print "Fetching photos_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+  print_status("Fetching photos_getInfo for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
   info = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
   print "Done."
 
@@ -64,40 +69,40 @@ def query_flickr(flickrAPI, photo_id):
     time.sleep(1)
     result['metadata']['info'] = info['photo']
 
-    print "Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    print_status("Fetching photos_getAllContexts for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
     time.sleep(1)
     result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
     print "Done."
 
     if info['photo']['comments']['_content'] != '0':
-      print "Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+      print_status("Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
       time.sleep(1)
       result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))
     else:
       result['metadata']['comments'] = []
     print "Done."
 
-    print "Fetching photos_getExif for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    print_status("Fetching photos_getExif for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
     time.sleep(1)
     result['metadata']['exif'] = flickr_parse_json(flickrAPI.photos_getExif(photo_id=photo_id, format='json'))
     print "Done."
 
-    print "Fetching photos_geo_getLocation for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    print_status("Fetching photos_geo_getLocation for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
     time.sleep(1)
     result['metadata']['geo'] = flickr_parse_json(flickrAPI.photos_geo_getLocation(photo_id=photo_id, format='json'))
     print "Done."
 
-    print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    print_status("Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id))
     time.sleep(1)
     result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))
     print "Done."
 
-    print "Metadata for photo {0} sucessfully crawled".format(photo_id)
+    print_status("Metadata for photo {0} sucessfully crawled".format(photo_id))
   else:
     result['status_code'] = 403
     result['stat'] = "fail"
     result['message'] = "Photo is private"
-    print "Photo {0} is private, cannot be crawled".format(photo_id)
+    print_status("Photo {0} is private) cannot be crawled \n".format(photo_id))
 
   return result
 
@@ -121,24 +126,25 @@ def main():
   metafiles_paths.sort()
 
   for metafile_path in metafiles_paths:
-    print "Parsing file: {0}".format(metafile_path)
+    print_status("Parsing file: {0}\n".format(metafile_path))
     metafile = parse_datafile(metafile_path)
     photo_id = metafile.get('Photo id')
     if url_exists(metafile.get('Web url')):
       try:
         photo_data = query_flickr(pyFlickrAPI, photo_id)
       except flickrapi.FlickrError as e:
-        print "Cannot retrieve metadata for photo_id: {0} ({1})".format(photo_id,e.message)
+        print_status("Cannot retrieve metadata for photo_id: {0} ({1})\n".format(photo_id,e.message))
     else:
-      print "Photo {0} has been deleted".format(photo_id)
+      print_status("Photo {0} has been deleted\n".format(photo_id))
       photo_data = {"id": photo_id, "status_code": 404, "stat": "fail", "message": "Photo not found"}
     output_path = metafile_path[:-4] + '.json'
-    print "Writing data to output file {0}".format(output_path)
+    print_status("Writing data to output file {0}... ".format(output_path))
     with open(output_path, 'w') as outfile:
       json.dump(photo_data, outfile)
-    print "Done processing photo {0} from file {1}.\n\n".format(photo_id, metafile_path)
+    print "Done."
+    print_status("Done processing photo {0} from file {1}.\n\n".format(photo_id, metafile_path))
 
-  print "\n\nFinished: ",time.strftime("%Y/%m/%d %H:%M:%S", time.localtime())
+  print_status("\n\nFinished!\n\n")
 
 if __name__ == '__main__':
     main()
