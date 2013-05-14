@@ -69,17 +69,27 @@ def query_flickr(flickrAPI, photo_id):
     result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
     print "Done."
 
-    print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
-    time.sleep(1)
-    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))['sizes'].get('size', [])
-    print "Done."
-
     if info['photo']['comments']['_content'] != '0':
       print "Fetching photos_comments_getList for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
       time.sleep(1)
-      result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))['comments'].get('comment', [])
+      result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))
     else:
       result['metadata']['comments'] = []
+    print "Done."
+
+    print "Fetching photos_getExif for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['exif'] = flickr_parse_json(flickrAPI.photos_getExif(photo_id=photo_id, format='json'))
+    print "Done."
+
+    print "Fetching photos_geo_getLocation for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['geo'] = flickr_parse_json(flickrAPI.photos_geo_getLocation(photo_id=photo_id, format='json'))
+    print "Done."
+
+    print "Fetching photos_getSizes for photo_id={0} (API-call! Will wait 1sec until continue)... ".format(photo_id),
+    time.sleep(1)
+    result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))
     print "Done."
 
     print "Metadata for photo {0} sucessfully crawled".format(photo_id)
@@ -108,6 +118,7 @@ def main():
   pyFlickrAPI = flickrapi.FlickrAPI(api_key)
 
   metafiles_paths = find_metafiles_to_process(metadata_dir)
+  metafiles_paths.sort()
 
   for metafile_path in metafiles_paths:
     print "Parsing file: {0}".format(metafile_path)
