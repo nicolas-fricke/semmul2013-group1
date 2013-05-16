@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-################################################################################
+######################################################################################
 # Preprocesses the tags from the metadata crawling
 #
 # config file: ../config.cfg
@@ -9,9 +9,9 @@
 # Use config.cfg.template as template for this file
 #
 #
-# author: tino junge
-# mail: tino.junge@student.hpi.uni-potsdam.de
-################################################################################
+# authors: tino junge, mandy roick
+# mail: tino.junge@student.hpi.uni-potsdam.de, mandy.roick@student.hpi.uni-potsdam.de
+######################################################################################
 
 import ConfigParser
 from collections import Counter
@@ -46,13 +46,13 @@ def main():
   # read json files from metadata directory
   json_files = get_json_files(metadata_dir)
 
-  # get tags and count them
-  counter = Counter()
+  # get list of all tags and count there co-occurences
+  tag_histogram = Counter()
   for json_file in json_files:
     tag_list = read_tags_from_file(json_file)
     if not tag_list == None:
-      counter.update(tag_list)
-  print counter
+      tag_histogram.update(tag_list)
+  print tag_histogram
 
 if __name__ == '__main__':
     main()
