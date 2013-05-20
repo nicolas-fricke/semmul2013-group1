@@ -80,6 +80,11 @@ def main():
     laplace_matrice[tag_dict[tag2]][tag_dict[tag1]] = -1
 
   np.set_printoptions(threshold='nan')
+
+  # create diagonal matrice with degree of vertices
+  for i,line in enumerate(laplace_matrice):
+    laplace_matrice[i][i] = sum(line)*(-1)
+
   print  laplace_matrice
 
 if __name__ == '__main__':
