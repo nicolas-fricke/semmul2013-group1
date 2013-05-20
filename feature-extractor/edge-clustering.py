@@ -19,6 +19,10 @@ import sys
 import time
 import json
 import glob
+from collections import defaultdict
+from SimpleCV import Image
+from SimpleCV import EdgeHistogramFeatureExtractor
+from Pycluster import kcluster
 
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
@@ -49,8 +53,42 @@ def main():
   metadata_dir = '../' + config.get('Directories', 'metadata-dir')
 
   metajson_files = find_metajsons_to_process(metadata_dir)
-  print get_small_image_url(parse_json_file(metajson_files[2]))
 
+  print_status("Reading metadata files, loading images and calculating edge histograms.... ")
+  edgeExtractor = EdgeHistogramFeatureExtractor()
+  images = []
+  for file_number, metajson_file in enumerate(metajson_files):
+    metadata = parse_json_file(metajson_file)
+    if metadata["stat"] == "ok":
+      data = {}
+      url      = get_small_image_url(metadata)
+      data["image_id"]  = metadata["id"]
+      data["file_path"] = metajson_file
+      data["url"]       = url
+      data["edges"]     = edgeExtractor.extract(Image(url))
+      images.append(data)
+    if file_number > 100:
+      break
+  print "Done."
+
+  print_status("Building data structure for clustering.... ")
+  edges = []
+  for image_data in images:
+    edges.append(image_data["edges"])
+  print "Done."
+
+  print_status("Clustering images by edge histograms via k-means algorithm.... ")
+  clustered_images, value, _ = kcluster(edges, 20)
+  print "Done."
+
+  clusters = defaultdict(list)
+  for index, cluster in enumerate(clustered_images):
+    clusters[cluster].append(images[index])
+
+  for cluster_number, images in clusters.iteritems():
+    print "======================== cluster: %d ========================" % cluster_number
+    for image in images:
+      print image["url"]
 
 if __name__ == '__main__':
     main()
