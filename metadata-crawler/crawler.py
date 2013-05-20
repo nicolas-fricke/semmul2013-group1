@@ -64,7 +64,7 @@ def query_flickr(flickrAPI, photo_id):
       time.sleep(1)
       info = flickr_parse_json(flickrAPI.photos_getInfo(photo_id=photo_id, format='json'))
       break
-    except urllib2.URLError as e:
+    except Exception as e:
       print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
   print "Done."
 
@@ -84,7 +84,7 @@ def query_flickr(flickrAPI, photo_id):
         time.sleep(1)
         result['metadata']['contexts'] = flickr_parse_json(flickrAPI.photos_getAllContexts(photo_id=photo_id, format='json'))
         break
-      except urllib2.URLError as e:
+      except Exception as e:
         print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
@@ -97,7 +97,7 @@ def query_flickr(flickrAPI, photo_id):
           time.sleep(1)
           result['metadata']['comments'] = flickr_parse_json(flickrAPI.photos_comments_getList(photo_id=photo_id, format='json'))
           break
-        except urllib2.URLError as e:
+        except Exception as e:
           print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     else:
       result['metadata']['comments'] = []
@@ -111,7 +111,7 @@ def query_flickr(flickrAPI, photo_id):
         time.sleep(1)
         result['metadata']['exif'] = flickr_parse_json(flickrAPI.photos_getExif(photo_id=photo_id, format='json'))
         break
-      except urllib2.URLError as e:
+      except Exception as e:
         print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
@@ -123,7 +123,7 @@ def query_flickr(flickrAPI, photo_id):
         time.sleep(1)
         result['metadata']['geo'] = flickr_parse_json(flickrAPI.photos_geo_getLocation(photo_id=photo_id, format='json'))
         break
-      except urllib2.URLError as e:
+      except Exception as e:
         print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
@@ -135,7 +135,7 @@ def query_flickr(flickrAPI, photo_id):
         time.sleep(1)
         result['metadata']['sizes'] = flickr_parse_json(flickrAPI.photos_getSizes(photo_id=photo_id, format='json'))
         break
-      except urllib2.URLError as e:
+      except Exception as e:
         print_status("\nURLError, retrying (attempt {0})... ".format(attempts))
     print "Done."
 
