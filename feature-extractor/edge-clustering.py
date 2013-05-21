@@ -44,6 +44,25 @@ def get_small_image_url(metajson):
     return None
   return [entry["source"] for entry in sizes["sizes"]["size"] if entry["label"] == "Small"][0]
 
+def write_clusters_to_html(clusters, html_file="out.html"):
+  output_html =  ( "<html>"
+                   "  <head>"
+                   "    <title>Cluster Visualization</title>"
+                   "  </head>"
+                   "  <body>"
+                   "    <table border='1'>"
+                   "      <tr><th>Cluster</th><th>Images</th></tr>")
+  for cluster_number, images in clusters.iteritems():
+    output_html += "      <tr><td>%d</td><td>" % cluster_number
+    for image in images:
+      output_html += "        <img src='%s' />" % image["url"]
+    output_html += "      </td></tr>"
+  output_html += ( "    </table>"
+                   "  </body>"
+                   "</html>")
+  with open(html_file, "w") as output_file:
+    output_file.write(output_html)
+
 def main():
   # import configuration
   config = ConfigParser.SafeConfigParser()
@@ -65,7 +84,11 @@ def main():
       data["image_id"]  = metadata["id"]
       data["file_path"] = metajson_file
       data["url"]       = url
-      data["edges"]     = edgeExtractor.extract(Image(url))
+      try:
+        image = Image(url)
+      except Exception:
+        continue
+      data["edges"]     = edgeExtractor.extract(image)
       images.append(data)
     if file_number > 100:
       break
@@ -85,10 +108,7 @@ def main():
   for index, cluster in enumerate(clustered_images):
     clusters[cluster].append(images[index])
 
-  for cluster_number, images in clusters.iteritems():
-    print "======================== cluster: %d ========================" % cluster_number
-    for image in images:
-      print image["url"]
+  write_clusters_to_html(clusters)
 
 if __name__ == '__main__':
     main()
