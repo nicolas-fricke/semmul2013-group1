@@ -23,6 +23,9 @@ from nltk.corpus import wordnet as wn
 import numpy as np
 from scipy import linalg
 
+################     Reading of Files       ####################################
+
+# probably add preprocessing steps for tags
 def read_tags_from_json(json_data):
   tag_list = []
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
@@ -34,7 +37,7 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/1000*.json')
+  return glob.glob(metadata_dir + '/*/*/10000*.json')
 
 def read_tags_from_file(json_file):
   f = open(json_file)
@@ -45,17 +48,77 @@ def read_tags_from_file(json_file):
     return read_tags_from_json(json_data)
   return None
 
-def main():
-  # import configuration
+def import_metadata_dir_of_config(path):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
-  metadata_dir = '../' + config.get('Directories', 'metadata-dir')
+  return '../' + config.get('Directories', 'metadata-dir')
+
+################     Tag Clustering       ####################################
+
+################     Laplace Matrix       ###################################
+def calculation_of_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram):
+  negative_adjacency_matrix = np.zeros((len(tag_index_dict),len(tag_index_dict)))
+  for (tag1, tag2) in tag_co_occurrence_histogram:
+    negative_adjacency_matrix[tag_index_dict[tag1]][tag_index_dict[tag2]] = -1
+    negative_adjacency_matrix[tag_index_dict[tag2]][tag_index_dict[tag1]] = -1
+  return negative_adjacency_matrix
+
+# set diagonal of laplace to degrees of vertices
+def add_diagonal_matrix_to_adjacency(matrix):
+  for i,line in enumerate(matrix):
+    matrix[i][i] = sum(line)*(-1)
+  return matrix
+
+def calculation_of_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram):
+  laplace_matrix = calculation_of_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram)
+  laplace_matrix = add_diagonal_matrix_to_adjacency(laplace_matrix)
+  return laplace_matrix
+
+################     Spectral Bisection       ###################################
+def calculate_second_highest_eigen_vector(eigen_values, eigen_vectors):
+  index_of_highest_eigen_value = 0
+  index_of_second_highest_eigen_value = 0
+  for index, eigen_value in enumerate(eigen_values):
+    if(eigen_value > eigen_values[index_of_second_highest_eigen_value]):
+      if(eigen_value > eigen_values[index_of_highest_eigen_value]):
+        index_of_second_highest_eigen_value = index_of_highest_eigen_value
+        index_of_highest_eigen_value = index
+      else:
+        index_of_second_highest_eigen_value = index
+
+  return eigen_vectors[index_of_second_highest_eigen_value]
+
+def create_clusters(separation_vector, index_tag_dict):
+  tag_cluster1 = []
+  tag_cluster2 = []
+
+  # '>=' instead of '>' results in overlapping clusters
+  for index, vector_value in enumerate(separation_vector):
+    if vector_value >= 0:
+      tag_cluster1.append(index_tag_dict[index])
+    if vector_value <= 0:
+      tag_cluster2.append(index_tag_dict[index])
+
+  return tag_cluster1, tag_cluster2
+
+def sepctral_bisection(matrix, index_tag_dict):
+  eigen_values, eigen_vectors = linalg.eig(matrix)
+  second_highest_eigen_vector = calculate_second_highest_eigen_vector(eigen_values, eigen_vectors)
+  return create_clusters(second_highest_eigen_vector, index_tag_dict)
+
+def calculation_of_Q():
+  return
+
+def main():
+  # import configuration
+  metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
   # read json files from metadata directory
   json_files = get_json_files(metadata_dir)
   print "Done Reading " + str(len(json_files)) + " Json Files"
 
   # get list of all tags and count there co-occurrences
+
   tag_histogram = Counter()
   tag_co_occurrence_histogram = Counter()
   for json_file in json_files:
@@ -75,62 +138,15 @@ def main():
   #print tag_dict
 
   # create laplace matrice
-  laplace_matrice = np.zeros((len(tag_histogram),len(tag_histogram)))
-  for (tag1, tag2) in tag_co_occurrence_histogram:
-    laplace_matrice[tag_dict[tag1]][tag_dict[tag2]] = -1
-    laplace_matrice[tag_dict[tag2]][tag_dict[tag1]] = -1
-  print "Done creating laplace_matrice"
+  laplace_matrix = calculation_of_laplace_matrix(tag_dict, tag_co_occurrence_histogram)
+  print "Done creating laplace_matrix"
 
-  # create diagonal matrice with degree of vertices
-  for i,line in enumerate(laplace_matrice):
-    laplace_matrice[i][i] = sum(line)*(-1)
-  np.set_printoptions(threshold='nan')
-  print "Done creating diagonal matrice"
-  #print  laplace_matrice
-
-  # calculate second highest eigenvalue and eigenvector of laplace_matrice
-  e_vals, e_vecs = linalg.eig(laplace_matrice)
-  #print np.linalg.eig(laplace_matrice)
-  highest_eval = 0
-  highest_index = 0
-  sec_highest_eval = 0
-  sec_highest_index = 0
-  for i,e_val in enumerate(e_vals):
-    if e_val > highest_eval:
-      sec_highest_eval = highest_eval
-      sec_highest_index = highest_index
-      highest_eval = e_val
-      highest_index = i
-    elif e_val > sec_highest_eval:
-      sec_highest_eval = e_val
-      sec_highest_index = i
-
-  sec_highest_evec = e_vecs[sec_highest_index]
-  print "Done calculating sec_highest_eval"
-  #print "Highest e_val, e_vec"
-  #print highest_eval ,  e_vecs[highest_index]
-  #print "Second Highest e_val, e_vec"
-  #print sec_highest_eval , e_vecs[sec_highest_index]
-
-  # create inverse tag_dict for accesing tags through index
-  tag_dict_reverse = dict(zip(tag_dict.values(), tag_dict.keys()))
-  print "Done creating tag_dict_reverse"
-
-  # group tags in 2 clusters corresponding to their value in the second highest eigenvector (<0 and >0, =0 in both clusters)
-  cluster1 = []
-  cluster2 = []
-  for i,val in enumerate(sec_highest_evec):
-    if val > 0:
-      cluster1.append(tag_dict_reverse[i])
-    elif val < 0:
-      cluster2.append(tag_dict_reverse[i])
-    elif val == 0:
-      cluster1.append(tag_dict_reverse[i])
-      cluster2.append(tag_dict_reverse[i])
-
+  # create two overlapping clusters
+  index_tag_dict = dict(zip(tag_dict.values(), tag_dict.keys()))
+  cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
   print "Done group into 2 child cluster"
-  #pprint.pprint(cluster1)
-  #pprint.pprint(cluster2)
+  pprint.pprint(cluster1)
+  pprint.pprint(cluster2)
 
   # calculate modularity function Q
   # --------------------------------------------
