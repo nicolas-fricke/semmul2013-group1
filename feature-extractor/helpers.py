@@ -4,6 +4,7 @@ from glob import glob
 import json
 import sys
 import time
+import os
 
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
@@ -25,7 +26,7 @@ def get_small_image_url(metajson):
     return None
   return [entry["source"] for entry in sizes["sizes"]["size"] if entry["label"] == "Small"][0]
 
-def write_clusters_to_html(clusters, html_file="out.html"):
+def write_clusters_to_html(clusters, html_file_path="out.html", open_in_browser=False):
   output_html =  ( "<html>\n"
                    "  <head>\n"
                    "    <title>Cluster Visualization</title>\n"
@@ -47,8 +48,13 @@ def write_clusters_to_html(clusters, html_file="out.html"):
   output_html += ( "    </table>\n"
                    "  </body>\n"
                    "</html>")
-  with open(html_file, "w") as output_file:
+  with open(html_file_path, "w") as output_file:
     output_file.write(output_html)
+  if open_in_browser:
+    try:
+      os.system("open -a Google\ Chrome " + html_file_path)
+    except BaseException:
+      return
 
 def split_image_into_bins(image, bins):
   bins_sqrt = int(sqrt(bins))
