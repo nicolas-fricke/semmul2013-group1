@@ -72,7 +72,7 @@ def main():
   for index, cluster in enumerate(clustered_images):
     clusters[cluster].append(images[index])
 
-  write_clusters_to_html(clusters)
+  write_clusters_to_html(clusters, open_in_browser=True)
 
 if __name__ == '__main__':
     main()
