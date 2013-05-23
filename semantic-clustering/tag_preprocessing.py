@@ -108,9 +108,61 @@ def sepctral_bisection(matrix, index_tag_dict):
 
 ################     Spectral Bisection       ###################################
 
+def calculate_parent_weight(tag_co_occurrence_histogram):
+  return 2*sum(tag_co_occurrence_histogram.values())
 
-def calculate_Q():
-  return
+def calculate_child_weights(tag_co_occurrence_histogram, cluster1, cluster2):
+  child1_weight = 0
+  child2_weight = 0
+  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
+    if tag1 in cluster1 and tag2 in cluster1:
+      child1_weight += weight
+    if tag1 in cluster2 and tag2 in cluster2:
+      child2_weight += weight
+
+  # weights need to be doubled because we have to regard the opposite direction of every edge
+  child1_weight *= 2
+  child2_weight *= 2
+  return child1_weight, child2_weight
+
+def calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, cluster2):
+  inter_cluster_child1_parent_weight = 0
+  inter_cluster_child2_parent_weight = 0
+  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
+    if tag1 in cluster1 and tag2 in cluster2:
+      inter_cluster_child1_parent_weight += weight
+    if tag1 in cluster2 and tag2 in cluster1:
+      inter_cluster_child2_parent_weight += weight
+  return inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight
+
+def calculate_modularity_of_child_cluster(child_weight, inter_cluster_weight, parent_weight):
+  return ((child_weight/parent_weight) - ((inter_cluster_weight/parent_weight)*(inter_cluster_weight/parent_weight)))
+
+# calculate modularity function Q
+def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
+  # A(V,V)
+  parent_weight = calculate_parent_weight(tag_co_occurrence_histogram)
+  print "Done calculate parent_weight: " + str(parent_weight)
+
+  # A(Vc,Vc)
+  child1_weight, child2_weight = calculate_child_weights(tag_co_occurrence_histogram, cluster1, cluster2)
+  print "Done calculate child weights"
+  print "child1_weight %2d" % child1_weight
+  print "child2_weight %2d" % child2_weight
+
+  # A(Vc,V)
+  inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight = calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, cluster2)
+  inter_cluster_child1_parent_weight += child1_weight
+  inter_cluster_child2_parent_weight += child2_weight
+  print "inter_cluster_child1_parent_weight: " + str(inter_cluster_child1_parent_weight)
+  print "inter_cluster_child2_parent_weight: " + str(inter_cluster_child2_parent_weight)
+
+  # calculate modularity Q
+  q1 = calculate_modularity_of_child_cluster(child1_weight, inter_cluster_child1_parent_weight, parent_weight)
+  q2 = calculate_modularity_of_child_cluster(child2_weight, inter_cluster_child2_parent_weight, parent_weight)
+  print "q1: " + str(q1)
+  print  "q2: " + str(q2)
+  return q1 + q2
 
 def main():
   # import configuration
@@ -151,43 +203,7 @@ def main():
   #pprint.pprint(cluster1)
   #pprint.pprint(cluster2)
 
-  # calculate modularity function Q
-  # --------------------------------------------
-  # sum up edge weights of parent cluster A(V,V)
-  parent_weight = 2*sum(tag_co_occurrence_histogram.values())
-  print "Done calculate parent_weight"
-
-  # sum up edge weights of two child clusters A(Vc,Vc)
-  child1_weight = 0
-  child2_weight = 0
-  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
-    if tag1 in cluster1 and tag2 in cluster1:
-      child1_weight += weight
-    if tag1 in cluster2 and tag2 in cluster2:
-      child2_weight += weight
-
-  child1_weight *= 2
-  child2_weight *= 2
-  print "Done calculate child weights"
-  #print "child1_weight %2d" % child1_weight
-  #print "child2_weight %2d" % child2_weight
-
-  # sum up edge weight for intra cluster weights A(Vc,V)
-  intra_cluster_child1_parent_weight = 0
-  intra_cluster_child2_parent_weight = 0
-  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
-    if tag1 in cluster1 and tag2 in cluster2:
-      intra_cluster_child1_parent_weight += weight
-    if tag1 in cluster2 and tag2 in cluster1:
-      intra_cluster_child2_parent_weight += weight
-
-  intra_cluster_child1_parent_weight += child1_weight
-  intra_cluster_child2_parent_weight += child2_weight
-
-  # calculate modularity Q
-  q1 = child1_weight/parent_weight - ((intra_cluster_child1_parent_weight/parent_weight)*(intra_cluster_child1_parent_weight/parent_weight))
-  q2 = child2_weight/parent_weight - ((intra_cluster_child2_parent_weight/parent_weight)*(intra_cluster_child2_parent_weight/parent_weight))
-  q = q1 + q2
+  q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
 
   print q
 
