@@ -56,7 +56,7 @@ def import_metadata_dir_of_config(path):
 ################     Tag Clustering       ####################################
 
 ################     Laplace Matrix       ###################################
-def calculation_of_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram):
+def calculate_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram):
   negative_adjacency_matrix = np.zeros((len(tag_index_dict),len(tag_index_dict)))
   for (tag1, tag2) in tag_co_occurrence_histogram:
     negative_adjacency_matrix[tag_index_dict[tag1]][tag_index_dict[tag2]] = -1
@@ -69,8 +69,8 @@ def add_diagonal_matrix_to_adjacency(matrix):
     matrix[i][i] = sum(line)*(-1)
   return matrix
 
-def calculation_of_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram):
-  laplace_matrix = calculation_of_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram)
+def calculate_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram):
+  laplace_matrix = calculate_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram)
   laplace_matrix = add_diagonal_matrix_to_adjacency(laplace_matrix)
   return laplace_matrix
 
@@ -106,7 +106,10 @@ def sepctral_bisection(matrix, index_tag_dict):
   second_highest_eigen_vector = calculate_second_highest_eigen_vector(eigen_values, eigen_vectors)
   return create_clusters(second_highest_eigen_vector, index_tag_dict)
 
-def calculation_of_Q():
+################     Spectral Bisection       ###################################
+
+
+def calculate_Q():
   return
 
 def main():
@@ -138,15 +141,15 @@ def main():
   #print tag_dict
 
   # create laplace matrice
-  laplace_matrix = calculation_of_laplace_matrix(tag_dict, tag_co_occurrence_histogram)
+  laplace_matrix = calculate_laplace_matrix(tag_dict, tag_co_occurrence_histogram)
   print "Done creating laplace_matrix"
 
   # create two overlapping clusters
   index_tag_dict = dict(zip(tag_dict.values(), tag_dict.keys()))
   cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
   print "Done group into 2 child cluster"
-  pprint.pprint(cluster1)
-  pprint.pprint(cluster2)
+  #pprint.pprint(cluster1)
+  #pprint.pprint(cluster2)
 
   # calculate modularity function Q
   # --------------------------------------------
