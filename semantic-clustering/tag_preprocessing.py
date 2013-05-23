@@ -39,7 +39,7 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/10000*.json')
+  return glob.glob(metadata_dir + '/*/*/10*.json')
 
 def read_tags_from_file(json_file):
   f = open(json_file)
@@ -223,6 +223,7 @@ def split_co_occurence_histogram(co_occurrence_histogram, cluster1, cluster2):
   return co_occurrence_histogram1, co_occurrence_histogram2
 
 def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
+  tag_clusters = []
   cluster1, cluster2 = partitioning(tag_index_dict, tag_co_occurrence_histogram)
    # calculate modularity function Q whether partition is useful
   q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
@@ -236,12 +237,13 @@ def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
     #print tag_co_occurrence_histogram1
     #print tag_co_occurrence_histogram2
     if len(cluster1) > 1:
-      recursive_partitioning(tag_index_dict1, tag_co_occurrence_histogram1)
+      tag_clusters.extend(recursive_partitioning(tag_index_dict1, tag_co_occurrence_histogram1))
     if len(cluster2) > 1:
-      recursive_partitioning(tag_index_dict2, tag_co_occurrence_histogram2)
+      tag_clusters.extend(recursive_partitioning(tag_index_dict2, tag_co_occurrence_histogram2))
   else:
     print "------------------------- Q < 0 ------------------------------"
-    print tag_index_dict
+    return [tag_index_dict.keys()]
+  return tag_clusters
 
 ################     Main        ###################################
 
@@ -261,7 +263,9 @@ def main():
   print "Done Tag Dict"
   #print tag_index_dict
 
-  recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram)
+  tag_clusters = recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram)
+  for tag_cluster in tag_clusters:
+    print tag_cluster
 
 if __name__ == '__main__':
     main()
