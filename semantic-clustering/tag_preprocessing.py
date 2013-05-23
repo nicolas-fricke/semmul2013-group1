@@ -53,6 +53,16 @@ def import_metadata_dir_of_config(path):
   config.read('../config.cfg')
   return '../' + config.get('Directories', 'metadata-dir')
 
+def calculate_tag_histogram_and_co_occurence_histogram(json_files):
+  tag_histogram = Counter()
+  tag_co_occurrence_histogram = Counter()
+  for json_file in json_files:
+    tag_list = read_tags_from_file(json_file)
+    if not tag_list == None:
+      tag_histogram.update(tag_list)
+      tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
+  return tag_histogram, tag_co_occurrence_histogram
+
 ################     Tag Clustering       ####################################
 
 ################     Laplace Matrix       ###################################
@@ -103,7 +113,9 @@ def create_clusters(separation_vector, index_tag_dict):
 
 def sepctral_bisection(matrix, index_tag_dict):
   eigen_values, eigen_vectors = linalg.eig(matrix)
+  print "\t Done calculate eigenvalues"
   second_highest_eigen_vector = calculate_second_highest_eigen_vector(eigen_values, eigen_vectors)
+  print "\t Done find vector for second highest eigenvalue"
   return create_clusters(second_highest_eigen_vector, index_tag_dict)
 
 ################     Spectral Bisection       ###################################
@@ -142,7 +154,7 @@ def calculate_modularity_of_child_cluster(child_weight, inter_cluster_weight, pa
 def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
   # A(V,V)
   parent_weight = calculate_parent_weight(tag_co_occurrence_histogram)
-  print "Done calculate parent_weight: " + str(parent_weight)
+  print "Done calculate parent_weight"
 
   # A(Vc,Vc)
   child1_weight, child2_weight = calculate_child_weights(tag_co_occurrence_histogram, cluster1, cluster2)
@@ -152,6 +164,7 @@ def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
   inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight = calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, cluster2)
   inter_cluster_child1_parent_weight += child1_weight
   inter_cluster_child2_parent_weight += child2_weight
+  print "Done calculate inter cluster weights"
 
   # calculate modularity Q
   q1 = calculate_modularity_of_child_cluster(child1_weight, inter_cluster_child1_parent_weight, parent_weight)
@@ -166,17 +179,7 @@ def main():
   json_files = get_json_files(metadata_dir)
   print "Done Reading " + str(len(json_files)) + " Json Files"
 
-  # get list of all tags and count there co-occurrences
-
-  tag_histogram = Counter()
-  tag_co_occurrence_histogram = Counter()
-  for json_file in json_files:
-    tag_list = read_tags_from_file(json_file)
-    if not tag_list == None:
-      tag_histogram.update(tag_list)
-      tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
-  #print tag_histogram
-  #print tag_co_occurrence_histogram
+  tag_histogram, tag_co_occurrence_histogram = calculate_tag_histogram_and_co_occurence_histogram(json_files)
   print "Done histogram creation. %2d Tags" % len(tag_histogram)
 
   # initialize tag dictionary
@@ -188,17 +191,17 @@ def main():
 
   # create laplace matrice
   laplace_matrix = calculate_laplace_matrix(tag_dict, tag_co_occurrence_histogram)
-  print "Done creating laplace_matrix"
+  print "Done creating laplace matrix"
 
   # create two overlapping clusters
   index_tag_dict = dict(zip(tag_dict.values(), tag_dict.keys()))
   cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
-  print "Done group into 2 child cluster"
+  print "Done group into 2 child clusters"
   #pprint.pprint(cluster1)
   #pprint.pprint(cluster2)
 
   q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
-  print q
+  print "Done calculate q: " + str(q)
 
 if __name__ == '__main__':
     main()
