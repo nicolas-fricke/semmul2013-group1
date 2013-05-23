@@ -34,7 +34,7 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/10000*.json')
+  return glob.glob(metadata_dir + '/*/*/1000*.json')
 
 def read_tags_from_file(json_file):
   f = open(json_file)
@@ -128,8 +128,49 @@ def main():
       cluster1.append(tag_dict_reverse[i])
       cluster2.append(tag_dict_reverse[i])
 
-  pprint.pprint(cluster1)
-  pprint.pprint(cluster2)
+  print "Done group into 2 child cluster"
+  #pprint.pprint(cluster1)
+  #pprint.pprint(cluster2)
+
+  # calculate modularity function Q
+  # --------------------------------------------
+  # sum up edge weights of parent cluster A(V,V)
+  parent_weight = 2*sum(tag_co_occurrence_histogram.values())
+  print "Done calculate parent_weight"
+
+  # sum up edge weights of two child clusters A(Vc,Vc)
+  child1_weight = 0
+  child2_weight = 0
+  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
+    if tag1 in cluster1 and tag2 in cluster1:
+      child1_weight += weight
+    if tag1 in cluster2 and tag2 in cluster2:
+      child2_weight += weight
+
+  child1_weight *= 2
+  child2_weight *= 2
+  print "Done calculate child weights"
+  #print "child1_weight %2d" % child1_weight
+  #print "child2_weight %2d" % child2_weight
+
+  # sum up edge weight for intra cluster weights A(Vc,V)
+  intra_cluster_child1_parent_weight = 0
+  intra_cluster_child2_parent_weight = 0
+  for (tag1, tag2), weight in tag_co_occurrence_histogram.items():
+    if tag1 in cluster1 and tag2 in cluster2:
+      intra_cluster_child1_parent_weight += weight
+    if tag1 in cluster2 and tag2 in cluster1:
+      intra_cluster_child2_parent_weight += weight
+
+  intra_cluster_child1_parent_weight += child1_weight
+  intra_cluster_child2_parent_weight += child2_weight
+
+  # calculate modularity Q
+  q1 = child1_weight/parent_weight - ((intra_cluster_child1_parent_weight/parent_weight)*(intra_cluster_child1_parent_weight/parent_weight))
+  q2 = child2_weight/parent_weight - ((intra_cluster_child2_parent_weight/parent_weight)*(intra_cluster_child2_parent_weight/parent_weight))
+  q = q1 + q2
+
+  print q
 
 if __name__ == '__main__':
     main()
