@@ -136,7 +136,7 @@ def calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, clust
   return inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight
 
 def calculate_modularity_of_child_cluster(child_weight, inter_cluster_weight, parent_weight):
-  return ((child_weight/parent_weight) - ((inter_cluster_weight/parent_weight)*(inter_cluster_weight/parent_weight)))
+  return ((child_weight/float(parent_weight)) - ((inter_cluster_weight/float(parent_weight))*(inter_cluster_weight/float(parent_weight))))
 
 # calculate modularity function Q
 def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
@@ -147,21 +147,15 @@ def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
   # A(Vc,Vc)
   child1_weight, child2_weight = calculate_child_weights(tag_co_occurrence_histogram, cluster1, cluster2)
   print "Done calculate child weights"
-  print "child1_weight %2d" % child1_weight
-  print "child2_weight %2d" % child2_weight
 
   # A(Vc,V)
   inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight = calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, cluster2)
   inter_cluster_child1_parent_weight += child1_weight
   inter_cluster_child2_parent_weight += child2_weight
-  print "inter_cluster_child1_parent_weight: " + str(inter_cluster_child1_parent_weight)
-  print "inter_cluster_child2_parent_weight: " + str(inter_cluster_child2_parent_weight)
 
   # calculate modularity Q
   q1 = calculate_modularity_of_child_cluster(child1_weight, inter_cluster_child1_parent_weight, parent_weight)
   q2 = calculate_modularity_of_child_cluster(child2_weight, inter_cluster_child2_parent_weight, parent_weight)
-  print "q1: " + str(q1)
-  print  "q2: " + str(q2)
   return q1 + q2
 
 def main():
@@ -204,7 +198,6 @@ def main():
   #pprint.pprint(cluster2)
 
   q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
-
   print q
 
 if __name__ == '__main__':
