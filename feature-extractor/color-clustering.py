@@ -18,7 +18,6 @@ import ConfigParser
 import json
 from collections import defaultdict
 from SimpleCV import Image
-from SimpleCV import EdgeHistogramFeatureExtractor
 from Pycluster import kcluster
 from helpers import *
 
@@ -32,8 +31,7 @@ def main():
 
   metajson_files = find_metajsons_to_process(metadata_dir)
 
-  print_status("Reading metadata files, loading images and calculating edge histograms.... ")
-  edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)
+  print_status("Reading metadata files, loading images and calculating color histograms.... ")
   images = []
   for file_number, metajson_file in enumerate(metajson_files):
     metadata = parse_json_file(metajson_file)
@@ -44,25 +42,30 @@ def main():
       data["file_path"] = metajson_file
       data["url"]       = url
       try:
-        image = Image(url)
+        image = Image(url).toHSV()
       except Exception:
         continue
-      edge_angles_and_lengths = edgeExtractor.extract(image)
-      data["edge-angles"]      = edge_angles_and_lengths[:len(edge_angles_and_lengths) / 2]
-      data["edge-lengths"]     = edge_angles_and_lengths[len(edge_angles_and_lengths) / 2:]
+      bins = split_image_into_bins(image, 25)
+      data["colors"] = []
+      for bin in bins:
+        (hue, saturation, value) = bin.splitChannels()
+        data["colors"] += hue.histogram(20)
+        data["colors"] += saturation.histogram(20)
+        data["colors"] += value.histogram(20)
+      (hue, saturation, value) = image.splitChannels()
       images.append(data)
     if file_number > 200:
       break
   print "Done."
 
   print_status("Building data structure for clustering.... ")
-  edges = []
+  colors = []
   for image_data in images:
-    edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
+    colors.append(image_data["colors"])
   print "Done."
 
-  print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  clustered_images, value, _ = kcluster(edges, 20)
+  print_status("Clustering images by color histograms via k-means algorithm.... ")
+  clustered_images, value, _ = kcluster(colors, 20)
   print "Done."
 
   clusters = defaultdict(list)
