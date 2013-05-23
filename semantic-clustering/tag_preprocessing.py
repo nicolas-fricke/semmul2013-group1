@@ -112,6 +112,24 @@ def main():
   #print "Second Highest e_val, e_vec"
   #print sec_highest_eval , e_vecs[sec_highest_index]
 
+  # create inverse tag_dict for accesing tags through index
+  tag_dict_reverse = dict(zip(tag_dict.values(), tag_dict.keys()))
+  print "Done creating tag_dict_reverse"
+
+  # group tags in 2 clusters corresponding to their value in the second highest eigenvector (<0 and >0, =0 in both clusters)
+  cluster1 = []
+  cluster2 = []
+  for i,val in enumerate(sec_highest_evec):
+    if val > 0:
+      cluster1.append(tag_dict_reverse[i])
+    elif val < 0:
+      cluster2.append(tag_dict_reverse[i])
+    elif val == 0:
+      cluster1.append(tag_dict_reverse[i])
+      cluster2.append(tag_dict_reverse[i])
+
+  pprint.pprint(cluster1)
+  pprint.pprint(cluster2)
 
 if __name__ == '__main__':
     main()
