@@ -17,10 +17,11 @@ import ConfigParser
 from collections import Counter
 import json
 import glob
-from pprint import pprint
+import pprint
 import nltk
 from nltk.corpus import wordnet as wn
 import numpy as np
+from scipy import linalg
 
 def read_tags_from_json(json_data):
   tag_list = []
@@ -33,7 +34,7 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/1000*.json')
+  return glob.glob(metadata_dir + '/*/*/10000*.json')
 
 def read_tags_from_file(json_file):
   f = open(json_file)
@@ -71,21 +72,46 @@ def main():
   for i, key in enumerate(tag_histogram.keys()):
     tag_dict[key] = i
   print "Done Tag Dict"
-  print tag_dict
+  #print tag_dict
 
   # create laplace matrice
   laplace_matrice = np.zeros((len(tag_histogram),len(tag_histogram)))
   for (tag1, tag2) in tag_co_occurrence_histogram:
     laplace_matrice[tag_dict[tag1]][tag_dict[tag2]] = -1
     laplace_matrice[tag_dict[tag2]][tag_dict[tag1]] = -1
-
-  np.set_printoptions(threshold='nan')
+  print "Done creating laplace_matrice"
 
   # create diagonal matrice with degree of vertices
   for i,line in enumerate(laplace_matrice):
     laplace_matrice[i][i] = sum(line)*(-1)
+  np.set_printoptions(threshold='nan')
+  print "Done creating diagonal matrice"
+  #print  laplace_matrice
 
-  print  laplace_matrice
+  # calculate second highest eigenvalue and eigenvector of laplace_matrice
+  e_vals, e_vecs = linalg.eig(laplace_matrice)
+  #print np.linalg.eig(laplace_matrice)
+  highest_eval = 0
+  highest_index = 0
+  sec_highest_eval = 0
+  sec_highest_index = 0
+  for i,e_val in enumerate(e_vals):
+    if e_val > highest_eval:
+      sec_highest_eval = highest_eval
+      sec_highest_index = highest_index
+      highest_eval = e_val
+      highest_index = i
+    elif e_val > sec_highest_eval:
+      sec_highest_eval = e_val
+      sec_highest_index = i
+
+  sec_highest_evec = e_vecs[sec_highest_index]
+  print "Done calculating sec_highest_eval"
+  #print "Highest e_val, e_vec"
+  #print highest_eval ,  e_vecs[highest_index]
+  #print "Second Highest e_val, e_vec"
+  #print sec_highest_eval , e_vecs[sec_highest_index]
+
 
 if __name__ == '__main__':
     main()
