@@ -23,6 +23,8 @@ from nltk.corpus import wordnet as wn
 import numpy as np
 from scipy import linalg
 
+error_occuring = 0
+
 ################     Reading of Files       ####################################
 
 # probably add preprocessing steps for tags
@@ -64,6 +66,11 @@ def calculate_tag_histogram_and_co_occurence_histogram(json_files):
   return tag_histogram, tag_co_occurrence_histogram
 
 ################     Tag Clustering       ####################################
+def create_tag_index_dict(tag_histogram):
+  tag_dict = dict()
+  for index, tag in enumerate(tag_histogram.keys()):
+    tag_dict[tag] = index
+  return tag_dict
 
 ################     Laplace Matrix       ###################################
 def calculate_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram):
@@ -81,7 +88,9 @@ def add_diagonal_matrix_to_adjacency(matrix):
 
 def calculate_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram):
   laplace_matrix = calculate_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram)
+  print "Done calculation of adjacency matrix"
   laplace_matrix = add_diagonal_matrix_to_adjacency(laplace_matrix)
+  print "Done calculation of diagonal matrix"
   return laplace_matrix
 
 ################     Spectral Bisection       ###################################
@@ -113,9 +122,9 @@ def create_clusters(separation_vector, index_tag_dict):
 
 def sepctral_bisection(matrix, index_tag_dict):
   eigen_values, eigen_vectors = linalg.eig(matrix)
-  print "\t Done calculate eigenvalues"
+  print "Done calculate eigenvalues"
   second_highest_eigen_vector = calculate_second_highest_eigen_vector(eigen_values, eigen_vectors)
-  print "\t Done find vector for second highest eigenvalue"
+  print "Done find vector for second highest eigenvalue"
   return create_clusters(second_highest_eigen_vector, index_tag_dict)
 
 ################     Spectral Bisection       ###################################
@@ -148,6 +157,8 @@ def calculate_inter_cluster_weights(tag_co_occurrence_histogram, cluster1, clust
   return inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight
 
 def calculate_modularity_of_child_cluster(child_weight, inter_cluster_weight, parent_weight):
+  if parent_weight == 0:
+    return 0
   return ((child_weight/float(parent_weight)) - ((inter_cluster_weight/float(parent_weight))*(inter_cluster_weight/float(parent_weight))))
 
 # calculate modularity function Q
@@ -171,6 +182,69 @@ def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
   q2 = calculate_modularity_of_child_cluster(child2_weight, inter_cluster_child2_parent_weight, parent_weight)
   return q1 + q2
 
+################     Recursive Partitioning       ###################################
+
+def partitioning(tag_index_dict, tag_co_occurrence_histogram):
+  # create laplace matrice
+  laplace_matrix = calculate_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram)
+  print "Done creating laplace matrix"
+
+  # create two overlapping clusters
+  index_tag_dict = dict(zip(tag_index_dict.values(), tag_index_dict.keys()))
+  cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
+  print "Done group into 2 child clusters"
+  #pprint.pprint(cluster1)
+  #pprint.pprint(cluster2)
+  return cluster1, cluster2
+
+def split_dictionary(dictionary, cluster1, cluster2):
+  dict1 = dict()
+  current_index1 = 0
+  dict2 = dict()
+  current_index2 = 0
+  for key, value in dictionary.items():
+    if key in cluster1:
+      dict1[key] = current_index1
+      current_index1 += 1
+    if key in cluster2:
+      dict2[key] = current_index2
+      current_index2 += 1
+  return dict1, dict2
+
+def split_co_occurence_histogram(co_occurrence_histogram, cluster1, cluster2):
+  # TODO
+  co_occurrence_histogram1 = Counter()
+  co_occurrence_histogram2 = Counter()
+  for (tag1, tag2), value in co_occurrence_histogram.items():
+    if tag1 in cluster1 and tag2 in cluster1:
+      co_occurrence_histogram1[(tag1, tag2)] = value
+    if tag1 in cluster2 and tag2 in cluster2:
+      co_occurrence_histogram2[(tag1, tag2)] = value
+  return co_occurrence_histogram1, co_occurrence_histogram2
+
+def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
+  cluster1, cluster2 = partitioning(tag_index_dict, tag_co_occurrence_histogram)
+   # calculate modularity function Q whether partition is useful
+  q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
+  print "Done calculate q: " + str(q)
+  print "######################     Done with one bisection        ###################################"
+  if q > 0:
+    tag_index_dict1, tag_index_dict2 = split_dictionary(tag_index_dict, cluster1, cluster2)
+    #print tag_index_dict1
+    #print tag_index_dict2
+    tag_co_occurrence_histogram1, tag_co_occurrence_histogram2 = split_co_occurence_histogram(tag_co_occurrence_histogram, cluster1, cluster2)
+    #print tag_co_occurrence_histogram1
+    #print tag_co_occurrence_histogram2
+    if len(cluster1) > 1:
+      recursive_partitioning(tag_index_dict1, tag_co_occurrence_histogram1)
+    if len(cluster2) > 1:
+      recursive_partitioning(tag_index_dict2, tag_co_occurrence_histogram2)
+  else:
+    print "------------------------- Q < 0 ------------------------------"
+    print tag_index_dict
+
+################     Main        ###################################
+
 def main():
   # import configuration
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
@@ -182,26 +256,12 @@ def main():
   tag_histogram, tag_co_occurrence_histogram = calculate_tag_histogram_and_co_occurence_histogram(json_files)
   print "Done histogram creation. %2d Tags" % len(tag_histogram)
 
-  # initialize tag dictionary
-  tag_dict = dict()
-  for i, key in enumerate(tag_histogram.keys()):
-    tag_dict[key] = i
+  # tag index dict saves the matching index of a tag in the laplace matrix
+  tag_index_dict = create_tag_index_dict(tag_histogram)
   print "Done Tag Dict"
-  #print tag_dict
+  #print tag_index_dict
 
-  # create laplace matrice
-  laplace_matrix = calculate_laplace_matrix(tag_dict, tag_co_occurrence_histogram)
-  print "Done creating laplace matrix"
-
-  # create two overlapping clusters
-  index_tag_dict = dict(zip(tag_dict.values(), tag_dict.keys()))
-  cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
-  print "Done group into 2 child clusters"
-  #pprint.pprint(cluster1)
-  #pprint.pprint(cluster2)
-
-  q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
-  print "Done calculate q: " + str(q)
+  recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram)
 
 if __name__ == '__main__':
     main()
