@@ -22,8 +22,27 @@ import nltk
 from nltk.corpus import wordnet as wn
 import numpy as np
 from scipy import linalg
+import os
 
+output_file_name = ""
 error_occuring = 0
+
+################     Write Tag-Clusters       ####################################
+
+def remove_output_file(file_name=None):
+  if file_name == None:
+    file_name = output_file_name
+  if os.path.isfile(file_name):
+    os.remove(file_name)
+
+def write_to_output(content, file_name=None):
+  if file_name == None:
+    file_name = output_file_name
+  output_file = open(file_name, 'a')
+  output_string = str(content)
+  output_string += "\n"
+  output_file.write(output_string)
+  output_file.close()
 
 ################     Reading of Files       ####################################
 
@@ -113,9 +132,9 @@ def create_clusters(separation_vector, index_tag_dict):
 
   # '>=' instead of '>' results in overlapping clusters
   for index, vector_value in enumerate(separation_vector):
-    if vector_value >= 0:
+    if vector_value > 0:
       tag_cluster1.append(index_tag_dict[index])
-    if vector_value <= 0:
+    if vector_value < 0:
       tag_cluster2.append(index_tag_dict[index])
 
   return tag_cluster1, tag_cluster2
@@ -255,8 +274,18 @@ def main():
   json_files = get_json_files(metadata_dir)
   print "Done Reading " + str(len(json_files)) + " Json Files"
 
+  global output_file_name
+  output_file_name = "Results_for_" + str(len(json_files)) + "_JSONS.txt"
+  remove_output_file()
+
   tag_histogram, tag_co_occurrence_histogram = calculate_tag_histogram_and_co_occurence_histogram(json_files)
   print "Done histogram creation. %2d Tags" % len(tag_histogram)
+  write_to_output(len(tag_histogram))
+
+  #remove to small values from the histogram
+  #for key, val in tag_co_occurrence_histogram.items():
+  #  if val < 1:
+  #    del tag_co_occurrence_histogram[key]
 
   # tag index dict saves the matching index of a tag in the laplace matrix
   tag_index_dict = create_tag_index_dict(tag_histogram)
@@ -266,6 +295,7 @@ def main():
   tag_clusters = recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram)
   for tag_cluster in tag_clusters:
     print tag_cluster
+    write_to_output(tag_cluster)
 
 if __name__ == '__main__':
     main()
