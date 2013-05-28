@@ -58,31 +58,32 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/10*.json')
+  return glob.glob(metadata_dir + '/*/*/1000*.json')
 
-def read_tags_from_file(json_file):
+def read_tags_and_photoid_from_file(json_file):
   f = open(json_file)
   json_data = json.load(f)
   f.close()
-  tag_list = []
   if json_data["stat"] == "ok":
-    return read_tags_from_json(json_data)
-  return None
+    return read_tags_from_json(json_data), json_data["id"]
+  return None, None
 
 def import_metadata_dir_of_config(path):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   return '../' + config.get('Directories', 'metadata-dir')
 
-def calculate_tag_histogram_and_co_occurence_histogram(json_files):
+def parse_json_data(json_files):
   tag_histogram = Counter()
   tag_co_occurrence_histogram = Counter()
+  image_tags_dict = {}
   for json_file in json_files:
-    tag_list = read_tags_from_file(json_file)
+    tag_list, photo_id = read_tags_and_photoid_from_file(json_file)
+    image_tags_dict[photo_id] = tag_list
     if not tag_list == None:
       tag_histogram.update(tag_list)
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
-  return tag_histogram, tag_co_occurrence_histogram
+  return tag_histogram, tag_co_occurrence_histogram, image_tags_dict
 
 ################     Tag Clustering       ####################################
 def create_tag_index_dict(tag_histogram):
@@ -278,9 +279,11 @@ def main():
   output_file_name = "Results_for_" + str(len(json_files)) + "_JSONS.txt"
   remove_output_file()
 
-  tag_histogram, tag_co_occurrence_histogram = calculate_tag_histogram_and_co_occurence_histogram(json_files)
-  print "Done histogram creation. %2d Tags" % len(tag_histogram)
+  # parse data from json files
+  tag_histogram, tag_co_occurrence_histogram, image_tags_dict = parse_json_data(json_files)
+  print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
   write_to_output(len(tag_histogram))
+  #print image_tags_dict
 
   #remove to small values from the histogram
   #for key, val in tag_co_occurrence_histogram.items():
@@ -296,6 +299,7 @@ def main():
   for tag_cluster in tag_clusters:
     print tag_cluster
     write_to_output(tag_cluster)
+  print "%d clusters" % len(tag_clusters)
 
 if __name__ == '__main__':
     main()
