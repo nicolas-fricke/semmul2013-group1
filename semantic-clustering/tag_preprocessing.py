@@ -23,6 +23,12 @@ from nltk.corpus import wordnet as wn
 import numpy as np
 from scipy import linalg
 import os
+import operator
+from collections import defaultdict
+# Import own module helpers 
+import sys
+sys.path.append('../feature-extractor')
+from helpers import *
 
 output_file_name = ""
 error_occuring = 0
@@ -58,14 +64,17 @@ def read_tags_from_json(json_data):
   return tag_list
 
 def get_json_files(metadata_dir):
-  return glob.glob(metadata_dir + '/*/*/1000*.json')
+  return glob(metadata_dir + '/*/*/1000*.json')
 
-def read_tags_and_photoid_from_file(json_file):
+def read_data_from_json_file(json_file):
   f = open(json_file)
   json_data = json.load(f)
   f.close()
+  data = {}   # Create data dict for image visualization
   if json_data["stat"] == "ok":
-    return read_tags_from_json(json_data), json_data["id"]
+    data["image_id"]  = json_data["id"]
+    data["url"] = get_small_image_url(json_data)
+    return read_tags_from_json(json_data), data
   return None, None
 
 def import_metadata_dir_of_config(path):
@@ -76,14 +85,17 @@ def import_metadata_dir_of_config(path):
 def parse_json_data(json_files):
   tag_histogram = Counter()
   tag_co_occurrence_histogram = Counter()
-  image_tags_dict = {}
+  photo_tags_dict = {}
+  photo_data_list = {}
   for json_file in json_files:
-    tag_list, photo_id = read_tags_and_photoid_from_file(json_file)
-    image_tags_dict[photo_id] = tag_list
+    tag_list, photo_data = read_data_from_json_file(json_file)
+    if not photo_data == None:
+      photo_tags_dict[int(photo_data["image_id"])] = tag_list
+      photo_data_list[int(photo_data["image_id"])] = photo_data
     if not tag_list == None:
       tag_histogram.update(tag_list)
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
-  return tag_histogram, tag_co_occurrence_histogram, image_tags_dict
+  return tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list
 
 ################     Tag Clustering       ####################################
 def create_tag_index_dict(tag_histogram):
@@ -265,6 +277,32 @@ def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
     return [tag_index_dict.keys()]
   return tag_clusters
 
+################     Photo Clustering  #############################
+
+def intersect_tag_lists(tag_cluster,tag_list):
+  return list(set(tag_cluster).intersection( set(tag_list) ))
+    
+
+def get_photo_clusters(tag_clusters,photo_tags_dict):
+  affiliated_photos_tuples = []
+  for tag_cluster in tag_clusters:
+    affiliated_photos = {}
+    for photo_id, tag_list in photo_tags_dict.items():
+      if (not tag_list == None) and (len(tag_list) > 0):
+        shared_tags = intersect_tag_lists(tag_cluster,tag_list)
+        #print "Photo %d | shared tags = %d | shared_tags / photo_tags = %f | shared_tags / tag_cluster = %f" % (photo_id,len(shared_tags),len(shared_tags)/float(len(tag_list)),len(shared_tags)/float(len(tag_cluster)))
+        if len(shared_tags) > 0:
+          affiliation_score = len(shared_tags)/float(len(tag_list)) + len(shared_tags)/float(len(tag_cluster))
+          affiliated_photos[photo_id] = affiliation_score
+    sorted_affiliated_photos = sorted(affiliated_photos.iteritems(), key=operator.itemgetter(1))
+    sorted_affiliated_photos.reverse()  
+    affiliated_photos_tuples.append(sorted_affiliated_photos)
+    #print sorted_affiliated_photos
+  return affiliated_photos_tuples
+
+
+
+
 ################     Main        ###################################
 
 def main():
@@ -280,10 +318,10 @@ def main():
   remove_output_file()
 
   # parse data from json files
-  tag_histogram, tag_co_occurrence_histogram, image_tags_dict = parse_json_data(json_files)
+  tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files)
   print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
   write_to_output(len(tag_histogram))
-  #print image_tags_dict
+  #print photo_tags_dict
 
   #remove to small values from the histogram
   #for key, val in tag_co_occurrence_histogram.items():
@@ -300,6 +338,18 @@ def main():
     print tag_cluster
     write_to_output(tag_cluster)
   print "%d clusters" % len(tag_clusters)
+
+  # cluster photos
+  print "Calculate photo clusters"
+  photo_clusters = get_photo_clusters(tag_clusters,photo_tags_dict)
+  print "Done"
+
+  clusters = defaultdict(list)
+  for index, cluster in enumerate(photo_clusters):
+    for photo_id, score in cluster:
+      clusters[index].append(photo_data_list[photo_id])
+
+  write_clusters_to_html(clusters, open_in_browser=True)
 
 if __name__ == '__main__':
     main()
