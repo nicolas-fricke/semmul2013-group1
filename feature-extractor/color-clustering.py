@@ -48,7 +48,7 @@ def main():
       bins = split_image_into_bins(image, 25)
       data["colors"] = []
       for bin in bins:
-        (hue, saturation, value) = bin.splitChannels()
+        (value, saturation, hue) = bin.splitChannels()
         data["colors"] += hue.histogram(20)
         data["colors"] += saturation.histogram(20)
         data["colors"] += value.histogram(20)
