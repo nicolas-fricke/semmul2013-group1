@@ -3,11 +3,20 @@ import json
 import sys
 import time
 import os
+import cPickle as pickle
 
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
   sys.stdout.write(message)
   sys.stdout.flush()
+
+def save_object(obj, filename):
+  with open(filename, 'wb') as output:
+      pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
+def load_object(filename):
+  with open(filename, 'rb') as input:
+      return pickle.load(input)
 
 def find_metajsons_to_process(metadata_path):
   return glob(metadata_path + '/*/*/*.json')
