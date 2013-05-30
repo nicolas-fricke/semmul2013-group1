@@ -345,11 +345,14 @@ def main():
 
   # write clusters to html
   clusters = defaultdict(list)
+  additional_columns= {}
+  additional_columns["Tags"] = []
   for index, cluster in enumerate(photo_clusters):
+    additional_columns["Tags"].append(tag_clusters[index])
     for photo_id, score in cluster:
       clusters[index].append(photo_data_list[photo_id])
 
-  write_clusters_to_html(clusters, open_in_browser=True)
+  write_clusters_to_html(clusters, additional_columns=additional_columns, open_in_browser=True)
 
 if __name__ == '__main__':
     main()

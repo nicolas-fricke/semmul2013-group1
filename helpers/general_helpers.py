@@ -37,9 +37,15 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
                    "  </head>\n"
                    "  <body>\n"
                    "    <table border='1'>\n"
-                   "      <tr><th style='width: 100px'>Cluster</th><th>Images</th></tr>\n")
+                   "      <tr><th style='width: 100px'>Cluster</th>")
+  for column_heading in additional_columns.keys():
+    output_html += "          <th style='width: 300px'>%s</th>" % column_heading
+  output_html+= "             <th>Images</th></tr>\n"
   for cluster_number, images in clusters.iteritems():
-    output_html += "      <tr><td>#%d<br/><i>(%d images)</i></td><td class='images'>\n" % (cluster_number, len(images))
+    output_html += "      <tr><td>#%d<br/><i>(%d images)</i></td>\n" % (cluster_number, len(images))
+    for column in additional_columns.values():
+      output_html += "      <td>%s</td>" % column[cluster_number]
+    output_html += "        <td class='images'>\n"
     for image in images:
       output_html += "        <img src='%s' />\n" % image["url"]
     output_html += "        </td></tr>\n"
