@@ -59,13 +59,13 @@ def main(argv):
           image = Image(url).toHSV()
         except Exception:
           continue
-        bins = split_image_into_bins(image, 16)
+        (value, saturation, hue) = image.splitChannels()
+        bins = zip(split_image_into_bins(hue, 16), split_image_into_bins(saturation.equalize(), 16), split_image_into_bins(value.equalize(), 16))
         data["colors"] = []
-        for bin in bins:
-          (value, saturation, hue) = bin.splitChannels()
-          data["colors"] += hue.histogram(20)
-          data["colors"] += saturation.histogram(20)
-          data["colors"] += value.histogram(20)
+        for hue_bin, sat_bin, val_bin in bins:
+          data["colors"] += hue_bin.histogram(20)
+          data["colors"] += sat_bin.histogram(20)
+          data["colors"] += val_bin.histogram(20)
         images.append(data)
         file_number += 1
       if file_number >= 400:
