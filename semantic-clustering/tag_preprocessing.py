@@ -16,7 +16,6 @@
 import ConfigParser
 from collections import Counter
 import json
-import glob
 import pprint
 import nltk
 from nltk.corpus import wordnet as wn
@@ -25,10 +24,10 @@ from scipy import linalg
 import os
 import operator
 from collections import defaultdict
-# Import own module helpers 
+# Import own module helpers
 import sys
-sys.path.append('../feature-extractor')
-from helpers import *
+sys.path.append('../helpers')
+from general_helpers import *
 
 output_file_name = ""
 error_occuring = 0
@@ -281,7 +280,7 @@ def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
 
 def intersect_tag_lists(tag_cluster,tag_list):
   return list(set(tag_cluster).intersection( set(tag_list) ))
-    
+
 
 def get_photo_clusters(tag_clusters,photo_tags_dict):
   affiliated_photos_tuples = []
@@ -295,7 +294,7 @@ def get_photo_clusters(tag_clusters,photo_tags_dict):
           affiliation_score = len(shared_tags)/float(len(tag_list)) + len(shared_tags)/float(len(tag_cluster))
           affiliated_photos[photo_id] = affiliation_score
     sorted_affiliated_photos = sorted(affiliated_photos.iteritems(), key=operator.itemgetter(1))
-    sorted_affiliated_photos.reverse()  
+    sorted_affiliated_photos.reverse()
     affiliated_photos_tuples.append(sorted_affiliated_photos)
     #print sorted_affiliated_photos
   return affiliated_photos_tuples
@@ -344,6 +343,7 @@ def main():
   photo_clusters = get_photo_clusters(tag_clusters,photo_tags_dict)
   print "Done"
 
+  # write clusters to html
   clusters = defaultdict(list)
   for index, cluster in enumerate(photo_clusters):
     for photo_id, score in cluster:

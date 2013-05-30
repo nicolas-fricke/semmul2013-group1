@@ -20,7 +20,11 @@ from collections import defaultdict
 from SimpleCV import Image
 from SimpleCV import EdgeHistogramFeatureExtractor
 from Pycluster import kcluster
-from helpers import *
+# Import own module helpers
+import sys
+sys.path.append('../helpers')
+from general_helpers import *
+from visual_helpers import *
 
 def main():
   # import configuration
