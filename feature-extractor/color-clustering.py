@@ -19,12 +19,18 @@ import ConfigParser
 import json
 from collections import defaultdict
 from SimpleCV import Image
-from Pycluster import kcluster
+from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 # Import own module helpers
 import sys
 sys.path.append('../helpers')
 from general_helpers import *
 from visual_helpers import *
+
+def distance_function(u, v):
+  sum_u = sum(u[20:30])
+  sum_v = sum(v[20:30])
+  diff  = abs(sum_u - sum_v)
+  return 0 if diff < 2 else 1
 
 def main(argv):
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
@@ -81,8 +87,8 @@ def main(argv):
     colors.append(image_data["colors"])
   print "Done."
 
-  print_status("Clustering images by color histograms via k-means algorithm.... ")
-  clustered_images, value, _ = kcluster(colors, 20)
+  print_status("Clustering images by color histograms hierarchial_cluster algorithm with our own distance function.... ")
+  clustered_images = hierarchial_cluster(colors, 0.3, criterion='distance', metric=distance_function)
   print "Done."
 
   clusters = defaultdict(list)
