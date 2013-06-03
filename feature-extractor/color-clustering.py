@@ -14,53 +14,72 @@
 # mail: nicolas.fricke@student.hpi.uni-potsdam.de
 ################################################################################
 
+import argparse
 import ConfigParser
 import json
 from collections import defaultdict
 from SimpleCV import Image
-from Pycluster import kcluster
+from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 # Import own module helpers
 import sys
 sys.path.append('../helpers')
 from general_helpers import *
 from visual_helpers import *
 
-def main():
-  # import configuration
-  config = ConfigParser.SafeConfigParser()
-  config.read('../config.cfg')
+def distance_function(u, v):
+  sum_u = sum(u[20:30])
+  sum_v = sum(v[20:30])
+  diff  = abs(sum_u - sum_v)
+  return 0 if diff < 2 else 1
 
-  api_key = config.get('Flickr API Key', 'key')
-  metadata_dir = '../' + config.get('Directories', 'metadata-dir')
+def main(argv):
+  parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
+  parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
+                   help='If specified, use preprocessed image data, otherwise download and process images and save values to file for next use')
+  args = parser.parse_args()
 
-  metajson_files = find_metajsons_to_process(metadata_dir)
+  print_status("Use prerpocessed data: " + str(args.use_preprocessed_data) + "\n\n")
 
-  print_status("Reading metadata files, loading images and calculating color histograms.... ")
-  images = []
-  for file_number, metajson_file in enumerate(metajson_files):
-    metadata = parse_json_file(metajson_file)
-    if metadata["stat"] == "ok":
-      data = {}
-      url      = get_small_image_url(metadata)
-      data["image_id"]  = metadata["id"]
-      data["file_path"] = metajson_file
-      data["url"]       = url
-      try:
-        image = Image(url).toHSV()
-      except Exception:
-        continue
-      bins = split_image_into_bins(image, 25)
-      data["colors"] = []
-      for bin in bins:
-        (value, saturation, hue) = bin.splitChannels()
-        data["colors"] += hue.histogram(20)
-        data["colors"] += saturation.histogram(20)
-        data["colors"] += value.histogram(20)
-      (hue, saturation, value) = image.splitChannels()
-      images.append(data)
-    if file_number > 200:
-      break
-  print "Done."
+  if not args.use_preprocessed_data:
+    # import configuration
+    config = ConfigParser.SafeConfigParser()
+    config.read('../config.cfg')
+
+    api_key = config.get('Flickr API Key', 'key')
+    metadata_dir = '../' + config.get('Directories', 'metadata-dir')
+
+    metajson_files = find_metajsons_to_process(metadata_dir)
+
+    print_status("Reading metadata files, loading images and calculating color histograms.... ")
+    images = []
+    file_number = 0
+    for metajson_file in metajson_files:
+      metadata = parse_json_file(metajson_file)
+      if metadata["stat"] == "ok":
+        data = {}
+        url      = get_small_image_url(metadata)
+        data["image_id"]  = metadata["id"]
+        data["file_path"] = metajson_file
+        data["url"]       = url
+        try:
+          image = Image(url).toHSV()
+        except Exception:
+          continue
+        (value, saturation, hue) = image.splitChannels()
+        bins = zip(split_image_into_bins(hue, 16), split_image_into_bins(saturation.equalize(), 16), split_image_into_bins(value.equalize(), 16))
+        data["colors"] = []
+        for hue_bin, sat_bin, val_bin in bins:
+          data["colors"] += hue_bin.histogram(20)
+          data["colors"] += sat_bin.histogram(20)
+          data["colors"] += val_bin.histogram(20)
+        images.append(data)
+        file_number += 1
+      if file_number >= 400:
+        break
+    print "Done."
+    save_object(images, "color_features.pickle")
+  else:
+    images = load_object("color_features.pickle")
 
   print_status("Building data structure for clustering.... ")
   colors = []
@@ -68,8 +87,8 @@ def main():
     colors.append(image_data["colors"])
   print "Done."
 
-  print_status("Clustering images by color histograms via k-means algorithm.... ")
-  clustered_images, value, _ = kcluster(colors, 20)
+  print_status("Clustering images by color histograms hierarchial_cluster algorithm with our own distance function.... ")
+  clustered_images = hierarchial_cluster(colors, 0.3, criterion='distance', metric=distance_function)
   print "Done."
 
   clusters = defaultdict(list)
@@ -79,4 +98,4 @@ def main():
   write_clusters_to_html(clusters, open_in_browser=True)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])

@@ -3,11 +3,20 @@ import json
 import sys
 import time
 import os
+import cPickle as pickle
 
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
   sys.stdout.write(message)
   sys.stdout.flush()
+
+def save_object(obj, filename):
+  with open(filename, 'wb') as output:
+      pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
+def load_object(filename):
+  with open(filename, 'rb') as input:
+      return pickle.load(input)
 
 def find_metajsons_to_process(metadata_path):
   return glob(metadata_path + '/*/*/*.json')
@@ -38,13 +47,15 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
                    "  <body>\n"
                    "    <table border='1'>\n"
                    "      <tr><th style='width: 100px'>Cluster</th>")
-  for column_heading in additional_columns.keys():
-    output_html += "          <th style='width: 300px'>%s</th>" % column_heading
+  if additional_columns != None:
+    for column_heading in additional_columns.keys():
+      output_html += "          <th style='width: 300px'>%s</th>" % column_heading
   output_html+= "             <th>Images</th></tr>\n"
   for cluster_number, images in clusters.iteritems():
     output_html += "      <tr><td>#%d<br/><i>(%d images)</i></td>\n" % (cluster_number, len(images))
-    for column in additional_columns.values():
-      output_html += "      <td>%s</td>" % column[cluster_number]
+    if additional_columns != None:
+      for column in additional_columns.values():
+        output_html += "      <td>%s</td>" % column[cluster_number]
     output_html += "        <td class='images'>\n"
     for image in images:
       output_html += "        <img src='%s' />\n" % image["url"]
