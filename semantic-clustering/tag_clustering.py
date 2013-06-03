@@ -13,11 +13,9 @@ import numpy as np
 from scipy import linalg
 import os
 import operator
-from collections import defaultdict
 from collections import Counter
 
 tag_co_occurrence_histogram = Counter()
-tag_index_dict = dict()
 
 ################     Laplace Matrix       ###################################
 
@@ -214,12 +212,10 @@ def recursive_partitioning(tag_list):
 
 ################     Tag Clustering       ###################################
 
-def tag_clustering(index_dict, co_occurrence_histogram):
+def tag_clustering(tag_index_dict, co_occurrence_histogram):
   global tag_co_occurrence_histogram
-  global tag_index_dict
-  tag_index_dict = index_dict
   tag_co_occurrence_histogram = co_occurrence_histogram
-  tag_clusters = recursive_partitioning(index_dict.keys())
+  tag_clusters = recursive_partitioning(tag_index_dict.keys())
 
   for tag_cluster in tag_clusters:
     print tag_cluster
