@@ -2,11 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ######################################################################################
-# Preprocesses the tags from the metadata crawling
-#
-# config file: ../config.cfg
-#
-# Use config.cfg.template as template for this file
+# Clusters the given images semantically
 #
 #
 # authors: tino junge, mandy roick
@@ -19,16 +15,11 @@ import os
 import operator
 from collections import defaultdict
 # Import own modules
-import sys
-sys.path.append('../helpers')
-from general_helpers import *
 from tag_preprocessing import *
-
-output_file_name = ""
-error_occuring = 0
 
 
 ################     Laplace Matrix       ###################################
+
 def calculate_negative_adjacency_matrix(tag_index_dict, tag_co_occurrence_histogram):
   negative_adjacency_matrix = np.zeros((len(tag_index_dict),len(tag_index_dict)))
   for (tag1, tag2) in tag_co_occurrence_histogram:
@@ -49,7 +40,9 @@ def calculate_laplace_matrix(tag_index_dict, tag_co_occurrence_histogram):
   print "Done calculation of diagonal matrix"
   return laplace_matrix
 
+
 ################     Spectral Bisection       ###################################
+
 def calculate_second_highest_eigen_vector(eigen_values, eigen_vectors):
   index_of_highest_eigen_value = 0
   index_of_second_highest_eigen_value = 0
@@ -98,7 +91,8 @@ def spectral_bisection(matrix, index_tag_dict):
   print "Done find vector for second highest eigenvalue"
   return create_clusters(partitioning_vector, index_tag_dict)
 
-################     Spectral Bisection       ###################################
+
+################     Calculate Q       ###################################
 
 def calculate_parent_weight(tag_co_occurrence_histogram):
   return 2*sum(tag_co_occurrence_histogram.values())
@@ -152,6 +146,7 @@ def calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2):
   q1 = calculate_modularity_of_child_cluster(child1_weight, inter_cluster_child1_parent_weight, parent_weight)
   q2 = calculate_modularity_of_child_cluster(child2_weight, inter_cluster_child2_parent_weight, parent_weight)
   return q1 + q2
+
 
 ################     Recursive Partitioning       ###################################
 
@@ -216,6 +211,7 @@ def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
     return [tag_index_dict.keys()]
   return tag_clusters
 
+
 ################     Photo Clustering  #############################
 
 def intersect_tag_lists(tag_cluster,tag_list):
@@ -238,8 +234,6 @@ def get_photo_clusters(tag_clusters,photo_tags_dict):
     affiliated_photos_tuples.append(sorted_affiliated_photos)
     #print sorted_affiliated_photos
   return affiliated_photos_tuples
-
-
 
 
 ################     Main        ###################################
