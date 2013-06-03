@@ -92,8 +92,13 @@ def spectral_bisection(matrix, tag_list):
 
 ################     Calculate Q       ###################################
 
-def calculate_parent_weight():
-  return 2*sum(tag_co_occurrence_histogram.values())
+def calculate_parent_weight(parent_cluster):
+  sum_of_weights = 0
+  for tag1 in parent_cluster:
+    for tag2 in parent_cluster:
+      if (tag1, tag2) in tag_co_occurrence_histogram:
+        sum_of_weights += tag_co_occurrence_histogram[(tag1, tag2)]
+  return sum_of_weights
 
 def calculate_child_weights(cluster1, cluster2):
   child1_weight = 0
@@ -104,9 +109,6 @@ def calculate_child_weights(cluster1, cluster2):
     if tag1 in cluster2 and tag2 in cluster2:
       child2_weight += weight
 
-  # weights need to be doubled because we have to regard the opposite direction of every edge
-  child1_weight *= 2
-  child2_weight *= 2
   return child1_weight, child2_weight
 
 def calculate_inter_cluster_weights(cluster1, cluster2):
@@ -125,9 +127,9 @@ def calculate_modularity_of_child_cluster(child_weight, inter_cluster_weight, pa
   return ((child_weight/float(parent_weight)) - ((inter_cluster_weight/float(parent_weight))*(inter_cluster_weight/float(parent_weight))))
 
 # calculate modularity function Q
-def calculate_Q(cluster1, cluster2):
+def calculate_Q(parent_cluster, cluster1, cluster2):
   # A(V,V)
-  parent_weight = calculate_parent_weight()
+  parent_weight = calculate_parent_weight(parent_cluster)
   print "Done calculate parent_weight"
 
   # A(Vc,Vc)
@@ -136,8 +138,6 @@ def calculate_Q(cluster1, cluster2):
 
   # A(Vc,V)
   inter_cluster_child1_parent_weight, inter_cluster_child2_parent_weight = calculate_inter_cluster_weights(cluster1, cluster2)
-  inter_cluster_child1_parent_weight += child1_weight
-  inter_cluster_child2_parent_weight += child2_weight
   print "Done calculate inter cluster weights"
 
   # calculate modularity Q
@@ -189,7 +189,7 @@ def recursive_partitioning(tag_list):
   tag_clusters = []
   cluster1, cluster2 = partitioning(tag_list)
    # calculate modularity function Q whether partition is useful
-  q = calculate_Q(cluster1, cluster2)
+  q = calculate_Q(tag_list, cluster1, cluster2)
   print "Done calculate q: %f" % q
   print "######################     Done with one bisection        ###################################"
   if q > 0:
