@@ -24,6 +24,7 @@ import sys
 sys.path.append('../helpers')
 from general_helpers import *
 
+
 ################     Reading of Files       ####################################
 
 # probably add preprocessing steps for tags
@@ -74,6 +75,17 @@ def parse_json_data(json_files,number_of_jsons):
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
   return tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list
 
+def remove_tags_with_small_occurence(threshold):
+  new_tag_histogram = {}
+  for key, val in tag_histogram.items():
+   if val < threshold:
+    new_tag_histogram[key] = val
+  new_tag_co_occurence_histogram = {}
+  for (key1,key2),val in tag_co_occurrence_histogram.items():
+    if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
+      new_tag_co_occurence_histogram[(key1,key2)] = val
+  return  new_tag_histogram, new_tag_co_occurence_histogram
+
 ################     Tag Clustering       ####################################
 
 def create_tag_index_dict(tag_histogram):
@@ -99,16 +111,7 @@ def tag_preprocessing(number_of_jsons):
   #print photo_tags_dict
 
   #remove tags with too small values from the histograms
-  new_tag_histogram = {}
-  for key, val in tag_histogram.items():
-   if val < 10:
-    new_tag_histogram[key] = val
-  new_tag_co_occurence_histogram = {}
-  for (key1,key2),val in tag_co_occurrence_histogram.items():
-    if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
-      new_tag_co_occurence_histogram[(key1,key2)] = val
-  tag_histogram = new_tag_histogram
-  tag_co_occurrence_histogram = new_tag_co_occurence_histogram
+  tag_histogram, tag_co_occurrence_histogram = remove_tags_with_small_occurence(10)
   print "Done removing small values from tag_histogram and tag_co_occurrence_histogram"
 
   # tag index dict saves the matching index of a tag in the laplace matrix
