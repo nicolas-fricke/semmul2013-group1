@@ -313,7 +313,8 @@ def main():
   print "Done Reading " + str(len(json_files)) + " Json Files"
 
   global output_file_name
-  output_file_name = "Results_for_" + str(len(json_files)) + "_JSONS.txt"
+  how_many_jsons = len(json_files)
+  output_file_name = "Results_for_" + str(how_many_jsons) + "_JSONS.txt"
   remove_output_file()
 
   # parse data from json files
@@ -352,7 +353,8 @@ def main():
     for photo_id, score in cluster:
       clusters[index].append(photo_data_list[photo_id])
 
-  write_clusters_to_html(clusters, additional_columns=additional_columns, open_in_browser=True)
+  name_of_html_file = str(how_many_jsons) + "_old_q.html"
+  write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
 
 if __name__ == '__main__':
     main()
