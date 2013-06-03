@@ -28,6 +28,7 @@ from collections import defaultdict
 import sys
 sys.path.append('../helpers')
 from general_helpers import *
+import re # Regex
 
 output_file_name = ""
 error_occuring = 0
@@ -59,7 +60,8 @@ def read_tags_from_json(json_data):
     tag = raw_tag["_content"]
     #tag = tag.lower               # Only lower case
     #tag = wn.morphy(tag)          # Stemmming
-    tag_list.append(tag)
+    if not re.search("[0-9]", tag):
+      tag_list.append(tag)
   return tag_list
 
 def get_json_files(metadata_dir):
@@ -273,7 +275,7 @@ def recursive_partitioning(tag_index_dict, tag_co_occurrence_histogram):
   cluster1, cluster2 = partitioning(tag_index_dict, tag_co_occurrence_histogram)
    # calculate modularity function Q whether partition is useful
   q = calculate_Q(tag_co_occurrence_histogram, cluster1, cluster2)
-  print "Done calculate q: " + str(q)
+  print "Done calculate q: %f" % q
   print "######################     Done with one bisection        ###################################"
   if q > 0:
     tag_index_dict1, tag_index_dict2 = split_dictionary(tag_index_dict, cluster1, cluster2)
