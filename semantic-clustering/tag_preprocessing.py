@@ -24,6 +24,8 @@ import sys
 sys.path.append('../helpers')
 from general_helpers import *
 
+tag_histogram = Counter()
+tag_co_occurrence_histogram = Counter()
 
 ################     Reading of Files       ####################################
 
@@ -106,6 +108,8 @@ def tag_preprocessing(number_of_jsons):
   print "Done Reading %d Json Files" % number_of_jsons
 
   # parse data from json files
+  global tag_histogram
+  global tag_co_occurrence_histogram
   tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
   print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
   #print photo_tags_dict
