@@ -350,7 +350,7 @@ def main():
   for index, cluster in enumerate(photo_clusters):
     additional_columns["Tags"].append(tag_clusters[index])
     for photo_id, score in cluster:
-      clusters[index].append(photo_data_list[photo_id])
+      clusters[index].append(dict(photo_data_list[photo_id].items()+{"score":score}.items()))
 
   write_clusters_to_html(clusters, additional_columns=additional_columns, open_in_browser=True)
 
