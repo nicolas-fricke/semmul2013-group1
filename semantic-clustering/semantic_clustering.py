@@ -168,7 +168,7 @@ def create_clusters(separation_vector, index_tag_dict):
 
   return tag_cluster1, tag_cluster2
 
-def sepctral_bisection(matrix, index_tag_dict):
+def spectral_bisection(matrix, index_tag_dict):
   eigen_values, eigen_vectors = linalg.eig(matrix)
   print "Done calculate eigenvalues"
   partitioning_vector = calculate_second_smallest_eigen_vector(eigen_values, eigen_vectors)
@@ -239,7 +239,7 @@ def partitioning(tag_index_dict, tag_co_occurrence_histogram):
 
   # create two overlapping clusters
   index_tag_dict = dict(zip(tag_index_dict.values(), tag_index_dict.keys()))
-  cluster1, cluster2 = sepctral_bisection(laplace_matrix, index_tag_dict)
+  cluster1, cluster2 = spectral_bisection(laplace_matrix, index_tag_dict)
   print "Done group into 2 child clusters"
   #pprint.pprint(cluster1)
   #pprint.pprint(cluster2)
