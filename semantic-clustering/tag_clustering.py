@@ -20,7 +20,7 @@ tag_co_occurrence_histogram = Counter()
 def calculate_negative_adjacency_matrix(tag_list):
   negative_adjacency_matrix = np.zeros((len(tag_list),len(tag_list)))
   for index1 in range(0, len(tag_list)):
-    for index2 in range(index1, len(tag_list)):
+    for index2 in range(index1+1, len(tag_list)):
       if ((tag_list[index1], tag_list[index2]) in tag_co_occurrence_histogram) or ((tag_list[index2], tag_list[index1]) in tag_co_occurrence_histogram):
         negative_adjacency_matrix[index1][index2] = -1
         negative_adjacency_matrix[index2][index1] = -1
@@ -46,12 +46,11 @@ def calculate_second_highest_eigen_vector(eigen_values, eigen_vectors):
   index_of_highest_eigen_value = 0
   index_of_second_highest_eigen_value = 0
   for index, eigen_value in enumerate(eigen_values):
-    if(eigen_value > eigen_values[index_of_second_highest_eigen_value]):
-      if(eigen_value > eigen_values[index_of_highest_eigen_value]):
-        index_of_second_highest_eigen_value = index_of_highest_eigen_value
-        index_of_highest_eigen_value = index
-      else:
-        index_of_second_highest_eigen_value = index
+    if eigen_value > eigen_values[index_of_highest_eigen_value]:
+      index_of_second_highest_eigen_value = index_of_highest_eigen_value
+      index_of_highest_eigen_value = index
+    elif eigen_value > eigen_values[index_of_second_highest_eigen_value]:
+      index_of_second_highest_eigen_value = index
 
   return eigen_vectors[index_of_second_highest_eigen_value]
 
