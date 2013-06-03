@@ -340,10 +340,18 @@ def main():
   write_to_output(len(tag_histogram))
   #print photo_tags_dict
 
-  #remove to small values from the histogram
-  #for key, val in tag_co_occurrence_histogram.items():
-  #  if val < 1:
-  #    del tag_co_occurrence_histogram[key]
+  #remove tags with too small values from the histograms
+  new_tag_histogram = {}
+  for key, val in tag_histogram.items():
+   if val < 10:
+    new_tag_histogram[key] = val
+  new_tag_co_occurence_histogram = {}
+  for (key1,key2),val in tag_co_occurrence_histogram.items():
+    if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
+      new_tag_co_occurence_histogram[(key1,key2)] = val
+  tag_histogram = new_tag_histogram
+  tag_co_occurrence_histogram = new_tag_co_occurence_histogram
+  print "Done removing small values from tag_histogram and tag_co_occurrence_histogram"
 
   # tag index dict saves the matching index of a tag in the laplace matrix
   tag_index_dict = create_tag_index_dict(tag_histogram)
