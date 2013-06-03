@@ -10,6 +10,7 @@
 ######################################################################################
 
 from collections import defaultdict
+import operator
 
 # Import own modules
 from tag_preprocessing import *

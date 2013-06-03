@@ -11,8 +11,6 @@
 
 import numpy as np
 from scipy import linalg
-import os
-import operator
 from collections import Counter
 
 tag_co_occurrence_histogram = Counter()
