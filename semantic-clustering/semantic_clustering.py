@@ -138,6 +138,21 @@ def calculate_second_highest_eigen_vector(eigen_values, eigen_vectors):
 
   return eigen_vectors[index_of_second_highest_eigen_value]
 
+def calculate_second_smallest_eigen_vector(eigen_values, eigen_vectors):
+  index_of_smallest_eigen_value = -1
+  index_of_second_smallest_eigen_value = -1
+  for index, eigen_value in enumerate(eigen_values):
+    if eigen_value == 0:
+      if index_of_smallest_eigen_value == -1:
+        index_of_smallest_eigen_value = index
+      else:
+        index_of_second_smallest_eigen_value = index
+        break
+    elif eigen_value > 0:
+      if (index_of_second_smallest_eigen_value == -1) or (eigen_value < eigen_values[index_of_second_smallest_eigen_value]):
+        index_of_second_smallest_eigen_value = index
+  return eigen_vectors[index_of_second_smallest_eigen_value]
+
 def create_clusters(separation_vector, index_tag_dict):
   tag_cluster1 = []
   tag_cluster2 = []
@@ -154,9 +169,9 @@ def create_clusters(separation_vector, index_tag_dict):
 def sepctral_bisection(matrix, index_tag_dict):
   eigen_values, eigen_vectors = linalg.eig(matrix)
   print "Done calculate eigenvalues"
-  second_highest_eigen_vector = calculate_second_highest_eigen_vector(eigen_values, eigen_vectors)
+  partitioning_vector = calculate_second_smallest_eigen_vector(eigen_values, eigen_vectors)
   print "Done find vector for second highest eigenvalue"
-  return create_clusters(second_highest_eigen_vector, index_tag_dict)
+  return create_clusters(partitioning_vector, index_tag_dict)
 
 ################     Spectral Bisection       ###################################
 
@@ -353,7 +368,7 @@ def main():
     for photo_id, score in cluster:
       clusters[index].append(photo_data_list[photo_id])
 
-  name_of_html_file = str(how_many_jsons) + "_old_q.html"
+  name_of_html_file = str(how_many_jsons) + "_old_q_second_smallest.html"
   write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
 
 if __name__ == '__main__':
