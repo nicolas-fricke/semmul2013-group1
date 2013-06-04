@@ -38,12 +38,12 @@ def read_tags_from_json(json_data):
     tag = raw_tag["raw"]
     tag_array = string.split(tag," ")      # split by space
     for tag in tag_array:
-      tag = re.sub("[0-9]","", tag) # cut off digits
+      tag = re.sub("[0-9]","", tag)        # cut off digits
       tag = string.lower(tag)              # Only lower case
       #print tag.encode('ascii', 'replace')
       tag = wn.morphy(tag)                 # Stemmming
       if not tag == None:
-        tag_list.append(tag)
+        tag_list.append(str(tag))
   return tag_list
 
 def get_json_files(metadata_dir):

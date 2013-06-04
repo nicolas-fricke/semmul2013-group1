@@ -46,22 +46,25 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
                    "  </head>\n"
                    "  <body>\n"
                    "    <table border='1'>\n"
-                   "      <tr><th style='width: 100px'>Cluster</th>")
+                   "      <tr>\n"
+                   "        <th style='width: 100px'>Cluster</th>\n")
   if additional_columns != None:
     for column_heading in additional_columns.keys():
-      output_html += "          <th style='width: 300px'>%s</th>" % column_heading
-  output_html+= "             <th>Images</th></tr>\n"
+      output_html+="        <th style='width: 300px'>%s</th>\n" % column_heading
+  output_html+=  ( "        <th>Images</th>\n"
+                   "      </tr>\n")
   for cluster_number, images in clusters.iteritems():
-    output_html += "      <tr><td>#%d<br/><i>(%d images)</i></td>\n" % (cluster_number, len(images))
+    output_html +=("      <tr>\n"
+                   "        <td>#%d<br/><i>(%d images)</i></td>\n" % (cluster_number, len(images)))
     if additional_columns != None:
       for column in additional_columns.values():
-        output_html += "      <td>%s</td>" % column[cluster_number]
+        output_html += "        <td>%s</td>\n" % column[cluster_number]
     output_html += "        <td class='images'>\n"
     for image in images:
-      output_html += "        <img src='%s'" % image["url"]
+      output_html+="        <img src='%s'" % image["url"]
       if image.get("score") != None:
         output_html += "title='Score:%f'" % image["score"]
-      output_html += "        />\n"
+      output_html += "/>\n"
     output_html += "        </td></tr>\n"
   output_html += ( "    </table>\n"
                    "  </body>\n"
