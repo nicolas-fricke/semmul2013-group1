@@ -200,7 +200,7 @@ def recursive_partitioning(tag_list):
     if len(cluster2) > 1:
       tag_clusters.extend(recursive_partitioning(cluster2))
     else:
-      tag_cluster.append(cluster2)
+      tag_clusters.append(cluster2)
   else:
     print "------------------------- Q < 0 ------------------------------"
     return [tag_list]

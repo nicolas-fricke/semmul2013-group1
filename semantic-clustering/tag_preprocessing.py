@@ -40,9 +40,8 @@ def read_tags_from_json(json_data):
     for tag in tag_array:
       tag = re.sub("[0-9]","", tag)        # cut off digits
       tag = string.lower(tag)              # Only lower case
-      #print tag.encode('ascii', 'replace')
       tag = wn.morphy(tag)                 # Stemmming
-      if not tag == None:
+      if not tag == None and len(tag) > 2: # Only tags with more than 2 literals
         tag_list.append(str(tag))
   return tag_list
 
