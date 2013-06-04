@@ -9,6 +9,9 @@
 # mail: tino.junge@student.hpi.uni-potsdam.de, mandy.roick@student.hpi.uni-potsdam.de
 ######################################################################################
 
+from collections import defaultdict
+import operator
+
 # Import own modules
 from tag_preprocessing import *
 from tag_clustering import *
