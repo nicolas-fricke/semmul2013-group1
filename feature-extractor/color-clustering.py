@@ -19,6 +19,7 @@ import ConfigParser
 import json
 from collections import defaultdict
 from SimpleCV import Image
+from math import sqrt
 from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 # Import own module helpers
 import sys
@@ -27,10 +28,21 @@ from general_helpers import *
 from visual_helpers import *
 
 def distance_function(u, v):
-  sum_u = sum(u[20:30])
-  sum_v = sum(v[20:30])
-  diff  = abs(sum_u - sum_v)
-  return 0 if diff < 2 else 1
+  sum = 0
+  for i in range(0, len(u)):
+    #if i < 
+    sum += (u[i] - v[i]) ** 2
+  #sum_u = sum(u[20:30])
+  #sum_v = sum(v[20:30])
+  #diff  = abs(sum_u - sum_v)
+  #print "distance: " + str(sqrt(sum))
+  return sqrt(sum)
+
+def tag_is_present(tag_content, tag_list):
+  for tag in tag_list:
+    if tag["_content"] == tag_content:
+      return True
+  return False
 
 def main(argv):
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
@@ -56,17 +68,20 @@ def main(argv):
     for metajson_file in metajson_files:
       metadata = parse_json_file(metajson_file)
       if metadata["stat"] == "ok":
+        if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
+          continue
         data = {}
         url      = get_small_image_url(metadata)
         data["image_id"]  = metadata["id"]
         data["file_path"] = metajson_file
         data["url"]       = url
+        data["score"]     = None
         try:
           image = Image(url).toHSV()
         except Exception:
           continue
         (value, saturation, hue) = image.splitChannels()
-        bins = zip(split_image_into_bins(hue, 16), split_image_into_bins(saturation.equalize(), 16), split_image_into_bins(value.equalize(), 16))
+        bins = zip(split_image_into_bins(hue, 9), split_image_into_bins(saturation.equalize(), 9), split_image_into_bins(value.equalize(), 9))
         data["colors"] = []
         for hue_bin, sat_bin, val_bin in bins:
           data["colors"] += hue_bin.histogram(20)
@@ -74,7 +89,7 @@ def main(argv):
           data["colors"] += val_bin.histogram(20)
         images.append(data)
         file_number += 1
-      if file_number >= 400:
+      if file_number >= 100:
         break
     print "Done."
     save_object(images, "color_features.pickle")
@@ -88,7 +103,7 @@ def main(argv):
   print "Done."
 
   print_status("Clustering images by color histograms hierarchial_cluster algorithm with our own distance function.... ")
-  clustered_images = hierarchial_cluster(colors, 0.3, criterion='distance', metric=distance_function)
+  clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
   print "Done."
 
   clusters = defaultdict(list)
