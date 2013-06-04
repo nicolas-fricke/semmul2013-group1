@@ -19,6 +19,7 @@ import json
 import nltk
 from nltk.corpus import wordnet as wn
 import re # Regex
+import string
 # Import own modules
 import sys
 sys.path.append('../helpers')
@@ -34,11 +35,15 @@ def read_tags_from_json(json_data):
   tag_list = []
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
     # Preprocess tag before appending to tag_list
-    tag = raw_tag["_content"]
-    #tag = tag.lower               # Only lower case
-    #tag = wn.morphy(tag)          # Stemmming
-    if not re.search("[0-9]", tag):
-      tag_list.append(tag)
+    tag = raw_tag["raw"]
+    tag_array = string.split(tag," ")      # split by space
+    for tag in tag_array:
+      tag = re.sub("[0-9]","", tag) # cut off digits
+      tag = string.lower(tag)              # Only lower case
+      #print tag.encode('ascii', 'replace')
+      tag = wn.morphy(tag)                 # Stemmming
+      if not tag == None:
+        tag_list.append(tag)
   return tag_list
 
 def get_json_files(metadata_dir):

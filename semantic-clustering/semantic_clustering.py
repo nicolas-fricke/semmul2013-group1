@@ -44,7 +44,7 @@ def get_photo_clusters(tag_clusters,photo_tags_dict):
 ################     Main        ###################################
 
 def main():
-  number_of_jsons = 100
+  number_of_jsons = 500
 
   tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
 

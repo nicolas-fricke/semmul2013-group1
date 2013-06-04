@@ -17,6 +17,7 @@
 import argparse
 import ConfigParser
 import json
+import numpy as np
 from collections import defaultdict
 from SimpleCV import Image
 from math import sqrt
@@ -75,7 +76,6 @@ def main(argv):
         data["image_id"]  = metadata["id"]
         data["file_path"] = metajson_file
         data["url"]       = url
-        data["score"]     = None
         try:
           image = Image(url).toHSV()
         except Exception:
@@ -104,6 +104,7 @@ def main(argv):
 
   print_status("Clustering images by color histograms hierarchial_cluster algorithm with our own distance function.... ")
   clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
+  #clustered_images = Pycluster.kcluster(colors, 8)
   print "Done."
 
   clusters = defaultdict(list)
