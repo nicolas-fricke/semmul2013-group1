@@ -59,7 +59,7 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
     output_html += "        <td class='images'>\n"
     for image in images:
       output_html += "        <img src='%s'" % image["url"]
-      if image["score"] != None:
+      if image.get("score") != None:
         output_html += "title='Score:%f'" % image["score"]
       output_html += "        />\n"
     output_html += "        </td></tr>\n"
