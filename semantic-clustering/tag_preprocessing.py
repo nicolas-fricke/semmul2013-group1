@@ -20,13 +20,18 @@ import nltk
 from nltk.corpus import wordnet as wn
 import re # Regex
 import string
+import operator
+from math import log
+
 # Import own modules
 import sys
 sys.path.append('../helpers')
 from general_helpers import *
 
+# Global variables
 tag_histogram = Counter()
 tag_co_occurrence_histogram = Counter()
+
 
 ################     Reading of Files       ####################################
 
@@ -44,9 +49,6 @@ def read_tags_from_json(json_data):
       if not tag == None and len(tag) > 2: # Only tags with more than 2 literals
         tag_list.append(str(tag))
   return tag_list
-
-def get_json_files(metadata_dir):
-  return glob(metadata_dir + '/*/*/1000*.json')
 
 def read_data_from_json_file(json_file):
   f = open(json_file)
@@ -81,16 +83,22 @@ def parse_json_data(json_files,number_of_jsons):
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
   return tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list
 
-def remove_tags_with_small_occurence(threshold):
+def remove_tags_with_small_occurence(cut_off_percentage):
   new_tag_histogram = {}
-  for key, val in tag_histogram.items():
-   if val < threshold:
-    new_tag_histogram[key] = val
+  cut_off_threshold = (len(tag_histogram) * cut_off_percentage)/100
+  sorted_tag_histogram = sorted(tag_histogram.iteritems(), key=operator.itemgetter(1))
+  for (key, val) in sorted_tag_histogram:
+    if cut_off_threshold > 0:
+      cut_off_threshold -= 1
+      continue
+    else:
+      new_tag_histogram[key] = val
   new_tag_co_occurence_histogram = {}
   for (key1,key2),val in tag_co_occurrence_histogram.items():
     if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
       new_tag_co_occurence_histogram[(key1,key2)] = val
   return  new_tag_histogram, new_tag_co_occurence_histogram
+
 
 ################     Tag Clustering       ####################################
 
@@ -118,9 +126,21 @@ def tag_preprocessing(number_of_jsons):
   print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
   #print photo_tags_dict
 
-  #remove tags with too small values from the histograms
-  tag_histogram, tag_co_occurrence_histogram = remove_tags_with_small_occurence(10)
-  print "Done removing small values from tag_histogram and tag_co_occurrence_histogram"
+  # remove X percent tags with too small occurence from the histograms
+  cut_off_percentage = 10
+  tag_histogram, tag_co_occurrence_histogram = remove_tags_with_small_occurence(cut_off_percentage)
+  print "Done removing the lower %d%% of tags from histograms. %2d Tags remaining" % (cut_off_percentage,len(tag_histogram))
+
+  # remove tags with too small and too high Tf-idf value (occure too seldom or too often)
+  # sorted_tag_histogram = sorted(tag_histogram.iteritems(), key=operator.itemgetter(1))
+  # print "Tag \t Frequency \t Tf-idf"
+  # (_,highest_val) = sorted_tag_histogram[-1]
+  # for (key, val) in sorted_tag_histogram:
+  #   tf_idf = 0
+  #   for photo_taglist in photo_tags_dict.values():
+  #     if key in photo_taglist:
+  #       tf_idf += log(number_of_jsons/float(val)) # * freq(val) / freq(highest_val)
+  #   print "%s \t %d \t %f" % (key,val,tf_idf)
 
   # tag index dict saves the matching index of a tag in the laplace matrix
   tag_index_dict = create_tag_index_dict(tag_histogram)
