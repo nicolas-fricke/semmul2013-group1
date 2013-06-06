@@ -108,6 +108,9 @@ def main(argv):
 
   inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
 
+  # TODO: 1) recursively iterate over hyponyms and check in inverted index which photos have this tag
+  #       2) visualize image clusters, make one cluster per hyponym with all subimages as subclusters
+
   # ####### Write clusters to html ######
 
   # print_status("Writing Clusters...")
