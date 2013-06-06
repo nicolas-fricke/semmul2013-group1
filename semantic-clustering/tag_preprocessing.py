@@ -100,6 +100,7 @@ def remove_tags_with_small_occurence(cut_off_percentage):
   for (key1,key2),val in tag_co_occurrence_histogram.items():
     if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
       new_tag_co_occurence_histogram[(key1,key2)] = val
+  print "There are " + str(len(new_tag_co_occurence_histogram)) + " tag coocurrences"
   return  new_tag_histogram, new_tag_co_occurence_histogram
 
 ################     Tag Similarity       ####################################
@@ -120,8 +121,9 @@ def calculate_tag_similarities(tag_histogram):
         else:
           tag_similarity = synset1[0].lch_similarity(synset2[0])
           #print tag_similarity
-          if tag_similarity >= 1:
-            tag_similarity_histogram[(tag1, tag2)] = tag_similarity
+          if tag_similarity >= 0.2:
+            tag_similarity_histogram[(tag1, tag2)] = pow(tag_similarity,2) * tag_co_occurrence_histogram[(tag1, tag2)]
+  print "There are " + str(len(tag_similarity_histogram)) + " edges"
   return tag_similarity_histogram, tag_histogram
 
 def write_tag_similarity_histogram_to_file(tag_similarity_histogram):
