@@ -88,7 +88,7 @@ def main(argv):
   ####### Getting Tag List ######
 
   print_status("Running tag_preprocessing for %d Jsons...\n" % number_of_jsons)
-  tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
+  tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons)
   print_status("Running tag_preprocessing... Done.\n")
 
   ####### WordNet Search #######
