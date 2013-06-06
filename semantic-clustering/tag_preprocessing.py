@@ -31,6 +31,7 @@ from general_helpers import *
 # Global variables
 tag_histogram = Counter()
 tag_co_occurrence_histogram = Counter()
+tag_similarity_histogram = dict()
 
 
 ################     Reading of Files       ####################################
@@ -69,6 +70,7 @@ def import_metadata_dir_of_config(path):
 def parse_json_data(json_files,number_of_jsons):
   tag_histogram = Counter()
   tag_co_occurrence_histogram = Counter()
+  tag_similarity_histogram = dict()
   photo_tags_dict = {}
   photo_data_list = {}
   for count,json_file in enumerate(json_files):
@@ -81,7 +83,8 @@ def parse_json_data(json_files,number_of_jsons):
     if not tag_list == None:
       tag_histogram.update(tag_list)
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
-  return tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list
+  tag_similarity_histogram, new_tag_histogram = calculate_tag_similarities(tag_histogram)
+  return new_tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list
 
 def remove_tags_with_small_occurence(cut_off_percentage):
   new_tag_histogram = {}
@@ -99,6 +102,35 @@ def remove_tags_with_small_occurence(cut_off_percentage):
       new_tag_co_occurence_histogram[(key1,key2)] = val
   return  new_tag_histogram, new_tag_co_occurence_histogram
 
+################     Tag Similarity       ####################################
+
+def calculate_tag_similarities(tag_histogram):
+  tag_similarity_histogram = {}
+  for tag1 in tag_histogram.keys():
+    for tag2 in tag_histogram.keys():
+      if tag1 < tag2:
+        # get synsets
+        synset1 = wn.synsets(tag1, pos=wn.NOUN)
+        synset2 = wn.synsets(tag2, pos=wn.NOUN)
+        if len(synset1) == 0:
+          del tag_histogram[tag1]
+          break
+        elif len(synset2) == 0:
+          del tag_histogram[tag2]
+        else:
+          tag_similarity = synset1[0].lch_similarity(synset2[0])
+          #print tag_similarity
+          if tag_similarity >= 1:
+            tag_similarity_histogram[(tag1, tag2)] = tag_similarity
+  return tag_similarity_histogram, tag_histogram
+
+def write_tag_similarity_histogram_to_file(tag_similarity_histogram):
+  print "Writing similarity file."
+  output_file = open('tag_similarity_file.txt', 'w')
+  for (tag1, tag2), similarity in tag_similarity_histogram.iteritems():
+    output_file.write(tag1 + ' ' + tag2 + ' ' + str(similarity) + '\n')
+    #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
+  output_file.close()
 
 ################     Tag Clustering       ####################################
 
@@ -122,9 +154,12 @@ def tag_preprocessing(number_of_jsons):
   # parse data from json files
   global tag_histogram
   global tag_co_occurrence_histogram
-  tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
+  global tag_similarity_histogram
+  tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
   print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
   #print photo_tags_dict
+
+  #write_tag_similarity_histogram_to_file(tag_similarity_histogram)
 
   # remove X percent tags with too small occurence from the histograms
   cut_off_percentage = 10
@@ -143,8 +178,8 @@ def tag_preprocessing(number_of_jsons):
   #   print "%s \t %d \t %f" % (key,val,tf_idf)
 
   # tag index dict saves the matching index of a tag in the laplace matrix
-  tag_index_dict = create_tag_index_dict(tag_histogram)
+  tag_list = tag_histogram.keys()
   print "Done Tag Dict"
   #print tag_index_dict
 
-  return tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list
+  return tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list
