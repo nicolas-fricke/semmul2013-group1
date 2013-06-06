@@ -6,8 +6,8 @@
 # Search the given word in wordnet and try to cluster images which belongs to it
 #
 #
-# authors: tino junge
-# mail: tino.junge@student.hpi.uni-potsdam.de
+# authors: tino junge, nicolas fricke
+# mail: {tino.junge nicolas.fricke}@student.hpi.uni-potsdam.de
 ######################################################################################
 
 import sys
@@ -25,8 +25,7 @@ def get_synset_name(synset):
   return synset.name.split(".")[0]
 
 
-def main(argv):
-
+def parse_command_line_arguments(argv):
   ####### Reading Commandline arguments ########
 
   word = ''
@@ -55,15 +54,9 @@ def main(argv):
     print 'Syntax: wordnet_search_clustering.py -n <number_of_jsons> -w <word>'
     sys.exit()
 
-  ####### Getting Tag List ######
+  return word, number_of_jsons
 
-  print_status("Running tag_preprocessing for %d Jsons...\n" % number_of_jsons)
-  tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
-  print_status("Running tag_preprocessing... Done.\n")
-
-  ####### WordNet Search #######
-
-  print_status("Running WordNet Search for %s..." % word)
+def find_hyponyms_on_wordnet(word, photo_tags_dict):
   synonyms_photo_lists = []
   hyponyms_lists = []
   for synonym in wn.synsets(word):
@@ -86,6 +79,22 @@ def main(argv):
     #   sys.stdout.write("%d, " % photo_id)
     # sys.stdout.write("\n")
     # sys.stdout.flush()
+    return synonyms_photo_lists, hyponyms_lists
+
+def main(argv):
+  ####### Reading Commandline arguments ########
+  word, number_of_jsons = parse_command_line_arguments(argv)
+
+  ####### Getting Tag List ######
+
+  print_status("Running tag_preprocessing for %d Jsons...\n" % number_of_jsons)
+  tag_co_occurrence_histogram, tag_index_dict, tag_similarity_histogram, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons)
+  print_status("Finishing tag_preprocessing.\n")
+
+  ####### WordNet Search #######
+
+  print_status("Running WordNet Search for %s..." % word)
+  synonyms_photo_lists, hyponyms_lists = find_hyponyms_on_wordnet(word,photo_tags_dict)
   print "Done."
 
 
@@ -103,7 +112,7 @@ def main(argv):
   name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
   write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
   print "Done."
-  print_status("Done")
+  print_status("Done.\n")
 
 
 if __name__ == '__main__':
