@@ -160,31 +160,6 @@ def partitioning(tag_list):
   #pprint.pprint(cluster2)
   return cluster1, cluster2
 
-def split_dictionary(dictionary, cluster1, cluster2):
-  dict1 = dict()
-  current_index1 = 0
-  dict2 = dict()
-  current_index2 = 0
-  for key, value in dictionary.items():
-    if key in cluster1:
-      dict1[key] = current_index1
-      current_index1 += 1
-    if key in cluster2:
-      dict2[key] = current_index2
-      current_index2 += 1
-  return dict1, dict2
-
-def split_co_occurence_histogram(co_occurrence_histogram, cluster1, cluster2):
-  # TODO
-  co_occurrence_histogram1 = Counter()
-  co_occurrence_histogram2 = Counter()
-  for (tag1, tag2), value in co_occurrence_histogram.items():
-    if tag1 in cluster1 and tag2 in cluster1:
-      co_occurrence_histogram1[(tag1, tag2)] = value
-    if tag1 in cluster2 and tag2 in cluster2:
-      co_occurrence_histogram2[(tag1, tag2)] = value
-  return co_occurrence_histogram1, co_occurrence_histogram2
-
 def recursive_partitioning(tag_list):
   tag_clusters = []
   cluster1, cluster2 = partitioning(tag_list)
