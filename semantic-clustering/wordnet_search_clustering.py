@@ -63,7 +63,7 @@ def main(argv):
 
   ####### WordNet Search #######
 
-  print_status("Running WordNet Search for %s..." % word)
+  print_status("Running WordNet Search for word: '%s'..." % word)
   synonyms_photo_lists = []
   hyponyms_lists = []
   for synonym in wn.synsets(word):
@@ -103,7 +103,7 @@ def main(argv):
   name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
   write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
   print "Done."
-  print_status("Done")
+  print_status("Done.\n")
 
 
 if __name__ == '__main__':
