@@ -68,14 +68,10 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name):
     return hyponyms_of_synset
 
 def find_hyponyms_on_wordnet(word):
-  hyponyms_lists = []
+  hyponym_tree = defaultdict(list)
   for synset in wn.synsets(word):
-    hyponym_list = []
-    for hyponym in synset.hyponyms():
-      hyponym_list.append(hyponym.name)
-
-    hyponyms_lists.append(hyponym_list)
-  return hyponyms_lists
+    hyponym_tree[synset.name].append(recursively_find_all_hyponyms_on_wordnet(synset.name))
+  return hyponym_tree
 
 def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
   synonyms_photo_lists = []
