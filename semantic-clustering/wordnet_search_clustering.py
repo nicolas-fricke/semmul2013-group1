@@ -56,30 +56,25 @@ def parse_command_line_arguments(argv):
 
   return word, number_of_jsons
 
-def find_hyponyms_on_wordnet(word, photo_tags_dict):
-  synonyms_photo_lists = []
+def find_hyponyms_on_wordnet(word):
   hyponyms_lists = []
-  for synonym in wn.synsets(word):
-    synonym_name = get_synset_name(synonym)
-    # sys.stdout.write(synonym_name + " : \n      hyponyms: ")
-    synonym_photo_list = []
+  for synset in wn.synsets(word):
     hyponym_list = []
-    for hyponym in synonym.hyponyms():
-      hyponym_name = get_synset_name(hyponym)
-      hyponym_list.append(hyponym_name)
-      # sys.stdout.write("%s, " % hyponym_name)
-      for photo_id, tag_list in photo_tags_dict.items():
-        if hyponym_name in tag_list: # or (hyponym_name in tag_list and synonym_name in tag_list)
-          synonym_photo_list.append(photo_id)
+    for hyponym in synset.hyponyms():
+      hyponym_list.append(hyponym.name)
+
     hyponyms_lists.append(hyponym_list)
+  return hyponyms_lists
+
+def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
+  synonyms_photo_lists = []
+  for hyponym_name in hyponyms:
+    synonym_photo_list = []
+    for photo_id, tag_list in photo_tags_dict.items():
+      if hyponym_name in tag_list: # or (hyponym_name in tag_list and synonym_name in tag_list)
+        synonym_photo_list.append(photo_id)
     synonyms_photo_lists.append(synonym_photo_list)
-    # sys.stdout.write("\n")
-    # sys.stdout.write("      Photos: ")
-    # for photo_id in synonym_photo_list:
-    #   sys.stdout.write("%d, " % photo_id)
-    # sys.stdout.write("\n")
-    # sys.stdout.flush()
-    return synonyms_photo_lists, hyponyms_lists
+  return synonyms_photo_lists
 
 def main(argv):
   ####### Reading Commandline arguments ########
@@ -94,25 +89,27 @@ def main(argv):
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s..." % word)
-  synonyms_photo_lists, hyponyms_lists = find_hyponyms_on_wordnet(word,photo_tags_dict)
+  hyponyms_lists = find_hyponyms_on_wordnet(word)
   print "Done."
 
+  print hyponyms_lists
 
-  ####### Write clusters to html ######
 
-  print_status("Writing Clusters...")
-  clusters = defaultdict(list)
-  additional_columns= {}
-  additional_columns["hyponyms"] = []
-  for index, photo_list in enumerate(synonyms_photo_lists):
-    additional_columns["hyponyms"].append(hyponyms_lists[index])
-    for photo_id in photo_list:
-      clusters[index].append(dict(photo_data_list[photo_id].items()))
+  # ####### Write clusters to html ######
 
-  name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
-  write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
-  print "Done."
-  print_status("Done.\n")
+  # print_status("Writing Clusters...")
+  # clusters = defaultdict(list)
+  # additional_columns= {}
+  # additional_columns["hyponyms"] = []
+  # for index, photo_list in enumerate(synonyms_photo_lists):
+  #   additional_columns["hyponyms"].append(hyponyms_lists[index])
+  #   for photo_id in photo_list:
+  #     clusters[index].append(dict(photo_data_list[photo_id].items()))
+
+  # name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
+  # write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
+  # print "Done."
+  # print_status("Done.\n")
 
 
 if __name__ == '__main__':
