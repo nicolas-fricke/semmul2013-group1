@@ -155,16 +155,10 @@ def tag_preprocessing(number_of_jsons):
   # parse data from json files
   global tag_histogram
   global tag_co_occurrence_histogram
-<<<<<<< HEAD
-  print_status("Parsing json files, creating histograms and tags dictionary... ")
-  tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
-  print "Done, with %2d Tags" % len(tag_histogram)
-=======
   global tag_similarity_histogram
+  print_status("Parsing json files, creating histograms and tags dictionary... ")
   tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
-  print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
->>>>>>> 6921f95a5dd2853412c2e9612d3e6cdfe876a903
-  #print photo_tags_dict
+  print "Done, with %2d Tags" % len(tag_histogram)
 
   #write_tag_similarity_histogram_to_file(tag_similarity_histogram)
 
