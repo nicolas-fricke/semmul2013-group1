@@ -67,24 +67,33 @@ def import_metadata_dir_of_config(path):
   config.read('../config.cfg')
   return '../' + config.get('Directories', 'metadata-dir')
 
-def parse_json_data(json_files,number_of_jsons):
-  tag_histogram = Counter()
-  tag_co_occurrence_histogram = Counter()
-  tag_similarity_histogram = dict()
-  photo_tags_dict = {}
-  photo_data_list = {}
+def parse_json_data(json_files,number_of_jsons, get_tag_histogram=False, get_tag_co_occurence_histogram=False, get_tag_similarity_histogram=False, get_photo_tags_dict=False, get_photo_data_list=False):
+  if get_tag_histogram: tag_histogram = Counter()
+  if get_tag_co_occurrence_histogram: tag_co_occurrence_histogram = Counter()
+  if get_tag_similarity_histogram: tag_similarity_histogram = dict()
+  if get_photo_tags_dict: photo_tags_dict = {}
+  if get_photo_data_list: photo_data_list = {}
   for count,json_file in enumerate(json_files):
     if count > number_of_jsons:
       break
     tag_list, photo_data = read_data_from_json_file(json_file)
     if not photo_data == None:
-      photo_tags_dict[int(photo_data["image_id"])] = tag_list
-      photo_data_list[int(photo_data["image_id"])] = photo_data
+      if get_photo_tags_dict: photo_tags_dict[int(photo_data["image_id"])] = tag_list
+      if get_photo_data_list: photo_data_list[int(photo_data["image_id"])] = photo_data
     if not tag_list == None:
-      tag_histogram.update(tag_list)
-      tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
-  tag_similarity_histogram, new_tag_histogram = calculate_tag_similarities(tag_histogram)
-  return new_tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list
+      if get_tag_histogram: tag_histogram.update(tag_list)
+      if get_tag_co_occurrence_histogram: tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
+  if get_tag_similarity_histogram: tag_similarity_histogram, tag_histogram = calculate_tag_similarities(tag_histogram)
+
+  return_values = []
+
+  if get_tag_histogram: return_values.append(tag_histogram)
+  if get_tag_co_occurrence_histogram: return_values.append(tag_co_occurrence_histogram)
+  if get_tag_similarity_histogram: return_values.append(tag_similarity_histogram)
+  if get_photo_tags_dict: return_values.append(photo_tags_dict)
+  if get_photo_data_list: return_values.append(photo_data_list)
+
+  return tuple(return_values)
 
 def remove_tags_with_small_occurence(cut_off_percentage):
   new_tag_histogram = {}
