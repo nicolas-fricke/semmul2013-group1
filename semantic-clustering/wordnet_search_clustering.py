@@ -83,6 +83,13 @@ def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
     synonyms_photo_lists.append(synonym_photo_list)
   return synonyms_photo_lists
 
+def build_inverted_tag_index(photo_tags_dict):
+  inverted_tag_index = defaultdict(list)
+  for photo_id, photo_tags in photo_tags_dict.items():
+    for tag in photo_tags:
+      inverted_tag_index[tag].append(photo_id)
+  return inverted_tag_index
+
 def main(argv):
   ####### Reading Commandline arguments ########
   word, number_of_jsons = parse_command_line_arguments(argv)
@@ -99,8 +106,7 @@ def main(argv):
   hyponyms_lists = find_hyponyms_on_wordnet(word)
   print "Done."
 
-  print hyponyms_lists
-
+  inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
 
   # ####### Write clusters to html ######
 
