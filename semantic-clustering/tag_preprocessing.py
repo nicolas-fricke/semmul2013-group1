@@ -116,20 +116,23 @@ def tag_preprocessing(number_of_jsons):
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
   # read json files from metadata directory
+  print_status("Reading %d Json Files... " % number_of_jsons)
   json_files = find_metajsons_to_process(metadata_dir)
-  print "Done Reading %d Json Files" % number_of_jsons
+  print "Done."
 
   # parse data from json files
   global tag_histogram
   global tag_co_occurrence_histogram
+  print_status("Parsing json files, creating histograms and tags dictionary... ")
   tag_histogram, tag_co_occurrence_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
-  print "Done parsing json files: histograms and tags dictionary. %2d Tags" % len(tag_histogram)
+  print "Done, with %2d Tags" % len(tag_histogram)
   #print photo_tags_dict
 
   # remove X percent tags with too small occurence from the histograms
   cut_off_percentage = 10
+  print_status("Removing the lower %d%% of tags from histograms... " % cut_off_percentage)
   tag_histogram, tag_co_occurrence_histogram = remove_tags_with_small_occurence(cut_off_percentage)
-  print "Done removing the lower %d%% of tags from histograms. %2d Tags remaining" % (cut_off_percentage,len(tag_histogram))
+  print "Done, %2d Tags remaining" % len(tag_histogram)
 
   # remove tags with too small and too high Tf-idf value (occure too seldom or too often)
   # sorted_tag_histogram = sorted(tag_histogram.iteritems(), key=operator.itemgetter(1))
@@ -143,8 +146,9 @@ def tag_preprocessing(number_of_jsons):
   #   print "%s \t %d \t %f" % (key,val,tf_idf)
 
   # tag index dict saves the matching index of a tag in the laplace matrix
+  print_status("Creating tag dictionary... ")
   tag_index_dict = create_tag_index_dict(tag_histogram)
-  print "Done Tag Dict"
+  print "Done."
   #print tag_index_dict
 
   return tag_co_occurrence_histogram, tag_index_dict, photo_tags_dict, photo_data_list
