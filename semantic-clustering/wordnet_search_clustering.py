@@ -56,6 +56,17 @@ def parse_command_line_arguments(argv):
 
   return word, number_of_jsons
 
+def recursively_find_all_hyponyms_on_wordnet(synset_name):
+  synset = wn.synset(synset_name)
+  hyponyms = synset.hyponyms()
+  if len(hyponyms) == 0:
+    return None
+  else:
+    hyponyms_of_synset = {}
+    for hyponym in hyponyms:
+      hyponyms_of_synset[hyponym.name] = recursively_find_all_hyponyms_on_wordnet(hyponym.name)
+    return hyponyms_of_synset
+
 def find_hyponyms_on_wordnet(word):
   hyponyms_lists = []
   for synset in wn.synsets(word):
