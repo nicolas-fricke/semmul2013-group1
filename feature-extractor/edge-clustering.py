@@ -51,11 +51,15 @@ def main():
         image = Image(url)
       except Exception:
         continue
-      edge_angles_and_lengths = edgeExtractor.extract(image)
-      data["edge-angles"]      = edge_angles_and_lengths[:len(edge_angles_and_lengths) / 2]
-      data["edge-lengths"]     = edge_angles_and_lengths[len(edge_angles_and_lengths) / 2:]
+      image_bins = split_image_into_bins(image, 16)
+      data["edge-angles"]  = []
+      data["edge-lengths"] = []
+      for image_bin in image_bins:
+        edge_angles_and_lengths = edgeExtractor.extract(image_bin)
+        data["edge-angles"]  += edge_angles_and_lengths[:len(edge_angles_and_lengths) / 2]
+        data["edge-lengths"] += edge_angles_and_lengths[len(edge_angles_and_lengths) / 2:]
       images.append(data)
-    if file_number > 200:
+    if file_number > 500:
       break
   print "Done."
 
