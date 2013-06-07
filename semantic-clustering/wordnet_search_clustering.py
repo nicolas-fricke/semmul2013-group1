@@ -56,30 +56,39 @@ def parse_command_line_arguments(argv):
 
   return word, number_of_jsons
 
-def find_hyponyms_on_wordnet(word, photo_tags_dict):
+def recursively_find_all_hyponyms_on_wordnet(synset_name):
+  synset = wn.synset(synset_name)
+  hyponyms = synset.hyponyms()
+  if len(hyponyms) == 0:
+    return None
+  else:
+    hyponyms_of_synset = {}
+    for hyponym in hyponyms:
+      hyponyms_of_synset[hyponym.name] = recursively_find_all_hyponyms_on_wordnet(hyponym.name)
+    return hyponyms_of_synset
+
+def find_hyponyms_on_wordnet(word):
+  hyponym_tree = defaultdict(list)
+  for synset in wn.synsets(word):
+    hyponym_tree[synset.name].append(recursively_find_all_hyponyms_on_wordnet(synset.name))
+  return hyponym_tree
+
+def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
   synonyms_photo_lists = []
-  hyponyms_lists = []
-  for synonym in wn.synsets(word):
-    synonym_name = get_synset_name(synonym)
-    # sys.stdout.write(synonym_name + " : \n      hyponyms: ")
+  for hyponym_name in hyponyms:
     synonym_photo_list = []
-    hyponym_list = []
-    for hyponym in synonym.hyponyms():
-      hyponym_name = get_synset_name(hyponym)
-      hyponym_list.append(hyponym_name)
-      # sys.stdout.write("%s, " % hyponym_name)
-      for photo_id, tag_list in photo_tags_dict.items():
-        if hyponym_name in tag_list: # or (hyponym_name in tag_list and synonym_name in tag_list)
-          synonym_photo_list.append(photo_id)
-    hyponyms_lists.append(hyponym_list)
+    for photo_id, tag_list in photo_tags_dict.items():
+      if hyponym_name in tag_list: # or (hyponym_name in tag_list and synonym_name in tag_list)
+        synonym_photo_list.append(photo_id)
     synonyms_photo_lists.append(synonym_photo_list)
-    # sys.stdout.write("\n")
-    # sys.stdout.write("      Photos: ")
-    # for photo_id in synonym_photo_list:
-    #   sys.stdout.write("%d, " % photo_id)
-    # sys.stdout.write("\n")
-    # sys.stdout.flush()
-    return synonyms_photo_lists, hyponyms_lists
+  return synonyms_photo_lists
+
+def build_inverted_tag_index(photo_tags_dict):
+  inverted_tag_index = defaultdict(list)
+  for photo_id, photo_tags in photo_tags_dict.items():
+    for tag in photo_tags:
+      inverted_tag_index[tag].append(photo_id)
+  return inverted_tag_index
 
 def main(argv):
   ####### Reading Commandline arguments ########
@@ -94,25 +103,29 @@ def main(argv):
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s..." % word)
-  synonyms_photo_lists, hyponyms_lists = find_hyponyms_on_wordnet(word,photo_tags_dict)
+  hyponyms_lists = find_hyponyms_on_wordnet(word)
   print "Done."
 
+  inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
 
-  ####### Write clusters to html ######
+  # TODO: 1) recursively iterate over hyponyms and check in inverted index which photos have this tag
+  #       2) visualize image clusters, make one cluster per hyponym with all subimages as subclusters
 
-  print_status("Writing Clusters...")
-  clusters = defaultdict(list)
-  additional_columns= {}
-  additional_columns["hyponyms"] = []
-  for index, photo_list in enumerate(synonyms_photo_lists):
-    additional_columns["hyponyms"].append(hyponyms_lists[index])
-    for photo_id in photo_list:
-      clusters[index].append(dict(photo_data_list[photo_id].items()))
+  # ####### Write clusters to html ######
 
-  name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
-  write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
-  print "Done."
-  print_status("Done.\n")
+  # print_status("Writing Clusters...")
+  # clusters = defaultdict(list)
+  # additional_columns= {}
+  # additional_columns["hyponyms"] = []
+  # for index, photo_list in enumerate(synonyms_photo_lists):
+  #   additional_columns["hyponyms"].append(hyponyms_lists[index])
+  #   for photo_id in photo_list:
+  #     clusters[index].append(dict(photo_data_list[photo_id].items()))
+
+  # name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
+  # write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
+  # print "Done."
+  # print_status("Done.\n")
 
 
 if __name__ == '__main__':
