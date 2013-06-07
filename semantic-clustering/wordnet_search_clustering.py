@@ -94,11 +94,22 @@ def main(argv):
   ####### Reading Commandline arguments ########
   word, number_of_jsons = parse_command_line_arguments(argv)
 
-  ####### Getting Tag List ######
 
-  print_status("Running tag_preprocessing for %d Jsons...\n" % number_of_jsons)
-  tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons)
-  print_status("Finishing tag_preprocessing.\n")
+  ####### Getting JSON files #########
+
+  # import configuration
+  metadata_dir = import_metadata_dir_of_config('../config.cfg')
+
+  print_status("Reading %d Json Files... " % number_of_jsons)
+  json_files = find_metajsons_to_process(metadata_dir)
+  print "Done."
+
+
+  ####### Getting Photo Tag List ######
+
+  print_status("Parsing photo_tags_dict for %d Jsons..." % number_of_jsons)
+  photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
+  print "Done."
 
   ####### WordNet Search #######
 

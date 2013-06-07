@@ -86,6 +86,16 @@ def parse_json_data(json_files,number_of_jsons):
   tag_similarity_histogram, new_tag_histogram = calculate_tag_similarities(tag_histogram)
   return new_tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list
 
+def parse_photo_tags_from_json_data(json_files,number_of_jsons):
+  photo_tags_dict = {}
+  for count,json_file in enumerate(json_files):
+    if count > number_of_jsons:
+      break
+    tag_list, photo_data = read_data_from_json_file(json_file)
+    if not photo_data == None:
+      photo_tags_dict[int(photo_data["image_id"])] = tag_list
+  return photo_tags_dict
+
 def remove_tags_with_small_occurence(cut_off_percentage):
   new_tag_histogram = {}
   cut_off_threshold = (len(tag_histogram) * cut_off_percentage)/100
