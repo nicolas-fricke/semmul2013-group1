@@ -90,23 +90,61 @@ def build_inverted_tag_index(photo_tags_dict):
       inverted_tag_index[tag].append(photo_id)
   return inverted_tag_index
 
+def add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index):
+  if hyponyms_lists == None:
+    return None
+  else:
+    for hyponym, hyponym_list in hyponyms_lists.items():
+      hyponym_name = hyponym.split(".")[0]
+      print hyponym_name
+      print inverted_tag_index.get(hyponym_name)
+      if inverted_tag_index.get(hyponym_name):
+        print "Matching!!"
+      if hyponym_list == None:
+        return None
+      else:
+        for hyponym_dict in hyponym_list:
+          add_photos_to_hyponym_lists(hyponym_dict,inverted_tag_index)
+  return hyponyms_lists
+
+
 def main(argv):
   ####### Reading Commandline arguments ########
   word, number_of_jsons = parse_command_line_arguments(argv)
 
-  ####### Getting Tag List ######
 
-  print_status("Running tag_preprocessing for %d Jsons...\n" % number_of_jsons)
-  tag_co_occurrence_histogram, tag_index_dict, tag_similarity_histogram, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons)
-  print_status("Finishing tag_preprocessing.\n")
+  ####### Getting JSON files #########
+
+  # import configuration
+  metadata_dir = import_metadata_dir_of_config('../config.cfg')
+
+  print_status("Reading %d Json Files... " % number_of_jsons)
+  json_files = find_metajsons_to_process(metadata_dir)
+  print "Done."
+
+
+  ####### Getting Photo Tag List ######
+
+  print_status("Parsing photo_tags_dict for %d Jsons... " % number_of_jsons)
+  photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
+  print "Done."
 
   ####### WordNet Search #######
 
-  print_status("Running WordNet Search for %s..." % word)
+  print_status("Running WordNet Search for %s... " % word)
   hyponyms_lists = find_hyponyms_on_wordnet(word)
   print "Done."
 
+  print_status("Building inverted_tag_index... ")
   inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
+  print "Done."
+
+  print inverted_tag_index
+  print hyponyms_lists
+
+  print_status("Check if photo_tags in hyponyms_lists... ")
+  hyponyms_lists = add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index)
+  print "Done."
 
   # TODO: 1) recursively iterate over hyponyms and check in inverted index which photos have this tag
   #       2) visualize image clusters, make one cluster per hyponym with all subimages as subclusters
