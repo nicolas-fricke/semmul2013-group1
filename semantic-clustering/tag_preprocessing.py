@@ -21,7 +21,7 @@ from nltk.corpus import wordnet as wn
 import re # Regex
 import string
 import operator
-from math import log
+from math import log, e
 
 # Import own modules
 import sys
@@ -84,6 +84,7 @@ def parse_json_data(json_files,number_of_jsons):
       tag_histogram.update(tag_list)
       tag_co_occurrence_histogram.update([(tag1,tag2) for tag1 in tag_list for tag2 in tag_list if tag1 < tag2])
   tag_similarity_histogram, new_tag_histogram = calculate_tag_similarities(tag_histogram)
+  print tag_similarity_histogram
   return new_tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list
 
 def remove_tags_with_small_occurence(cut_off_percentage):
@@ -96,12 +97,19 @@ def remove_tags_with_small_occurence(cut_off_percentage):
       continue
     else:
       new_tag_histogram[key] = val
+
+  new_tag_similarity_histogram = {}
+  for (key1,key2),val in tag_similarity_histogram.items():
+    if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
+      new_tag_similarity_histogram[(key1,key2)] = val
+  print "There are " + str(len(new_tag_similarity_histogram)) + " similarity edges"
+
   new_tag_co_occurence_histogram = {}
   for (key1,key2),val in tag_co_occurrence_histogram.items():
     if new_tag_histogram.get(key1) and new_tag_histogram.get(key2):
       new_tag_co_occurence_histogram[(key1,key2)] = val
   print "There are " + str(len(new_tag_co_occurence_histogram)) + " tag coocurrences"
-  return  new_tag_histogram, new_tag_co_occurence_histogram
+  return  new_tag_histogram, new_tag_co_occurence_histogram, new_tag_similarity_histogram
 
 ################     Tag Similarity       ####################################
 
@@ -119,18 +127,22 @@ def calculate_tag_similarities(tag_histogram):
         elif len(synset2) == 0:
           del tag_histogram[tag2]
         else:
-          tag_similarity = synset1[0].lch_similarity(synset2[0])
-          #print tag_similarity
-          if tag_similarity >= 0.2:
-            tag_similarity_histogram[(tag1, tag2)] = pow(tag_similarity,2) * tag_co_occurrence_histogram[(tag1, tag2)]
+          try:
+            #TODO: find right synset (don't just take the first one!)
+            tag_similarity = synset1[0].lch_similarity(synset2[0])
+          except:
+            tag_similarity = 0
+          if tag_similarity >= 1.3:
+            #TODO: replace tags by the correct synset
+            tag_similarity_histogram[(tag1, tag2)] = tag_similarity
   print "There are " + str(len(tag_similarity_histogram)) + " edges"
   return tag_similarity_histogram, tag_histogram
 
 def write_tag_similarity_histogram_to_file(tag_similarity_histogram):
   print "Writing similarity file."
   output_file = open('tag_similarity_file.txt', 'w')
-  for (tag1, tag2), similarity in tag_similarity_histogram.iteritems():
-    output_file.write(tag1 + ' ' + tag2 + ' ' + str(similarity) + '\n')
+  for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
+    output_file.write(synset1 + ' ' + synset2 + ' ' + str(similarity) + '\n')
     #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
   output_file.close()
 
@@ -167,7 +179,7 @@ def tag_preprocessing(number_of_jsons):
   # remove X percent tags with too small occurence from the histograms
   cut_off_percentage = 10
   print_status("Removing the lower %d%% of tags from histograms... " % cut_off_percentage)
-  tag_histogram, tag_co_occurrence_histogram = remove_tags_with_small_occurence(cut_off_percentage)
+  tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram = remove_tags_with_small_occurence(cut_off_percentage)
   print "Done, %2d Tags remaining" % len(tag_histogram)
 
   # remove tags with too small and too high Tf-idf value (occure too seldom or too often)
