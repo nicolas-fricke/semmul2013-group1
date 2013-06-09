@@ -52,11 +52,12 @@ def main(argv):
         except Exception:
           continue
 
-        images.append(extract_colors(image, data))
-        images.append(extract_edges(image, data))
+        data = extract_colors(image, data)
+        data = extract_edges(image, data)
+        images.append(data)
 
         file_number += 1
-      if file_number >= 50:
+      if file_number >= 100:
         break
     print "Done."
     save_object(images, "color_and_edge_features.pickle")
@@ -82,8 +83,9 @@ def main(argv):
 
   #DO LATE FUSION
 
+  print_status("Displaying clusters (BY COLOR ONLY BECAUSE LATE FUSION TBD!)")
   clusters = defaultdict(list)
-  for index, cluster in enumerate(clustered_images):
+  for index, cluster in enumerate(clustered_images_by_color):
     clusters[cluster].append(images[index])
 
   write_clusters_to_html(clusters, open_in_browser=True)
