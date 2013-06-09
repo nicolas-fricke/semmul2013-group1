@@ -52,8 +52,8 @@ def main(argv):
         except Exception:
           continue
 
-        data = extract_colors(image, data)
-        data = extract_edges(image, data)
+        data = extract_colors(image, data, 1)
+        data = extract_edges(image, data, 9)
         images.append(data)
 
         file_number += 1
@@ -74,19 +74,22 @@ def main(argv):
 
   print_status("Clustering images by color histograms via k-means algorithm.... ")
   #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  clustered_images_by_color, value, _ = kcluster(colors, 10)
+  k_color = 7 # TOOD: increase k until no improvement anymore
+  clustered_images_by_color, value, _ = kcluster(colors, k_color)
   print "Done."
 
   print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  clustered_images_by_edges, value, _ = kcluster(edges, 10)
+  k_edges = 7 # TOOD: increase k until no improvement anymore
+  clustered_images_by_edges, value, _ = kcluster(edges, k_edges)
   print "Done."
 
   #DO LATE FUSION
 
-  print_status("Displaying clusters (BY COLOR ONLY BECAUSE LATE FUSION TBD!)")
+  print_status("Displaying clusters (simple intersection of color and edge clusters")
   clusters = defaultdict(list)
-  for index, cluster in enumerate(clustered_images_by_color):
-    clusters[cluster].append(images[index])
+  for index, cluster_color in enumerate(clustered_images_by_color):
+    cluster_edges = clustered_images_by_edges[index]
+    clusters[cluster_color + cluster_edges * k_color].append(images[index])
 
   write_clusters_to_html(clusters, open_in_browser=True)
 
