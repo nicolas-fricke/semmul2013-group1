@@ -10,6 +10,12 @@ def print_status(message):
   sys.stdout.write(message)
   sys.stdout.flush()
 
+def tag_is_present(tag_content, tag_list):
+  for tag in tag_list:
+    if tag["_content"] == tag_content:
+      return True
+  return False
+
 def save_object(obj, filename):
   with open(filename, 'wb') as output:
       pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)

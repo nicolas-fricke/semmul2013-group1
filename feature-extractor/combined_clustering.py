@@ -1,19 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-################################################################################
-# Script crawls images from flickr and parses them in SimpleCV
-#
-#
-# Specify the metadata folder in the config file: ../config.cfg
-#
-# Use config.cfg.template as template for this file
-#
-#
-# author: nicolas fricke
-# mail: nicolas.fricke@student.hpi.uni-potsdam.de
-################################################################################
-
 import argparse
 import ConfigParser
 import json
@@ -22,28 +6,15 @@ from collections import defaultdict
 from SimpleCV import Image
 from math import sqrt
 from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
+from Pycluster import kcluster
 # Import own module helpers
 import sys
 sys.path.append('../helpers')
 from general_helpers import *
 from visual_helpers import *
+from color_clustering import extract_colors
+from edge_clustering import extract_edges
 
-def distance_function(u, v):
-  sum = 0
-  for i in range(0, len(u)):
-    #if i < 
-    sum += (u[i] - v[i]) ** 2
-  #sum_u = sum(u[20:30])
-  #sum_v = sum(v[20:30])
-  #diff  = abs(sum_u - sum_v)
-  #print "distance: " + str(sqrt(sum))
-  return sqrt(sum)
-
-def tag_is_present(tag_content, tag_list):
-  for tag in tag_list:
-    if tag["_content"] == tag_content:
-      return True
-  return False
 
 def main(argv):
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
@@ -63,7 +34,7 @@ def main(argv):
 
     metajson_files = find_metajsons_to_process(metadata_dir)
 
-    print_status("Reading metadata files, loading images and calculating color histograms.... ")
+    print_status("Reading metadata files, loading images and calculating color and edge histograms.... ")
     images = []
     file_number = 0
     for metajson_file in metajson_files:
@@ -80,32 +51,36 @@ def main(argv):
           image = Image(url).toHSV()
         except Exception:
           continue
-        (value, saturation, hue) = image.splitChannels()
-        bins = zip(split_image_into_bins(hue, 9), split_image_into_bins(saturation.equalize(), 9), split_image_into_bins(value.equalize(), 9))
-        data["colors"] = []
-        for hue_bin, sat_bin, val_bin in bins:
-          data["colors"] += hue_bin.histogram(20)
-          data["colors"] += sat_bin.histogram(20)
-          data["colors"] += val_bin.histogram(20)
-        images.append(data)
+
+        images.append(extract_colors(image, data))
+        images.append(extract_edges(image, data))
+
         file_number += 1
-      if file_number >= 100:
+      if file_number >= 50:
         break
     print "Done."
-    save_object(images, "color_features.pickle")
+    save_object(images, "color_and_edge_features.pickle")
   else:
-    images = load_object("color_features.pickle")
+    images = load_object("color_and_edge_features.pickle")
 
   print_status("Building data structure for clustering.... ")
   colors = []
+  edges = []
   for image_data in images:
     colors.append(image_data["colors"])
+    edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
   print "Done."
 
-  print_status("Clustering images by color histograms hierarchial_cluster algorithm with our own distance function.... ")
-  clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  #clustered_images = Pycluster.kcluster(colors, 8)
+  print_status("Clustering images by color histograms via k-means algorithm.... ")
+  #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
+  clustered_images_by_color, value, _ = kcluster(colors, 10)
   print "Done."
+
+  print_status("Clustering images by edge histograms via k-means algorithm.... ")
+  clustered_images_by_edges, value, _ = kcluster(edges, 10)
+  print "Done."
+
+  #DO LATE FUSION
 
   clusters = defaultdict(list)
   for index, cluster in enumerate(clustered_images):

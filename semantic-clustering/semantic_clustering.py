@@ -47,8 +47,8 @@ def main():
   number_of_jsons = 100
 
   tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
-  tag_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
-  #tag_clusters = tag_clustering(tag_list, tag_similarity_histogram)
+  #tag_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
+  tag_clusters = tag_clustering(tag_list, tag_similarity_histogram)
 
   # cluster photos
   print "Calculate photo clusters"

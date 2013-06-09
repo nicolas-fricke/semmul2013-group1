@@ -26,6 +26,17 @@ sys.path.append('../helpers')
 from general_helpers import *
 from visual_helpers import *
 
+def extract_edges(image, data):
+  edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)
+  image_bins = split_image_into_bins(image, 16)
+  data["edge-angles"]  = []
+  data["edge-lengths"] = []
+  for image_bin in image_bins:
+    edge_angles_and_lengths = edgeExtractor.extract(image_bin)
+    data["edge-angles"]  += edge_angles_and_lengths[:len(edge_angles_and_lengths) / 2]
+    data["edge-lengths"] += edge_angles_and_lengths[len(edge_angles_and_lengths) / 2:]
+  return data
+
 def main():
   # import configuration
   config = ConfigParser.SafeConfigParser()
@@ -37,7 +48,6 @@ def main():
   metajson_files = find_metajsons_to_process(metadata_dir)
 
   print_status("Reading metadata files, loading images and calculating edge histograms.... ")
-  edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)
   images = []
   for file_number, metajson_file in enumerate(metajson_files):
     metadata = parse_json_file(metajson_file)
@@ -51,15 +61,8 @@ def main():
         image = Image(url)
       except Exception:
         continue
-      image_bins = split_image_into_bins(image, 16)
-      data["edge-angles"]  = []
-      data["edge-lengths"] = []
-      for image_bin in image_bins:
-        edge_angles_and_lengths = edgeExtractor.extract(image_bin)
-        data["edge-angles"]  += edge_angles_and_lengths[:len(edge_angles_and_lengths) / 2]
-        data["edge-lengths"] += edge_angles_and_lengths[len(edge_angles_and_lengths) / 2:]
-      images.append(data)
-    if file_number > 500:
+      images.append(extract_edges(image, data))
+    if file_number > 50:
       break
   print "Done."
 
@@ -70,7 +73,7 @@ def main():
   print "Done."
 
   print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  clustered_images, value, _ = kcluster(edges, 20)
+  clustered_images, value, _ = kcluster(edges, 10)
   print "Done."
 
   clusters = defaultdict(list)
