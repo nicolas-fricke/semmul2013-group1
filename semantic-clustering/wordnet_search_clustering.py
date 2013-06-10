@@ -142,9 +142,7 @@ def main(argv):
   hyponyms_trees = find_hyponyms_on_wordnet(word)
   print "Done."
 
-  for synset_name, subhyponym_tree in hyponyms_trees.iteritems():
-    print synset_name
-    pretty_print_dict(subhyponym_tree, 1)
+  pretty_print_dict(hyponyms_trees)
 
   # print_status("Building inverted_tag_index... ")
   # inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
