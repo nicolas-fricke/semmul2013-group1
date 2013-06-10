@@ -120,21 +120,21 @@ def main(argv):
   word, number_of_jsons = parse_command_line_arguments(argv)
 
 
-  ####### Getting JSON files #########
+  # ####### Getting JSON files #########
 
-  # import configuration
-  metadata_dir = import_metadata_dir_of_config('../config.cfg')
+  # # import configuration
+  # metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
-  print_status("Reading %d Json Files... " % number_of_jsons)
-  json_files = find_metajsons_to_process(metadata_dir)
-  print "Done."
+  # print_status("Reading %d Json Files... " % number_of_jsons)
+  # json_files = find_metajsons_to_process(metadata_dir)
+  # print "Done."
 
 
-  ####### Getting Photo Tag List ######
+  # ####### Getting Photo Tag List ######
 
-  print_status("Parsing photo_tags_dict for %d Jsons... " % number_of_jsons)
-  photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
-  print "Done."
+  # print_status("Parsing photo_tags_dict for %d Jsons... " % number_of_jsons)
+  # photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
+  # print "Done."
 
   ####### WordNet Search #######
 
@@ -171,7 +171,7 @@ def main(argv):
   # name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
   # write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
   # print "Done."
-  # print_status("Done.\n")
+  print_status("Done.\n")
 
 
 if __name__ == '__main__':
