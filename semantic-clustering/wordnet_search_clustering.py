@@ -111,7 +111,7 @@ def pretty_print_dict(d, indent=0):
    parent_indent = indent - 1 if indent > 0 else 0
    if not isinstance(d, dict): return
    for key, value in d.iteritems():
-      print '|   ' * parent_indent + '|-- ' + str(key)
+      print '|   ' * parent_indent + ('|-- ' if indent > 0 else "")  + str(key)
       if isinstance(value, dict):
          pretty_print_dict(value, indent + 1)
 
