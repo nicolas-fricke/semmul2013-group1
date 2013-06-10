@@ -115,6 +115,14 @@ def pretty_print_dict(d, indent=0):
       if isinstance(value, dict):
          pretty_print_dict(value, indent + 1)
 
+def count_nested_dict(d):
+  counter = 0
+  for value in d.values():
+    counter += 1
+    if value != None:
+      counter += count_nested_dict(value)
+  return counter
+
 def main(argv):
   ####### Reading Commandline arguments ########
   word, number_of_jsons = parse_command_line_arguments(argv)
@@ -169,7 +177,7 @@ def main(argv):
   # name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
   # write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
   # print "Done."
-  print_status("Done.\n")
+  print_status("Done. Found %d entries.\n" % count_nested_dict(hyponyms_trees))
 
 
 if __name__ == '__main__':
