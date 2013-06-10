@@ -68,9 +68,9 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name):
     return hyponyms_of_synset
 
 def find_hyponyms_on_wordnet(word):
-  hyponym_tree = defaultdict(list)
+  hyponym_tree = {}
   for synset in wn.synsets(word):
-    hyponym_tree[synset.name].append(recursively_find_all_hyponyms_on_wordnet(synset.name))
+    hyponym_tree[synset.name] = recursively_find_all_hyponyms_on_wordnet(synset.name)
   return hyponym_tree
 
 def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
@@ -107,6 +107,13 @@ def add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index):
           add_photos_to_hyponym_lists(hyponym_dict,inverted_tag_index)
   return hyponyms_lists
 
+def pretty_print_dict(d, indent=0):
+   parent_indent = indent - 1 if indent > 0 else 0
+   if not isinstance(d, dict): return
+   for key, value in d.iteritems():
+      print '|   ' * parent_indent + '|-- ' + str(key)
+      if isinstance(value, dict):
+         pretty_print_dict(value, indent + 1)
 
 def main(argv):
   ####### Reading Commandline arguments ########
@@ -132,19 +139,20 @@ def main(argv):
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s... " % word)
-  hyponyms_lists = find_hyponyms_on_wordnet(word)
+  hyponyms_trees = find_hyponyms_on_wordnet(word)
   print "Done."
 
-  print_status("Building inverted_tag_index... ")
-  inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
-  print "Done."
+  for synset_name, subhyponym_tree in hyponyms_trees.iteritems():
+    print synset_name
+    pretty_print_dict(subhyponym_tree, 1)
 
-  print inverted_tag_index
-  print hyponyms_lists
+  # print_status("Building inverted_tag_index... ")
+  # inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
+  # print "Done."
 
-  print_status("Check if photo_tags in hyponyms_lists... ")
-  hyponyms_lists = add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index)
-  print "Done."
+  # print_status("Check if photo_tags in hyponyms_lists... ")
+  # hyponyms_lists = add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index)
+  # print "Done."
 
   # TODO: 1) recursively iterate over hyponyms and check in inverted index which photos have this tag
   #       2) visualize image clusters, make one cluster per hyponym with all subimages as subclusters
