@@ -68,9 +68,9 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name):
     return hyponyms_of_synset
 
 def find_hyponyms_on_wordnet(word):
-  hyponym_tree = defaultdict(list)
+  hyponym_tree = {}
   for synset in wn.synsets(word):
-    hyponym_tree[synset.name].append(recursively_find_all_hyponyms_on_wordnet(synset.name))
+    hyponym_tree[synset.name] = recursively_find_all_hyponyms_on_wordnet(synset.name)
   return hyponym_tree
 
 def search_photos_for_hyponyms(hyponyms, photo_tags_dict):
@@ -107,44 +107,58 @@ def add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index):
           add_photos_to_hyponym_lists(hyponym_dict,inverted_tag_index)
   return hyponyms_lists
 
+def pretty_print_dict(d, indent=0):
+   parent_indent = indent - 1 if indent > 0 else 0
+   if not isinstance(d, dict): return
+   for key, value in d.iteritems():
+      print '|   ' * parent_indent + '|-- ' + str(key)
+      if isinstance(value, dict):
+         pretty_print_dict(value, indent + 1)
+
+def count_nested_dict(d):
+  counter = 0
+  for value in d.values():
+    counter += 1
+    if value != None:
+      counter += count_nested_dict(value)
+  return counter
 
 def main(argv):
   ####### Reading Commandline arguments ########
   word, number_of_jsons = parse_command_line_arguments(argv)
 
 
-  ####### Getting JSON files #########
+  # ####### Getting JSON files #########
 
-  # import configuration
-  metadata_dir = import_metadata_dir_of_config('../config.cfg')
+  # # import configuration
+  # metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
-  print_status("Reading %d Json Files... " % number_of_jsons)
-  json_files = find_metajsons_to_process(metadata_dir)
-  print "Done."
+  # print_status("Reading %d Json Files... " % number_of_jsons)
+  # json_files = find_metajsons_to_process(metadata_dir)
+  # print "Done."
 
 
-  ####### Getting Photo Tag List ######
+  # ####### Getting Photo Tag List ######
 
-  print_status("Parsing photo_tags_dict for %d Jsons... " % number_of_jsons)
-  photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
-  print "Done."
+  # print_status("Parsing photo_tags_dict for %d Jsons... " % number_of_jsons)
+  # photo_tags_dict = parse_photo_tags_from_json_data(json_files,number_of_jsons,)
+  # print "Done."
 
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s... " % word)
-  hyponyms_lists = find_hyponyms_on_wordnet(word)
+  hyponyms_trees = find_hyponyms_on_wordnet(word)
   print "Done."
 
-  print_status("Building inverted_tag_index... ")
-  inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
-  print "Done."
+  pretty_print_dict(hyponyms_trees)
 
-  print inverted_tag_index
-  print hyponyms_lists
+  # print_status("Building inverted_tag_index... ")
+  # inverted_tag_index = build_inverted_tag_index(photo_tags_dict)
+  # print "Done."
 
-  print_status("Check if photo_tags in hyponyms_lists... ")
-  hyponyms_lists = add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index)
-  print "Done."
+  # print_status("Check if photo_tags in hyponyms_lists... ")
+  # hyponyms_lists = add_photos_to_hyponym_lists(hyponyms_lists,inverted_tag_index)
+  # print "Done."
 
   # TODO: 1) recursively iterate over hyponyms and check in inverted index which photos have this tag
   #       2) visualize image clusters, make one cluster per hyponym with all subimages as subclusters
@@ -163,7 +177,7 @@ def main(argv):
   # name_of_html_file = str(number_of_jsons) + "_wordnet_search_clustering.html"
   # write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
   # print "Done."
-  # print_status("Done.\n")
+  print_status("Done. Found %d entries.\n" % count_nested_dict(hyponyms_trees))
 
 
 if __name__ == '__main__':
