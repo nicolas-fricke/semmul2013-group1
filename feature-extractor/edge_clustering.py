@@ -27,7 +27,7 @@ from general_helpers import *
 from visual_helpers import *
 
 def extract_edges(image, data, regions):
-  edgeExtractor = EdgeHistogramFeatureExtractor(bins=8)
+  edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)
   image_bins = split_image_into_bins(image, regions)
   data["edge-angles"]  = []
   data["edge-lengths"] = []

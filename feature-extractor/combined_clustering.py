@@ -4,7 +4,7 @@ import json
 import numpy as np
 from collections import defaultdict
 from SimpleCV import Image
-from math import sqrt
+from math import log, pow
 from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 from Pycluster import kcluster
 # Import own module helpers
@@ -22,7 +22,7 @@ def main(argv):
                    help='If specified, use preprocessed image data, otherwise download and process images and save values to file for next use')
   args = parser.parse_args()
 
-  print_status("Use prerpocessed data: " + str(args.use_preprocessed_data) + "\n\n")
+  print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
 
   if not args.use_preprocessed_data:
     # import configuration
@@ -53,7 +53,7 @@ def main(argv):
           continue
 
         data = extract_colors(image, data, 1)
-        data = extract_edges(image, data, 9)
+        data = extract_edges(image, data, 1)
         images.append(data)
 
         file_number += 1
@@ -74,17 +74,28 @@ def main(argv):
 
   print_status("Clustering images by color histograms via k-means algorithm.... ")
   #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  k_color = 7 # TOOD: increase k until no improvement anymore
-  clustered_images_by_color, value, _ = kcluster(colors, k_color)
-  print "Done."
+  k_color = 1
+  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  previous_error = error * 2
+  while 1/(log(k_color+0.00001)*error) > 1/(log(k_color-0.9999)*previous_error):
+  #while error < 0.9 * previous_error:
+    k_color += 1 
+    previous_error = error
+    clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  print "Done. %d Clusters" % k_color
 
   print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  k_edges = 7 # TOOD: increase k until no improvement anymore
-  clustered_images_by_edges, value, _ = kcluster(edges, k_edges)
-  print "Done."
+  k_edges = 1
+  clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  previous_error = error * 2
+  #while 1/(log(k_edges+0.00001)*error) > 1/(log(k_edges-0.9999)*previous_error):
+  while error < 0.9 * previous_error:
+    k_edges += 1
+    previous_error = error
+    clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  print "Done. %d Clusters" % k_edges
 
   #DO LATE FUSION
-
   print_status("Displaying clusters (simple intersection of color and edge clusters")
   clusters = defaultdict(list)
   for index, cluster_color in enumerate(clustered_images_by_color):
