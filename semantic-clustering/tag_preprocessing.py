@@ -144,7 +144,7 @@ def calculate_tag_similarities(tag_histogram):
             tag_similarity = 0
           if tag_similarity >= 1.3:
             #TODO: replace tags by the correct synset
-            tag_similarity_histogram[(tag1, tag2)] = tag_similarity
+            tag_similarity_histogram[(synset1[0], synset2[0])] = tag_similarity
   print "There are " + str(len(tag_similarity_histogram)) + " edges"
   return tag_similarity_histogram, tag_histogram
 
@@ -179,10 +179,10 @@ def tag_preprocessing(number_of_jsons):
   #write_tag_similarity_histogram_to_file(tag_similarity_histogram)
 
   # remove X percent tags with too small occurence from the histograms
-  cut_off_percentage = 10
-  print_status("Removing the lower %d%% of tags from histograms... " % cut_off_percentage)
-  tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram = remove_tags_with_small_occurence(cut_off_percentage)
-  print "Done, %2d Tags remaining" % len(tag_histogram)
+  #cut_off_percentage = 10
+  #print_status("Removing the lower %d%% of tags from histograms... " % cut_off_percentage)
+  #tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram = remove_tags_with_small_occurence(cut_off_percentage)
+  #print "Done, %2d Tags remaining" % len(tag_histogram)
 
   # remove tags with too small and too high Tf-idf value (occure too seldom or too often)
   # sorted_tag_histogram = sorted(tag_histogram.iteritems(), key=operator.itemgetter(1))

@@ -23,7 +23,7 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
   print "Writing similarity file."
   output_file = open(file_name, 'w')
   for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
-    output_file.write(synset1 + ' ' + synset2 + ' ' + str(similarity) + '\n')
+    output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(similarity) + '\n')
     #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
   output_file.close()
 
