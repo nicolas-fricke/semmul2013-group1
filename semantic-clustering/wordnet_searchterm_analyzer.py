@@ -53,13 +53,33 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name):
   else:
     hyponyms_of_synset = {}
     for hyponym in hyponyms:
-      hyponyms_of_synset[hyponym.name] = recursively_find_all_hyponyms_on_wordnet(hyponym.name)
+      hyponyms_of_synset[hyponym.name] = {
+        "hyponyms": recursively_find_all_hyponyms_on_wordnet(hyponym.name),
+        "meronyms": recursively_find_all_meronyms_on_wordnet(hyponym.name)
+      }
     return hyponyms_of_synset
+
+def recursively_find_all_meronyms_on_wordnet(synset_name):
+  synset = wn.synset(synset_name)
+  meronyms = synset.part_meronyms()
+  if len(meronyms) == 0:
+    return None
+  else:
+    meronyms_of_synset = {}
+    for meronym in meronyms:
+      meronyms_of_synset[meronym.name] = {
+        "hyponyms": recursively_find_all_hyponyms_on_wordnet(meronym.name),
+        "meronyms": recursively_find_all_meronyms_on_wordnet(meronym.name)
+      }
+    return meronyms_of_synset
 
 def find_hyponyms_on_wordnet(word):
   hyponym_tree = {}
   for synset in wn.synsets(word):
-    hyponym_tree[synset.name] = recursively_find_all_hyponyms_on_wordnet(synset.name)
+    hyponym_tree[synset.name] = {
+      "hyponyms": recursively_find_all_hyponyms_on_wordnet(synset.name),
+      "meronyms": recursively_find_all_meronyms_on_wordnet(synset.name)
+    }
   return hyponym_tree
 
 def pretty_print_dict(d, indent=0):
