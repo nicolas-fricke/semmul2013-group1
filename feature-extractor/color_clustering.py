@@ -40,9 +40,9 @@ def distance_function(u, v):
   #print "distance: " + str(sqrt(sum))
   return sqrt(sum)
 
-def extract_colors(image, data, regions):
+def extract_colors(image, data, slices):
   (value, saturation, hue) = image.splitChannels()
-  bins = zip(split_image_into_bins(hue, regions), split_image_into_bins(saturation.equalize(), regions), split_image_into_bins(value.equalize(), regions))
+  bins = zip(split_image_into_slices(hue, slices), split_image_into_slices(saturation.equalize(), slices), split_image_into_slices(value.equalize(), slices))
   data["colors"] = []
   for hue_bin, sat_bin, val_bin in bins:
     data["colors"] += hue_bin.histogram(20)
@@ -85,9 +85,9 @@ def main(argv):
           image = Image(url).toHSV()
         except Exception:
           continue
-        images.append(extract_colors(image, data, 9))
+        images.append(extract_colors(image, data, 4))
         file_number += 1
-      if file_number >= 50:
+      if file_number >= 200:
         break
     print "Done."
     save_object(images, "color_features.pickle")

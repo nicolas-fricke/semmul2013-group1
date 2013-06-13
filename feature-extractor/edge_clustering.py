@@ -26,9 +26,9 @@ sys.path.append('../helpers')
 from general_helpers import *
 from visual_helpers import *
 
-def extract_edges(image, data, regions):
+def extract_edges(image, data, slices):
   edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)
-  image_bins = split_image_into_bins(image, regions)
+  image_bins = split_image_into_slices(image, slices)
   data["edge-angles"]  = []
   data["edge-lengths"] = []
   for image_bin in image_bins:
@@ -61,7 +61,7 @@ def main():
         image = Image(url)
       except Exception:
         continue
-      images.append(extract_edges(image, data, 16))
+      images.append(extract_edges(image, data, 4))
     if file_number > 50:
       break
   print "Done."
