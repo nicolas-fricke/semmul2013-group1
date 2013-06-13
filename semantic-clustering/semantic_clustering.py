@@ -11,11 +11,39 @@
 
 from collections import defaultdict
 import operator
+from subprocess import call
 
 # Import own modules
 from tag_preprocessing import *
 from tag_clustering import *
 
+################     Write to File    ##############################
+
+def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
+  print "Writing similarity file."
+  output_file = open(file_name, 'w')
+  for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
+    output_file.write(synset1 + ' ' + synset2 + ' ' + str(similarity) + '\n')
+    #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
+  output_file.close()
+
+################     MCL Clustering    #############################
+
+def read_clusters_from_file(file_name):
+  clusters = []
+  cluster_file = open(file_name, 'r')
+  for line in cluster_file:
+    clusters.append(line.rstrip('\n\r').split('\t'))
+  cluster_file.close()
+  return clusters
+
+def mcl_tag_clustering(tag_histogram):
+  histogram_file_name = 'tag_similarity_file2.txt'
+  write_tag_similarity_histogram_to_file(tag_histogram, histogram_file_name)
+  out_file_name = "out.txt"
+  call(["mcl", histogram_file_name, "--abc", "-o", out_file_name])
+  #call("mcl " + histogram_file_name + " --abc -o " + out_file_name, shell=True)
+  return read_clusters_from_file(out_file_name)
 
 ################     Photo Clustering  #############################
 
@@ -48,7 +76,9 @@ def main():
 
   tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
   #tag_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
-  tag_clusters = tag_clustering(tag_list, tag_similarity_histogram)
+  #tag_clusters = tag_clustering(tag_list, tag_similarity_histogram)
+  
+  tag_clusters = mcl_tag_clustering(tag_similarity_histogram)
 
   # cluster photos
   print "Calculate photo clusters"

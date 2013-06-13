@@ -148,14 +148,6 @@ def calculate_tag_similarities(tag_histogram):
   print "There are " + str(len(tag_similarity_histogram)) + " edges"
   return tag_similarity_histogram, tag_histogram
 
-def write_tag_similarity_histogram_to_file(tag_similarity_histogram):
-  print "Writing similarity file."
-  output_file = open('tag_similarity_file.txt', 'w')
-  for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
-    output_file.write(synset1 + ' ' + synset2 + ' ' + str(similarity) + '\n')
-    #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
-  output_file.close()
-
 ################     Tag Clustering       ####################################
 
 def create_tag_index_dict(tag_histogram):
