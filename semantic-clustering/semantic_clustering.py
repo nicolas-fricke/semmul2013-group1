@@ -16,6 +16,7 @@ from subprocess import call
 # Import own modules
 from tag_preprocessing import *
 from tag_clustering import *
+from synset_detection import synset_detection
 
 ################     Write to File    ##############################
 
@@ -47,21 +48,21 @@ def mcl_tag_clustering(tag_histogram):
 
 ################     Photo Clustering  #############################
 
-def intersect_tag_lists(tag_cluster,tag_list):
-  return list(set(tag_cluster).intersection( set(tag_list) ))
+def intersect_keyword_lists(keyword_cluster,keyword_list):
+  return list(set(keyword_cluster).intersection( set(keyword_list) ))
 
 
-def get_photo_clusters(tag_clusters,photo_tags_dict):
+def get_photo_clusters(keyword_clusters, keywords_for_pictures):
   affiliated_photos_tuples = []
-  for tag_cluster in tag_clusters:
+  for keyword_cluster in keyword_clusters:
     affiliated_photos = {}
-    for photo_id, tag_list in photo_tags_dict.items():
-      if (not tag_list == None) and (len(tag_list) > 0):
-        shared_tags = intersect_tag_lists(tag_cluster,tag_list)
-        #print "Photo %d | shared tags = %d | shared_tags / photo_tags = %f | shared_tags / tag_cluster = %f" % (photo_id,len(shared_tags),len(shared_tags)/float(len(tag_list)),len(shared_tags)/float(len(tag_cluster)))
-        if len(shared_tags) > 0:
-          affiliation_score = len(shared_tags)/float(len(tag_list)) + len(shared_tags)/float(len(tag_cluster))
-          affiliated_photos[photo_id] = affiliation_score
+    for photo_url, keyword_list in keywords_for_pictures.iteritems():
+      if (not keyword_list == None) and (len(keyword_list) > 0):
+        shared_keywords = intersect_keyword_lists(keyword_cluster,keyword_list)
+        #print "Photo %d | shared keywords = %d | shared_keywords / photo_keywords = %f | shared_keywords / keyword_cluster = %f" % (photo_id,len(shared_keywords),len(shared_keywords)/float(len(keyword_list)),len(shared_keywords)/float(len(keyword_cluster)))
+        if len(shared_keywords) > 0:
+          affiliation_score = len(shared_keywords)/float(len(keyword_list)) + len(shared_keywords)/float(len(keyword_cluster))
+          affiliated_photos[photo_url] = affiliation_score
     sorted_affiliated_photos = sorted(affiliated_photos.iteritems(), key=operator.itemgetter(1))
     sorted_affiliated_photos.reverse()
     affiliated_photos_tuples.append(sorted_affiliated_photos)
@@ -71,18 +72,35 @@ def get_photo_clusters(tag_clusters,photo_tags_dict):
 
 ################     Main        ###################################
 
+# cut off lowest 10% of synsets
+# save filename of pictures in pickle, datastructure keyword_for_picture should be: {json_file_name: (url, [synsets]), ...}
+# calculation of keyword_similarity_histogram (probably synset similarities combined with co_occurrences)
+# adapt get_photo_clusters and photo_clusters according to have file name in keywords_for_pictures
+
 def main():
   number_of_jsons = 100
 
-  tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
-  #tag_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
-  #tag_clusters = tag_clustering(tag_list, tag_similarity_histogram)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
+                      help='If specified, use preprocessed keyword data, otherwise find keywords and save values to file for next use')
+  args = parser.parse_args()
+
+  print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
+
+  if args.use_preprocessed_data:
+    keywords_for_pictures = load_object("preprocessed_data.pickle")
+  else:
+    keywords_for_pictures = synset_detection(number_of_jsons)
   
-  tag_clusters = mcl_tag_clustering(tag_similarity_histogram)
+  #tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
+  #keyword_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
+  #keyword_clusters = tag_clustering(tag_list, tag_similarity_histogram)
+  
+  keyword_clusters = mcl_tag_clustering(keyword_similarity_histogram)
 
   # cluster photos
   print "Calculate photo clusters"
-  photo_clusters = get_photo_clusters(tag_clusters,photo_tags_dict)
+  photo_clusters = get_photo_clusters(keyword_clusters,keywords_for_pictures)
   print "Done"
 
   # write clusters to html
@@ -90,9 +108,9 @@ def main():
   additional_columns= {}
   additional_columns["Tags"] = []
   for index, cluster in enumerate(photo_clusters):
-    additional_columns["Tags"].append(tag_clusters[index])
-    for photo_id, score in cluster:
-      clusters[index].append(dict(photo_data_list[photo_id].items()+{"score":score}.items()))
+    additional_columns["Tags"].append(keyword_clusters[index])
+    for photo_url, score in cluster:
+      clusters[index].append(dict(photo_data_list[photo_url].items()+{"score":score}.items()))
 
   name_of_html_file = str(number_of_jsons) + "_old_q_second_smallest.html"
   write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)

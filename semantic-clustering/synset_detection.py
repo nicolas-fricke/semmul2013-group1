@@ -69,9 +69,3 @@ def synset_detection(number_of_jsons):
   print "Done."
 
   return None
-
-def main():
-  synset_detection(100)
-
-if __name__ == '__main__':
-    main()
