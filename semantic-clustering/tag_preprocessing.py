@@ -36,6 +36,13 @@ tag_similarity_histogram = dict()
 
 ################     Reading of Files       ####################################
 
+def hypernym_is_color(tag):
+  if len(wn.synsets(tag)) > 0:
+    if len(wn.synsets(tag)[0].hypernyms()) > 0:
+      if len(wn.synsets(tag)[0].hypernyms()[0].hypernyms()) > 0:
+        return wn.synsets(tag)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
+  return False
+
 # probably add preprocessing steps for tags
 def read_tags_from_json(json_data):
   tag_list = []
@@ -48,7 +55,8 @@ def read_tags_from_json(json_data):
       tag = string.lower(tag)              # Only lower case
       tag = wn.morphy(tag)                 # Stemmming
       if not tag == None and len(tag) > 2: # Only tags with more than 2 literals
-        tag_list.append(str(tag))
+        if not hypernym_is_color(tag):     # Remove color tags
+          tag_list.append(str(tag))
   return tag_list
 
 def read_data_from_json_file(json_file):
