@@ -19,16 +19,16 @@ def parse_json_data(json_files, number_of_jsons):
     tag_list, photo_data = read_data_from_json_file(json_file)
     if tag_list == None:
       continue
-    print "############ ", photo_data["url"], " ##########"
+    #print "############ ", photo_data["url"], " ##########"
 
-    synsets_for_pictures[photo_data["url"]] = []
+    synsets_for_pictures[json_file] = (photo_data["url"], [])
     indefinite_synsets = []
 
     for tag in tag_list:
       synsets_for_tag = wn.synsets(tag, pos=wn.NOUN)
       if len(synsets_for_tag) == 1:
-        synsets_for_pictures[photo_data["url"]].append(synsets_for_tag[0])
-        print "Eindeutiges Synset: " + str(synsets_for_tag[0])
+        synsets_for_pictures[json_file][1].append(synsets_for_tag[0])
+        #print "Eindeutiges Synset: " + str(synsets_for_tag[0])
       elif len(synsets_for_tag) > 1:
         indefinite_synsets.append(synsets_for_tag)
 
@@ -37,15 +37,15 @@ def parse_json_data(json_files, number_of_jsons):
       max_sim_sum = (0, 0)
       for index, synset in enumerate(indefinite_synset):
         sim_sum = 0
-        for found_synset in synsets_for_pictures[photo_data["url"]]:
+        for found_synset in synsets_for_pictures[json_file][1]:
           sim_sum += synset.lch_similarity(found_synset)
         if sim_sum > max_sim_sum[0]:
           max_sim_sum = (sim_sum, index)
-      synsets_for_pictures[photo_data["url"]].append(indefinite_synset[max_sim_sum[1]])
-      print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
+      synsets_for_pictures[json_file][1].append(indefinite_synset[max_sim_sum[1]])
+      #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
   return synsets_for_pictures
 
-def synset_detection(number_of_jsons):
+def synset_detection(number_of_jsons, output_filename):
   # import configuration
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
@@ -60,7 +60,7 @@ def synset_detection(number_of_jsons):
   print "Done, with %2d Tags" % len(tag_histogram)
 
   print_status("Write preprocessed data to file ...")
-  save_object(keywords_for_pictures, "preprocessed_data")
+  save_object(keywords_for_pictures, output_filename)
   print "Done"
 
   # tag index dict saves the matching index of a tag in the laplace matrix
@@ -68,4 +68,4 @@ def synset_detection(number_of_jsons):
   tag_list = tag_histogram.keys()
   print "Done."
 
-  return None
+  return keywords_for_pictures

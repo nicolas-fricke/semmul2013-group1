@@ -12,6 +12,8 @@
 from collections import defaultdict
 import operator
 from subprocess import call
+import argparse
+from nltk.corpus import wordnet as wn
 
 # Import own modules
 from tag_preprocessing import *
@@ -27,6 +29,27 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
     output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(similarity) + '\n')
     #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
   output_file.close()
+
+################     Similarity Historgram   #######################
+
+def calculate_similarity_histogram(keywords_for_pictures):
+  synset_filenames_dict = defaultdict(list)
+  for filename, (_, synset_list) in keywords_for_pictures.iteritems():
+    for synset in synset_list:
+      synset_filenames_dict[synset].append(filename)
+
+  similarity_histogram = dict()
+  for synset1, filenames1 in synset_filenames_dict.iteritems():
+    #print synset1.name()
+    for synset2, filenames2 in synset_filenames_dict.iteritems():
+      if synset1 < synset2:
+        if (synset1, synset2) not in similarity_histogram:
+          co_occurrence = len(set(filenames1).intersection(set(filenames2)))
+          print synset2.lch_similarity(synset1)
+          similarity_histogram[(synset1, synset2)] = synset1.lch_similarity(synset2) * co_occurrence
+    #for filename in filenames:
+  return similarity_histogram
+
 
 ################     MCL Clustering    #############################
 
@@ -87,15 +110,18 @@ def main():
 
   print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
 
+  keywords_for_pictures_filename = "preprocessed_data.pickle"
   if args.use_preprocessed_data:
-    keywords_for_pictures = load_object("preprocessed_data.pickle")
+    keywords_for_pictures = load_object(keywords_for_pictures_filename)
   else:
-    keywords_for_pictures = synset_detection(number_of_jsons)
+    keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
   
   #tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
   #keyword_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
   #keyword_clusters = tag_clustering(tag_list, tag_similarity_histogram)
   
+  keyword_similarity_histogram = calculate_similarity_histogram(keywords_for_pictures)
+
   keyword_clusters = mcl_tag_clustering(keyword_similarity_histogram)
 
   # cluster photos
