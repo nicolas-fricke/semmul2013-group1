@@ -43,10 +43,10 @@ def calculate_similarity_histogram(keywords_for_pictures):
     #print synset1.name()
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
-        if (synset1, synset2) not in similarity_histogram:
+        if (synset1.name, synset2.name) not in similarity_histogram:
           co_occurrence = len(set(filenames1).intersection(set(filenames2)))
           #print synset2.lch_similarity(synset1)
-          similarity_histogram[(synset1, synset2)] = synset1.lch_similarity(synset2) * co_occurrence
+          similarity_histogram[(synset1.name, synset2.name)] = synset1.lch_similarity(synset2) * co_occurrence
     #for filename in filenames:
   return similarity_histogram
 
@@ -79,7 +79,7 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
   affiliated_photos_tuples = []
   for keyword_cluster in keyword_clusters:
     affiliated_photos = {}
-    for photo_url, keyword_list in keywords_for_pictures.iteritems():
+    for (photo_url, keyword_list) in keywords_for_pictures.values():
       if (not keyword_list == None) and (len(keyword_list) > 0):
         shared_keywords = intersect_keyword_lists(keyword_cluster,keyword_list)
         #print "Photo %d | shared keywords = %d | shared_keywords / photo_keywords = %f | shared_keywords / keyword_cluster = %f" % (photo_id,len(shared_keywords),len(shared_keywords)/float(len(keyword_list)),len(shared_keywords)/float(len(keyword_cluster)))
@@ -127,7 +127,7 @@ def main():
 
   # cluster photos
   print "Calculate photo clusters"
-  photo_clusters = get_photo_clusters(keyword_clusters,keywords_for_pictures)
+  photo_clusters = get_photo_clusters(keyword_clusters, storable_keywords_for_pictures)
   print "Done"
 
   # write clusters to html
@@ -137,7 +137,7 @@ def main():
   for index, cluster in enumerate(photo_clusters):
     additional_columns["Tags"].append(keyword_clusters[index])
     for photo_url, score in cluster:
-      clusters[index].append(dict(photo_data_list[photo_url].items()+{"score":score}.items()))
+      clusters[index].append({"url":photo_url, "score":score})
 
   name_of_html_file = str(number_of_jsons) + "_old_q_second_smallest.html"
   write_clusters_to_html(clusters, html_file_path=name_of_html_file, additional_columns=additional_columns, open_in_browser=True)
