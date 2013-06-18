@@ -18,7 +18,7 @@ from nltk.corpus import wordnet as wn
 # Import own modules
 from tag_preprocessing import *
 from tag_clustering import *
-from synset_detection import synset_detection
+from synset_detection import *
 
 ################     Write to File    ##############################
 
@@ -45,7 +45,7 @@ def calculate_similarity_histogram(keywords_for_pictures):
       if synset1 < synset2:
         if (synset1, synset2) not in similarity_histogram:
           co_occurrence = len(set(filenames1).intersection(set(filenames2)))
-          print synset2.lch_similarity(synset1)
+          #print synset2.lch_similarity(synset1)
           similarity_histogram[(synset1, synset2)] = synset1.lch_similarity(synset2) * co_occurrence
     #for filename in filenames:
   return similarity_histogram
@@ -112,7 +112,8 @@ def main():
 
   keywords_for_pictures_filename = "preprocessed_data.pickle"
   if args.use_preprocessed_data:
-    keywords_for_pictures = load_object(keywords_for_pictures_filename)
+    storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
+    keywords_for_pictures = restore_keywords_for_pictures(storable_keywords_for_pictures)
   else:
     keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
   

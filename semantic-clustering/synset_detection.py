@@ -45,6 +45,24 @@ def parse_json_data(json_files, number_of_jsons):
       #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
   return synsets_for_pictures
 
+def make_keywords_storable(keywords_for_pictures):
+  storable_keywords_for_pictures = dict()
+  for photo_filename, (photo_url, synsets) in keywords_for_pictures.iteritems():
+    synset_names =[]
+    for synset in synsets:
+      synset_names.append(synset.name)
+    storable_keywords_for_pictures[photo_filename] = (photo_url, synset_names)
+  return storable_keywords_for_pictures
+
+def restore_keywords_for_pictures(storable_keywords_for_pictures):
+  keywords_for_pictures = dict()
+  for photo_filename, (photo_url, synset_names) in storable_keywords_for_pictures.iteritems():
+    synsets =[]
+    for synset_name in synset_names:
+      synsets.append(wn.synset(synset_name))
+    keywords_for_pictures[photo_filename] = (photo_url, synsets)
+  return keywords_for_pictures
+
 def synset_detection(number_of_jsons, output_filename):
   # import configuration
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
@@ -57,10 +75,14 @@ def synset_detection(number_of_jsons, output_filename):
   # parse data from json files
   print_status("Parsing json files, creating histograms and tags dictionary... ")
   keywords_for_pictures = parse_json_data(json_files,number_of_jsons)
-  print "Done, with %2d Tags" % len(tag_histogram)
+  print "Done"
+
+  print_status("Create structure for writing to file... ")
+  storable_keywords_for_pictures = make_keywords_storable(keywords_for_pictures)
+  print "Done"
 
   print_status("Write preprocessed data to file ...")
-  save_object(keywords_for_pictures, output_filename)
+  save_object(storable_keywords_for_pictures, output_filename)
   print "Done"
 
   # tag index dict saves the matching index of a tag in the laplace matrix
