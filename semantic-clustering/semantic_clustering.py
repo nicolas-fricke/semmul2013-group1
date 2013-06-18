@@ -27,7 +27,6 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
   output_file = open(file_name, 'w')
   for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
     output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(similarity) + '\n')
-    #output_file.write(tag2 + ' ' + tag1 + ' ' + str(similarity) + '\n')
   output_file.close()
 
 ################     Similarity Historgram   #######################
@@ -40,14 +39,11 @@ def calculate_similarity_histogram(keywords_for_pictures):
 
   similarity_histogram = dict()
   for synset1, filenames1 in synset_filenames_dict.iteritems():
-    #print synset1.name()
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
         if (synset1.name, synset2.name) not in similarity_histogram:
           co_occurrence = len(set(filenames1).intersection(set(filenames2)))
-          #print synset2.lch_similarity(synset1)
           similarity_histogram[(synset1.name, synset2.name)] = synset1.lch_similarity(synset2) * co_occurrence
-    #for filename in filenames:
   return similarity_histogram
 
 
@@ -66,7 +62,6 @@ def mcl_tag_clustering(tag_histogram):
   write_tag_similarity_histogram_to_file(tag_histogram, histogram_file_name)
   out_file_name = "out.txt"
   call(["mcl", histogram_file_name, "--abc", "-o", out_file_name])
-  #call("mcl " + histogram_file_name + " --abc -o " + out_file_name, shell=True)
   return read_clusters_from_file(out_file_name)
 
 ################     Photo Clustering  #############################
@@ -82,23 +77,18 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
     for (photo_url, keyword_list) in keywords_for_pictures.values():
       if (not keyword_list == None) and (len(keyword_list) > 0):
         shared_keywords = intersect_keyword_lists(keyword_cluster,keyword_list)
-        #print "Photo %d | shared keywords = %d | shared_keywords / photo_keywords = %f | shared_keywords / keyword_cluster = %f" % (photo_id,len(shared_keywords),len(shared_keywords)/float(len(keyword_list)),len(shared_keywords)/float(len(keyword_cluster)))
         if len(shared_keywords) > 0:
           affiliation_score = len(shared_keywords)/float(len(keyword_list)) + len(shared_keywords)/float(len(keyword_cluster))
           affiliated_photos[photo_url] = affiliation_score
     sorted_affiliated_photos = sorted(affiliated_photos.iteritems(), key=operator.itemgetter(1))
     sorted_affiliated_photos.reverse()
     affiliated_photos_tuples.append(sorted_affiliated_photos)
-    #print sorted_affiliated_photos
   return affiliated_photos_tuples
 
 
 ################     Main        ###################################
 
 # cut off lowest 10% of synsets
-# save filename of pictures in pickle, datastructure keyword_for_picture should be: {json_file_name: (url, [synsets]), ...}
-# calculation of keyword_similarity_histogram (probably synset similarities combined with co_occurrences)
-# adapt get_photo_clusters and photo_clusters according to have file name in keywords_for_pictures
 
 def main():
   number_of_jsons = 100
@@ -112,21 +102,25 @@ def main():
 
   keywords_for_pictures_filename = "preprocessed_data.pickle"
   if args.use_preprocessed_data:
+    print_status("Restore preprocessed data from file... ")
     storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
     keywords_for_pictures = restore_keywords_for_pictures(storable_keywords_for_pictures)
+    print "Done"
   else:
-    keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
+    print_status("Detect synsets for the tags of every picture... ")
+    keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
+    print "Done"
   
-  #tag_co_occurrence_histogram, tag_similarity_histogram, tag_list, photo_tags_dict, photo_data_list = tag_preprocessing(number_of_jsons);
-  #keyword_clusters = tag_clustering(tag_list, dict(tag_co_occurrence_histogram))
-  #keyword_clusters = tag_clustering(tag_list, tag_similarity_histogram)
-  
+  print_status("Calculate similarity histogram... ")
   keyword_similarity_histogram = calculate_similarity_histogram(keywords_for_pictures)
+  print "Done"
 
+  print_status("Cluster synsets with the help of MCL... ")
   keyword_clusters = mcl_tag_clustering(keyword_similarity_histogram)
+  print "Done"
 
   # cluster photos
-  print "Calculate photo clusters"
+  print_status("Calculate photo clusters... ")
   photo_clusters = get_photo_clusters(keyword_clusters, storable_keywords_for_pictures)
   print "Done"
 

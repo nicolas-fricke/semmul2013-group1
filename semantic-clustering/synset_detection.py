@@ -73,15 +73,17 @@ def synset_detection(number_of_jsons, output_filename):
   print "Done."
 
   # parse data from json files
-  print_status("Parsing json files, creating histograms and tags dictionary... ")
+  print_status("Parsing json files and detect synsets... ")
   keywords_for_pictures = parse_json_data(json_files,number_of_jsons)
   print "Done"
 
+  # create a data structure where the names of synsets instead of synsets themself are stored
   print_status("Create structure for writing to file... ")
   storable_keywords_for_pictures = make_keywords_storable(keywords_for_pictures)
   print "Done"
 
-  print_status("Write preprocessed data to file ...")
+  # write the storable data structure to a pickle to avoid repetition
+  print_status("Write preprocessed data to file... ")
   save_object(storable_keywords_for_pictures, output_filename)
   print "Done"
 
@@ -90,4 +92,4 @@ def synset_detection(number_of_jsons, output_filename):
   tag_list = tag_histogram.keys()
   print "Done."
 
-  return keywords_for_pictures
+  return keywords_for_pictures, storable_keywords_for_pictures
