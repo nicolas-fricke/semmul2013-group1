@@ -11,38 +11,43 @@ from general_helpers import *
 from tag_preprocessing import *
 
 
+def find_synsets(synsets_for_pictures,tag_list):
+  indefinite_synsets = []
+  synsets = []
+  for tag in tag_list:
+    synsets_for_tag = wn.synsets(tag, pos=wn.NOUN)
+    if len(synsets_for_tag) == 1:
+      synsets.append(synsets_for_tag[0])
+      #print "Eindeutiges Synset: " + str(synsets_for_tag[0])
+    elif len(synsets_for_tag) > 1:
+      indefinite_synsets.append(synsets_for_tag)
+
+  for indefinite_synset in indefinite_synsets:
+    #initialize index to 0 so that if no tags with single synset (=synsets[index_of_json] empty), first synset will be chosen
+    max_sim_sum = (0, 0)
+    for index, synset in enumerate(indefinite_synset):
+      sim_sum = 0
+      for found_synset in synsets:
+        sim_sum += synset.lch_similarity(found_synset)
+      if sim_sum > max_sim_sum[0]:
+        max_sim_sum = (sim_sum, index)
+    synsets.append(indefinite_synset[max_sim_sum[1]])
+    #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
+
+  return synsets
+
 def parse_json_data(json_files, number_of_jsons):
-  synsets_for_pictures = defaultdict(list)
+  synsets_for_pictures = dict()
   for index_of_json, json_file in enumerate(json_files):
     if index_of_json > number_of_jsons:
       break
     tag_list, photo_data = read_data_from_json_file(json_file)
     if tag_list == None:
       continue
-    #print "############ ", photo_data["url"], " ##########"
 
-    synsets_for_pictures[json_file] = (photo_data["url"], [])
-    indefinite_synsets = []
+    synsets = find_synsets(synsets_for_pictures,tag_list)
+    synsets_for_pictures[json_file] = (photo_data["url"], synsets)
 
-    for tag in tag_list:
-      synsets_for_tag = wn.synsets(tag, pos=wn.NOUN)
-      if len(synsets_for_tag) == 1:
-        synsets_for_pictures[json_file][1].append(synsets_for_tag[0])
-        #print "Eindeutiges Synset: " + str(synsets_for_tag[0])
-      elif len(synsets_for_tag) > 1:
-        indefinite_synsets.append(synsets_for_tag)
-
-    for indefinite_synset in indefinite_synsets:
-      #initialize index to 0 so that if no tags with single synset (=synsetes[index_of_json] empty), first synset will be chosen
-      max_sim_sum = (0, 0)
-      for index, synset in enumerate(indefinite_synset):
-        sim_sum = 0
-        for found_synset in synsets_for_pictures[json_file][1]:
-          sim_sum += synset.lch_similarity(found_synset)
-        if sim_sum > max_sim_sum[0]:
-          max_sim_sum = (sim_sum, index)
-      synsets_for_pictures[json_file][1].append(indefinite_synset[max_sim_sum[1]])
-      #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
   return synsets_for_pictures
 
 def make_keywords_storable(keywords_for_pictures):
