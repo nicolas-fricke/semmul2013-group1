@@ -11,9 +11,11 @@ from general_helpers import *
 from tag_preprocessing import *
 
 
-def find_synsets(synsets_for_pictures,tag_list):
+def find_synsets_and_unmatched_tags(tag_list):
   indefinite_synsets = []
   synsets = []
+  unmatched_tags = []
+
   for tag in tag_list:
     synsets_for_tag = wn.synsets(tag, pos=wn.NOUN)
     if len(synsets_for_tag) == 1:
@@ -21,6 +23,8 @@ def find_synsets(synsets_for_pictures,tag_list):
       #print "Eindeutiges Synset: " + str(synsets_for_tag[0])
     elif len(synsets_for_tag) > 1:
       indefinite_synsets.append(synsets_for_tag)
+    elif len(synsets_for_tag) == 0:
+      unmatched_tags.append(tag)
 
   for indefinite_synset in indefinite_synsets:
     #initialize index to 0 so that if no tags with single synset (=synsets[index_of_json] empty), first synset will be chosen
@@ -34,7 +38,7 @@ def find_synsets(synsets_for_pictures,tag_list):
     synsets.append(indefinite_synset[max_sim_sum[1]])
     #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
 
-  return synsets
+  return synsets, unmatched_tags
 
 def parse_json_data(json_files, number_of_jsons):
   synsets_for_pictures = dict()
@@ -45,27 +49,28 @@ def parse_json_data(json_files, number_of_jsons):
     if tag_list == None:
       continue
 
-    synsets = find_synsets(synsets_for_pictures,tag_list)
-    synsets_for_pictures[json_file] = (photo_data["url"], synsets)
+    synsets, unmatched_tags = find_synsets_and_unmatched_tags(tag_list)
+    synsets_for_pictures[json_file] = (photo_data["url"], synsets, unmatched_tags)
+    print synsets_for_pictures[json_file]
 
   return synsets_for_pictures
 
 def make_keywords_storable(keywords_for_pictures):
   storable_keywords_for_pictures = dict()
-  for photo_filename, (photo_url, synsets) in keywords_for_pictures.iteritems():
+  for photo_filename, (photo_url, synsets, unmatched_tags) in keywords_for_pictures.iteritems():
     synset_names =[]
     for synset in synsets:
       synset_names.append(synset.name)
-    storable_keywords_for_pictures[photo_filename] = (photo_url, synset_names)
+    storable_keywords_for_pictures[photo_filename] = (photo_url, synset_names, unmatched_tags)
   return storable_keywords_for_pictures
 
 def restore_keywords_for_pictures(storable_keywords_for_pictures):
   keywords_for_pictures = dict()
-  for photo_filename, (photo_url, synset_names) in storable_keywords_for_pictures.iteritems():
+  for photo_filename, (photo_url, synset_names, unmatched_tags) in storable_keywords_for_pictures.iteritems():
     synsets =[]
     for synset_name in synset_names:
       synsets.append(wn.synset(synset_name))
-    keywords_for_pictures[photo_filename] = (photo_url, synsets)
+    keywords_for_pictures[photo_filename] = (photo_url, synsets, unmatched_tags)
   return keywords_for_pictures
 
 def synset_detection(number_of_jsons, output_filename):

@@ -47,7 +47,7 @@ def get_co_occurrence_dict(synset_filenames_dict):
 
 def calculate_similarity_histogram(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
-  for filename, (_, synset_list) in keywords_for_pictures.iteritems():
+  for filename, (_, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
     for synset in synset_list:
       synset_filenames_dict[synset].append(filename)
 
@@ -61,7 +61,7 @@ def calculate_similarity_histogram(keywords_for_pictures):
         similarity = synset1.lch_similarity(synset2)
         co_occurrence = co_occurrence_dict[(synset1.name, synset2.name)] / float(max_co_occurrence)
         if similarity < 1.8:
-          similarity = 0  
+          similarity = 0
         similarity_histogram[(synset1.name, synset2.name)] = similarity + 2*co_occurrence
   return similarity_histogram
 
@@ -93,7 +93,7 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
   affiliated_photos_tuples = []
   for keyword_cluster in keyword_clusters:
     affiliated_photos = {}
-    for (photo_url, keyword_list) in keywords_for_pictures.values():
+    for (photo_url, keyword_list, _) in keywords_for_pictures.values():
       if (not keyword_list == None) and (len(keyword_list) > 0):
         shared_keywords = intersect_keyword_lists(keyword_cluster,keyword_list)
         if len(shared_keywords) > 0:
@@ -110,7 +110,7 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
 # cut off lowest 10% of synsets
 
 def main():
-  number_of_jsons = 1000
+  number_of_jsons = 100
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
@@ -129,7 +129,7 @@ def main():
     print_status("Detect synsets for the tags of every picture... \n")
     keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
     print "Done detecting synsets"
-  
+
   print_status("Calculate similarity histogram... ")
   keyword_similarity_histogram = calculate_similarity_histogram(keywords_for_pictures)
   print "Done with %d edges" % len(keyword_similarity_histogram)

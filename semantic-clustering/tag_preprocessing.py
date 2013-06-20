@@ -53,10 +53,10 @@ def read_tags_from_json(json_data):
     for tag in tag_array:
       tag = re.sub("[0-9]","", tag)        # cut off digits
       tag = string.lower(tag)              # Only lower case
-      tag = wn.morphy(tag)                 # Stemmming
+      # tag = wn.morphy(tag)                 # Stemmming
       if not tag == None and len(tag) > 2: # Only tags with more than 2 literals
         if not hypernym_is_color(tag):     # Remove color tags
-          tag_list.append(str(tag))
+          tag_list.append(tag)
   return tag_list
 
 def read_data_from_json_file(json_file):
