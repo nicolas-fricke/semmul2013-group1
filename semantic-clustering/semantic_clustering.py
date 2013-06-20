@@ -31,19 +31,38 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
 
 ################     Similarity Historgram   #######################
 
+def get_co_occurrence_dict(synset_filenames_dict):
+  co_occurrence_dict = dict()
+  max_co_occurrence = 0
+  for synset1, filenames1 in synset_filenames_dict.iteritems():
+    for synset2, filenames2 in synset_filenames_dict.iteritems():
+      if synset1 < synset2:
+        #if (synset1.name, synset2.name) not in co_occurrence_dict:
+        co_occurence = len(set(filenames1).intersection(set(filenames2)))
+        co_occurrence_dict[(synset1.name, synset2.name)] = co_occurence
+        if co_occurence > max_co_occurrence:
+          max_co_occurrence = co_occurence
+  return max_co_occurrence, co_occurrence_dict
+
+
 def calculate_similarity_histogram(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
   for filename, (_, synset_list) in keywords_for_pictures.iteritems():
     for synset in synset_list:
       synset_filenames_dict[synset].append(filename)
 
+  max_co_occurrence, co_occurrence_dict = get_co_occurrence_dict(synset_filenames_dict)
+
   similarity_histogram = dict()
   for synset1, filenames1 in synset_filenames_dict.iteritems():
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
-        if (synset1.name, synset2.name) not in similarity_histogram:
-          co_occurrence = len(set(filenames1).intersection(set(filenames2)))
-          similarity_histogram[(synset1.name, synset2.name)] = synset1.lch_similarity(synset2) * co_occurrence
+        #if (synset1.name, synset2.name) not in similarity_histogram:
+        similarity = synset1.lch_similarity(synset2)
+        co_occurrence = co_occurrence_dict[(synset1.name, synset2.name)] / float(max_co_occurrence)
+        if similarity < 1.8:
+          similarity = 0  
+        similarity_histogram[(synset1.name, synset2.name)] = similarity + 2*co_occurrence
   return similarity_histogram
 
 
@@ -91,29 +110,29 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
 # cut off lowest 10% of synsets
 
 def main():
-  number_of_jsons = 100
+  number_of_jsons = 1000
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
                       help='If specified, use preprocessed keyword data, otherwise find keywords and save values to file for next use')
   args = parser.parse_args()
 
-  print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
+  print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n")
 
-  keywords_for_pictures_filename = "preprocessed_data.pickle"
+  keywords_for_pictures_filename = str(number_of_jsons) + "_preprocessed_data.pickle"
   if args.use_preprocessed_data:
     print_status("Restore preprocessed data from file... ")
     storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
     keywords_for_pictures = restore_keywords_for_pictures(storable_keywords_for_pictures)
     print "Done"
   else:
-    print_status("Detect synsets for the tags of every picture... ")
+    print_status("Detect synsets for the tags of every picture... \n")
     keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
-    print "Done"
+    print "Done detecting synsets"
   
   print_status("Calculate similarity histogram... ")
   keyword_similarity_histogram = calculate_similarity_histogram(keywords_for_pictures)
-  print "Done"
+  print "Done with %d edges" % len(keyword_similarity_histogram)
 
   print_status("Cluster synsets with the help of MCL... ")
   keyword_clusters = mcl_tag_clustering(keyword_similarity_histogram)
