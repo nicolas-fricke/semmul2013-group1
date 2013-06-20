@@ -47,9 +47,9 @@ def get_synset_co_occurrence_dict(synset_filenames_dict):
 
 def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict,number_of_jsons):
   tag_synset_co_occurrence_dict = defaultdict(list)
-  max_co_occurrence = 0
 
   for synset, synset_filenames in synset_filenames_dict.iteritems():
+    max_co_occurrence = 0
     co_occurences = {}
     for unmatched_tag, unmatched_tag_filenames in unmatched_tag_filenames_dict.iteritems():
       co_occurence = len(set(synset_filenames).intersection(set(unmatched_tag_filenames)))
@@ -58,9 +58,12 @@ def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_fil
         max_co_occurrence = co_occurence
 
     for unmatched_tag, co_occurence in co_occurences.iteritems():
-      tf_idf = (co_occurence/float(max_co_occurrence))*log(number_of_jsons/float(len(unmatched_tag_filenames)))
-      if tf_idf > 0:
-        tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(tf_idf))
+      if max_co_occurrence == 0:
+        tf_idf = 0
+      else:
+        tf_idf = (co_occurence/float(max_co_occurrence)) #*log(number_of_jsons/float(len(unmatched_tag_filenames)))
+        if tf_idf > 0:
+          tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(tf_idf))
   return tag_synset_co_occurrence_dict
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
