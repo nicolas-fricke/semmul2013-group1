@@ -21,6 +21,7 @@ def parse_json_data(json_files, number_of_jsons):
       continue
     #print "############ ", photo_data["url"], " ##########"
 
+    json_file = json_file[json_file.rfind("/")+1:]
     synsets_for_pictures[json_file] = (photo_data["url"], [])
     indefinite_synsets = []
 
