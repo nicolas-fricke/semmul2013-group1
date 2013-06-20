@@ -51,7 +51,6 @@ def parse_json_data(json_files, number_of_jsons):
 
     synsets, unmatched_tags = find_synsets_and_unmatched_tags(tag_list)
     synsets_for_pictures[json_file] = (photo_data["url"], synsets, unmatched_tags)
-    print synsets_for_pictures[json_file]
 
   return synsets_for_pictures
 

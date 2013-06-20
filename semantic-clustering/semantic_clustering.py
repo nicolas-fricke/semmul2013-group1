@@ -31,7 +31,7 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
 
 ################     Similarity Historgram   #######################
 
-def get_co_occurrence_dict(synset_filenames_dict):
+def get_synset_co_occurrence_dict(synset_filenames_dict):
   co_occurrence_dict = dict()
   max_co_occurrence = 0
   for synset1, filenames1 in synset_filenames_dict.iteritems():
@@ -44,14 +44,29 @@ def get_co_occurrence_dict(synset_filenames_dict):
           max_co_occurrence = co_occurence
   return max_co_occurrence, co_occurrence_dict
 
+def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
+  tag_synset_co_occurrence_dict = defaultdict(list)
+  for synset, synset_filenames in synset_filenames_dict.iteritems():
+    for unmatched_tag, unmatched_tag_filenames in unmatched_tag_filenames_dict.iteritems():
+      co_occurence = len(set(synset_filenames).intersection(set(unmatched_tag_filenames)))
+      co_occurence = co_occurence/float(len(unmatched_tag_filenames)+len(synset_filenames))
+      if co_occurence > 0.2:
+        tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(co_occurence))
 
-def calculate_similarity_histogram(keywords_for_pictures):
+  return tag_synset_co_occurrence_dict
+
+def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
+  unmatched_tag_filenames_dict = defaultdict(list)
   for filename, (_, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
     for synset in synset_list:
       synset_filenames_dict[synset].append(filename)
+    for unmatched_tag in unmatched_tags:
+      unmatched_tag_filenames_dict[unmatched_tag].append(filename)
+  return synset_filenames_dict, unmatched_tag_filenames_dict
 
-  max_co_occurrence, co_occurrence_dict = get_co_occurrence_dict(synset_filenames_dict)
+def calculate_similarity_histogram(synset_filenames_dict):
+  max_co_occurrence, co_occurrence_dict = get_synset_co_occurrence_dict(synset_filenames_dict)
 
   similarity_histogram = dict()
   for synset1, filenames1 in synset_filenames_dict.iteritems():
@@ -110,7 +125,7 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
 # cut off lowest 10% of synsets
 
 def main():
-  number_of_jsons = 100
+  number_of_jsons = 1000
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
@@ -128,10 +143,19 @@ def main():
   else:
     print_status("Detect synsets for the tags of every picture... \n")
     keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
-    print "Done detecting synsets"
+    print_status("Done detecting synsets\n")
+
+  print_status("Create_inverse_keywords_for_pictures_dicts... ")
+  synset_filenames_dict, unmatched_tag_filenames_dict = create_inverse_keywords_for_pictures_dict(keywords_for_pictures)
+  print "Done"
+
+  print_status("Create tag_synset_co_occurrence_dict... ")
+  tag_synset_co_occurrence_dict = get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict)
+  print "Done"
+  print tag_synset_co_occurrence_dict
 
   print_status("Calculate similarity histogram... ")
-  keyword_similarity_histogram = calculate_similarity_histogram(keywords_for_pictures)
+  keyword_similarity_histogram = calculate_similarity_histogram(synset_filenames_dict)
   print "Done with %d edges" % len(keyword_similarity_histogram)
 
   print_status("Cluster synsets with the help of MCL... ")
