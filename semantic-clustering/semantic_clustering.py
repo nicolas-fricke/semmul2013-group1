@@ -14,6 +14,7 @@ import operator
 from subprocess import call
 import argparse
 from nltk.corpus import wordnet as wn
+from math import log
 
 # Import own modules
 from tag_preprocessing import *
@@ -44,15 +45,22 @@ def get_synset_co_occurrence_dict(synset_filenames_dict):
           max_co_occurrence = co_occurence
   return max_co_occurrence, co_occurrence_dict
 
-def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
+def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict,number_of_jsons):
   tag_synset_co_occurrence_dict = defaultdict(list)
+  max_co_occurrence = 0
+
   for synset, synset_filenames in synset_filenames_dict.iteritems():
+    co_occurences = {}
     for unmatched_tag, unmatched_tag_filenames in unmatched_tag_filenames_dict.iteritems():
       co_occurence = len(set(synset_filenames).intersection(set(unmatched_tag_filenames)))
-      co_occurence = co_occurence/float(len(unmatched_tag_filenames)+len(synset_filenames))
-      if co_occurence > 0.2:
-        tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(co_occurence))
+      co_occurences[unmatched_tag] = co_occurence
+      if co_occurence > max_co_occurrence:
+        max_co_occurrence = co_occurence
 
+    for unmatched_tag, co_occurence in co_occurences.iteritems():
+      tf_idf = (co_occurence/float(max_co_occurrence))*log(number_of_jsons/float(len(unmatched_tag_filenames)))
+      if tf_idf > 0:
+        tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(tf_idf))
   return tag_synset_co_occurrence_dict
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
@@ -150,7 +158,7 @@ def main():
   print "Done"
 
   print_status("Create tag_synset_co_occurrence_dict... ")
-  tag_synset_co_occurrence_dict = get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict)
+  tag_synset_co_occurrence_dict = get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict,number_of_jsons)
   print "Done"
   print tag_synset_co_occurrence_dict
 
