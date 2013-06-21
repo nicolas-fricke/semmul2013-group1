@@ -17,7 +17,7 @@ def hello():
 @app.route("/search/<searchterm>")
 def search(searchterm):
   tree = get_hyponyms_trees_with_filenames(searchterm)
-  return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
+  return render_template('result.html', tree=WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
 
 
 if __name__ == "__main__":
