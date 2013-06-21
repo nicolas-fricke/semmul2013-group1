@@ -14,7 +14,7 @@ import sys
 import getopt
 from nltk.corpus import wordnet as wn
 from collections import defaultdict
-
+from json import *
 
 # Import own modules
 sys.path.append('../helpers')
@@ -39,6 +39,10 @@ class WordnetNode:
 
   def has_pictures(self):
     return isinstance(self.associated_pictures, list) and len(self.associated_pictures) > 0
+
+class WordnetNodeJSONEncoder(JSONEncoder):
+  def default(self, o):
+    return o.__dict__
 
 def parse_command_line_arguments(argv):
 	####### Reading Commandline arguments ########
