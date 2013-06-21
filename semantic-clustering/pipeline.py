@@ -18,25 +18,30 @@ def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, 
 #   for node in hyponyms_trees:
 #     recursively_find_pictures_for_synset_tree(node, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=find_pictures_for_meronyms)
 #   return hyponyms_trees
-    
 
-def main(argv):
-  ####### Reading Commandline arguments ########
-  word = parse_command_line_arguments(argv)
-
+def get_hyponyms_trees_with_filenames(search_term):
   ####### WordNet Search #######
 
-  print_status("Running WordNet Search for %s... " % word)
-  hyponyms_trees = find_hyponyms_on_wordnet(word)
+  print_status("Running WordNet Search for %s... " % search_term)
+  hyponyms_trees = find_hyponyms_on_wordnet(search_term)
   print "Done."
 
   #pretty_print_tree(hyponyms_trees)
 
   print_status("Done. Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
-  synsets_to_filenames_dict = load_object("synset_filenames_dict_100.pickle")
+  synsets_to_filenames_dict = load_object("own_synset_filenames_dict_5000.pickle")
 
   hyponyms_trees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True)
+
+  return hyponyms_trees_with_filenames
+
+def main(argv):
+  ####### Reading Commandline arguments ########
+  word = parse_command_line_arguments(argv)
+
+  ####### Creating hyponym_trees ###########
+  hyponyms_trees_with_filenames = get_hyponyms_trees_with_filenames(word)
 
   for synset in hyponyms_trees_with_filenames:
     pretty_print_tree(synset)

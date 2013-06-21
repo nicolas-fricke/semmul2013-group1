@@ -6,8 +6,7 @@ from flask import render_template
 
 
 sys.path.append('../semantic-clustering')
-# from pipeline import *
-from wordnet_searchterm_analyzer import *
+from pipeline import *
 
 app = Flask(__name__)
 
@@ -17,7 +16,7 @@ def hello():
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
-  tree = find_hyponyms_on_wordnet(searchterm)
+  tree = get_hyponyms_trees_with_filenames(searchterm)
   return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
 
 
