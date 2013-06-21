@@ -30,7 +30,7 @@ def get_hyponyms_trees_with_filenames(search_term):
 
   print_status("Done. Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
-  synsets_to_filenames_dict = load_object("own_synset_filenames_dict_5000.pickle")
+  synsets_to_filenames_dict = load_object("../semantic-clustering/synset_picture_urls_dict_5000.pickle")
 
   hyponyms_trees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True)
 
