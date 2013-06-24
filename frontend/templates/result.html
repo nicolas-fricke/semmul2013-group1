@@ -9,6 +9,64 @@
     <h1>Flickr Clusterer</h1>
     <input id="input-searchterm" name="searchterm">
     <input type="button" value="find" onclick="onClickFind()">
-    <div id="tree-canvas" style="width: 100%; min-height: 400px;">{{ tree }}</div>
+    <div id="tree-canvas" style="width: 100%; min-height: 400px;">
+      <table>
+      {% for node in tree %}
+        <tr>
+          <td>{{ node.name }}</td>
+          {% for picture in node.associated_pictures %}
+          <td><img src={{ picture }}></td>
+          {% endfor %}
+        <tr>
+        {% for node2 in node.hyponyms %}
+        <tr>
+          <td> -- {{ node2.name }}</td>
+          {% for picture2 in node2.associated_pictures %}
+          <td><img src={{ picture2 }}></td>
+          {% endfor %}
+        <tr>
+          {% for node22 in node2.hyponyms %}
+          <tr>
+            <td> ---- {{ node22.name }}</td>
+            {% for picture22 in node22.associated_pictures %}
+            <td><img src={{ picture22 }}></td>
+            {% endfor %}
+          <tr>
+          {% endfor %}
+          {% for node23 in node2.meronyms %}
+          <tr>
+            <td> ---- {{ node23.name }}</td>
+            {% for picture23 in node23.associated_pictures %}
+            <td><img src={{ picture23 }}></td>
+            {% endfor %}
+          <tr>
+          {% endfor %}
+        {% endfor %}
+        {% for node3 in node.meronyms %}
+        <tr>
+          <td> -- {{ node3.name }}</td>
+          {% for picture3 in node3.associated_pictures %}
+          <td><img src={{ picture3 }}></td>
+          {% endfor %}
+        <tr>
+          {% for node32 in node3.hyponyms %}
+          <tr>
+            <td> ---- {{ node32.name }}</td>
+            {% for picture32 in node32.associated_pictures %}
+            <td><img src={{ picture2 }}></td>
+            {% endfor %}
+          <tr>
+          {% endfor %}
+          {% for node33 in node3.meronyms %}
+          <tr>
+            <td> ---- {{ node33.name }}</td>
+            {% for picture333 in node3.associated_pictures %}
+            <td><img src={{ picture33 }}></td>
+            {% endfor %}
+          <tr>
+          {% endfor %}
+        {% endfor %}
+      {% endfor %}
+    </div>
   </body>
 </html>
