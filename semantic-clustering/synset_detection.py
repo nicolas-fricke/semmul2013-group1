@@ -72,7 +72,7 @@ def restore_keywords_for_pictures(storable_keywords_for_pictures):
     keywords_for_pictures[photo_filename] = (photo_url, synsets, unmatched_tags)
   return keywords_for_pictures
 
-def synset_detection(number_of_jsons, output_filename):
+def synset_detection(number_of_jsons):
   # import configuration
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
@@ -82,18 +82,13 @@ def synset_detection(number_of_jsons, output_filename):
   print "Done."
 
   # parse data from json files
-  print_status("Parsing json files and detect synsets... ")
+  print_status("Parsing json files and detecting synsets... ")
   keywords_for_pictures = parse_json_data(json_files,number_of_jsons)
   print "Done"
 
   # create a data structure where the names of synsets instead of synsets themself are stored
-  print_status("Create structure for writing to file... ")
+  print_status("Creating structure for writing to file... ")
   storable_keywords_for_pictures = make_keywords_storable(keywords_for_pictures)
-  print "Done"
-
-  # write the storable data structure to a pickle to avoid repetition
-  print_status("Write preprocessed data to file... ")
-  save_object(storable_keywords_for_pictures, output_filename)
   print "Done"
 
   # tag index dict saves the matching index of a tag in the laplace matrix
