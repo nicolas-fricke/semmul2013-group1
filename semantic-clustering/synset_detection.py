@@ -50,6 +50,7 @@ def parse_json_data(json_files, number_of_jsons):
       continue
 
     synsets, unmatched_tags = find_synsets_and_unmatched_tags(tag_list)
+    json_file = json_file[json_file.rfind("/")+1:]
     synsets_for_pictures[json_file] = (photo_data["url"], synsets, unmatched_tags)
 
   return synsets_for_pictures
