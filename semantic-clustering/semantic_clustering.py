@@ -61,10 +61,43 @@ def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_fil
       if max_co_occurrence == 0:
         tf_idf = 0
       else:
-        tf_idf = (co_occurence/float(max_co_occurrence)) #*log(number_of_jsons/float(len(unmatched_tag_filenames)))
+        tf = (co_occurence/float(max_co_occurrence))
         if tf_idf > 0:
           tag_synset_co_occurrence_dict[synset.name].append(unmatched_tag + " : " + str(tf_idf))
+
+    idf = log(len(synset_filenames)/float(len(unmatched_tag_filenames)))
   return tag_synset_co_occurrence_dict
+
+def get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
+  synset_tags_tf_idf_dict = dict()
+
+  synset_tag_co_occurrence_dict = dict()
+
+  how_many_synsests_for_tag = dict()
+  for unmatched_tag in unmatched_tag_filenames_dict.keys():
+    how_many_synsests_for_tag[unmatched_tag] = 0
+
+  max_co_occurrence_for_synset = dict()
+
+  for synset, synset_filenames in synset_filenames_dict.iteritems():
+    max_co_occurrence_for_synset[synset] = 0
+    for unmatched_tag, unmatched_tag_filenames in unmatched_tag_filenames_dict.iteritems():
+      co_occurence = len(set(synset_filenames).intersection(set(unmatched_tag_filenames)))
+      if co_occurence > max_co_occurrence_for_synset[synset]:
+        max_co_occurrence_for_synset[synset] = co_occurence
+      if co_occurence > 0:
+        how_many_synsests_for_tag[unmatched_tag] += 1
+        synset_tag_co_occurrence_dict[(synset, unmatched_tag)] = co_occurence
+
+  for (synset, unmatched_tag), co_occurence in synset_tag_co_occurrence_dict.iteritems():
+    tf = 0
+    idf = 0
+    if max_co_occurrence_for_synset[synset] != 0:
+      tf = co_occurence/float(max_co_occurrence_for_synset[synset])
+    if how_many_synsests_for_tag[unmatched_tag] != 0:
+      idf =  log(len(synset_filenames_dict.keys())/float(how_many_synsests_for_tag[unmatched_tag]))
+    synset_tags_tf_idf_dict[(synset, unmatched_tag)] = tf*idf
+  return synset_tags_tf_idf_dict
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
@@ -88,7 +121,7 @@ def calculate_similarity_histogram(synset_filenames_dict):
         co_occurrence = co_occurrence_dict[(synset1.name, synset2.name)] / float(max_co_occurrence)
         if similarity < 1.8:
           similarity = 0
-        similarity_histogram[(synset1.name, synset2.name)] = similarity + 2*co_occurrence
+        similarity_histogram[(synset1.name, synset2.name)] = co_occurrence#similarity + 2*co_occurrence
   return similarity_histogram
 
 
@@ -136,7 +169,7 @@ def get_photo_clusters(keyword_clusters, keywords_for_pictures):
 # cut off lowest 10% of synsets
 
 def main():
-  number_of_jsons = 1000
+  number_of_jsons = 100
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
@@ -161,9 +194,9 @@ def main():
   print "Done"
 
   print_status("Create tag_synset_co_occurrence_dict... ")
-  tag_synset_co_occurrence_dict = get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict,number_of_jsons)
+  synset_tag_tf_idf_dict = get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict)
   print "Done"
-  print tag_synset_co_occurrence_dict
+  print sorted(synset_tag_tf_idf_dict.iteritems(), key=operator.itemgetter(1))
 
   print_status("Calculate similarity histogram... ")
   keyword_similarity_histogram = calculate_similarity_histogram(synset_filenames_dict)
