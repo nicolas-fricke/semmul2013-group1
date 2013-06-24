@@ -1,6 +1,12 @@
 <html>
-  <head>
+  <head>table-layout: fixed;
     <title>Semantic Multimedia – Flickr Clusterer</title>
+    <style>
+      table {width: 100%; table-layout: fixed; border-collapse: collapse;}
+      tr > td:first-child {text-align: left; font-weight: bold;}
+      td {border: 2px solid black; margin: 5px;}
+      .images {white-space: nowrap; overflow: scroll;}
+    </style>\n"
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="static/assets/js/main.js"></script>
@@ -13,57 +19,71 @@
       <table>
       {% for node in tree %}
         <tr>
-          <td>{{ node.name }}</td>
+          <td style='width: 200px'>{{ node.name }}</td>
+          <td class=images>
           {% for picture in node.associated_pictures %}
-          <td><img src={{ picture }}></td>
+            <img src={{ picture }}>
           {% endfor %}
-        <tr>
+          </td>
+        </tr>
         {% for node2 in node.hyponyms %}
         <tr>
-          <td> -- {{ node2.name }}</td>
+          <td> |-- {{ node2.name }}</td>
+          <td class=images>
           {% for picture2 in node2.associated_pictures %}
-          <td><img src={{ picture2 }}></td>
+            <img src={{ picture2 }}>
           {% endfor %}
-        <tr>
+          </td>
+        </tr>
           {% for node22 in node2.hyponyms %}
           <tr>
-            <td> ---- {{ node22.name }}</td>
+            <td> .....|-- {{ node22.name }}</td>
+            <td class=images>
             {% for picture22 in node22.associated_pictures %}
-            <td><img src={{ picture22 }}></td>
+              <img src={{ picture22 }}>
             {% endfor %}
-          <tr>
+            </td>
+          </tr>
           {% endfor %}
           {% for node23 in node2.meronyms %}
           <tr>
-            <td> ---- {{ node23.name }}</td>
+            <td> .....|-- {{ node23.name }}</td>
+            <td class=images>
             {% for picture23 in node23.associated_pictures %}
-            <td><img src={{ picture23 }}></td>
+              <img src={{ picture23 }}>
             {% endfor %}
-          <tr>
+            </td>
+          </tr>
           {% endfor %}
         {% endfor %}
         {% for node3 in node.meronyms %}
         <tr>
-          <td> -- {{ node3.name }}</td>
+          <td> |-- {{ node3.name }}</td>
+          <td class=images>
           {% for picture3 in node3.associated_pictures %}
-          <td><img src={{ picture3 }}></td>
+            <img src={{ picture3 }}>
           {% endfor %}
-        <tr>
+          </td>
+        </tr>
           {% for node32 in node3.hyponyms %}
           <tr>
-            <td> ---- {{ node32.name }}</td>
+            <td> |||-- {{ node32.name }}</td>
+            <td class=images>
             {% for picture32 in node32.associated_pictures %}
-            <td><img src={{ picture2 }}></td>
+              <img src={{ picture2 }}>
             {% endfor %}
-          <tr>
+            </td>
+          </tr>
           {% endfor %}
           {% for node33 in node3.meronyms %}
           <tr>
-            <td> ---- {{ node33.name }}</td>
+            <td> |||-- {{ node33.name }}</td>
+            <td class=images>
             {% for picture333 in node3.associated_pictures %}
-            <td><img src={{ picture33 }}></td>
+              <img src={{ picture33 }}>
             {% endfor %}
-          <tr>
+            </td>
+          </tr>
           {% endfor %}
         {% endfor %}
       {% endfor %}
