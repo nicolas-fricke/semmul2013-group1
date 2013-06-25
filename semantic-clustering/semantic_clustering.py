@@ -68,8 +68,8 @@ def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_fil
     idf = log(len(synset_filenames)/float(len(unmatched_tag_filenames)))
   return tag_synset_co_occurrence_dict
 
-def get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
-  synset_tags_tf_idf_dict = dict()
+def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
+  synset_tags_tf_idf_dict = defaultdict(list)
 
   synset_tag_co_occurrence_dict = dict()
 
@@ -96,7 +96,7 @@ def get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_
       tf = co_occurence/float(max_co_occurrence_for_synset[synset])
     if how_many_synsests_for_tag[unmatched_tag] != 0:
       idf =  log(len(synset_filenames_dict.keys())/float(how_many_synsests_for_tag[unmatched_tag]))
-    synset_tags_tf_idf_dict[(synset, unmatched_tag)] = tf*idf
+    synset_tags_tf_idf_dict[synset].append((unmatched_tag, tf*idf))
   return synset_tags_tf_idf_dict
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
@@ -198,10 +198,9 @@ def main():
   synset_filenames_dict, unmatched_tag_filenames_dict = create_inverse_keywords_for_pictures_dict(keywords_for_pictures)
   print "Done"
 
-  print_status("Create tag_synset_co_occurrence_dict... ")
-  synset_tag_tf_idf_dict = get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict)
-  print "Done"
-  print sorted(synset_tag_tf_idf_dict.iteritems(), key=operator.itemgetter(1))
+  #print_status("Create tag_synset_co_occurrence_dict... ")
+  #synset_tags_tf_idf_dict = create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict)
+  #print "Done"
 
   print_status("Calculate similarity histogram... ")
   keyword_similarity_histogram = calculate_similarity_histogram(synset_filenames_dict)
