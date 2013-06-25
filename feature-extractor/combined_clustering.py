@@ -40,6 +40,8 @@ def cluster_by_color(colors):
   #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
   k_color = 2
   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  if error == 0:
+    print "Something is wrong here... error is zero"
   previous_error = pow(error,2)
   while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
   #while error < 0.9 * previous_error:
@@ -53,7 +55,6 @@ def cluster_by_color(colors):
 
 
 def cluster_by_edges(edges):
-  print_status("Clustering images by edge histograms via k-means algorithm.... ")
   k_edges = 2
   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
   previous_error = error * 10
@@ -90,10 +91,14 @@ def cluster_by_features(images):
 
 def cluster_visually(tree_node):
   if len(tree_node.associated_pictures) > 15:              ##TODO: find appropriate threshold
+    print_status("Extracting visual features (colors and edges) from images.... ")
     images = extract_features(tree_node)
+    print "Done.\n"
+
+    print_status("Clustering images by visual features via k-means algorithm.... ")
     clusters = cluster_by_features(images)
     tree_node.subclusters = clusters
-    print "%d subclusters for " % len(clusters), tree_node.name
+    print "Done. %d subclusters for " % len(clusters), tree_node.name
 
   if tree_node.has_hyponyms():
     for child_hyponym_node in tree_node.hyponyms:

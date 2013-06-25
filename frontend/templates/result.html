@@ -19,15 +19,17 @@
       <table>
       {% for node in tree %}
         <tr>
-          <td style='width: 200px'>{{ node.name }}  {{ node.subclusters }}</td>
+          <td style='width: 200px'>{{ node.name }} </td>
           <td class=images><table>
-          {% for cluster in node.subclusters %}
+          {% if node.subclusters != None %}
+          {% for cluster in node.subclusters.values() %}
             <tr><td>
             {% for picture in cluster %}
-              <img src={{ picture[1] }}>
+              <img src={{ picture["url"] }}>
             {% endfor %}
             </td></tr>
           {% endfor %}
+          {% endif %}
           </table></td>
         </tr>
         {% for node2 in node.hyponyms %}
