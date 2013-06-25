@@ -1,13 +1,14 @@
 import sys
 from wordnet_searchterm_analyzer import *
 sys.path.append('../helpers')
+sys.path.append('../feature-extractor')
 from general_helpers import load_object
+from combined_clustering import *
 
 
 def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, find_pictures_for_hyponyms=False, find_pictures_for_meronyms=False):
   for node in nodes:
     if find_pictures_for_hyponyms and node.has_hyponyms():
-      print node.hyponyms
       recursively_find_pictures_for_synset_tree(node.hyponyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=find_pictures_for_meronyms)
     if find_pictures_for_meronyms and node.has_meronyms():
       recursively_find_pictures_for_synset_tree(node.meronyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=True)
@@ -19,7 +20,7 @@ def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, 
 #     recursively_find_pictures_for_synset_tree(node, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=find_pictures_for_meronyms)
 #   return hyponyms_trees
 
-def get_hyponyms_trees_with_filenames(search_term):
+def get_searchtrees_with_filenames(search_term):
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s... " % search_term)
@@ -28,20 +29,30 @@ def get_hyponyms_trees_with_filenames(search_term):
 
   #pretty_print_tree(hyponyms_trees)
 
-  print_status("Done. Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
+  print_status("Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
-  synsets_to_filenames_dict = load_object("../semantic-clustering/synset_picture_urls_dict_5000.pickle")
+  #synsets_to_filenames_dict = load_object("../semantic-clustering/synset_picture_urls_dict_5000.pickle")
+  synsets_to_filenames_dict = load_object("../semantic-clustering/synset_filenames_dict.pickle")
 
-  hyponyms_trees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True)
+  searchtrees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True)
 
-  return hyponyms_trees_with_filenames
+  return searchtrees_with_filenames
+
+def get_clusters(search_term):
+  searchtrees_with_filenames = get_searchtrees_with_filenames(search_term)
+
+  result_trees = []
+  for searchtree in searchtrees_with_filenames:
+    result_trees.append(cluster_visually(searchtree))
+
+  return result_trees
 
 def main(argv):
   ####### Reading Commandline arguments ########
   word = parse_command_line_arguments(argv)
 
   ####### Creating hyponym_trees ###########
-  hyponyms_trees_with_filenames = get_hyponyms_trees_with_filenames(word)
+  hyponyms_trees_with_filenames = get_searchtrees_with_filenames(word)
 
   for synset in hyponyms_trees_with_filenames:
     pretty_print_tree(synset)

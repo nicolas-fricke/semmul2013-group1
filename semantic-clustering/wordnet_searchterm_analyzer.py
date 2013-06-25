@@ -27,6 +27,7 @@ class WordnetNode:
     self.hyponyms = hyponyms if isinstance(hyponyms, list) else []
     self.meronyms = meronyms if isinstance(meronyms, list) else []
     self.associated_pictures = None
+    self.subclusters = None
 
   def has_hyponyms(self):
     return isinstance(self.hyponyms, list) and len(self.hyponyms) > 0

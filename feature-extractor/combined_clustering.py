@@ -15,6 +15,94 @@ from visual_helpers import *
 from color_clustering import extract_colors
 from edge_clustering import extract_edges
 
+def extract_features(tree_node):
+  images = []
+  for metajson_file, _ in tree_node.associated_pictures:
+    metadata = parse_json_file("../data/" + metajson_file)
+    if metadata["stat"] == "ok":
+      data = {}
+      url = get_small_image_url(metadata)
+      data["image_id"]  = metadata["id"]
+      data["file_path"] = metajson_file
+      data["url"]       = url
+      try:
+        image = Image(url).toHSV()
+      except Exception:
+        continue
+
+      data = extract_colors(image, data, 1)               ##TODO: how to call pyramidal extraction?
+      data = extract_edges(image, data, 1)                ##TODO: how to call pyramidal extraction?
+      images.append(data)
+  return images    
+
+
+def cluster_by_color(colors):
+  #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
+  k_color = 2
+  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  previous_error = pow(error,2)
+  while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
+  #while error < 0.9 * previous_error:
+    k_color += 1 
+    previous_error = error
+    clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  k_color -= 1
+  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
+
+  return clustered_images_by_color, k_color
+
+
+def cluster_by_edges(edges):
+  print_status("Clustering images by edge histograms via k-means algorithm.... ")
+  k_edges = 2
+  clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  previous_error = error * 10
+  #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
+  while error < 0.85 * previous_error:
+    k_edges += 1
+    previous_error = error
+    clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  k_edges -= 1
+  clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
+
+  return clustered_images_by_edges, k_edges
+
+
+def cluster_by_features(images):
+  colors = []
+  edges = []
+
+  for image_data in images:
+    colors.append(image_data["colors"])
+    edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
+
+  clustered_images_by_color, k_color = cluster_by_color(colors)
+  clustered_images_by_edges, k_edges = cluster_by_edges(edges)
+
+  #DO LATE FUSION
+  clusters = defaultdict(list)
+  for index, cluster_color in enumerate(clustered_images_by_color):
+    cluster_edges = clustered_images_by_edges[index]
+    clusters[cluster_color + cluster_edges * k_color].append(images[index])
+
+  return clusters
+
+
+def cluster_visually(tree_node):
+  if len(tree_node.associated_pictures) > 15:              ##TODO: find appropriate threshold
+    images = extract_features(tree_node)
+    clusters = cluster_by_features(images)
+    tree_node.subclusters = clusters
+    print "%d subclusters for " % len(clusters), tree_node.name
+
+  if tree_node.has_hyponyms():
+    for child_hyponym_node in tree_node.hyponyms:
+      cluster_visually(child_hyponym_node)
+  if tree_node.has_meronyms():
+    for child_meronym_node in tree_node.meronyms:
+      cluster_visually(child_meronym_node)
+
+  return tree_node
 
 def main(argv):
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
