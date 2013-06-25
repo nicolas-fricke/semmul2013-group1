@@ -102,11 +102,11 @@ def get_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
   unmatched_tag_filenames_dict = defaultdict(list)
-  for filename, (_, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
+  for filename, (url, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
     for synset in synset_list:
-      synset_filenames_dict[synset].append(filename)
+      synset_filenames_dict[synset].append((filename,url))
     for unmatched_tag in unmatched_tags:
-      unmatched_tag_filenames_dict[unmatched_tag].append(filename)
+      unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
   return synset_filenames_dict, unmatched_tag_filenames_dict
 
 def calculate_similarity_histogram(synset_filenames_dict):
@@ -186,8 +186,13 @@ def main():
     print "Done"
   else:
     print_status("Detect synsets for the tags of every picture... \n")
-    keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons, keywords_for_pictures_filename)
+    keywords_for_pictures, storable_keywords_for_pictures = synset_detection(number_of_jsons)
     print_status("Done detecting synsets\n")
+
+    # write the storable data structure to a pickle to avoid repetition
+    print_status("Write preprocessed data to file... ")
+    save_object(storable_keywords_for_pictures, keywords_for_pictures_filename)
+    print "Done"
 
   print_status("Create_inverse_keywords_for_pictures_dicts... ")
   synset_filenames_dict, unmatched_tag_filenames_dict = create_inverse_keywords_for_pictures_dict(keywords_for_pictures)
