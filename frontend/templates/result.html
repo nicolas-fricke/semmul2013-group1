@@ -44,6 +44,26 @@
             {% endfor %}
             </td>
           </tr>
+            {% for node222 in node22.hyponyms %}
+            <tr>
+              <td> _____| {{ node222.name }}</td>
+              <td class=images>
+              {% for picture222 in node222.associated_pictures %}
+                <img src={{ picture222 }}>
+              {% endfor %}
+              </td>
+            </tr>
+            {% endfor %}
+            {% for node223 in node22.meronyms %}
+            <tr>
+              <td> _____| {{ node223.name }}</td>
+              <td class=images>
+              {% for picture223 in node223.associated_pictures %}
+                <img src={{ picture223 }}>
+              {% endfor %}
+              </td>
+            </tr>
+            {% endfor %}
           {% endfor %}
           {% for node23 in node2.meronyms %}
           <tr>
