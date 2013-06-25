@@ -74,26 +74,30 @@ def main(argv):
 
   print_status("Clustering images by color histograms via k-means algorithm.... ")
   #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  k_color = 1
+  k_color = 2
   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  previous_error = error * 2
-  while 1/(log(k_color+0.00001)*error) > 1/(log(k_color-0.9999)*previous_error):
+  previous_error = pow(error,2)
+  while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
   #while error < 0.9 * previous_error:
     k_color += 1 
     previous_error = error
     clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  print "Done. %d Clusters" % k_color
+  k_color -= 1
+  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
+  print "Done. %d Clusters with error %d" % (k_color, error)
 
   print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  k_edges = 1
+  k_edges = 2
   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  previous_error = error * 2
-  #while 1/(log(k_edges+0.00001)*error) > 1/(log(k_edges-0.9999)*previous_error):
-  while error < 0.9 * previous_error:
+  previous_error = error * 10
+  #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
+  while error < 0.85 * previous_error:
     k_edges += 1
     previous_error = error
     clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  print "Done. %d Clusters" % k_edges
+  k_edges -= 1
+  clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
+  print "Done. %d Clusters with error %f" % (k_edges, error)
 
   #DO LATE FUSION
   print_status("Displaying clusters (simple intersection of color and edge clusters")
