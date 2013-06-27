@@ -129,7 +129,7 @@ def find_hyponyms_on_wordnet(word):
       name = synset.name,
       hyponyms = recursively_find_all_hyponyms_on_wordnet(synset.name),
       meronyms = recursively_find_all_meronyms_on_wordnet(synset.name),
-      strong_cooccurrences = find_strong_co_occurrences(synset.name, synset_tag_tf_idf_dict_filename)
+      co_occurring_tags = find_strong_co_occurrences(synset.name, synset_tag_tf_idf_dict_filename)
     ))
   return hyponym_tree
 
