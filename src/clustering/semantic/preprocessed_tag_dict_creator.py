@@ -57,8 +57,7 @@ def main():
   print "Done."
 
   print_status("Create tf_idf dictionary... ")
-  storable_synset_unmatched_tags_tf_idfs_dict = create_unmatched_tag_tf_idf_dict(storable_synset_filenames_dict,
-                                                                                 unmatched_tag_filenames_dict)
+  storable_synset_unmatched_tags_tf_idfs_dict = create_unmatched_tag_tf_idf_dict(storable_synset_filenames_dict, unmatched_tag_filenames_dict)
   print "Done"
 
   print_status("Writing storable_synset_unmatched_tags_tf_idfs_dict... ")

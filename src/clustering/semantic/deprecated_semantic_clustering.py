@@ -111,6 +111,7 @@ def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   unmatched_tag_filenames_dict = defaultdict(list)
   for filename, (url, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
     for synset in synset_list:
+      if (filename, url) not in synset_filenames_dict[synset]:
       synset_filenames_dict[synset].append((filename,url))
     for unmatched_tag in unmatched_tags:
       unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
