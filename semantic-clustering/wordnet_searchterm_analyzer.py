@@ -22,8 +22,9 @@ from general_helpers import *
 from tag_preprocessing import *
 
 class WordnetNode:
-  def __init__(self, name, hyponyms, meronyms):
+  def __init__(self, name, hyponyms, meronyms, strong_cooccurrences=None):
     self.name = name
+    self.strong_cooccurrences = strong_cooccurrences if isinstance(strong_cooccurrences, list) else [] 
     self.hyponyms = hyponyms if isinstance(hyponyms, list) else []
     self.meronyms = meronyms if isinstance(meronyms, list) else []
     self.associated_pictures = None
