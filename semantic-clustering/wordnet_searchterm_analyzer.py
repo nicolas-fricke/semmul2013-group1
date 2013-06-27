@@ -23,9 +23,9 @@ from general_helpers import *
 from tag_preprocessing import *
 
 class WordnetNode:
-  def __init__(self, name, hyponyms, meronyms, strong_cooccurrences=None):
+  def __init__(self, name, hyponyms, meronyms, co_occurring_tags=None):
     self.name = name
-    self.strong_cooccurrences = strong_cooccurrences if isinstance(strong_cooccurrences, list) else [] 
+    self.co_occurring_tags = co_occurring_tags if isinstance(co_occurring_tags, list) else [] 
     self.hyponyms = hyponyms if isinstance(hyponyms, list) else []
     self.meronyms = meronyms if isinstance(meronyms, list) else []
     self.associated_pictures = None
@@ -36,6 +36,9 @@ class WordnetNode:
 
   def has_meronyms(self):
     return isinstance(self.meronyms, list) and len(self.meronyms) > 0
+
+  def has_co_occurring_tags(self):
+    return isinstance(self.co_occurring_tags, list) and len(self.co_occurring_tags) > 0
 
   def has_child_nodes(self):
     return self.has_hyponyms() or self.has_meronyms()
