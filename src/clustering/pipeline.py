@@ -19,6 +19,11 @@ def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, 
 #   return hyponyms_trees
 
 def get_searchtrees_with_filenames(search_term):
+  # import configuration
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  synset_filenames_dict_filename = config.get('Filenames for Pickles', 'synset_filenames_dict_filename')
+
   ####### WordNet Search #######
 
   print_status("Running WordNet Search for %s... " % search_term)
@@ -29,8 +34,7 @@ def get_searchtrees_with_filenames(search_term):
 
   print_status("Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
-  #synsets_to_filenames_dict = load_object("../semantic-clustering/synset_picture_urls_dict_5000.pickle")
-  synsets_to_filenames_dict = load_object("../semantic-clustering/synset_filenames_dict.pickle")
+  synsets_to_filenames_dict = load_object(synset_filenames_dict_filename)
 
   searchtrees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True)
 
