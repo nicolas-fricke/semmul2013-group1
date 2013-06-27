@@ -31,6 +31,11 @@ def parse_json_file(json_file):
   with open(json_file) as file:
     return json.load(file)
 
+def construct_path_to_json(metajson):
+  parent_folder_name = metajson[:3]
+  grand_parent_folder_name = parent_folder_name[:2]+"0-"+parent_folder_name[:2]+"9"
+  return "/"+grand_parent_folder_name+"/"+parent_folder_name+"/"+metajson
+
 def get_small_image_url(metajson):
   if not metajson.get("stat") == "ok":
     return None
