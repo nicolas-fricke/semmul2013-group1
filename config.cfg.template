@@ -5,3 +5,6 @@ metadata-dir: %(data-dir)s/metadata
 [Flickr API Key]                      ; Get key at: from http://www.flickr.com/services/apps/create/noncommercial/
 key: <your-flickr-key>                ; Replace with your key
 secret: <your-flickr-secret>          ; Just not to loose your secret, put it here ;)
+
+[Filenames for Pickles]
+synset-tag-cooccurrence-dict: synset_tags_tf_idf_dict.pickle
