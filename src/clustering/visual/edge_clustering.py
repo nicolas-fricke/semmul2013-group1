@@ -22,9 +22,8 @@ from SimpleCV import EdgeHistogramFeatureExtractor
 from Pycluster import kcluster
 # Import own module helpers
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
-from visual_helpers import *
+from helpers.general_helpers import *
+from helpers.visual_helpers import *
 
 def extract_edges(image, data, slices):
   edgeExtractor = EdgeHistogramFeatureExtractor(bins=4)

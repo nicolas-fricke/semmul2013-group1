@@ -34,8 +34,15 @@ nosetests.xml
 .project
 .pydevproject
 
+# IntelliJ Idea files
+.idea/
+*.iml
+
 # Configuration file
 config.cfg
 
 # metadata folder
 data/*
+
+# ignore Mac trash file
+.DS_Store

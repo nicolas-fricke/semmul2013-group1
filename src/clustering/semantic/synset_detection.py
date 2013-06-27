@@ -6,9 +6,8 @@ import operator
 
 # Import own modules
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
-from tag_preprocessing import *
+from helpers.general_helpers import *
+from clustering.semantic.tag_preprocessing import *
 
 
 def find_synsets_and_unmatched_tags(tag_list):

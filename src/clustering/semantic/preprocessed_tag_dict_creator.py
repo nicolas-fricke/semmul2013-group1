@@ -19,11 +19,10 @@ import ConfigParser
 
 # Import own modules
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
+from helpers.general_helpers import *
 
-from semantic_clustering import *
-from synset_detection import *
+from clustering.semantic.deprecated_semantic_clustering import *
+from clustering.semantic.synset_detection import *
 
 
 def main():

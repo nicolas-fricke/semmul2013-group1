@@ -159,7 +159,7 @@ def main():
   config.read('../config.cfg')
 
   api_key = config.get('Flickr API Key', 'key')
-  metadata_dir = '../' + config.get('Directories', 'metadata-dir')
+  metadata_dir = '../../' + config.get('Directories', 'metadata-dir')
 
   # initialize pyFlickrAPI
   pyFlickrAPI = flickrapi.FlickrAPI(api_key)
