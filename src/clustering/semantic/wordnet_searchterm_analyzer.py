@@ -73,20 +73,19 @@ def parse_command_line_arguments(argv):
 
 	return word
 
-def find_strong_co_occurrences(synset_name, synset_tag_tf_idf_dict_filename):
+def find_strong_co_occurrences(synset_name, tf_idf_tuple):
   tags_with_strong_co_occurrence = []
-  max_tf_idf, synset_tag_tf_idf_dict = load_object(synset_tag_tf_idf_dict_filename)
+  max_tf_idf, synset_tag_tf_idf_dict = tf_idf_tuple
+
   threshold = max_tf_idf * 0.5
 
   tag_tf_idf_list = synset_tag_tf_idf_dict[synset_name]
   for tag, tf_idf in tag_tf_idf_list:
     if tf_idf > threshold:
-      tags_with_strong_co_occurrence.append((tag, tf_idf))
-  print synset_name, tags_with_strong_co_occurrence
-  print max_tf_idf
+      tags_with_strong_co_occurrence.append(tag)
   return tags_with_strong_co_occurrence
 
-def recursively_find_all_hyponyms_on_wordnet(synset_name):
+def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple):
   synset = wn.synset(synset_name)
   hyponyms = synset.hyponyms()
   if len(hyponyms) == 0:
@@ -96,12 +95,14 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name):
     for hyponym in hyponyms:
       hyponyms_of_synset.append(WordnetNode(
         name = hyponym.name,
-        hyponyms = recursively_find_all_hyponyms_on_wordnet(hyponym.name),
-        meronyms = recursively_find_all_meronyms_on_wordnet(hyponym.name)
+        hyponyms = recursively_find_all_hyponyms_on_wordnet(hyponym.name, tf_idf_tuple),
+        meronyms = recursively_find_all_meronyms_on_wordnet(hyponym.name, tf_idf_tuple)
+        #,
+        #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
       ))
     return hyponyms_of_synset
 
-def recursively_find_all_meronyms_on_wordnet(synset_name):
+def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple):
   synset = wn.synset(synset_name)
   meronyms = synset.part_meronyms()
   if len(meronyms) == 0:
@@ -111,25 +112,23 @@ def recursively_find_all_meronyms_on_wordnet(synset_name):
     for meronym in meronyms:
       meronyms_of_synset.append(WordnetNode(
         name = meronym.name,
-        hyponyms = recursively_find_all_hyponyms_on_wordnet(meronym.name),
-        meronyms = recursively_find_all_meronyms_on_wordnet(meronym.name)
+        hyponyms = recursively_find_all_hyponyms_on_wordnet(meronym.name, tf_idf_tuple),
+        meronyms = recursively_find_all_meronyms_on_wordnet(meronym.name, tf_idf_tuple)
+        #,
+        #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
       ))
     return meronyms_of_synset
 
-def find_hyponyms_on_wordnet(word):
-  # import configuration
-  config = ConfigParser.SafeConfigParser()
-  config.read('../config.cfg')
-  synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
+def find_hyponyms_on_wordnet(word, tf_idf_tuple):
 
   # build tree
   hyponym_tree = []
   for synset in wn.synsets(word):
     hyponym_tree.append(WordnetNode(
       name = synset.name,
-      hyponyms = recursively_find_all_hyponyms_on_wordnet(synset.name),
-      meronyms = recursively_find_all_meronyms_on_wordnet(synset.name),
-      co_occurring_tags = find_strong_co_occurrences(synset.name, synset_tag_tf_idf_dict_filename)
+      hyponyms = recursively_find_all_hyponyms_on_wordnet(synset.name, tf_idf_tuple),
+      meronyms = recursively_find_all_meronyms_on_wordnet(synset.name, tf_idf_tuple),
+      co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
     ))
   return hyponym_tree
 
@@ -167,10 +166,13 @@ def main(argv):
 	####### Reading Commandline arguments ########
 	word = parse_command_line_arguments(argv)
 
-	####### WordNet Search #######
+  #config = ConfigParser.SafeConfigParser()
+  #config.read('../config.cfg')
+  #synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
 
+  ####### WordNet Search #######
 	print_status("Running WordNet Search for %s... " % word)
-	hyponyms_trees = find_hyponyms_on_wordnet(word)
+	hyponyms_trees = find_hyponyms_on_wordnet(word, synset_tag_tf_idf_dict_filename)
 	print "Done."
 
 	for synset in hyponyms_trees:
