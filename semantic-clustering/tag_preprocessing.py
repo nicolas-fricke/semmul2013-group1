@@ -49,12 +49,11 @@ def read_tags_from_json(json_data):
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
     # Preprocess tag before appending to tag_list
     tag = raw_tag["raw"]
-    tag = string.replace(tag, " ", "_")      # replace space by underscore
-    #tag = re.sub("[0-9]","", tag)        # cut off digits
+    tag = string.replace(tag, " ", "_")  # replace space by underscore
+    tag = re.sub("['!?\-.%()*]", "", tag)        # cut special characters
     if re.match(r".*[0-9].*", tag) or len(tag) > 2:
       continue
     tag = string.lower(tag)              # Only lower case
-    # tag = wn.morphy(tag)                 # Stemmming
     if not tag == None: # Only tags with more than 2 literals
       if not hypernym_is_color(tag):     # Remove color tags
         tag_list.append(tag)
