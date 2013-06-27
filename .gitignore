@@ -34,6 +34,10 @@ nosetests.xml
 .project
 .pydevproject
 
+# IntelliJ Idea files
+.idea/
+*.iml
+
 # Configuration file
 config.cfg
 
