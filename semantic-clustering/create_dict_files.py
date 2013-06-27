@@ -15,6 +15,7 @@
 #########################################################################################
 
 from collections import defaultdict
+import ConfigParser
 
 # Import own modules
 import sys
@@ -27,6 +28,11 @@ from synset_detection import *
 
 def main():
   number_of_jsons = 100
+
+  # import configuration
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
 
   print_status("Detecting synsets for the tags of every picture... \n")
   _, storable_keywords_for_pictures = synset_detection(number_of_jsons)
@@ -54,7 +60,7 @@ def main():
   print "Done"
 
   print_status("Writing storable_synset_unmatched_tags_tf_idfs_dict... ")
-  save_object(storable_synset_unmatched_tags_tf_idfs_dict,"storable_synset_unmatched_tags_tf_idfs_dict.pickle")
+  save_object(storable_synset_unmatched_tags_tf_idfs_dict, synset_tag_tf_idf_dict_filename)
   print "Done."
 
 if __name__ == '__main__':

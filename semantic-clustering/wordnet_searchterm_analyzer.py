@@ -10,6 +10,7 @@
 # mail: {tino.junge nicolas.fricke}@student.hpi.uni-potsdam.de
 ######################################################################################
 
+import ConfigParser
 import sys
 import getopt
 from nltk.corpus import wordnet as wn
@@ -70,6 +71,12 @@ def parse_command_line_arguments(argv):
 
 	return word
 
+def find_strong_co_occurrences(synset_name, synset_tag_tf_idf_dict_filename):
+  tags_with_strong_co_occurrence = []
+  synset_tag_tf_idf_dict = load_object(synset_tag_tf_idf_dict_filename)
+  
+  return tags_with_strong_co_occurrence
+
 def recursively_find_all_hyponyms_on_wordnet(synset_name):
   synset = wn.synset(synset_name)
   hyponyms = synset.hyponyms()
@@ -101,12 +108,19 @@ def recursively_find_all_meronyms_on_wordnet(synset_name):
     return meronyms_of_synset
 
 def find_hyponyms_on_wordnet(word):
+  # import configuration
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
+
+  # build tree
   hyponym_tree = []
   for synset in wn.synsets(word):
     hyponym_tree.append(WordnetNode(
       name = synset.name,
       hyponyms = recursively_find_all_hyponyms_on_wordnet(synset.name),
-      meronyms = recursively_find_all_meronyms_on_wordnet(synset.name)
+      meronyms = recursively_find_all_meronyms_on_wordnet(synset.name),
+      strong_cooccurrences = find_strong_co_occurrences(synset.name, synset_tag_tf_idf_dict_filename)
     ))
   return hyponym_tree
 
