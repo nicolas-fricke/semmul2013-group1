@@ -79,6 +79,7 @@ def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenam
 
   max_co_occurrence_for_synset = dict()
 
+  # first run over the data to find normalization factors
   for synset, synset_filenames in synset_filenames_dict.iteritems():
     max_co_occurrence_for_synset[synset] = 0
     for unmatched_tag, unmatched_tag_filenames in unmatched_tag_filenames_dict.iteritems():
@@ -89,6 +90,8 @@ def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenam
         how_many_synsests_for_tag[unmatched_tag] += 1
         synset_tag_co_occurrence_dict[(synset, unmatched_tag)] = co_occurence
 
+  # second run to actually calculate the tf idfs
+  max_tf_idf = 0
   for (synset, unmatched_tag), co_occurence in synset_tag_co_occurrence_dict.iteritems():
     tf = 0
     idf = 0
@@ -96,8 +99,12 @@ def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenam
       tf = co_occurence/float(max_co_occurrence_for_synset[synset])
     if how_many_synsests_for_tag[unmatched_tag] != 0:
       idf =  log(len(synset_filenames_dict.keys())/float(how_many_synsests_for_tag[unmatched_tag]))
-    synset_tags_tf_idf_dict[synset].append((unmatched_tag, tf*idf))
-  return synset_tags_tf_idf_dict
+    tf_idf = tf*idf
+    if tf_idf > max_tf_idf:
+      max_tf_idf = tf_idf
+    synset_tags_tf_idf_dict[synset].append((unmatched_tag, tf_idf))
+
+  return (max_tf_idf, synset_tags_tf_idf_dict)
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
