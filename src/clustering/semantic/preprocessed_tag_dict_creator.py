@@ -26,7 +26,7 @@ from clustering.semantic.synset_detection import *
 
 
 def main():
-  number_of_jsons = 100
+  number_of_jsons = 1000
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
