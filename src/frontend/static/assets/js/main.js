@@ -7,44 +7,17 @@
   };
 
   searchDataArrived = function(data) {
+    console.log("Search data arrived:");
+    console.log(data);
     window.debug = data;
-    return console.log("Done! " + data);
+    return draw(data);
   };
 
   this.draw = function(treeData) {
-    var canvas, diagonal, link, links, node, nodes, tree;
-    canvas = d3.select("#tree-canvas").append("svg:svg").attr("width", 400).attr("height", 300).append("svg:g").attr("transform", "translate(40, 0)");
-    tree = d3.layout.tree().size([300, 150]);
-    diagonal = d3.svg.diagonal().projection(function(d) {
-      return [d.y, d.x];
-    });
-    nodes = tree.nodes(treeData);
-    links = tree.links(nodes);
-    console.log(treeData);
-    console.log(nodes);
-    console.log(links);
-    link = canvas.selectAll("pathlink").data(links).enter().append("svg:path").attr("class", "link").attr("d", diagonal);
-    node = canvas.selectAll("g.node").data(nodes).enter().append("svg:g").attr("transform", function(d) {
-      return "translate(" + d.y + "," + d.x + ")";
-    });
-    node.append("svg:circle").attr("r", 3.5);
-    return node.append("svg:text").attr("dx", function(d) {
-      if (d.children) {
-        return -8;
-      } else {
-        return 8;
-      }
-    }).attr("dy", 3).attr("text-anchor", function(d) {
-      if (d.children) {
-        return "end";
-      } else {
-        return "start";
-      }
-    }).text(function(d) {
-      return d.name;
-    });
+    console.log("I would draw if I could");
+    return window.tree_canvas.append("circle").style("stroke", "gray").style("fill", "white").attr("r", 40).attr("cx", 50).attr("cy", 50);
   };
 
-  $.ready(draw());
+  $.ready(window.tree_canvas = d3.select("#tree-canvas").append("svg").attr("width", 100).attr("height", 100));
 
 }).call(this);
