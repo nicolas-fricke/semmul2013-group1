@@ -20,17 +20,11 @@
       {% for node in tree %}
         <tr>
           <td style='width: 200px'>{{ node.name }} </td>
-          <td class=images><table>
-          {% if node.subclusters != None %}
-          {% for cluster in node.subclusters.values() %}
-            <tr><td>
-            {% for picture in cluster %}
-              <img src={{ picture["url"] }}>
+          <td class=images>
+            {% for picture in node.associated_pictures %}
+              <img src={{ picture[1] }}>
             {% endfor %}
-            </td></tr>
-          {% endfor %}
-          {% endif %}
-          </table></td>
+          </td>
         </tr>
         {% for node2 in node.hyponyms %}
         <tr>
@@ -112,7 +106,7 @@
           </tr>
           {% endfor %}
         {% endfor %}
-      {% endfor %}
+       {% endfor %}
     </div>
   </body>
 </html>
