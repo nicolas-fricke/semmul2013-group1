@@ -9,3 +9,6 @@ secret: <your-flickr-secret>          ; Just not to loose your secret, put it he
 [Filenames for Pickles]
 preprocessed-data-dir: <full path to your dir for preprocessed data>
 synset-tag-cooccurrence-dict: %(preprocessed-data-dir)s/synset_tags_tf_idf_dict.pickle
+keywords_for_pictures_filename: %(preprocessed-data-dir)s/keywords_for_pictures.pickle
+synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.pickle
+unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.pickle

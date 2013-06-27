@@ -10,7 +10,7 @@
 # synset -> list(tag,tf_idf)
 #
 # authors: tino junge, claudia exeler, mandy roick
-# mail: tino.junge@student.hpi.uni-potsdam.de, claudia.exeler@student.hpi.uni-potsdam.de, 
+# mail: tino.junge@student.hpi.uni-potsdam.de, claudia.exeler@student.hpi.uni-potsdam.de,
 #       mandy.roick@student.hpi.uni-potsdam.de
 #########################################################################################
 
@@ -32,13 +32,16 @@ def main():
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
+  keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
+  synset_filenames_dict_filename = config.get('Filenames for Pickles', 'synset_filenames_dict_filename')
+  unmatched_tag_filenames_dict_filename = config.get('Filenames for Pickles', 'unmatched_tag_filenames_dict_filename')
 
   print_status("Detecting synsets for the tags of every picture... \n")
   _, storable_keywords_for_pictures = synset_detection(number_of_jsons)
   print_status("Done detecting synsets \n")
 
   print_status("Writing keywords_for_pictures... ")
-  save_object(storable_keywords_for_pictures,"keywords_for_pictures.pickle")
+  save_object(storable_keywords_for_pictures, keywords_for_pictures_filename)
   print "Done."
 
   print_status("Create_inverse_keywords_for_pictures_dicts... ")
@@ -46,15 +49,15 @@ def main():
   print "Done"
 
   print_status("Writing synset_filenames_dict... ")
-  save_object(storable_synset_filenames_dict,"synset_filenames_dict.pickle")
+  save_object(storable_synset_filenames_dict, synset_filenames_dict_filename)
   print "Done."
 
   print_status("Writing unmatched_tag_filenames_dict... ")
-  save_object(unmatched_tag_filenames_dict,"unmatched_tag_filenames_dict.pickle")
+  save_object(unmatched_tag_filenames_dict, unmatched_tag_filenames_dict_filename)
   print "Done."
 
   print_status("Create tf_idf dictionary... ")
-  storable_synset_unmatched_tags_tf_idfs_dict = create_unmatched_tag_tf_idf_dict(storable_synset_filenames_dict, 
+  storable_synset_unmatched_tags_tf_idfs_dict = create_unmatched_tag_tf_idf_dict(storable_synset_filenames_dict,
                                                                                  unmatched_tag_filenames_dict)
   print "Done"
 
