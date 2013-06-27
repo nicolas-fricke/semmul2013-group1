@@ -14,10 +14,10 @@ from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
-def extract_features(tree_node):
+def extract_features(tree_node, data_dir):
   images = []
   for metajson_file, _ in tree_node.associated_pictures:
-    metadata = parse_json_file("../../data/" + metajson_file)
+    metadata = parse_json_file(data_dir + metajson_file)
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
@@ -89,9 +89,13 @@ def cluster_by_features(images):
 
 
 def cluster_visually(tree_node):
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  data_dir = config.get('Directories', 'data-dir')
+
   if len(tree_node.associated_pictures) > 15:              ##TODO: find appropriate threshold
     print_status("Extracting visual features (colors and edges) from images.... ")
-    images = extract_features(tree_node)
+    images = extract_features(tree_node, data_dir)
     print "Done.\n"
 
     print_status("Clustering images by visual features via k-means algorithm.... ")
