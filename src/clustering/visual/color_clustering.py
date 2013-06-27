@@ -25,9 +25,8 @@ from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 from Pycluster import kcluster
 # Import own module helpers
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
-from visual_helpers import *
+from helpers.general_helpers import *
+from helpers.visual_helpers import *
 
 def distance_function(u, v):
   sum = 0

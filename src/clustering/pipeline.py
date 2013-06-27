@@ -1,9 +1,7 @@
 import sys
-from wordnet_searchterm_analyzer import *
-sys.path.append('../helpers')
-sys.path.append('../feature-extractor')
-from general_helpers import load_object
-from combined_clustering import *
+from clustering.semantic.wordnet_searchterm_analyzer import *
+from clustering.visual.combined_clustering import *
+from helpers.general_helpers import load_object
 
 
 def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, find_pictures_for_hyponyms=False, find_pictures_for_meronyms=False):

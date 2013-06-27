@@ -17,9 +17,9 @@ from nltk.corpus import wordnet as wn
 from math import log
 
 # Import own modules
-from tag_preprocessing import *
-from tag_clustering import *
-from synset_detection import *
+from clustering.semantic.tag_preprocessing import *
+from clustering.semantic.tag_clustering import *
+from clustering.semantic.synset_detection import *
 
 ################     Write to File    ##############################
 

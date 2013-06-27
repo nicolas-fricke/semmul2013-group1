@@ -25,8 +25,7 @@ from math import log, e
 
 # Import own modules
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
+from helpers.general_helpers import *
 
 # Global variables
 tag_histogram = Counter()
