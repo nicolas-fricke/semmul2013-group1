@@ -14,10 +14,11 @@ from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
-def extract_features(tree_node, data_dir):
+def extract_features(tree_node, metadata_dir):
   images = []
   for metajson_file, _ in tree_node.associated_pictures:
-    metadata = parse_json_file(data_dir + metajson_file)
+    path_to_json = construct_path_to_json(metajson_file)
+    metadata = parse_json_file(metadata_dir + path_to_json)
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
@@ -32,7 +33,7 @@ def extract_features(tree_node, data_dir):
       data = extract_colors(image, data, 5)
       data = extract_edges(image, data, 5)
       images.append(data)
-  return images    
+  return images
 
 
 def cluster_by_color(colors):
@@ -44,7 +45,7 @@ def cluster_by_color(colors):
   previous_error = pow(error,2)
   while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
   #while error < 0.9 * previous_error:
-    k_color += 1 
+    k_color += 1
     previous_error = error
     clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
   k_color -= 1
@@ -91,11 +92,11 @@ def cluster_by_features(images):
 def cluster_visually(tree_node):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
-  data_dir = config.get('Directories', 'data-dir')
+  metadata_dir = config.get('Directories', 'metadata-dir')
 
   if len(tree_node.associated_pictures) > 15:              ##TODO: find appropriate threshold
     print_status("Extracting visual features (colors and edges) from images.... ")
-    images = extract_features(tree_node, data_dir)
+    images = extract_features(tree_node, metadata_dir)
     print "Done.\n"
 
     print_status("Clustering images by visual features via k-means algorithm.... ")
@@ -175,7 +176,7 @@ def main(argv):
   previous_error = pow(error,2)
   while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
   #while error < 0.9 * previous_error:
-    k_color += 1 
+    k_color += 1
     previous_error = error
     clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
   k_color -= 1
