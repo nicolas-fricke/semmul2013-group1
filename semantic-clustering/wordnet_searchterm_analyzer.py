@@ -72,15 +72,16 @@ def parse_command_line_arguments(argv):
 	return word
 
 def find_strong_co_occurrences(synset_name, synset_tag_tf_idf_dict_filename):
-  threshold = 3
-
   tags_with_strong_co_occurrence = []
-  synset_tag_tf_idf_dict = load_object(synset_tag_tf_idf_dict_filename)
+  max_tf_idf, synset_tag_tf_idf_dict = load_object(synset_tag_tf_idf_dict_filename)
+  threshold = max_tf_idf * 0.5
+
   tag_tf_idf_list = synset_tag_tf_idf_dict[synset_name]
   for tag, tf_idf in tag_tf_idf_list:
     if tf_idf > threshold:
       tags_with_strong_co_occurrence.append((tag, tf_idf))
   print synset_name, tags_with_strong_co_occurrence
+  print max_tf_idf
   return tags_with_strong_co_occurrence
 
 def recursively_find_all_hyponyms_on_wordnet(synset_name):
