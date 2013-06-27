@@ -30,8 +30,8 @@ def extract_features(tree_node):
       except Exception:
         continue
 
-      data = extract_colors(image, data, 1)               ##TODO: how to call pyramidal extraction?
-      data = extract_edges(image, data, 1)                ##TODO: how to call pyramidal extraction?
+      data = extract_colors(image, data, 5)
+      data = extract_edges(image, data, 5)
       images.append(data)
   return images    
 
