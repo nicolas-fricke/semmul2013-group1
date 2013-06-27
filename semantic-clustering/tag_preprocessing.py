@@ -50,7 +50,7 @@ def read_tags_from_json(json_data):
     # Preprocess tag before appending to tag_list
     tag = raw_tag["raw"]
     tag = string.replace(tag, " ", "_")  # replace space by underscore
-    tag = re.sub("['!?\-.%()*]", "", tag)        # cut special characters
+    tag = re.sub("['!?\-.%()*:]", "", tag)        # cut special characters
     if re.match(r".*[0-9].*", tag) or len(tag) > 2:
       continue
     tag = string.lower(tag)              # Only lower case
