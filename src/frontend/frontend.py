@@ -4,9 +4,8 @@ from flask import render_template
 # from flask.ext.assets import Environment, Bundle
 # from flask import jsonify
 
-
-sys.path.append('../semantic-clustering')
-from pipeline import *
+# import own modules
+from clustering.pipeline import *
 
 app = Flask(__name__)
 

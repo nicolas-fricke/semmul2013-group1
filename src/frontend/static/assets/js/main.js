@@ -11,6 +11,40 @@
     return console.log("Done! " + data);
   };
 
-  $.ready();
+  this.draw = function(treeData) {
+    var canvas, diagonal, link, links, node, nodes, tree;
+    canvas = d3.select("#tree-canvas").append("svg:svg").attr("width", 400).attr("height", 300).append("svg:g").attr("transform", "translate(40, 0)");
+    tree = d3.layout.tree().size([300, 150]);
+    diagonal = d3.svg.diagonal().projection(function(d) {
+      return [d.y, d.x];
+    });
+    nodes = tree.nodes(treeData);
+    links = tree.links(nodes);
+    console.log(treeData);
+    console.log(nodes);
+    console.log(links);
+    link = canvas.selectAll("pathlink").data(links).enter().append("svg:path").attr("class", "link").attr("d", diagonal);
+    node = canvas.selectAll("g.node").data(nodes).enter().append("svg:g").attr("transform", function(d) {
+      return "translate(" + d.y + "," + d.x + ")";
+    });
+    node.append("svg:circle").attr("r", 3.5);
+    return node.append("svg:text").attr("dx", function(d) {
+      if (d.children) {
+        return -8;
+      } else {
+        return 8;
+      }
+    }).attr("dy", 3).attr("text-anchor", function(d) {
+      if (d.children) {
+        return "end";
+      } else {
+        return "start";
+      }
+    }).text(function(d) {
+      return d.name;
+    });
+  };
+
+  $.ready(draw());
 
 }).call(this);

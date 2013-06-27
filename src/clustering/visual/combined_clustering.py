@@ -9,16 +9,15 @@ from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 from Pycluster import kcluster
 # Import own module helpers
 import sys
-sys.path.append('../helpers')
-from general_helpers import *
-from visual_helpers import *
-from color_clustering import extract_colors
-from edge_clustering import extract_edges
+from helpers.general_helpers import *
+from helpers.visual_helpers import *
+from clustering.visual.color_clustering import extract_colors
+from clustering.visual.edge_clustering import extract_edges
 
 def extract_features(tree_node):
   images = []
   for metajson_file, _ in tree_node.associated_pictures:
-    metadata = parse_json_file("../data/" + metajson_file)
+    metadata = parse_json_file("../../data/" + metajson_file)
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
@@ -123,7 +122,7 @@ def main(argv):
     config.read('../config.cfg')
 
     api_key = config.get('Flickr API Key', 'key')
-    metadata_dir = '../' + config.get('Directories', 'metadata-dir')
+    metadata_dir = '../../' + config.get('Directories', 'metadata-dir')
 
     metajson_files = find_metajsons_to_process(metadata_dir)
 

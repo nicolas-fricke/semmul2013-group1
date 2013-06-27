@@ -18,9 +18,8 @@ from collections import defaultdict
 from json import *
 
 # Import own modules
-sys.path.append('../helpers')
-from general_helpers import *
-from tag_preprocessing import *
+from helpers.general_helpers import *
+from clustering.semantic.tag_preprocessing import *
 
 class WordnetNode:
   def __init__(self, name, hyponyms, meronyms, strong_cooccurrences=None):
