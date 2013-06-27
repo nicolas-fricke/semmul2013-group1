@@ -71,8 +71,8 @@ def read_data_from_json_file(json_file):
 
 def import_metadata_dir_of_config(path):
   config = ConfigParser.SafeConfigParser()
-  config.read('../config.cfg')
-  return '../' + config.get('Directories', 'metadata-dir')
+  config.read(path)
+  return config.get('Directories', 'metadata-dir')
 
 def parse_json_data(json_files,number_of_jsons):
   tag_histogram = Counter()
