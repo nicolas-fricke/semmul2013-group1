@@ -39,3 +39,6 @@ config.cfg
 
 # metadata folder
 data/*
+
+# ignore Mac trash file
+.DS_Store
