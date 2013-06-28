@@ -11,7 +11,6 @@
 ######################################################################################
 
 import ConfigParser
-import sys
 import getopt
 from nltk.corpus import wordnet as wn
 from collections import defaultdict
@@ -85,51 +84,66 @@ def find_strong_co_occurrences(synset_name, tf_idf_tuple):
       tags_with_strong_co_occurrence.append(tag)
   return tags_with_strong_co_occurrence
 
-def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple):
+def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple, synsets_already_in_tree):
   synset = wn.synset(synset_name)
   hyponyms = synset.hyponyms()
   if len(hyponyms) == 0:
-    return None
+    return None, synsets_already_in_tree
   else:
     hyponyms_of_synset = []
     for hyponym in hyponyms:
-      hyponyms_of_synset.append(WordnetNode(
-        name = hyponym.name,
-        hyponyms = recursively_find_all_hyponyms_on_wordnet(hyponym.name, tf_idf_tuple),
-        meronyms = recursively_find_all_meronyms_on_wordnet(hyponym.name, tf_idf_tuple)
-        #,
-        #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
-      ))
-    return hyponyms_of_synset
+      if hyponym.name not in synsets_already_in_tree:
+        synsets_already_in_tree.append(hyponym.name)
+        hyponym_subtrees, synsets_already_in_tree = recursively_find_all_hyponyms_on_wordnet(hyponym.name, tf_idf_tuple, synsets_already_in_tree)
+        meronym_subtrees, synsets_already_in_tree = recursively_find_all_meronyms_on_wordnet(hyponym.name, tf_idf_tuple, synsets_already_in_tree) 
 
-def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple):
+        hyponyms_of_synset.append(WordnetNode(
+          name = hyponym.name,
+          hyponyms = hyponym_subtrees,
+          meronyms = meronym_subtrees
+          #,
+          #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
+        ))
+    return hyponyms_of_synset, synsets_already_in_tree
+
+def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple, synsets_already_in_tree):
   synset = wn.synset(synset_name)
   meronyms = synset.part_meronyms()
   if len(meronyms) == 0:
-    return None
+    return None, synsets_already_in_tree
   else:
     meronyms_of_synset = []
     for meronym in meronyms:
-      meronyms_of_synset.append(WordnetNode(
-        name = meronym.name,
-        hyponyms = recursively_find_all_hyponyms_on_wordnet(meronym.name, tf_idf_tuple),
-        meronyms = recursively_find_all_meronyms_on_wordnet(meronym.name, tf_idf_tuple)
-        #,
-        #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
-      ))
-    return meronyms_of_synset
+      if meronym.name not in synsets_already_in_tree:
+        synsets_already_in_tree.append(meronym.name)
+        hyponym_subtrees, synsets_already_in_tree = recursively_find_all_hyponyms_on_wordnet(meronym.name, tf_idf_tuple, synsets_already_in_tree)
+        meronym_subtrees, synsets_already_in_tree = recursively_find_all_meronyms_on_wordnet(meronym.name, tf_idf_tuple, synsets_already_in_tree)
 
-def find_hyponyms_on_wordnet(word, tf_idf_tuple):
+        meronyms_of_synset.append(WordnetNode(
+          name = meronym.name,
+          hyponyms = hyponym_subtrees,
+          meronyms = meronym_subtrees
+          #,
+          #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
+        ))
+    return meronyms_of_synset, synsets_already_in_tree
 
+def construct_searchtree(word, tf_idf_tuple):
   # build tree
   hyponym_tree = []
+  synsets_already_in_tree = []
   for synset in wn.synsets(word):
-    hyponym_tree.append(WordnetNode(
-      name = synset.name,
-      hyponyms = recursively_find_all_hyponyms_on_wordnet(synset.name, tf_idf_tuple),
-      meronyms = recursively_find_all_meronyms_on_wordnet(synset.name, tf_idf_tuple),
-      co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
-    ))
+    if synset.name not in synsets_already_in_tree:
+      synsets_already_in_tree.append(synset.name)
+      hyponym_subtrees, synsets_already_in_tree = recursively_find_all_hyponyms_on_wordnet(synset.name, tf_idf_tuple, synsets_already_in_tree)
+      meronym_subtrees, synsets_already_in_tree = recursively_find_all_meronyms_on_wordnet(synset.name, tf_idf_tuple, synsets_already_in_tree)
+
+      hyponym_tree.append(WordnetNode(
+        name = synset.name,
+        hyponyms = hyponym_subtrees,
+        meronyms = meronym_subtrees,
+        co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
+      ))
   return hyponym_tree
 
 def pretty_print_tree(tree_node, indent=0):
@@ -172,13 +186,13 @@ def main(argv):
 
   ####### WordNet Search #######
 	print_status("Running WordNet Search for %s... " % word)
-	hyponyms_trees = find_hyponyms_on_wordnet(word, synset_tag_tf_idf_dict_filename)
+	searchtrees = construct_searchtree(word, synset_tag_tf_idf_dict_filename)
 	print "Done."
 
-	for synset in hyponyms_trees:
+	for synset in searchtrees:
 		pretty_print_tree(synset)
 
-	print_status("Done. Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
+	print_status("Done. Found %d entries.\n" % count_tree_nodes(searchtrees))
 
 if __name__ == '__main__':
 	main(sys.argv[1:])

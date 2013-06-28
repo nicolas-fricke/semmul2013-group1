@@ -97,7 +97,7 @@ def cluster_visually(tree_node):
   metadata_dir = config.get('Directories', 'metadata-dir')
 
   for cluster in tree_node.subclusters:
-    if len(cluster) > 15:              ##TODO: find appropriate threshold
+    if len(cluster) > 5:              ##TODO: find appropriate threshold
       print_status("Extracting visual features (colors and edges) from images.... ")
       images = extract_features(cluster, metadata_dir)
       print "Done.\n"
