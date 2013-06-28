@@ -23,6 +23,7 @@ from helpers.general_helpers import *
 
 from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
 from clustering.semantic.synset_detection import *
+from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
@@ -81,6 +82,10 @@ def main():
 
   print_status("Writing storable_synset_unmatched_tags_tf_idfs_dict... ")
   save_object(storable_synset_unmatched_tags_tf_idfs_dict, synset_tag_tf_idf_dict_filename)
+  print "Done."
+
+  print_status("Create MCL clusters and write them to file... ")
+  keyword_clustering_via_mcl(storable_synset_filenames_dict)
   print "Done."
 
 if __name__ == '__main__':
