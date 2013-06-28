@@ -16,6 +16,7 @@
 
 from collections import defaultdict
 import ConfigParser
+import argparse
 
 # Import own modules
 import sys
@@ -35,8 +36,17 @@ def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
       unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
   return synset_filenames_dict, unmatched_tag_filenames_dict
 
+def parse_command_line_arguments():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-m','--withmcl', dest='create_mcl_clusters', action='store_true',
+                      help='If specified, cluster keywords with mcl, otherwise leave it out and we windows friendly ;)')
+  args = parser.parse_args()
+  return args
+
 def main():
   number_of_jsons = 100
+
+  arguments = parse_command_line_arguments()
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
