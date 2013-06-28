@@ -14,9 +14,9 @@ from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
-def extract_features(tree_node, metadata_dir):
+def extract_features(image_cluster, metadata_dir):
   images = []
-  for metajson_file, _ in tree_node.associated_pictures:
+  for metajson_file, _ in image_cluster:
     path_to_json = construct_path_to_json(metajson_file)
     metadata = parse_json_file(metadata_dir + path_to_json)
     if metadata["stat"] == "ok":
@@ -94,22 +94,23 @@ def cluster_visually(tree_node):
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
 
-  if len(tree_node.associated_pictures) > 15:              ##TODO: find appropriate threshold
-    print_status("Extracting visual features (colors and edges) from images.... ")
-    images = extract_features(tree_node, metadata_dir)
-    print "Done.\n"
+  for cluster in tree_node.subclusters:
+    if len(cluster) > 15:              ##TODO: find appropriate threshold
+      print_status("Extracting visual features (colors and edges) from images.... ")
+      images = extract_features(cluster, metadata_dir)
+      print "Done.\n"
 
-    print_status("Clustering images by visual features via k-means algorithm.... ")
-    clusters = cluster_by_features(images)
-    tree_node.subclusters = clusters
-    print "Done. %d subclusters for " % len(clusters), tree_node.name
+      print_status("Clustering images by visual features via k-means algorithm.... ")
+      clusters = cluster_by_features(images)
+      tree_node.subclusters = clusters
+      print "Done. %d subclusters for " % len(clusters), tree_node.name
 
-  if tree_node.has_hyponyms():
-    for child_hyponym_node in tree_node.hyponyms:
-      cluster_visually(child_hyponym_node)
-  if tree_node.has_meronyms():
-    for child_meronym_node in tree_node.meronyms:
-      cluster_visually(child_meronym_node)
+    if tree_node.has_hyponyms():
+      for child_hyponym_node in tree_node.hyponyms:
+        cluster_visually(child_hyponym_node)
+    if tree_node.has_meronyms():
+      for child_meronym_node in tree_node.meronyms:
+        cluster_visually(child_meronym_node)
 
   return tree_node
 
