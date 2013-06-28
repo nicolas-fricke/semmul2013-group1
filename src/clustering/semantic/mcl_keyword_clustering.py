@@ -36,7 +36,7 @@ def get_synset_co_occurrence_dict(synset_filenames_dict):
 def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
   max_co_occurrence, co_occurrence_dict = get_synset_co_occurrence_dict(synset_filenames_dict)
 
-  similarity_histogram = dict()
+  edge_weigthings_for_synsets = dict()
   for synset1, filenames1 in synset_filenames_dict.iteritems():
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
@@ -45,14 +45,14 @@ def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
         co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
         if similarity < 1.8:
           similarity = 0
-        similarity_histogram[(synset1, synset2)] = similarity + 2*co_occurrence
-  return similarity_histogram
+        edge_weigthings_for_synsets[(synset1, synset2)] = similarity + 2*co_occurrence
+  return edge_weigthings_for_synsets
 
-def write_edge_weightings_to_file(tag_similarity_histogram, file_name):
-  print "Writing similarity file."
+def write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name):
+  print "Writing edge weighting to mcl readable file."
   output_file = open(file_name, 'w')
-  for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
-    output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(similarity) + '\n')
+  for (synset1, synset2), edge_weighting in edge_weigthings_for_synsets.iteritems():
+    output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(edge_weighting) + '\n')
   output_file.close()
 
 def mcl_clustering(edge_weightings):
