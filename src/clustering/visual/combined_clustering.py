@@ -122,15 +122,15 @@ def main(argv):
 
   print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
 
+  # import configuration
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
+  html_dir = config.get('Directories', 'html-dir')
+
   if not args.use_preprocessed_data:
-    # import configuration
-    config = ConfigParser.SafeConfigParser()
-    config.read('../config.cfg')
 
-    api_key = config.get('Flickr API Key', 'key')
     metadata_dir = config.get('Directories', 'metadata-dir')
-    color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
-
     metajson_files = find_metajsons_to_process(metadata_dir)
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... ")
@@ -205,7 +205,7 @@ def main(argv):
     cluster_edges = clustered_images_by_edges[index]
     clusters[cluster_color + cluster_edges * k_color].append(images[index])
 
-  write_clusters_to_html(clusters, open_in_browser=True)
+  write_clusters_to_html(clusters, html_file_path=html_dir+"/visual_clusters.html", open_in_browser=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
