@@ -1,6 +1,7 @@
 import sys
 from clustering.semantic.wordnet_searchterm_analyzer import *
 from clustering.visual.combined_clustering import *
+from clustering.semantic.mcl_keyword_clustering import cluster_via_mcl
 from helpers.general_helpers import load_object
 
 ################ finding pictures for Wordnet Nodes #######################
@@ -11,7 +12,6 @@ def find_associated_pictures(node, synsets_to_filenames_dict, tags_to_filenames_
   if len(associated_pictures) > 0:
     print "before: ", len(associated_pictures)
   for tag in node.co_occurring_tags:
-    print "looking for tag ", tag
     for picture in tags_to_filenames_dict[tag]:
       if picture not in associated_pictures:
         associated_pictures.append(picture)
@@ -56,16 +56,19 @@ def get_searchtrees_with_filenames(search_term):
   synsets_to_filenames_dict = load_object(synset_filenames_dict_filename)
   tags_to_filenames_dict = load_object(tag_filenames_dict_filename)
 
-  searchtrees_with_filenames = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True, tags_to_filenames_dict=tags_to_filenames_dict)
+  searchtrees_with_pictures = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True, tags_to_filenames_dict=tags_to_filenames_dict)
 
-  return searchtrees_with_filenames
+  return searchtrees_with_pictures
 
 def get_clusters(search_term):
-  searchtrees_with_filenames = get_searchtrees_with_filenames(search_term)
+  searchtrees_with_pictures = get_searchtrees_with_filenames(search_term)
 
   result_trees = []
-  for searchtree in searchtrees_with_filenames:
-    result_trees.append(cluster_visually(searchtree))
+  for searchtree in searchtrees_with_pictures:
+    print_status("Assign pictures to most fitting keyword cluster.... ")
+    mcl_clustered_searchtree = cluster_via_mcl(searchtree)
+    print "Done.\n"
+    result_trees.append(cluster_visually(mcl_clustered_searchtree))
 
   return result_trees
 
