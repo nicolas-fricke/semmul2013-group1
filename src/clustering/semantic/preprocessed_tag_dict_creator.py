@@ -21,12 +21,22 @@ import ConfigParser
 import sys
 from helpers.general_helpers import *
 
-from clustering.semantic.deprecated_semantic_clustering import *
+from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
 from clustering.semantic.synset_detection import *
 
+def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
+  synset_filenames_dict = defaultdict(list)
+  unmatched_tag_filenames_dict = defaultdict(list)
+  for filename, (url, synset_list, unmatched_tags) in keywords_for_pictures.iteritems():
+    for synset in synset_list:
+      if (filename, url) not in synset_filenames_dict[synset]:
+        synset_filenames_dict[synset].append((filename,url))
+    for unmatched_tag in unmatched_tags:
+      unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
+  return synset_filenames_dict, unmatched_tag_filenames_dict
 
 def main():
-  number_of_jsons = 1000
+  number_of_jsons = 100
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
