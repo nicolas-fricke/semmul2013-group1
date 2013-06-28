@@ -1,4 +1,15 @@
-import sys
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+######################################################################################
+#
+# Coordinate construction of searchtree as well as search and clustering of pictures
+#
+#
+# authors: 
+# mail: 
+######################################################################################
+
 from clustering.semantic.wordnet_searchterm_analyzer import *
 from clustering.visual.combined_clustering import *
 from clustering.semantic.mcl_keyword_clustering import cluster_via_mcl
@@ -28,11 +39,6 @@ def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, 
     node.associated_pictures = find_associated_pictures(node, synsets_to_filenames_dict, tags_to_filenames_dict)
     #print node.name, " has %d associated_pictures." % len(node.associated_pictures)
   return nodes
-
-# def find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True):
-#   for node in hyponyms_trees:
-#     recursively_find_pictures_for_synset_tree(node, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=find_pictures_for_meronyms)
-#   return hyponyms_trees
 
 def get_searchtrees_with_filenames(search_term):
   # import configuration
