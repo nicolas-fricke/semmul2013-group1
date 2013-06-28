@@ -13,7 +13,63 @@
 import ConfigParser
 import operator
 from collections import Counter, defaultdict
+from subprocess import call
+from nltk.corpus import wordnet as wn
+
 from helpers.general_helpers import *
+
+################ create keyword clusters ##############################
+
+def get_synset_co_occurrence_dict(synset_filenames_dict):
+  co_occurrence_dict = dict()
+  max_co_occurrence = 0
+  for synset1, filenames1 in synset_filenames_dict.iteritems():
+    for synset2, filenames2 in synset_filenames_dict.iteritems():
+      if synset1 < synset2:
+        #if (synset1.name, synset2.name) not in co_occurrence_dict:
+        co_occurence = len(set(filenames1).intersection(set(filenames2)))
+        co_occurrence_dict[(synset1, synset2)] = co_occurence
+        if co_occurence > max_co_occurrence:
+          max_co_occurrence = co_occurence
+  return max_co_occurrence, co_occurrence_dict
+
+def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
+  max_co_occurrence, co_occurrence_dict = get_synset_co_occurrence_dict(synset_filenames_dict)
+
+  similarity_histogram = dict()
+  for synset1, filenames1 in synset_filenames_dict.iteritems():
+    for synset2, filenames2 in synset_filenames_dict.iteritems():
+      if synset1 < synset2:
+        #if (synset1.name, synset2.name) not in similarity_histogram:
+        similarity = wn.synset(synset1).lch_similarity(wn.synset(synset2))
+        co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
+        if similarity < 1.8:
+          similarity = 0
+        similarity_histogram[(synset1, synset2)] = similarity + 2*co_occurrence
+  return similarity_histogram
+
+def write_edge_weightings_to_file(tag_similarity_histogram, file_name):
+  print "Writing similarity file."
+  output_file = open(file_name, 'w')
+  for (synset1, synset2), similarity in tag_similarity_histogram.iteritems():
+    output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(similarity) + '\n')
+  output_file.close()
+
+def mcl_clustering(edge_weightings):
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
+
+  edge_weightings_filename = 'edge_weightings_for_mcl.txt'
+  write_edge_weightings_to_file(edge_weightings, edge_weightings_filename)
+
+  call(["mcl", edge_weightings_filename, "--abc", "-o", mcl_filename])
+
+def keyword_clustering_via_mcl(synset_filenames_dict):
+  edge_weigthings_for_synsets = calculate_edge_weigthings_for_synsets(synset_filenames_dict)
+  mcl_clustering(edge_weigthings_for_synsets)
+
+################ create picture clusters ##############################
 
 def read_clusters_from_file(file_name):
   cluster_for_synsets = dict()
