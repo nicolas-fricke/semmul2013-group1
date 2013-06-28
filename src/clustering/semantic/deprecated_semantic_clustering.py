@@ -18,7 +18,6 @@ from math import log
 
 # Import own modules
 from clustering.semantic.tag_preprocessing import *
-from clustering.semantic.tag_clustering import *
 from clustering.semantic.synset_detection import *
 
 ################     Write to File    ##############################
