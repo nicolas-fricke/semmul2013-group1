@@ -12,3 +12,4 @@ synset-tag-cooccurrence-dict: %(preprocessed-data-dir)s/synset_tags_tf_idf_dict.
 keywords_for_pictures_filename: %(preprocessed-data-dir)s/keywords_for_pictures.pickle
 synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.pickle
 unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.pickle
+color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.pickle

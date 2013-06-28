@@ -17,13 +17,14 @@ from clustering.visual.edge_clustering import extract_edges
 def extract_features(tree_node, metadata_dir):
   images = []
   for metajson_file, _ in tree_node.associated_pictures:
-    path_to_json = construct_path_to_json(metajson_file)
-    metadata = parse_json_file(metadata_dir + path_to_json)
+    relative_path_to_json = construct_path_to_json(metajson_file)
+    full_path_to_json = metadata_dir + relative_path_to_json
+    metadata = parse_json_file(full_path_to_json)
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = metajson_file
+      data["file_path"] = full_path_to_json
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -84,7 +85,7 @@ def cluster_by_features(images):
   clusters = defaultdict(list)
   for index, cluster_color in enumerate(clustered_images_by_color):
     cluster_edges = clustered_images_by_edges[index]
-    clusters[cluster_color + cluster_edges * k_color].append(images[index])
+    clusters[str(cluster_color + cluster_edges * k_color)].append(images[index])
 
   return clusters
 
@@ -127,7 +128,8 @@ def main(argv):
     config.read('../config.cfg')
 
     api_key = config.get('Flickr API Key', 'key')
-    metadata_dir = '../../' + config.get('Directories', 'metadata-dir')
+    metadata_dir = config.get('Directories', 'metadata-dir')
+    color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
 
     metajson_files = find_metajsons_to_process(metadata_dir)
 
@@ -157,9 +159,9 @@ def main(argv):
       if file_number >= 100:
         break
     print "Done."
-    save_object(images, "color_and_edge_features.pickle")
+    save_object(images, color_and_edge_features_filename)
   else:
-    images = load_object("color_and_edge_features.pickle")
+    images = load_object(color_and_edge_features_filename)
 
   print_status("Building data structure for clustering.... ")
   colors = []
