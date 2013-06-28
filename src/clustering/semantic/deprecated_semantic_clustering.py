@@ -22,6 +22,7 @@ from clustering.semantic.synset_detection import *
 
 ################     Write to File    ##############################
 
+# moved to mcl_keyword_clustering.py
 def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
   print "Writing similarity file."
   output_file = open(file_name, 'w')
@@ -31,6 +32,7 @@ def write_tag_similarity_histogram_to_file(tag_similarity_histogram, file_name):
 
 ################     Similarity Historgram   #######################
 
+# moved to mcl_keyword_clustering.py
 def get_synset_co_occurrence_dict(synset_filenames_dict):
   co_occurrence_dict = dict()
   max_co_occurrence = 0
@@ -44,6 +46,7 @@ def get_synset_co_occurrence_dict(synset_filenames_dict):
           max_co_occurrence = co_occurence
   return max_co_occurrence, co_occurrence_dict
 
+# unused
 def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_filenames_dict,number_of_jsons):
   tag_synset_co_occurrence_dict = defaultdict(list)
 
@@ -67,6 +70,7 @@ def get_unmatched_tag_co_occurrence_dict(synset_filenames_dict,unmatched_tag_fil
     idf = log(len(synset_filenames)/float(len(unmatched_tag_filenames)))
   return tag_synset_co_occurrence_dict
 
+# moved to co_occurrence_detection.py
 def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenames_dict):
   synset_tags_tf_idf_dict = defaultdict(list)
 
@@ -105,6 +109,7 @@ def create_unmatched_tag_tf_idf_dict(synset_filenames_dict,unmatched_tag_filenam
 
   return (max_tf_idf, synset_tags_tf_idf_dict)
 
+# moved to preprocessed_tag_dict_creator
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
   unmatched_tag_filenames_dict = defaultdict(list)
@@ -116,6 +121,7 @@ def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
       unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
   return synset_filenames_dict, unmatched_tag_filenames_dict
 
+# moved to mcl_keyword_clustering.py
 def calculate_similarity_histogram(synset_filenames_dict):
   max_co_occurrence, co_occurrence_dict = get_synset_co_occurrence_dict(synset_filenames_dict)
 
@@ -134,6 +140,7 @@ def calculate_similarity_histogram(synset_filenames_dict):
 
 ################     MCL Clustering    #############################
 
+# moved to mcl_keyword_clustering.py
 def read_clusters_from_file(file_name):
   clusters = []
   cluster_file = open(file_name, 'r')
@@ -142,6 +149,7 @@ def read_clusters_from_file(file_name):
   cluster_file.close()
   return clusters
 
+# moved to mcl_keyword_clustering.py
 def mcl_tag_clustering(tag_histogram):
   histogram_file_name = 'tag_similarity_file2.txt'
   write_tag_similarity_histogram_to_file(tag_histogram, histogram_file_name)
