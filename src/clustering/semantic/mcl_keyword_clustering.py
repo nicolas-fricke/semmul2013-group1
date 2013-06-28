@@ -122,7 +122,8 @@ def cluster_via_mcl(searchtree):
       pictures_for_clusters[0].append(picture)
 
   searchtree.subclusters = pictures_for_clusters.values()
-  print "%s has %d subclusters.\n" % (searchtree.name, len(searchtree.subclusters)) 
+  if len(searchtree.associated_pictures) > 0:
+    print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters)) 
 
   # Recursively traverse tree
   if searchtree.has_hyponyms():
