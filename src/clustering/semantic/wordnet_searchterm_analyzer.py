@@ -119,7 +119,7 @@ def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple):
       ))
     return meronyms_of_synset
 
-def find_hyponyms_on_wordnet(word, tf_idf_tuple):
+def construct_searchtree(word, tf_idf_tuple):
 
   # build tree
   hyponym_tree = []
@@ -172,13 +172,13 @@ def main(argv):
 
   ####### WordNet Search #######
 	print_status("Running WordNet Search for %s... " % word)
-	hyponyms_trees = find_hyponyms_on_wordnet(word, synset_tag_tf_idf_dict_filename)
+	searchtrees = construct_searchtree(word, synset_tag_tf_idf_dict_filename)
 	print "Done."
 
-	for synset in hyponyms_trees:
+	for synset in searchtrees:
 		pretty_print_tree(synset)
 
-	print_status("Done. Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
+	print_status("Done. Found %d entries.\n" % count_tree_nodes(searchtrees))
 
 if __name__ == '__main__':
 	main(sys.argv[1:])

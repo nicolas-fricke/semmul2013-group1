@@ -46,7 +46,7 @@ def get_searchtrees_with_filenames(search_term):
   tf_idf_tuple = load_object(synset_tag_tf_idf_dict_filename)
 
   print_status("Running WordNet Search for %s... " % search_term)
-  hyponyms_trees = find_hyponyms_on_wordnet(search_term, tf_idf_tuple)
+  hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple)
   print "Done."
 
   #pretty_print_tree(hyponyms_trees)
