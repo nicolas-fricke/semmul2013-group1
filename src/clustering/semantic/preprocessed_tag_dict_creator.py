@@ -18,7 +18,6 @@ from collections import defaultdict
 import ConfigParser
 
 # Import own modules
-import sys
 from helpers.general_helpers import *
 
 from clustering.semantic.deprecated_semantic_clustering import *
