@@ -83,10 +83,11 @@ def main():
   print_status("Writing storable_synset_unmatched_tags_tf_idfs_dict... ")
   save_object(storable_synset_unmatched_tags_tf_idfs_dict, synset_tag_tf_idf_dict_filename)
   print "Done."
-
-  print_status("Create MCL clusters and write them to file... ")
-  keyword_clustering_via_mcl(storable_synset_filenames_dict)
-  print "Done."
+  
+  if arguments.create_mcl_clusters:
+    print_status("Create MCL clusters and write them to file... ")
+    keyword_clustering_via_mcl(storable_synset_filenames_dict)
+    print "Done."
 
 if __name__ == '__main__':
     main()
