@@ -45,15 +45,20 @@ def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
         co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
         if similarity < 1.8:
           similarity = 0
-        edge_weigthings_for_synsets[(synset1, synset2)] = similarity + 2*co_occurrence
+        if co_occurence < 0.1:
+          co_occurence = 0
+        edge_weighting = similarity + 2*co_occurrence
+        if edge_weighting != 0:
+          edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting
   return edge_weigthings_for_synsets
 
 def write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name):
-  print "Writing edge weighting to mcl readable file."
+  print_status("Writing edge weighting to mcl readable file.")
   output_file = open(file_name, 'w')
   for (synset1, synset2), edge_weighting in edge_weigthings_for_synsets.iteritems():
     output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(edge_weighting) + '\n')
   output_file.close()
+  print "Done."
 
 def mcl_clustering(edge_weightings):
   config = ConfigParser.SafeConfigParser()
