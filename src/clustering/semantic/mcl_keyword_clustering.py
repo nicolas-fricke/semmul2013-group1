@@ -64,8 +64,8 @@ def mcl_clustering(edge_weightings):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
+  edge_weightings_filename = config.get('Filenames for Pickles', 'edge_weightings_filename')
 
-  edge_weightings_filename = 'edge_weightings_for_mcl.txt'
   write_edge_weightings_to_file(edge_weightings, edge_weightings_filename)
 
   call(["mcl", edge_weightings_filename, "--abc", "-o", mcl_filename])
@@ -115,7 +115,7 @@ def cluster_via_mcl(searchtree):
     cluster_counter = Counter()
     synsets_for_picture = url_and_keywords_for_pictures[picture[0]][1]
     for synset in synsets_for_picture:
-      try: 
+      try:
         cluster_counter[cluster_for_synsets[synset]] += 1
       except KeyError:
         continue
@@ -128,7 +128,7 @@ def cluster_via_mcl(searchtree):
 
   searchtree.subclusters = pictures_for_clusters.values()
   if len(searchtree.associated_pictures) > 0:
-    print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters)) 
+    print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
 
   # Recursively traverse tree
   if searchtree.has_hyponyms():
@@ -137,5 +137,5 @@ def cluster_via_mcl(searchtree):
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
       cluster_via_mcl(child_meronym_node)
-  
+
   return searchtree

@@ -15,3 +15,4 @@ synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.
 unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.pickle
 color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.pickle
 mcl_clusters_filename: %(preprocessed-data-dir)s/mcl_clusters.txt
+edge_weightings_filename: %(preprocessed-data-dir)s/edge_weightings_for_mcl.txt
