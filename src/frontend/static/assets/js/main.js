@@ -15,20 +15,40 @@
     _results = [];
     for (i = _i = 0, _len = data.length; _i < _len; i = ++_i) {
       node = data[i];
-      _results.push(draw(node, i * 100 + 150));
+      _results.push(draw(node, i + 50, i * 50 + 50));
     }
     return _results;
   };
 
-  draw = function(treeData, position) {
-    var key, value, _results;
-    this.tree_canvas.append("circle").style("stroke", "gray").style("fill", "lightblue").attr("r", 40).attr("cx", position).attr("cy", 100);
+  draw = function(treeData, x, y) {
+    var i, key, picture, value, _results;
+    this.tree_canvas.append("circle").style("stroke", "gray").style("fill", "lightblue").attr("r", 5).attr("cx", x).attr("cy", y);
     _results = [];
     for (key in treeData) {
       value = treeData[key];
-      if (key === 'name') {
-        _results.push(this.tree_canvas.append("text").attr("dx", position - 20).attr("dy", 100).text(value));
+      if (!(key === 'name')) {
+        continue;
       }
+      this.tree_canvas.append("text").attr("dx", x + 20).attr("dy", y + 5).text(value);
+      _results.push((function() {
+        var _results1;
+        _results1 = [];
+        for (key in treeData) {
+          value = treeData[key];
+          if (key === 'associated_pictures') {
+            _results1.push((function() {
+              var _i, _len, _results2;
+              _results2 = [];
+              for (i = _i = 0, _len = value.length; _i < _len; i = ++_i) {
+                picture = value[i];
+                _results2.push(this.tree_canvas.append("image").attr("xlink:href", "/static/wuerfels.jpg").attr("width", 40).attr("height", 40).attr("x", 150 + i * 50).attr("y", y - 20));
+              }
+              return _results2;
+            }).call(this));
+          }
+        }
+        return _results1;
+      }).call(this));
     }
     return _results;
   };
