@@ -45,8 +45,8 @@ def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
         co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
         if similarity < 1.8:
           similarity = 0
-        if co_occurence < 0.1:
-          co_occurence = 0
+        if co_occurrence < 0.1:
+          co_occurrence = 0
         edge_weighting = similarity + 2*co_occurrence
         if edge_weighting != 0:
           edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting

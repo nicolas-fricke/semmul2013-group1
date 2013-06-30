@@ -17,6 +17,7 @@
 from collections import defaultdict
 import ConfigParser
 import argparse
+import gc
 
 # Import own modules
 from helpers.general_helpers import *
