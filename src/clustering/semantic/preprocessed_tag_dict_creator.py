@@ -47,13 +47,20 @@ def parse_command_line_arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m','--withmcl', dest='create_mcl_clusters', action='store_true',
                       help='If specified, cluster keywords with mcl, otherwise leave it out and we windows friendly ;)')
+  parser.add_argument('-n','--number_of_jsons', dest='number_of_jsons', type=int,
+                      help='Specifies the number of jsons which will be processed ;)')
   args = parser.parse_args()
   return args
 
 def main():
-  number_of_jsons = 100
-
   arguments = parse_command_line_arguments()
+
+  if arguments.number_of_jsons:
+    number_of_jsons = arguments.number_of_jsons
+  else:
+    # Default if not in arguments
+    number_of_jsons = 100
+    print "Default: Running with %d json files" % number_of_jsons
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
