@@ -12,13 +12,13 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-  return render_template('result_old.html')
+  return render_template('result.html')
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
   tree = get_clusters(searchterm)
-  return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
-  #return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
+  # return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
+  return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
 
 if __name__ == "__main__":
   app.run(debug=True)
