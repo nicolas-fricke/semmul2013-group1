@@ -51,12 +51,11 @@ def get_searchtrees_with_filenames(search_term):
   tf_idf_tuple = load_object(synset_tag_tf_idf_dict_filename)
 
   print_status("Running WordNet Search for %s... " % search_term)
-  hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple)
+  hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple, use_meronyms=True)
   print "Done."
 
   #pretty_print_tree(hyponyms_trees)
-
-  print_status("Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
+  #print_status("Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
   synsets_to_filenames_dict = load_object(synset_filenames_dict_filename)
   tags_to_filenames_dict = load_object(tag_filenames_dict_filename)
@@ -74,7 +73,7 @@ def get_clusters(search_term):
     mcl_clustered_searchtree = cluster_via_mcl(searchtree)
     print "Done.\n"
     result_trees.append(cluster_visually(mcl_clustered_searchtree))
-    #result_trees.append(mcl_clustered_searchtree)
+
   return result_trees
 
 def main(argv):
