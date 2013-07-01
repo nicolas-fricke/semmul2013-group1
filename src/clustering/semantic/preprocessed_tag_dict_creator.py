@@ -37,6 +37,12 @@ def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
       unmatched_tag_filenames_dict[unmatched_tag].append((filename,url))
   return synset_filenames_dict, unmatched_tag_filenames_dict
 
+def calculate_and_write_tf_idf_dict(synset_filenames_dict, unmatched_tag_filenames_dict, tf_idf_dict_filename):
+  tf_idfs_dict = create_unmatched_tag_tf_idf_dict(synset_filenames_dict, unmatched_tag_filenames_dict)
+  print len(tf_idfs_dict[1].keys())
+
+  save_object(tf_idfs_dict, tf_idf_dict_filename)
+
 def parse_command_line_arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m','--withmcl', dest='create_mcl_clusters', action='store_true',
@@ -77,12 +83,8 @@ def main():
   save_object(unmatched_tag_filenames_dict, unmatched_tag_filenames_dict_filename)
   print "Done."
 
-  print_status("Create tf_idf dictionary... ")
-  storable_synset_unmatched_tags_tf_idfs_dict = create_unmatched_tag_tf_idf_dict(storable_synset_filenames_dict, unmatched_tag_filenames_dict)
-  print "Done"
-
-  print_status("Writing storable_synset_unmatched_tags_tf_idfs_dict... ")
-  save_object(storable_synset_unmatched_tags_tf_idfs_dict, synset_tag_tf_idf_dict_filename)
+  print_status("Calculate and write tf_idf dictionary...")
+  calculate_and_write_tf_idf_dict(storable_synset_filenames_dict, unmatched_tag_filenames_dict, synset_tag_tf_idf_dict_filename)
   print "Done."
 
   print_status("Collecting the garbage... ")
