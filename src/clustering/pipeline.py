@@ -20,24 +20,23 @@ def find_associated_pictures(node, synsets_to_filenames_dict, tags_to_filenames_
   associated_pictures = []
   if node.name in synsets_to_filenames_dict:
     associated_pictures.extend(synsets_to_filenames_dict[node.name])
-  if len(associated_pictures) > 0:
-    print "before: ", len(associated_pictures)
+  #if len(associated_pictures) > 0:
+  #  print "before: ", len(associated_pictures)
   for tag in node.co_occurring_tags:
     for picture in tags_to_filenames_dict[tag]:
       if picture not in associated_pictures:
         associated_pictures.append(picture)
-  if len(associated_pictures) > 0:
-    print "after: ", len(associated_pictures)
+  #if len(associated_pictures) > 0:
+  #  print "after: ", len(associated_pictures)
   return associated_pictures
 
-def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, find_pictures_for_hyponyms=False, find_pictures_for_meronyms=False, find_pictures_for_tags=False, tags_to_filenames_dict={}):
+def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, find_pictures_for_hyponyms=False, find_pictures_for_meronyms=False, find_pictures_for_tags=False, tags_to_filenames_dict=None):
   for node in nodes:
     if find_pictures_for_hyponyms and node.has_hyponyms():
-      recursively_find_pictures_for_synset_tree(node.hyponyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=find_pictures_for_meronyms)
+      recursively_find_pictures_for_synset_tree(node.hyponyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=True, find_pictures_for_meronyms=find_pictures_for_meronyms, tags_to_filenames_dict=tags_to_filenames_dict)
     if find_pictures_for_meronyms and node.has_meronyms():
-      recursively_find_pictures_for_synset_tree(node.meronyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=True)
+      recursively_find_pictures_for_synset_tree(node.meronyms, synsets_to_filenames_dict, find_pictures_for_hyponyms=find_pictures_for_hyponyms, find_pictures_for_meronyms=True, tags_to_filenames_dict=tags_to_filenames_dict)
     node.associated_pictures = find_associated_pictures(node, synsets_to_filenames_dict, tags_to_filenames_dict)
-    #print node.name, " has %d associated_pictures." % len(node.associated_pictures)
   return nodes
 
 def get_searchtrees_with_filenames(search_term):
@@ -75,7 +74,7 @@ def get_clusters(search_term):
     mcl_clustered_searchtree = cluster_via_mcl(searchtree)
     print "Done.\n"
     result_trees.append(cluster_visually(mcl_clustered_searchtree))
-
+    #result_trees.append(mcl_clustered_searchtree)
   return result_trees
 
 def main(argv):
