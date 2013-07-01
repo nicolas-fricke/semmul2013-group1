@@ -69,7 +69,7 @@ def write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name, append
   output_file.close()
   print "Done."
 
-def mcl_clustering(edge_weightings, edge_weightings_filename):
+def mcl_clustering(edge_weightings_filename):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
@@ -82,7 +82,7 @@ def keyword_clustering_via_mcl(synset_filenames_dict):
   print_status("Done calculation of edge weightings and writing to file.\n")
   
   print_status("Start MCL Clustering...")
-  mcl_clustering(edge_weigthings_for_synsets, edge_weightings_filename)
+  mcl_clustering(edge_weightings_filename)
   print "Done."
 
 ################ create picture clusters ##############################

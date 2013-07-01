@@ -51,7 +51,7 @@ def parse_command_line_arguments():
   return args
 
 def main():
-  number_of_jsons = 8000
+  number_of_jsons = 100
 
   arguments = parse_command_line_arguments()
 
