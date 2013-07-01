@@ -43,11 +43,11 @@ def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
         #if (synset1.name, synset2.name) not in similarity_histogram:
         similarity = wn.synset(synset1).lch_similarity(wn.synset(synset2))
         co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
-        if similarity < 1.8:
+        if similarity < 2.0:
           similarity = 0
-        if co_occurrence < 0.1:
+        if co_occurrence < 0.4:
           co_occurrence = 0
-        edge_weighting = similarity + 2*co_occurrence
+        edge_weighting = similarity + 4*co_occurrence
         if edge_weighting != 0:
           edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting
   return edge_weigthings_for_synsets
@@ -72,6 +72,7 @@ def mcl_clustering(edge_weightings):
 
 def keyword_clustering_via_mcl(synset_filenames_dict):
   edge_weigthings_for_synsets = calculate_edge_weigthings_for_synsets(synset_filenames_dict)
+  print len(edge_weigthings_for_synsets.keys())
   mcl_clustering(edge_weigthings_for_synsets)
 
 ################ create picture clusters ##############################
