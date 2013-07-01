@@ -20,60 +20,71 @@ from helpers.general_helpers import *
 
 ################ create keyword clusters ##############################
 
-def get_synset_co_occurrence_dict(synset_filenames_dict):
-  co_occurrence_dict = dict()
+def calculate_max_co_occurrence(synset_filenames_dict):
   max_co_occurrence = 0
   for synset1, filenames1 in synset_filenames_dict.iteritems():
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
-        #if (synset1.name, synset2.name) not in co_occurrence_dict:
         co_occurence = len(set(filenames1).intersection(set(filenames2)))
-        co_occurrence_dict[(synset1, synset2)] = co_occurence
         if co_occurence > max_co_occurrence:
           max_co_occurrence = co_occurence
-  return max_co_occurrence, co_occurrence_dict
+  return max_co_occurrence
 
-def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
-  max_co_occurrence, co_occurrence_dict = get_synset_co_occurrence_dict(synset_filenames_dict)
-
+def calculate_and_write_edge_weigthings_for_synsets(synset_filenames_dict, file_name):
+  max_co_occurrence = calculate_max_co_occurrence(synset_filenames_dict)
   edge_weigthings_for_synsets = dict()
+  how_many_added = 0
+  write_edge_weightings_to_file(dict(), file_name)
+
   for synset1, filenames1 in synset_filenames_dict.iteritems():
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
         #if (synset1.name, synset2.name) not in similarity_histogram:
         similarity = wn.synset(synset1).lch_similarity(wn.synset(synset2))
-        co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
+        co_occurence = len(set(synset_filenames_dict[synset1]).intersection(set(synset_filenames_dict[synset2])))
+        normalized_co_occurrence = co_occurence/max_co_occurrence
         if similarity < 2.0:
           similarity = 0
-        if co_occurrence < 0.4:
-          co_occurrence = 0
-        edge_weighting = similarity + 4*co_occurrence
+        if normalized_co_occurrence < 0.4:
+          normalized_co_occurrence = 0
+        edge_weighting = similarity + 4*normalized_co_occurrence
         if edge_weighting != 0:
           edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting
-  return edge_weigthings_for_synsets
+          how_many_added += 1
+        if how_many_added > 1000:
+          write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name, append_to_file=True)
+          edge_weigthings_for_synsets = dict()
+          how_many_added = 0
+  write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name, append_to_file=True)
 
-def write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name):
-  print_status("Writing edge weighting to mcl readable file.")
-  output_file = open(file_name, 'w')
+def write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name, append_to_file=False):
+  print_status("Writing edge weightings to mcl readable file.")
+  output_file = None
+  if append_to_file:
+    output_file = open(file_name, 'a')
+  else:
+    output_file = open(file_name, 'w')
   for (synset1, synset2), edge_weighting in edge_weigthings_for_synsets.iteritems():
     output_file.write(str(synset1) + ' ' + str(synset2) + ' ' + str(edge_weighting) + '\n')
   output_file.close()
   print "Done."
 
-def mcl_clustering(edge_weightings):
+def mcl_clustering(edge_weightings_filename):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
   edge_weightings_filename = config.get('Filenames for Pickles', 'edge_weightings_filename')
 
-  write_edge_weightings_to_file(edge_weightings, edge_weightings_filename)
-
   call(["mcl", edge_weightings_filename, "--abc", "-o", mcl_filename])
 
 def keyword_clustering_via_mcl(synset_filenames_dict):
-  edge_weigthings_for_synsets = calculate_edge_weigthings_for_synsets(synset_filenames_dict)
-  print len(edge_weigthings_for_synsets.keys())
-  mcl_clustering(edge_weigthings_for_synsets)
+  edge_weightings_filename = 'edge_weightings_for_mcl.txt'
+  calculate_and_write_edge_weigthings_for_synsets(synset_filenames_dict, edge_weightings_filename)
+  print_status("Done calculation of edge weightings and writing to file.\n")
+
+  print_status("Start MCL Clustering...")
+  mcl_clustering(edge_weightings_filename)
+  print "Done."
 
 ################ create picture clusters ##############################
 
