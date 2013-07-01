@@ -17,15 +17,16 @@ from clustering.visual.edge_clustering import extract_edges
 def extract_features(image_cluster, metadata_dir):
   images = []
   for metajson_file, _ in image_cluster:
-    relative_path_to_json = construct_path_to_json(metajson_file)
-    full_path_to_json = metadata_dir + relative_path_to_json
-    metadata = parse_json_file(full_path_to_json)
+    # relative_path_to_json = construct_path_to_json(metajson_file)
+    # full_path_to_json = metadata_dir + relative_path_to_json
+    # metadata = parse_json_file(full_path_to_json)
+    metadata = parse_json_file(metajson_file)
 
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = full_path_to_json
+      data["file_path"] = metajson_file
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -42,10 +43,8 @@ def cluster_by_color(colors):
   #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
   k_color = 2
   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  if error == 0:
-    print "Something is wrong here... error is zero"
   previous_error = pow(error,2)
-  while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
+  while 1/log(k_color+0.000001)*error > 1/log(k_color-0.999999)*previous_error and k_color < len(colors):
   #while error < 0.9 * previous_error:
     k_color += 1
     previous_error = error
@@ -60,8 +59,8 @@ def cluster_by_edges(edges):
   k_edges = 2
   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
   previous_error = error * 10
-  #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
-  while error < 0.85 * previous_error:
+  while 1/log(k_edges+0.0000001)*error > 1/log(k_edges-0.999999)*previous_error and k_edges < len(edges):
+  #while error < 0.85 * previous_error:
     k_edges += 1
     previous_error = error
     clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
@@ -86,8 +85,7 @@ def cluster_by_features(images):
   clusters = defaultdict(list)
   for index, cluster_color in enumerate(clustered_images_by_color):
     cluster_edges = clustered_images_by_edges[index]
-    clusters[str(cluster_color + cluster_edges * k_color)].append(images[index])
-
+    clusters[str(cluster_color + cluster_edges * k_color)].append((images[index]["file_path"], images[index]["url"]))
   return clusters
 
 
@@ -96,24 +94,31 @@ def cluster_visually(tree_node):
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
 
+  new_subclusters = []
   for cluster in tree_node.subclusters:
-    if len(cluster) > 5:              ##TODO: find appropriate threshold
+    if len(cluster) > 8:              ##TODO: find appropriate threshold
       print_status("Extracting visual features (colors and edges) from images.... ")
       images = extract_features(cluster, metadata_dir)
       print "Done.\n"
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
       clusters = cluster_by_features(images)
-      tree_node.subclusters = clusters
+      new_subclusters.extend(clusters.values())
       print "Done. %d subclusters for " % len(clusters), tree_node.name
+    else:
+      new_subclusters.append(cluster)
 
-    if tree_node.has_hyponyms():
-      for child_hyponym_node in tree_node.hyponyms:
-        cluster_visually(child_hyponym_node)
-    if tree_node.has_meronyms():
-      for child_meronym_node in tree_node.meronyms:
-        cluster_visually(child_meronym_node)
-
+  #print "previously %d subclusters" % len(tree_node.subclusters)
+  tree_node.subclusters = new_subclusters
+  #print "now %d subclusters" % len(tree_node.subclusters)
+    
+  if tree_node.has_hyponyms():
+    for child_hyponym_node in tree_node.hyponyms:
+      cluster_visually(child_hyponym_node)
+  if tree_node.has_meronyms():
+    for child_meronym_node in tree_node.meronyms:
+      cluster_visually(child_meronym_node)
+        
   return tree_node
 
 def main(argv):
