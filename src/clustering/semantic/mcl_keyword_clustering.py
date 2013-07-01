@@ -89,9 +89,8 @@ def read_clusters_from_file(file_name):
 def get_clusters_with_highest_counter(cluster_counter):
   result = []
   sorted_cluster_counter = sorted(cluster_counter.items(), key=operator.itemgetter(1), reverse=True)
-  result.append(sorted_cluster_counter[0][0])
-
   max_count = sorted_cluster_counter[0][1]
+
   i = 0
   while sorted_cluster_counter[i][1] == max_count:
     result.append(sorted_cluster_counter[i][0])
@@ -121,9 +120,9 @@ def cluster_via_mcl(searchtree):
         continue
     if len(cluster_counter) > 0:
       for synset_cluster_number in get_clusters_with_highest_counter(cluster_counter):
-        pictures_for_clusters[synset_cluster_number].append(picture)
+        pictures_for_clusters[synset_cluster_number+1].append(picture)
     else:
-      #TODO: where to put unassignable pictures?
+      print "unassignable picture: ", picture[0]
       pictures_for_clusters[0].append(picture)
 
   searchtree.subclusters = pictures_for_clusters.values()
