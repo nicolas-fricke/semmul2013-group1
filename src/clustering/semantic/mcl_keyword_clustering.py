@@ -43,11 +43,11 @@ def calculate_edge_weigthings_for_synsets(synset_filenames_dict):
         #if (synset1.name, synset2.name) not in similarity_histogram:
         similarity = wn.synset(synset1).lch_similarity(wn.synset(synset2))
         co_occurrence = co_occurrence_dict[(synset1, synset2)] / float(max_co_occurrence)
-        if similarity < 1.8:
+        if similarity < 2.0:
           similarity = 0
-        if co_occurrence < 0.1:
+        if co_occurrence < 0.4:
           co_occurrence = 0
-        edge_weighting = similarity + 2*co_occurrence
+        edge_weighting = similarity + 4*co_occurrence
         if edge_weighting != 0:
           edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting
   return edge_weigthings_for_synsets
@@ -72,6 +72,7 @@ def mcl_clustering(edge_weightings):
 
 def keyword_clustering_via_mcl(synset_filenames_dict):
   edge_weigthings_for_synsets = calculate_edge_weigthings_for_synsets(synset_filenames_dict)
+  print len(edge_weigthings_for_synsets.keys())
   mcl_clustering(edge_weigthings_for_synsets)
 
 ################ create picture clusters ##############################
@@ -89,9 +90,8 @@ def read_clusters_from_file(file_name):
 def get_clusters_with_highest_counter(cluster_counter):
   result = []
   sorted_cluster_counter = sorted(cluster_counter.items(), key=operator.itemgetter(1), reverse=True)
-  result.append(sorted_cluster_counter[0][0])
-
   max_count = sorted_cluster_counter[0][1]
+
   i = 0
   while sorted_cluster_counter[i][1] == max_count:
     result.append(sorted_cluster_counter[i][0])
@@ -121,9 +121,9 @@ def cluster_via_mcl(searchtree):
         continue
     if len(cluster_counter) > 0:
       for synset_cluster_number in get_clusters_with_highest_counter(cluster_counter):
-        pictures_for_clusters[synset_cluster_number].append(picture)
+        pictures_for_clusters[synset_cluster_number+1].append(picture)
     else:
-      #TODO: where to put unassignable pictures?
+      print "unassignable picture: ", picture[0]
       pictures_for_clusters[0].append(picture)
 
   searchtree.subclusters = pictures_for_clusters.values()
