@@ -45,7 +45,7 @@ def parse_command_line_arguments():
   return args
 
 def main():
-  number_of_jsons = 100
+  number_of_jsons = 8000
 
   arguments = parse_command_line_arguments()
 
@@ -88,7 +88,7 @@ def main():
   print_status("Collecting the garbage... ")
   gc.collect()
   print "Done."
-  
+
   if arguments.create_mcl_clusters:
     print_status("Create MCL clusters and write them to file... \n")
     keyword_clustering_via_mcl(storable_synset_filenames_dict)

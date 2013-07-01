@@ -82,6 +82,7 @@ def find_strong_co_occurrences(synset_name, tf_idf_tuple):
   for tag, tf_idf in tag_tf_idf_list:
     if tf_idf > threshold:
       tags_with_strong_co_occurrence.append(tag)
+  print synset_name, tags_with_strong_co_occurrence
   return tags_with_strong_co_occurrence
 
 def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple, synsets_already_in_tree):
@@ -100,9 +101,8 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple, synsets_
         hyponyms_of_synset.append(WordnetNode(
           name = hyponym.name,
           hyponyms = hyponym_subtrees,
-          meronyms = meronym_subtrees
-          #,
-          #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
+          meronyms = meronym_subtrees,
+          co_occurring_tags = find_strong_co_occurrences(hyponym.name, tf_idf_tuple)
         ))
     return hyponyms_of_synset, synsets_already_in_tree
 
@@ -122,9 +122,8 @@ def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple, synsets_
         meronyms_of_synset.append(WordnetNode(
           name = meronym.name,
           hyponyms = hyponym_subtrees,
-          meronyms = meronym_subtrees
-          #,
-          #co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
+          meronyms = meronym_subtrees,
+          co_occurring_tags = find_strong_co_occurrences(meronym.name, tf_idf_tuple)
         ))
     return meronyms_of_synset, synsets_already_in_tree
 
