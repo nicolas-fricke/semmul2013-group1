@@ -78,7 +78,10 @@ def mcl_clustering(edge_weightings_filename):
   call(["mcl", edge_weightings_filename, "--abc", "-o", mcl_filename])
 
 def keyword_clustering_via_mcl(synset_filenames_dict):
-  edge_weightings_filename = 'edge_weightings_for_mcl.txt'
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  edge_weightings_filename = config.get('Filenames for Pickles', 'edge_weightings_filename')
+
   calculate_and_write_edge_weigthings_for_synsets(synset_filenames_dict, edge_weightings_filename)
   print_status("Done calculation of edge weightings and writing to file.\n")
 
