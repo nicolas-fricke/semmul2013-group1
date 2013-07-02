@@ -42,15 +42,14 @@ def extract_features(image_cluster, metadata_dir):
 
 def cluster_by_single_feature(feature_matrix):
   k = 2
-  clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
-  previous_error = pow(error,2)
-  while 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error and k < len(feature_matrix):
+  error = 1
+  previous_error = 1
+  while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
   #while error < 0.9 * previous_error:
+    clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
     k += 1
     previous_error = error
-    clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
   k -= 1
-  clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=10)
 
   return clustered_images_by_color, k
 
