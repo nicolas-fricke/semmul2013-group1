@@ -7,8 +7,9 @@ from SimpleCV import Image
 from math import log, pow
 from scipy.cluster.hierarchy import fclusterdata as hierarchial_cluster
 from Pycluster import kcluster
+from json import dumps
+
 # Import own module helpers
-import sys
 from helpers.general_helpers import *
 from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
@@ -39,20 +40,19 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 
-def cluster_by_color(colors):
-  #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  k_color = 2
-  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+def cluster_by_single_feature(feature_matrix):
+  k = 2
+  clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
   previous_error = pow(error,2)
-  while 1/log(k_color+0.000001)*error > 1/log(k_color-0.999999)*previous_error and k_color < len(colors):
+  while 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error and k < len(feature_matrix):
   #while error < 0.9 * previous_error:
-    k_color += 1
+    k += 1
     previous_error = error
-    clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  k_color -= 1
-  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
+    clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
+  k -= 1
+  clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=10)
 
-  return clustered_images_by_color, k_color
+  return clustered_images_by_color, k
 
 
 def cluster_by_edges(edges):
@@ -78,8 +78,8 @@ def cluster_by_features(images):
     colors.append(image_data["colors"])
     edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
 
-  clustered_images_by_color, k_color = cluster_by_color(colors)
-  clustered_images_by_edges, k_edges = cluster_by_edges(edges)
+  clustered_images_by_color, k_color = cluster_by_single_feature(colors)
+  clustered_images_by_edges, k_edges = cluster_by_single_feature(edges)
 
   #DO LATE FUSION
   clusters = defaultdict(list)
@@ -132,87 +132,89 @@ def main(argv):
   # import configuration
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
-  color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
-  html_dir = config.get('Directories', 'html-dir')
+  #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
+  visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
   if not args.use_preprocessed_data:
 
     metadata_dir = config.get('Directories', 'metadata-dir')
     metajson_files = find_metajsons_to_process(metadata_dir)
 
-    print_status("Reading metadata files, loading images and calculating color and edge histograms.... ")
-    images = []
+    print_status("Reading metadata files, loading images and calculating color and edge histograms.... \not")
+    images = {}
     file_number = 0
     for metajson_file in metajson_files:
       metadata = parse_json_file(metajson_file)
+      print_status(metadata["id"] + "\n")
       if metadata["stat"] == "ok":
-        if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
-          continue
+        #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
+        #  continue
         data = {}
         url      = get_small_image_url(metadata)
-        data["image_id"]  = metadata["id"]
+        image_id = metadata["id"]
         data["file_path"] = metajson_file
         data["url"]       = url
+        
         try:
           image = Image(url).toHSV()
         except Exception:
           continue
 
-        data = extract_colors(image, data, 1)
-        data = extract_edges(image, data, 1)
-        images.append(data)
+        data = extract_colors(image, data, 5)
+        data = extract_edges(image, data, 5)
+        images[image_id] = data
 
         file_number += 1
-      if file_number >= 100:
+      if file_number >= 50:
         break
     print "Done."
-    save_object(images, color_and_edge_features_filename)
-  else:
-    images = load_object(color_and_edge_features_filename)
+    write_json_file(images, visual_features_filename)
+  #else:
+  #  images = load_object(color_and_edge_features_filename)
 
-  print_status("Building data structure for clustering.... ")
-  colors = []
-  edges = []
-  for image_data in images:
-    colors.append(image_data["colors"])
-    edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
-  print "Done."
+  # print_status("Building data structure for clustering.... ")
+  # colors = []
+  # edges = []
+  # for image_data in images.values():
+  #   colors.append(image_data["colors"])
+  #   edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
+  # print "Done."
 
-  print_status("Clustering images by color histograms via k-means algorithm.... ")
-  #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  k_color = 2
-  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  previous_error = pow(error,2)
-  while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
-  #while error < 0.9 * previous_error:
-    k_color += 1
-    previous_error = error
-    clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  k_color -= 1
-  clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
-  print "Done. %d Clusters with error %d" % (k_color, error)
+  # print_status("Clustering images by color histograms via k-means algorithm.... ")
+  # #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
+  # k_color = 2
+  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  # previous_error = pow(error,2)
+  # while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
+  # #while error < 0.9 * previous_error:
+  #   k_color += 1
+  #   previous_error = error
+  #   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
+  # k_color -= 1
+  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
+  # print "Done. %d Clusters with error %d" % (k_color, error)
 
-  print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  k_edges = 2
-  clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  previous_error = error * 10
-  #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
-  while error < 0.85 * previous_error:
-    k_edges += 1
-    previous_error = error
-    clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  k_edges -= 1
-  clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
-  print "Done. %d Clusters with error %f" % (k_edges, error)
+  # print_status("Clustering images by edge histograms via k-means algorithm.... ")
+  # k_edges = 2
+  # clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  # previous_error = error * 10
+  # #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
+  # while error < 0.85 * previous_error:
+  #   k_edges += 1
+  #   previous_error = error
+  #   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
+  # k_edges -= 1
+  # clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
+  # print "Done. %d Clusters with error %f" % (k_edges, error)
 
-  #DO LATE FUSION
-  print_status("Displaying clusters (simple intersection of color and edge clusters")
-  clusters = defaultdict(list)
-  for index, cluster_color in enumerate(clustered_images_by_color):
-    cluster_edges = clustered_images_by_edges[index]
-    clusters[cluster_color + cluster_edges * k_color].append(images[index])
+  # #DO LATE FUSION
+  # print_status("Displaying clusters (simple intersection of color and edge clusters")
+  # clusters = defaultdict(list)
+  # for index, cluster_color in enumerate(clustered_images_by_color):
+  #   cluster_edges = clustered_images_by_edges[index]
+  #   clusters[cluster_color + cluster_edges * k_color].append(images[index])
 
-  write_clusters_to_html(clusters, html_file_path=html_dir+"/visual_clusters.html", open_in_browser=True)
+  # write_clusters_to_html(clusters, html_file_path=html_dir+"/visual_clusters.html", open_in_browser=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

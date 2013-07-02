@@ -16,3 +16,4 @@ unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_f
 color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.pickle
 mcl_clusters_filename: %(preprocessed-data-dir)s/mcl_clusters.txt
 edge_weightings_filename: %(preprocessed-data-dir)s/edge_weightings_for_mcl.txt
+visual_features_filename: %(preprocessed-data-dir)s/visual_features.json

@@ -27,6 +27,10 @@ def load_object(filename):
 def find_metajsons_to_process(metadata_path):
   return glob(metadata_path + '/*/*/*.json')
 
+def write_json_file(obj, filename):
+  with open(filename, 'wb') as output:
+    output.write(json.dumps(obj))
+
 def parse_json_file(json_file):
   with open(json_file) as file:
     return json.load(file)
