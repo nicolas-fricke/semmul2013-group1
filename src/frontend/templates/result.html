@@ -1,26 +1,72 @@
 <html>
   <head>
     <title>Semantic Multimedia – Flickr Clusterer</title>
-    <style>
-      table {width: 100%; table-layout: fixed; border-collapse: collapse;}
-      tr > td:first-child {text-align: left; font-weight: bold;}
-      td {border: 2px solid black; margin: 5px;}
-      .images {white-space: nowrap; overflow: scroll;}
-    </style>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="static/assets/css/bootstrap-amilia.css" rel="stylesheet" media="screen">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="static/assets/js/bootstrap.js"></script>
 
     <script type="text/javascript" src="static/assets/js/main.js"></script>
+
+    <style>
+      body {
+        padding-top: 60px;
+      }
+
+      .navbar-inner {
+        min-height: 50px;
+      }
+
+      #loading-progress {
+        margin-bottom: 0;
+      }
+
+      #input-searchterm {
+        margin: 2px;
+        height: 27px;
+      }
+
+      #input-searchbutton {
+        margin: 2px;
+        width: 60px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Flickr Clusterer</h1>
-    <input id="input-searchterm" name="searchterm" onkeydown="if (event.keyCode == 13) onClickFind()">
-    <input type="button" value="find" onclick="onClickFind()">
-    <div id="tree-canvas" style="width: 100%; min-height: 400px;"></div>
+    <div class="overlay"></div>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Flickr Clusterer</a>
+          <div class="nav-collapse collapse" id="main-menu">
+            <form class="navbar-search pull-right" action="">
+              <input type="text" id="input-searchterm" class="span5" placeholder="enter searchterm..." onkeydown="if (event.keyCode == 13) onClickFind()">
+              <a id="input-searchbutton" class="btn btn-inverse" href="#" onclick="onClickFind()">find</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="tree-canvas" style="width: 100%; min-height: 400px;"></div>
+    </div>
+
+    <div id="loading-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
+      <div class="modal-header">
+        <h3>Loading data for &quot;<em id="loading-popup-searchterm">...</em>&quot;</h3>
+      </div>
+      <div class="modal-footer">
+        <div id="loading-progress" class="progress progress-info progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

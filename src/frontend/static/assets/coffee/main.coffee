@@ -1,7 +1,11 @@
 @onClickFind = ->
-  $.get(("http://localhost:5000/search/" + $("#input-searchterm").val()), searchDataArrived)
+  searchterm = $("#input-searchterm").val()
+  $('#loading-popup-searchterm').text(searchterm)
+  $('#loading-popup').modal('show')
+  $.get(("http://localhost:5000/search/" + searchterm), searchDataArrived)
 
 searchDataArrived = (data) ->
+  $('#loading-popup').modal('hide')
   console.log "Search data arrived:"
   console.log data
   draw(node,i+50, i*50+50) for node, i in data
@@ -30,6 +34,8 @@ draw = (treeData,x,y) ->
           .attr("height",45)
           .attr("x", 150+i*50)
           .attr("y", y-20)
+          .attr("class", "flickr-thumbnail")
+          .attr("rel", "popover")
           .on("mouseover", -> onImageMouseOver @)
           .on("mouseout",  -> onImageMouseOut @)
 

@@ -4,11 +4,16 @@
     _this = this;
 
   this.onClickFind = function() {
-    return $.get("http://localhost:5000/search/" + $("#input-searchterm").val(), searchDataArrived);
+    var searchterm;
+    searchterm = $("#input-searchterm").val();
+    $('#loading-popup-searchterm').text(searchterm);
+    $('#loading-popup').modal('show');
+    return $.get("http://localhost:5000/search/" + searchterm, searchDataArrived);
   };
 
   searchDataArrived = function(data) {
     var i, node, _i, _len, _results;
+    $('#loading-popup').modal('hide');
     console.log("Search data arrived:");
     console.log(data);
     _results = [];
@@ -43,7 +48,7 @@
               for (i = _i = 0, _len = value.length; _i < _len; i = ++_i) {
                 picture = value[i];
                 console.log(picture, i);
-                _results2.push(this.tree_canvas.append("svg:image").attr("xlink:href", picture[1]).attr("width", 45).attr("height", 45).attr("x", 150 + i * 50).attr("y", y - 20).on("mouseover", function() {
+                _results2.push(this.tree_canvas.append("svg:image").attr("xlink:href", picture[1]).attr("width", 45).attr("height", 45).attr("x", 150 + i * 50).attr("y", y - 20).attr("class", "flickr-thumbnail").attr("rel", "popover").on("mouseover", function() {
                   return onImageMouseOver(this);
                 }).on("mouseout", function() {
                   return onImageMouseOut(this);
