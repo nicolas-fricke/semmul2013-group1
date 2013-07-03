@@ -170,7 +170,7 @@ def main(argv):
         break
 
       metadata = parse_json_file(metajson_file)
-      print_status("ID: " + metadata["id"] + "File number: " + str(file_number) + "\n")
+      print_status("ID: " + metadata["id"] + " File number: " + str(file_number) + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
         #  continue
@@ -183,11 +183,15 @@ def main(argv):
         try:
           image = Image(url).toHSV()
         except Exception:
+          print "Could not get image:", metadata["id"]
           continue
 
         data = extract_colors(image, data, 5)
         data = extract_edges(image, data, 5)
         images[image_id] = data
+
+      else:
+        print "Status was not ok:", metadata["id"]
 
     print "Done."
     write_json_file(images, visual_features_filename)
