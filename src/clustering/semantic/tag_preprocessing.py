@@ -42,10 +42,7 @@ def hypernym_is_color(keyword):
         return wn.synsets(keyword)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
   return False
 
-def preprocess_keyword(keyword, replace_space):
-  if replace_space:
-    keyword = string.replace(keyword, " ", "_")                 # Replace space by underscore
-  keyword = re.sub("['!?\-\+\\/.%()*:]", "", keyword)           # Cut off special characters
+def preprocess_keyword(keyword):
   if not re.match(r".*[0-9].*", keyword) and len(keyword) > 2:  # No numbers and only with more than 2 literals
     keyword = string.lower(keyword)                             # Only lower case
     if not keyword == None:                                     # Not None
@@ -53,22 +50,34 @@ def preprocess_keyword(keyword, replace_space):
         return keyword
   return None
 
+def get_keywords_for_key(key):
+  key_list = []
+  for keyword in key.split(" "):
+    keyword = wn.morphy(keyword, pos='n')                       # Stemming with WordNet (Nouns only)
+    if not keyword == None:
+      keyword = preprocess_keyword(keyword)
+      if not keyword == None:
+        print keyword
+        key_list.append(keyword)
+  return key_list
+
 def read_keywords_from_json(json_data):
   keyword_list = []
 
   # Tags
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
     tag = raw_tag["raw"]
-    tag = preprocess_keyword(tag,replace_space=True)
+    tag = string.replace(tag, " ", "_")                         # Replace space by underscore
+    tag = re.sub("['!?\-\+\\/.%()*:]", "", tag)                 # Cut off special characters
+    tag = preprocess_keyword(tag)
     if not tag == None:
       keyword_list.append(tag)
 
   # Title
-  title = json_data["metadata"]["info"]["title"]["_content"]
-  for title_keyword in title.split(" "):
-    title_keyword = preprocess_keyword(title_keyword,replace_space=False)
-    if not title_keyword == None:
-      keyword_list.append(title_keyword)
+  keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["title"]["_content"]))
+
+  # Description
+  keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["description"]["_content"]))
 
   return keyword_list
 
