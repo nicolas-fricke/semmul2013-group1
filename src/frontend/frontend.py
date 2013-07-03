@@ -16,8 +16,8 @@ def hello():
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
-  tree = get_clusters(searchterm)
-  # return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
+  tree = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6)
+  #return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
   return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
 
 if __name__ == "__main__":

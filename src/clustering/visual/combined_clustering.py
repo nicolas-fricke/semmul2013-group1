@@ -40,7 +40,7 @@ def extract_features(image_cluster, metadata_dir):
 
 
 def cluster_by_single_feature(feature_matrix):
-  k = 2
+  k = 1
   error = 1
   previous_error = 1
   while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
@@ -87,14 +87,14 @@ def cluster_by_features(images):
   return clusters
 
 
-def cluster_visually(tree_node):
+def cluster_visually(tree_node, visual_clustering_threshold=8):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
-    if len(cluster) > 8:              ##TODO: find appropriate threshold
+    if len(cluster) >= visual_clustering_threshold:
       print_status("Extracting visual features (colors and edges) from images.... ")
       images = extract_features(cluster, metadata_dir)
       print "Done.\n"
@@ -120,7 +120,6 @@ def cluster_visually(tree_node):
   return tree_node
 
 
-
 def parse_command_line_arguments():
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
@@ -131,6 +130,7 @@ def parse_command_line_arguments():
                       help='Specifies the number from which on jsons should be read')
   args = parser.parse_args()
   return args
+
 
 def main(argv):
   arguments = parse_command_line_arguments()
@@ -194,52 +194,6 @@ def main(argv):
 
     print "Done."
     write_json_file(images, visual_features_filename)
-  #else:
-  #  images = load_object(color_and_edge_features_filename)
-
-  # print_status("Building data structure for clustering.... ")
-  # colors = []
-  # edges = []
-  # for image_data in images.values():
-  #   colors.append(image_data["colors"])
-  #   edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
-  # print "Done."
-
-  # print_status("Clustering images by color histograms via k-means algorithm.... ")
-  # #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  # k_color = 2
-  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  # previous_error = pow(error,2)
-  # while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
-  # #while error < 0.9 * previous_error:
-  #   k_color += 1
-  #   previous_error = error
-  #   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  # k_color -= 1
-  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
-  # print "Done. %d Clusters with error %d" % (k_color, error)
-
-  # print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  # k_edges = 2
-  # clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  # previous_error = error * 10
-  # #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
-  # while error < 0.85 * previous_error:
-  #   k_edges += 1
-  #   previous_error = error
-  #   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  # k_edges -= 1
-  # clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
-  # print "Done. %d Clusters with error %f" % (k_edges, error)
-
-  # #DO LATE FUSION
-  # print_status("Displaying clusters (simple intersection of color and edge clusters")
-  # clusters = defaultdict(list)
-  # for index, cluster_color in enumerate(clustered_images_by_color):
-  #   cluster_edges = clustered_images_by_edges[index]
-  #   clusters[cluster_color + cluster_edges * k_color].append(images[index])
-
-  # write_clusters_to_html(clusters, html_file_path=html_dir+"/visual_clusters.html", open_in_browser=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
