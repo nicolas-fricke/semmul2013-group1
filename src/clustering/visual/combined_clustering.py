@@ -41,7 +41,7 @@ def extract_features(image_cluster, metadata_dir):
 
 
 def cluster_by_single_feature(feature_matrix):
-  k = 2
+  k = 1
   error = 1
   previous_error = 1
   while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
