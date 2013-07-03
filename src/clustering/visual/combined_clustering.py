@@ -160,6 +160,7 @@ def main(argv):
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... \not")
     images = {}
+    how_many_added = 0
     for file_number, metajson_file in enumerate(metajson_files):
       # For preprocessing it would be best to save intermediate results,
       #  we also need to have the possibility to start somewhere in the middle
@@ -188,6 +189,15 @@ def main(argv):
         data = extract_colors(image, data, 5)
         data = extract_edges(image, data, 5)
         images[image_id] = data
+
+        how_many_added += 1
+
+        if how_many_added >= 1000:
+          print_status("Done with " + str(file_number - index_to_start) + " of " + str(index_to_stop - index_to_start) + "\n")
+          file_name = str(file_number) + visual_features_filename
+          write_json_file(images, file_name)
+          images = {}
+          how_many_added = 0
 
       else:
         print "Status was not ok:", metadata["id"]
