@@ -46,7 +46,11 @@ def get_small_image_url(metajson):
   sizes = metajson["metadata"]["sizes"]
   if not sizes.get("stat") == "ok":
     return None
-  return [entry["source"] for entry in sizes["sizes"]["size"] if entry["label"] == "Small"][0]
+  
+  small_image_urls = [entry["source"] for entry in sizes["sizes"]["size"] if entry["label"] == "Small"]
+  if len(small_image_urls) == 0:
+    return None
+  return small_image_urls[0]
 
 def write_clusters_to_html(clusters, html_file_path="out.html", additional_columns=None, open_in_browser=False):
   output_html =  ( "<html>\n"

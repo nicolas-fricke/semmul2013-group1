@@ -46,9 +46,9 @@ def calculate_and_write_tf_idf_dict(synset_filenames_dict, unmatched_tag_filenam
 def parse_command_line_arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m','--withmcl', dest='create_mcl_clusters', action='store_true',
-                      help='If specified, cluster keywords with mcl, otherwise leave it out and we windows friendly ;)')
+                      help='If specified, cluster keywords with mcl, otherwise leave it out and be windows friendly')
   parser.add_argument('-n','--number_of_jsons', dest='number_of_jsons', type=int,
-                      help='Specifies the number of jsons which will be processed ;)')
+                      help='Specifies the number of jsons which will be processed')
   args = parser.parse_args()
   return args
 
