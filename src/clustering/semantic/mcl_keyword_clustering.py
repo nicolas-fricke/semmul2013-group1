@@ -115,7 +115,7 @@ def get_clusters_with_highest_counter(cluster_counter):
   return result
 
 
-def cluster_via_mcl(searchtree):
+def cluster_via_mcl(searchtree, mcl_clustering_threshold):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
@@ -125,31 +125,33 @@ def cluster_via_mcl(searchtree):
   url_and_keywords_for_pictures = load_object(keywords_for_pictures_filename)
   pictures_for_clusters = defaultdict(list)
 
-  for picture in searchtree.associated_pictures:
-    cluster_counter = Counter()
-    synsets_for_picture = url_and_keywords_for_pictures[picture[0]][1]
-    for synset in synsets_for_picture:
-      try:
-        cluster_counter[cluster_for_synsets[synset]] += 1
-      except KeyError:
-        continue
-    if len(cluster_counter) > 0:
-      for synset_cluster_number in get_clusters_with_highest_counter(cluster_counter):
-        pictures_for_clusters[synset_cluster_number+1].append(picture)
-    else:
-      print "unassignable picture: ", picture[0]
-      pictures_for_clusters[0].append(picture)
+  if len(searchtree.associated_pictures) >= mcl_clustering_threshold:
+    for picture in searchtree.associated_pictures:
+      cluster_counter = Counter()
+      synsets_for_picture = url_and_keywords_for_pictures[picture[0]][1]
+      for synset in synsets_for_picture:
+        try:
+          cluster_counter[cluster_for_synsets[synset]] += 1
+        except KeyError:
+          continue
+      if len(cluster_counter) > 0:
+        for synset_cluster_number in get_clusters_with_highest_counter(cluster_counter):
+          pictures_for_clusters[synset_cluster_number+1].append(picture)
+      else:
+        print "unassignable picture: ", picture[0]
+        pictures_for_clusters[0].append(picture)
 
-  searchtree.subclusters = pictures_for_clusters.values()
-  if len(searchtree.associated_pictures) > 0:
+    searchtree.subclusters = pictures_for_clusters.values()
     print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
+  else:
+    searchtree.subclusters = [searchtree.associated_pictures]
 
   # Recursively traverse tree
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
-      cluster_via_mcl(child_hyponym_node)
+      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
-      cluster_via_mcl(child_meronym_node)
+      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold)
 
   return searchtree

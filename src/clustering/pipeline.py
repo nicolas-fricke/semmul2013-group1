@@ -39,7 +39,7 @@ def recursively_find_pictures_for_synset_tree(nodes, synsets_to_filenames_dict, 
     node.associated_pictures = find_associated_pictures(node, synsets_to_filenames_dict, tags_to_filenames_dict)
   return nodes
 
-def get_searchtrees_with_filenames(search_term):
+def get_searchtrees_with_filenames(search_term, use_meronyms):
   # import configuration
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
@@ -51,7 +51,7 @@ def get_searchtrees_with_filenames(search_term):
   tf_idf_tuple = load_object(synset_tag_tf_idf_dict_filename)
 
   print_status("Running WordNet Search for %s... " % search_term)
-  hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple, use_meronyms=True)
+  hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple, use_meronyms)
   print "Done."
 
   #pretty_print_tree(hyponyms_trees)
@@ -64,15 +64,15 @@ def get_searchtrees_with_filenames(search_term):
 
   return searchtrees_with_pictures
 
-def get_clusters(search_term):
-  searchtrees_with_pictures = get_searchtrees_with_filenames(search_term)
+def get_clusters(search_term, use_meronyms, visual_clustering_threshold, mcl_clustering_threshold):
+  searchtrees_with_pictures = get_searchtrees_with_filenames(search_term, use_meronyms)
 
   result_trees = []
   for searchtree in searchtrees_with_pictures:
     print_status("Assign pictures to most fitting keyword cluster.... ")
-    mcl_clustered_searchtree = cluster_via_mcl(searchtree)
+    mcl_clustered_searchtree = cluster_via_mcl(searchtree, mcl_clustering_threshold)
     print "Done.\n"
-    result_trees.append(cluster_visually(mcl_clustered_searchtree))
+    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold))
 
   return result_trees
 
