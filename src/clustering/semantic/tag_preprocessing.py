@@ -60,12 +60,16 @@ def read_tags_from_json(json_data):
 
 def read_data_from_json_file(json_file):
   f = open(json_file)
-  json_data = json.load(f)
+  try:
+    json_data = json.load(f)
+  except ValueError:
+    print "Value Error occurred at JSON File:", json_file
+    return None, None
   f.close()
   data = {}   # Create data dict for image visualization
   if json_data["stat"] == "ok":
     data["image_id"]  = json_data["id"]
-    data["url"] = get_small_image_url(json_data)
+    data["url"] = get_small_image_url(json_data) # TODO: could return None, does this have to be catched somehow?
     return read_tags_from_json(json_data), data
   return None, None
 

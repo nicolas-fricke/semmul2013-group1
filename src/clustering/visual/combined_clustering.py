@@ -120,13 +120,23 @@ def cluster_visually(tree_node):
         
   return tree_node
 
-def main(argv):
+
+
+def parse_command_line_arguments():
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
                    help='If specified, use preprocessed image data, otherwise download and process images and save values to file for next use')
+  parser.add_argument('-n','--number_of_jsons', dest='number_of_jsons', type=int,
+                      help='Specifies the number of jsons which will be processed')
+  parser.add_argument('-i','--index_to_start', dest='index_to_start', type=int,
+                      help='Specifies the number from which on jsons should be read')
   args = parser.parse_args()
+  return args
 
-  print_status("Use preprocessed data: " + str(args.use_preprocessed_data) + "\n\n")
+def main(argv):
+  arguments = parse_command_line_arguments()
+
+  print_status("Use preprocessed data: " + str(arguments.use_preprocessed_data) + "\n\n")
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
@@ -134,17 +144,33 @@ def main(argv):
   #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
-  if not args.use_preprocessed_data:
+  if not arguments.use_preprocessed_data:
+    
+    if arguments.index_to_start:
+      index_to_start = arguments.index_to_start
+    else:
+      index_to_start = 0
+
+    if arguments.number_of_jsons:
+      index_to_stop = index_to_start + arguments.number_of_jsons
+    else:
+      index_to_stop = index_to_start + 50 # initial number of jsons is 50
 
     metadata_dir = config.get('Directories', 'metadata-dir')
     metajson_files = find_metajsons_to_process(metadata_dir)
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... \not")
     images = {}
-    file_number = 0
-    for metajson_file in metajson_files:
+    for file_number, metajson_file in enumerate(metajson_files):
+      # For preprocessing it would be best to save intermediate results,
+      #  we also need to have the possibility to start somewhere in the middle
+      if file_number < index_to_start:
+        continue
+      if file_number >= index_to_stop:
+        break
+
       metadata = parse_json_file(metajson_file)
-      print_status(metadata["id"] + "\n")
+      print_status("ID: " + metadata["id"] + "File number: " + str(file_number) + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
         #  continue
@@ -163,9 +189,6 @@ def main(argv):
         data = extract_edges(image, data, 5)
         images[image_id] = data
 
-        file_number += 1
-      if file_number >= 50:
-        break
     print "Done."
     write_json_file(images, visual_features_filename)
   #else:
