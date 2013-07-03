@@ -39,6 +39,14 @@ draw = (treeData,x,y) ->
           .on("mouseover", -> onImageMouseOver @)
           .on("mouseout",  -> onImageMouseOut @)
 
+    for key,hyponyms of treeData when key is 'hyponyms'
+      for hyponym, i in hyponyms
+        @tree_canvas.append("text")
+          .attr("dx", x+50+150*i)
+          .attr("dy", y+30)
+          .on("click", -> onNodeClick @)
+          .text(hyponym['name'])
+
 @onNodeClick = (nodeObject) =>
   console.log "Clicked on node: #{nodeObject.textContent}"
 

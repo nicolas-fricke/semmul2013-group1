@@ -34,11 +34,14 @@ def calculate_and_write_edge_weigthings_for_synsets(synset_filenames_dict, file_
   max_co_occurrence = calculate_max_co_occurrence(synset_filenames_dict)
   edge_weigthings_for_synsets = dict()
   how_many_added = 0
+  how_many_done = 0
+  how_many_to_do = len(synset_filenames_dict.keys()) * (len(synset_filenames_dict.keys())-1)
   write_edge_weightings_to_file(dict(), file_name)
 
   for synset1, filenames1 in synset_filenames_dict.iteritems():
     for synset2, filenames2 in synset_filenames_dict.iteritems():
       if synset1 < synset2:
+        how_many_done += 1
         #if (synset1.name, synset2.name) not in similarity_histogram:
         similarity = wn.synset(synset1).lch_similarity(wn.synset(synset2))
         co_occurence = len(set(synset_filenames_dict[synset1]).intersection(set(synset_filenames_dict[synset2])))
@@ -52,6 +55,7 @@ def calculate_and_write_edge_weigthings_for_synsets(synset_filenames_dict, file_
           edge_weigthings_for_synsets[(synset1, synset2)] = edge_weighting
           how_many_added += 1
         if how_many_added > 1000:
+          print_status("Done with " + str(how_many_done) + " von " + str(how_many_to_do) + "\n")
           write_edge_weightings_to_file(edge_weigthings_for_synsets, file_name, append_to_file=True)
           edge_weigthings_for_synsets = dict()
           how_many_added = 0
