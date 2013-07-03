@@ -35,28 +35,42 @@ tag_similarity_histogram = dict()
 
 ################     Reading of Files       ####################################
 
-def hypernym_is_color(tag):
-  if len(wn.synsets(tag)) > 0:
-    if len(wn.synsets(tag)[0].hypernyms()) > 0:
-      if len(wn.synsets(tag)[0].hypernyms()[0].hypernyms()) > 0:
-        return wn.synsets(tag)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
+def hypernym_is_color(keyword):
+  if len(wn.synsets(keyword)) > 0:
+    if len(wn.synsets(keyword)[0].hypernyms()) > 0:
+      if len(wn.synsets(keyword)[0].hypernyms()[0].hypernyms()) > 0:
+        return wn.synsets(keyword)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
   return False
 
-# probably add preprocessing steps for tags
+def preprocess_keyword(keyword, replace_space):
+  if replace_space:
+    keyword = string.replace(keyword, " ", "_")                 # Replace space by underscore
+  keyword = re.sub("['!?\-\+\\/.%()*:]", "", keyword)           # Cut off special characters
+  if not re.match(r".*[0-9].*", keyword) and len(keyword) > 2:  # No numbers and only with more than 2 literals
+    keyword = string.lower(keyword)                             # Only lower case
+    if not keyword == None:                                     # Not None
+      if not hypernym_is_color(keyword):                        # Remove color tags
+        return keyword
+  return None
+
 def read_keywords_from_json(json_data):
-  tag_list = []
+  keyword_list = []
+
+  # Tags
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
-    # Preprocess tag before appending to tag_list
     tag = raw_tag["raw"]
-    tag = string.replace(tag, " ", "_")             # Replace space by underscore
-    tag = re.sub("['!?\-.%()*:]", "", tag)          # Cut off special characters
-    if re.match(r".*[0-9].*", tag) or len(tag) < 2: # No numbers and only with more than 2 literals
-      continue
-    tag = string.lower(tag)                         # Only lower case
-    if not tag == None:                             # Not null
-      if not hypernym_is_color(tag):                # Remove color tags
-        tag_list.append(tag)
-  return tag_list
+    tag = preprocess_keyword(tag,replace_space=True)
+    if not tag == None:
+      keyword_list.append(tag)
+
+  # Title
+  title = json_data["metadata"]["info"]["title"]["_content"]
+  for title_keyword in title.split(" "):
+    title_keyword = preprocess_keyword(title_keyword,replace_space=False)
+    if not title_keyword == None:
+      keyword_list.append(title_keyword)
+
+  return keyword_list
 
 def read_data_from_json_file(json_file):
   f = open(json_file)
