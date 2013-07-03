@@ -57,7 +57,6 @@ def get_keywords_for_key(key):
     if not keyword == None:
       keyword = preprocess_keyword(keyword)
       if not keyword == None:
-        print keyword
         key_list.append(keyword)
   return key_list
 
