@@ -18,16 +18,15 @@ from clustering.visual.edge_clustering import extract_edges
 def extract_features(image_cluster, metadata_dir):
   images = []
   for metajson_file, _ in image_cluster:
-    # relative_path_to_json = construct_path_to_json(metajson_file)
-    # full_path_to_json = metadata_dir + relative_path_to_json
-    # metadata = parse_json_file(full_path_to_json)
-    metadata = parse_json_file(metajson_file)
+    relative_path_to_json = construct_path_to_json(metajson_file)
+    full_path_to_json = metadata_dir + relative_path_to_json
+    metadata = parse_json_file(full_path_to_json)
 
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = metajson_file
+      data["file_path"] = full_path_to_json
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -110,14 +109,14 @@ def cluster_visually(tree_node):
   #print "previously %d subclusters" % len(tree_node.subclusters)
   tree_node.subclusters = new_subclusters
   #print "now %d subclusters" % len(tree_node.subclusters)
-    
+
   if tree_node.has_hyponyms():
     for child_hyponym_node in tree_node.hyponyms:
       cluster_visually(child_hyponym_node)
   if tree_node.has_meronyms():
     for child_meronym_node in tree_node.meronyms:
       cluster_visually(child_meronym_node)
-        
+
   return tree_node
 
 
@@ -145,7 +144,7 @@ def main(argv):
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
   if not arguments.use_preprocessed_data:
-    
+
     if arguments.index_to_start:
       index_to_start = arguments.index_to_start
     else:
@@ -179,7 +178,7 @@ def main(argv):
         image_id = metadata["id"]
         data["file_path"] = metajson_file
         data["url"]       = url
-        
+
         try:
           image = Image(url).toHSV()
         except Exception:
