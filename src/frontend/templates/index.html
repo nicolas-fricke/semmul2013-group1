@@ -5,7 +5,7 @@
     <link href="static/assets/css/bootstrap-amilia.css" rel="stylesheet" media="screen">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    {# <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> #}
     <script type="text/javascript" src="static/assets/js/bootstrap.js"></script>
 
     <script type="text/javascript" src="static/assets/js/main.js"></script>
@@ -32,6 +32,20 @@
         margin: 2px;
         width: 60px;
       }
+
+      .result-synset {
+        padding-left: 30px;
+      }
+
+      .result-synset:nth-child(odd) {
+        background-color: #1cafbd;
+      }
+
+
+      .result-synset:nth-child(even) {
+        background-color: #1ebccb;
+      }
+
     </style>
   </head>
   <body>
@@ -48,14 +62,29 @@
           <div class="nav-collapse collapse" id="main-menu">
             <form class="navbar-search pull-right" action="">
               <input type="text" id="input-searchterm" class="span5" placeholder="enter searchterm...">
-              <a id="input-searchbutton" class="btn btn-inverse" href="#" onclick="getNewTree()">find</a>
+              <a id="input-searchbutton" class="btn btn-inverse" href="#" onclick="newSearch()">find</a>
             </form>
           </div>
         </div>
       </div>
     </div>
     <div class="container">
-      <div id="tree-canvas" style="width: 100%; min-height: 400px;"></div>
+      <div id="result-container">
+        {%- for synset in tree recursive %}
+          <div class="result-synset">
+            <div class="result-name pull-left">{{ synset.name }}</div>
+            <div class="result-preview pull-left">
+              {%- for _, image_url in synset.associated_pictures %}
+                <img src="{{ image_url }}" width="100px" />
+              {%- endfor %}
+            </div>
+            <div class="clearfix"></div>
+            {%- if synset.hyponyms -%}
+              {{ loop(synset.hyponyms) }}
+            {%- endif %}
+          </div>
+        {%- endfor %}
+      </div>
     </div>
     <div id="cluster-detail-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
       <div class="modal-header">

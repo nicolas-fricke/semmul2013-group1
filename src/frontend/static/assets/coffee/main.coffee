@@ -1,14 +1,15 @@
-@getNewTree = ->
+@newSearch = ->
   searchterm = $('#input-searchterm').val()
   $('#loading-popup-searchterm').text(searchterm)
   $('#loading-popup').modal('show')
-  $.get(("http://localhost:5000/search/" + searchterm), searchDataArrived)
+  $('#result-container').load("http://localhost:5000/search/" + searchterm + " #result-container", searchDataArrived)
 
-searchDataArrived = (data) ->
+searchDataArrived = (data) =>
   $('#loading-popup').modal('hide')
   console.log "Search data arrived:"
   console.log data
-  draw(node,i+50, i*50+50) for node, i in data
+
+###
 
 draw = (treeData,x,y) ->
   @tree_canvas.append("circle")
@@ -47,6 +48,8 @@ draw = (treeData,x,y) ->
           .on("click", -> onNodeClick @)
           .text(hyponym['name'])
 
+###
+
 @onNodeClick = (nodeObject) =>
   console.log "Clicked on node: #{nodeObject.textContent}"
 
@@ -60,14 +63,9 @@ bindFunctions = ->
   # React on <Enter> on search field
   $('#input-searchterm').keyup (e) ->
     if e.keyCode is 13 # enter
-      getNewTree()
+      newSearch()
 
 $.ready = =>
-  @tree_canvas = d3.select("#tree-canvas")
-    .append("svg")
-    .attr("width", $("#tree-canvas").width())
-    .attr("height", $("#tree-canvas").height())
-
-  bindFunctions()
-
+  $('#loading-popup').modal('hide')
+#  bindFunctions()
   $("#input-searchterm").focus()

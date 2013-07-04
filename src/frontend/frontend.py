@@ -24,7 +24,7 @@ print "Done."
 
 @app.route("/")
 def hello():
-  return render_template('result.html')
+  return render_template('index.html')
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
@@ -33,7 +33,7 @@ def search(searchterm):
                       cluster_for_synsets=cluster_for_synsets,
                       keywords_for_pictures=keywords_for_pictures)
   #return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
-  return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
+  return render_template('index.html', tree=tree)
 
 if __name__ == "__main__":
   app.run(debug=True)
