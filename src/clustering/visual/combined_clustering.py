@@ -39,15 +39,17 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 
-def read_features_from_file(cluster, json_filename):
+def read_features_from_file(cluster, json_filename, metadata_dir):
   images = []
   json_file = parse_json_file(json_filename)
   for picture_json_filename, _ in cluster:
-    picture_json_file = parse_json_file(picture_json_filename)
+    relative_path_to_json = construct_path_to_json(picture_json_filename)
+    full_path_to_json = metadata_dir + relative_path_to_json
+    picture_json_file = parse_json_file(full_path_to_json)
 
     if picture_json_file["stat"] == "ok":
-      data = json_file[picture_json_file["image_id"]]
-      data["image_id"] = picture_json_file["image_id"]
+      data = json_file[picture_json_file["id"]]
+      data["image_id"] = picture_json_file["id"]
     images.append(data)
 
   return images
@@ -106,13 +108,14 @@ def cluster_visually(tree_node, visual_clustering_threshold=8):
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
+  visual_features_filename = visual_features_filename.replace('##', 'all')
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
     if len(cluster) >= visual_clustering_threshold:
       print_status("Extracting visual features (colors and edges) from images.... ")
-      #images = read_features_from_file(cluster, visual_features_filename)
-      images = extract_features(cluster, metadata_dir)
+      images = read_features_from_file(cluster, visual_features_filename, metadata_dir)
+      # images = extract_features(cluster, metadata_dir)
       print "Done.\n"
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
@@ -158,12 +161,11 @@ def main(argv):
   config.read('../config.cfg')
   #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
-  visual_features_filename = visual_features_filename.replace('##', 'all')
   downloaded_images_dir = config.get('Directories', 'downloaded-images-dir')
 
   if not arguments.use_preprocessed_data:
 
-    metadata_dir = config.get('Directories', 'metadata-dir') 
+    metadata_dir = config.get('Directories', 'metadata-dir')
     if arguments.directory_to_preprocess:
       metadata_dir += arguments.directory_to_preprocess
       metajson_files = find_metajsons_to_process_in_dir(metadata_dir)
