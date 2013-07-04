@@ -40,6 +40,20 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 
+def read_features_from_file(cluster, json_filename):
+  images = []
+  json_file = parse_json_file(json_filename)
+  for picture_json_filename, _ in cluster:
+    picture_json_file = parse_json_file(picture_json_filename)
+
+    if picture_json_file["stat"] == "ok":
+      data = json_file[picture_json_file["image_id"]]
+      data["image_id"] = picture_json_file["image_id"]
+    images.append(data)
+
+  return images
+
+
 def cluster_by_single_feature(feature_matrix):
   k = 2
   error = 1
@@ -92,11 +106,13 @@ def cluster_visually(tree_node):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
+  visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
     if len(cluster) > 8:              ##TODO: find appropriate threshold
       print_status("Extracting visual features (colors and edges) from images.... ")
+      #images = read_features_from_file(cluster, visual_features_filename)
       images = extract_features(cluster, metadata_dir)
       print "Done.\n"
 
