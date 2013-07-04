@@ -39,6 +39,20 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 
+def read_features_from_file(cluster, json_filename):
+  images = []
+  json_file = parse_json_file(json_filename)
+  for picture_json_filename, _ in cluster:
+    picture_json_file = parse_json_file(picture_json_filename)
+
+    if picture_json_file["stat"] == "ok":
+      data = json_file[picture_json_file["image_id"]]
+      data["image_id"] = picture_json_file["image_id"]
+    images.append(data)
+
+  return images
+
+
 def cluster_by_single_feature(feature_matrix):
   k = 1
   error = 1
@@ -91,20 +105,22 @@ def cluster_visually(tree_node, visual_clustering_threshold=8):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
+  visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
     if len(cluster) >= visual_clustering_threshold:
       print_status("Extracting visual features (colors and edges) from images.... ")
+      #images = read_features_from_file(cluster, visual_features_filename)
       images = extract_features(cluster, metadata_dir)
       print "Done.\n"
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
       clusters = cluster_by_features(images)
-      new_subclusters.extend(clusters.values())
+      new_subclusters.append(clusters.values())
       print "Done. %d subclusters for " % len(clusters), tree_node.name
     else:
-      new_subclusters.append(cluster)
+      new_subclusters.append([cluster])
 
   #print "previously %d subclusters" % len(tree_node.subclusters)
   tree_node.subclusters = new_subclusters
@@ -124,10 +140,10 @@ def parse_command_line_arguments():
   parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
   parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
                    help='If specified, use preprocessed image data, otherwise download and process images and save values to file for next use')
-  parser.add_argument('-n','--number_of_jsons', dest='number_of_jsons', type=int,
-                      help='Specifies the number of jsons which will be processed')
-  parser.add_argument('-i','--index_to_start', dest='index_to_start', type=int,
-                      help='Specifies the number from which on jsons should be read')
+  parser.add_argument('-d','--directory_to_preprocess', dest='directory_to_preprocess', type=str,
+                      help='Specifies the directory which we want to preprocess')
+  parser.add_argument('-r','--read_images_from_disk', dest='read_images_from_disk', action='store_true',
+                      help='Specifies whether image files should be read from disk rather than downloaded from flickr, specify image path in config file')
   args = parser.parse_args()
   return args
 
@@ -142,35 +158,25 @@ def main(argv):
   config.read('../config.cfg')
   #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
+  downloaded_images_dir = config.get('Directories', 'downloaded-images-dir')
 
   if not arguments.use_preprocessed_data:
 
-    if arguments.index_to_start:
-      index_to_start = arguments.index_to_start
+    metadata_dir = config.get('Directories', 'metadata-dir') 
+    if arguments.directory_to_preprocess:
+      metadata_dir += arguments.directory_to_preprocess
+      metajson_files = find_metajsons_to_process_in_dir(metadata_dir)
+      visual_features_filename = visual_features_filename.replace('##', arguments.directory_to_preprocess.split('/')[-1])
     else:
-      index_to_start = 0
+      metajson_files = find_metajsons_to_process(metadata_dir)
+      visual_features_filename = visual_features_filename.replace('##', 'all')
 
-    if arguments.number_of_jsons:
-      index_to_stop = index_to_start + arguments.number_of_jsons
-    else:
-      index_to_stop = index_to_start + 50 # initial number of jsons is 50
-
-    metadata_dir = config.get('Directories', 'metadata-dir')
-    metajson_files = find_metajsons_to_process(metadata_dir)
-
-    print_status("Reading metadata files, loading images and calculating color and edge histograms.... \not")
+    print_status("Reading metadata files, loading images and calculating color and edge histograms.... \n")
     images = {}
-    how_many_added = 0
-    for file_number, metajson_file in enumerate(metajson_files):
-      # For preprocessing it would be best to save intermediate results,
-      #  we also need to have the possibility to start somewhere in the middle
-      if file_number < index_to_start:
-        continue
-      if file_number >= index_to_stop:
-        break
+    for metajson_file in metajson_files:
 
       metadata = parse_json_file(metajson_file)
-      print_status("ID: " + metadata["id"] + " File number: " + str(file_number) + "\n")
+      print_status("ID: " + metadata["id"] + " File number: " + metajson_file + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
         #  continue
@@ -181,7 +187,12 @@ def main(argv):
         data["url"]       = url
 
         try:
-          image = Image(url).toHSV()
+          if arguments.read_images_from_disk:
+            image_filename = metajson_file.split('/')[-1].replace('.json', '.jpg')
+            image_path = downloaded_images_dir + '/' + image_filename
+            image = Image(image_path).toHSV()
+          else:
+            image = Image(url).toHSV()
         except Exception:
           print "Could not get image:", metadata["id"]
           continue
