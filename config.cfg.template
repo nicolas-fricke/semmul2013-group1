@@ -1,6 +1,7 @@
 [Directories]
 data-dir: <full path to your dir for data>
 metadata-dir: %(data-dir)s/metadata
+downloaded-images-dir: %(data-dir)s/images
 html-dir: %(data-dir)s/html
 
 [Flickr API Key]                      ; Get key at: from http://www.flickr.com/services/apps/create/noncommercial/
@@ -16,4 +17,4 @@ unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_f
 color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.pickle
 mcl_clusters_filename: %(preprocessed-data-dir)s/mcl_clusters.txt
 edge_weightings_filename: %(preprocessed-data-dir)s/edge_weightings_for_mcl.txt
-visual_features_filename: %(preprocessed-data-dir)s/visual_features.json
+visual_features_filename: %(preprocessed-data-dir)s/visual_features_##.json ; ## stands for the folder number of preprocessed data, automatically gets replaced
