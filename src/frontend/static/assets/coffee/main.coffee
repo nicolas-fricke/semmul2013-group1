@@ -1,5 +1,5 @@
-@onClickFind = ->
-  searchterm = $("#input-searchterm").val()
+@getNewTree = ->
+  searchterm = $('#input-searchterm').val()
   $('#loading-popup-searchterm').text(searchterm)
   $('#loading-popup').modal('show')
   $.get(("http://localhost:5000/search/" + searchterm), searchDataArrived)
@@ -53,14 +53,22 @@ draw = (treeData,x,y) ->
 onImageMouseOver = (imageObject) =>
   console.log "Hover onto image: #{imageObject.href.baseVal}"
 
-
 onImageMouseOut = (imageObject) =>
   console.log "Hover out of image: #{imageObject.href.baseVal}"
+
+bindFunctions = ->
+  # React on <Enter> on search field
+  $('#input-searchterm').keyup (e) ->
+    if e.keyCode is 13
+      console.log 'enter pressed'
+      getNewTree()
 
 $.ready = =>
   @tree_canvas = d3.select("#tree-canvas")
     .append("svg")
     .attr("width", $("#tree-canvas").width())
     .attr("height", $("#tree-canvas").height())
+
+  bindFunctions()
 
   $("#input-searchterm").focus()
