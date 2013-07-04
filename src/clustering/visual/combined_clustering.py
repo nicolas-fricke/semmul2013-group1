@@ -153,10 +153,10 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
 
   if tree_node.has_hyponyms():
     for child_hyponym_node in tree_node.hyponyms:
-      cluster_visually(child_hyponym_node)
+      cluster_visually(child_hyponym_node, visual_clustering_threshold, visual_features)
   if tree_node.has_meronyms():
     for child_meronym_node in tree_node.meronyms:
-      cluster_visually(child_meronym_node)
+      cluster_visually(child_meronym_node, visual_clustering_threshold, visual_features)
 
   return tree_node
 

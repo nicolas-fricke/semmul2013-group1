@@ -146,9 +146,9 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=
   # Recursively traverse tree
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
-      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold)
+      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, cluster_for_synsets, url_and_keywords_for_pictures)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
-      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold)
+      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, cluster_for_synsets, url_and_keywords_for_pictures)
 
   return searchtree
