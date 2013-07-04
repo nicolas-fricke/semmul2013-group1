@@ -8,10 +8,9 @@
     {% endassets %}
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script type="text/javascript" src="static/assets/js/bootstrap.js"></script>
 
     {% assets output="gen/main.js",
-          "assets/js/main.js" %}
+          "assets/js/main.js", "assets/js/bootstrap.js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
@@ -55,6 +54,10 @@
       .result-preview {
         white-space: nowrap;
       }
+
+      .result-preview > img {
+        height: 100px;
+      }
     </style>
   </head>
   <body>
@@ -89,7 +92,6 @@
                   {% set visual_loop = loop %}
                   {%- for _, image_url in visual_cluster %}
                     <img src="{{ image_url }}"
-                         height="10"
                          data-mcl-cluster="{{ mcl_loop.index }}"
                          data-visual-cluster="{{ visual_loop.index }}"/>
                   {%- endfor %}
