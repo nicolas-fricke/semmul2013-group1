@@ -18,16 +18,15 @@ from clustering.visual.edge_clustering import extract_edges
 def extract_features(image_cluster, metadata_dir):
   images = []
   for metajson_file, _ in image_cluster:
-    # relative_path_to_json = construct_path_to_json(metajson_file)
-    # full_path_to_json = metadata_dir + relative_path_to_json
-    # metadata = parse_json_file(full_path_to_json)
-    metadata = parse_json_file(metajson_file)
+    relative_path_to_json = construct_path_to_json(metajson_file)
+    full_path_to_json = metadata_dir + relative_path_to_json
+    metadata = parse_json_file(full_path_to_json)
 
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = metajson_file
+      data["file_path"] = full_path_to_json
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -55,7 +54,7 @@ def read_features_from_file(cluster, json_filename):
 
 
 def cluster_by_single_feature(feature_matrix):
-  k = 2
+  k = 1
   error = 1
   previous_error = 1
   while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
@@ -102,7 +101,7 @@ def cluster_by_features(images):
   return clusters
 
 
-def cluster_visually(tree_node):
+def cluster_visually(tree_node, visual_clustering_threshold=8):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
@@ -110,7 +109,7 @@ def cluster_visually(tree_node):
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
-    if len(cluster) > 8:              ##TODO: find appropriate threshold
+    if len(cluster) >= visual_clustering_threshold:
       print_status("Extracting visual features (colors and edges) from images.... ")
       #images = read_features_from_file(cluster, visual_features_filename)
       images = extract_features(cluster, metadata_dir)
@@ -126,16 +125,15 @@ def cluster_visually(tree_node):
   #print "previously %d subclusters" % len(tree_node.subclusters)
   tree_node.subclusters = new_subclusters
   #print "now %d subclusters" % len(tree_node.subclusters)
-    
+
   if tree_node.has_hyponyms():
     for child_hyponym_node in tree_node.hyponyms:
       cluster_visually(child_hyponym_node)
   if tree_node.has_meronyms():
     for child_meronym_node in tree_node.meronyms:
       cluster_visually(child_meronym_node)
-        
-  return tree_node
 
+  return tree_node
 
 
 def parse_command_line_arguments():
@@ -149,6 +147,7 @@ def parse_command_line_arguments():
   args = parser.parse_args()
   return args
 
+
 def main(argv):
   arguments = parse_command_line_arguments()
 
@@ -161,7 +160,7 @@ def main(argv):
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
 
   if not arguments.use_preprocessed_data:
-    
+
     if arguments.index_to_start:
       index_to_start = arguments.index_to_start
     else:
@@ -177,6 +176,7 @@ def main(argv):
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... \not")
     images = {}
+    how_many_added = 0
     for file_number, metajson_file in enumerate(metajson_files):
       # For preprocessing it would be best to save intermediate results,
       #  we also need to have the possibility to start somewhere in the middle
@@ -195,7 +195,7 @@ def main(argv):
         image_id = metadata["id"]
         data["file_path"] = metajson_file
         data["url"]       = url
-        
+
         try:
           image = Image(url).toHSV()
         except Exception:
@@ -206,57 +206,20 @@ def main(argv):
         data = extract_edges(image, data, 5)
         images[image_id] = data
 
+        how_many_added += 1
+
+        if how_many_added >= 1000:
+          print_status("Done with " + str(file_number - index_to_start) + " of " + str(index_to_stop - index_to_start) + "\n")
+          file_name = str(file_number) + visual_features_filename
+          write_json_file(images, file_name)
+          images = {}
+          how_many_added = 0
+
       else:
         print "Status was not ok:", metadata["id"]
 
     print "Done."
     write_json_file(images, visual_features_filename)
-  #else:
-  #  images = load_object(color_and_edge_features_filename)
-
-  # print_status("Building data structure for clustering.... ")
-  # colors = []
-  # edges = []
-  # for image_data in images.values():
-  #   colors.append(image_data["colors"])
-  #   edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
-  # print "Done."
-
-  # print_status("Clustering images by color histograms via k-means algorithm.... ")
-  # #clustered_images = hierarchial_cluster(colors, 0.71, criterion='inconsistent', metric='euclidean')#distance_function)
-  # k_color = 2
-  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  # previous_error = pow(error,2)
-  # while 1/(log(k_color+0.000001)*error) > 1/(log(k_color-0.999999)*previous_error):
-  # #while error < 0.9 * previous_error:
-  #   k_color += 1
-  #   previous_error = error
-  #   clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=5)
-  # k_color -= 1
-  # clustered_images_by_color, error, _ = kcluster(colors, k_color, npass=10)
-  # print "Done. %d Clusters with error %d" % (k_color, error)
-
-  # print_status("Clustering images by edge histograms via k-means algorithm.... ")
-  # k_edges = 2
-  # clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  # previous_error = error * 10
-  # #while 1/(log(k_edges+0.0000001)*error) > 1/(log(k_edges-0.999999)*previous_error):
-  # while error < 0.85 * previous_error:
-  #   k_edges += 1
-  #   previous_error = error
-  #   clustered_images_by_edges, error, _ = kcluster(edges, k_edges, npass=5)
-  # k_edges -= 1
-  # clustered_images_by_edges, error, nfound = kcluster(edges, k_edges, npass=10)
-  # print "Done. %d Clusters with error %f" % (k_edges, error)
-
-  # #DO LATE FUSION
-  # print_status("Displaying clusters (simple intersection of color and edge clusters")
-  # clusters = defaultdict(list)
-  # for index, cluster_color in enumerate(clustered_images_by_color):
-  #   cluster_edges = clustered_images_by_edges[index]
-  #   clusters[cluster_color + cluster_edges * k_color].append(images[index])
-
-  # write_clusters_to_html(clusters, html_file_path=html_dir+"/visual_clusters.html", open_in_browser=True)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

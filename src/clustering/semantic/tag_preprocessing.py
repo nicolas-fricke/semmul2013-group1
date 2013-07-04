@@ -35,28 +35,50 @@ tag_similarity_histogram = dict()
 
 ################     Reading of Files       ####################################
 
-def hypernym_is_color(tag):
-  if len(wn.synsets(tag)) > 0:
-    if len(wn.synsets(tag)[0].hypernyms()) > 0:
-      if len(wn.synsets(tag)[0].hypernyms()[0].hypernyms()) > 0:
-        return wn.synsets(tag)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
+def hypernym_is_color(keyword):
+  if len(wn.synsets(keyword)) > 0:
+    if len(wn.synsets(keyword)[0].hypernyms()) > 0:
+      if len(wn.synsets(keyword)[0].hypernyms()[0].hypernyms()) > 0:
+        return wn.synsets(keyword)[0].hypernyms()[0].hypernyms()[0].name == 'color.n.01'
   return False
 
-# probably add preprocessing steps for tags
-def read_tags_from_json(json_data):
-  tag_list = []
+def preprocess_keyword(keyword):
+  if not re.match(r".*[0-9].*", keyword) and len(keyword) > 2:  # No numbers and only with more than 2 literals
+    keyword = string.lower(keyword)                             # Only lower case
+    if not keyword == None:                                     # Not None
+      if not hypernym_is_color(keyword):                        # Remove color tags
+        return keyword
+  return None
+
+def get_keywords_for_key(key):
+  key_list = []
+  for keyword in key.split(" "):
+    keyword = wn.morphy(keyword, pos='n')                       # Stemming with WordNet (Nouns only)
+    if not keyword == None:
+      keyword = preprocess_keyword(keyword)
+      if not keyword == None:
+        key_list.append(keyword)
+  return key_list
+
+def read_keywords_from_json(json_data):
+  keyword_list = []
+
+  # Tags
   for raw_tag in json_data["metadata"]["info"]["tags"]["tag"]:
-    # Preprocess tag before appending to tag_list
     tag = raw_tag["raw"]
-    tag = string.replace(tag, " ", "_")  # replace space by underscore
-    tag = re.sub("['!?\-.%()*:]", "", tag)        # cut special characters
-    if re.match(r".*[0-9].*", tag) or len(tag) < 2:
-      continue
-    tag = string.lower(tag)              # Only lower case
-    if not tag == None: # Only tags with more than 2 literals
-      if not hypernym_is_color(tag):     # Remove color tags
-        tag_list.append(tag)
-  return tag_list
+    tag = string.replace(tag, " ", "_")                         # Replace space by underscore
+    tag = re.sub("['!?\-\+\\/.%()*:]", "", tag)                 # Cut off special characters
+    tag = preprocess_keyword(tag)
+    if not tag == None:
+      keyword_list.append(tag)
+
+  # Title
+  keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["title"]["_content"]))
+
+  # Description
+  keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["description"]["_content"]))
+
+  return keyword_list
 
 def read_data_from_json_file(json_file):
   f = open(json_file)
@@ -70,7 +92,7 @@ def read_data_from_json_file(json_file):
   if json_data["stat"] == "ok":
     data["image_id"]  = json_data["id"]
     data["url"] = get_small_image_url(json_data) # TODO: could return None, does this have to be catched somehow?
-    return read_tags_from_json(json_data), data
+    return read_keywords_from_json(json_data), data
   return None, None
 
 def import_metadata_dir_of_config(path):
@@ -186,25 +208,6 @@ def tag_preprocessing(number_of_jsons):
   print_status("Parsing json files, creating histograms and tags dictionary... ")
   tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram, photo_tags_dict, photo_data_list = parse_json_data(json_files,number_of_jsons)
   print "Done, with %2d Tags" % len(tag_histogram)
-
-  #write_tag_similarity_histogram_to_file(tag_similarity_histogram)
-
-  # remove X percent tags with too small occurence from the histograms
-  #cut_off_percentage = 10
-  #print_status("Removing the lower %d%% of tags from histograms... " % cut_off_percentage)
-  #tag_histogram, tag_co_occurrence_histogram, tag_similarity_histogram = remove_tags_with_small_occurence(cut_off_percentage)
-  #print "Done, %2d Tags remaining" % len(tag_histogram)
-
-  # remove tags with too small and too high Tf-idf value (occure too seldom or too often)
-  # sorted_tag_histogram = sorted(tag_histogram.iteritems(), key=operator.itemgetter(1))
-  # print "Tag \t Frequency \t Tf-idf"
-  # (_,highest_val) = sorted_tag_histogram[-1]
-  # for (key, val) in sorted_tag_histogram:
-  #   tf_idf = 0
-  #   for photo_taglist in photo_tags_dict.values():
-  #     if key in photo_taglist:
-  #       tf_idf += log(number_of_jsons/float(val)) # * freq(val) / freq(highest_val)
-  #   print "%s \t %d \t %f" % (key,val,tf_idf)
 
   # tag index dict saves the matching index of a tag in the laplace matrix
   print_status("Creating tag list... ")
