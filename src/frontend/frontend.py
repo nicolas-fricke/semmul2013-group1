@@ -36,7 +36,6 @@ def search(searchterm):
                                    visual_features=visual_features,
                                    cluster_for_synsets=cluster_for_synsets,
                                    keywords_for_pictures=keywords_for_pictures)
-  print url_for('static', filename='assets/js/main.js')
   return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
