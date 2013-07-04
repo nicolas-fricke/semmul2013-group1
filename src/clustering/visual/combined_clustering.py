@@ -194,7 +194,7 @@ def main(argv):
 
         if how_many_added >= 1000:
           print_status("Done with " + str(file_number - index_to_start) + " of " + str(index_to_stop - index_to_start) + "\n")
-          file_name = str(file_number) + visual_features_filename
+          file_name = visual_features_filename + str(file_number) + ".json"
           write_json_file(images, file_name)
           images = {}
           how_many_added = 0
