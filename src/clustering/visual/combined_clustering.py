@@ -158,6 +158,7 @@ def main(argv):
   config.read('../config.cfg')
   #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
   visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
+  visual_features_filename = visual_features_filename.replace('##', 'all')
   downloaded_images_dir = config.get('Directories', 'downloaded-images-dir')
 
   if not arguments.use_preprocessed_data:
@@ -200,15 +201,6 @@ def main(argv):
         data = extract_colors(image, data, 5)
         data = extract_edges(image, data, 5)
         images[image_id] = data
-
-        how_many_added += 1
-
-        if how_many_added >= 1000:
-          print_status("Done with " + str(file_number - index_to_start) + " of " + str(index_to_stop - index_to_start) + "\n")
-          file_name = visual_features_filename + str(file_number) + ".json"
-          write_json_file(images, file_name)
-          images = {}
-          how_many_added = 0
 
       else:
         print "Status was not ok:", metadata["id"]
