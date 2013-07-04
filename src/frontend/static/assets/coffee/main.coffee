@@ -59,8 +59,7 @@ onImageMouseOut = (imageObject) =>
 bindFunctions = ->
   # React on <Enter> on search field
   $('#input-searchterm').keyup (e) ->
-    if e.keyCode is 13
-      console.log 'enter pressed'
+    if e.keyCode is 13 # enter
       getNewTree()
 
 $.ready = =>
