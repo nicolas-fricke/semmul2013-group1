@@ -95,11 +95,6 @@ def read_data_from_json_file(json_file):
     return read_keywords_from_json(json_data), data
   return None, None
 
-def import_metadata_dir_of_config(path):
-  config = ConfigParser.SafeConfigParser()
-  config.read(path)
-  return config.get('Directories', 'metadata-dir')
-
 def parse_json_data(json_files,number_of_jsons):
   tag_histogram = Counter()
   tag_co_occurrence_histogram = Counter()

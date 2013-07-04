@@ -49,7 +49,7 @@ def get_small_image_url(metajson):
   sizes = metajson["metadata"]["sizes"]
   if not sizes.get("stat") == "ok":
     return None
-  
+
   small_image_urls = [entry["source"] for entry in sizes["sizes"]["size"] if entry["label"] == "Small"]
   if len(small_image_urls) == 0:
     return None
@@ -98,3 +98,10 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
       os.system("open -a Google\ Chrome " + html_file_path)
     except BaseException:
       return
+
+def import_metadata_dir_of_config(path):
+  config = ConfigParser.SafeConfigParser()
+  config.read(path)
+  return config.get('Directories', 'metadata-dir')
+
+
