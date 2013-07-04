@@ -5,7 +5,6 @@
     <link href="static/assets/css/bootstrap-amilia.css" rel="stylesheet" media="screen">
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    {# <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> #}
     <script type="text/javascript" src="static/assets/js/bootstrap.js"></script>
 
     <script type="text/javascript" src="static/assets/js/main.js"></script>
@@ -81,6 +80,9 @@
             <div class="clearfix"></div>
             {%- if synset.hyponyms -%}
               {{ loop(synset.hyponyms) }}
+            {%- endif %}
+            {%- if synset.meronyms -%}
+              {{ loop(synset.meronyms) }}
             {%- endif %}
           </div>
         {%- endfor %}
