@@ -117,10 +117,10 @@ def cluster_visually(tree_node, visual_clustering_threshold=8):
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
       clusters = cluster_by_features(images)
-      new_subclusters.extend(clusters.values())
+      new_subclusters.append(clusters.values())
       print "Done. %d subclusters for " % len(clusters), tree_node.name
     else:
-      new_subclusters.append(cluster)
+      new_subclusters.append([cluster])
 
   #print "previously %d subclusters" % len(tree_node.subclusters)
   tree_node.subclusters = new_subclusters
@@ -200,6 +200,15 @@ def main(argv):
         data = extract_colors(image, data, 5)
         data = extract_edges(image, data, 5)
         images[image_id] = data
+
+        how_many_added += 1
+
+        if how_many_added >= 1000:
+          print_status("Done with " + str(file_number - index_to_start) + " of " + str(index_to_stop - index_to_start) + "\n")
+          file_name = visual_features_filename + str(file_number) + ".json"
+          write_json_file(images, file_name)
+          images = {}
+          how_many_added = 0
 
       else:
         print "Status was not ok:", metadata["id"]
