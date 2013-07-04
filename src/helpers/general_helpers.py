@@ -6,6 +6,7 @@ import os
 import cPickle as pickle
 import ConfigParser
 
+
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
   sys.stdout.write(message)
@@ -100,7 +101,17 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
     except BaseException:
       return
 
-############ Config Imports #############
+def read_clusters_from_file(file_name):
+  cluster_for_synsets = dict()
+  cluster_file = open(file_name, 'r')
+  for number_of_cluster, line in enumerate(cluster_file):
+    for synset in line.rstrip('\n\r').split('\t'):
+      cluster_for_synsets[synset] = number_of_cluster
+  cluster_file.close()
+  return cluster_for_synsets
+
+
+############ Config Import Methods #############
 
 def import_metadata_dir_of_config(path):
   config = ConfigParser.SafeConfigParser()
@@ -112,11 +123,23 @@ def get_name_from_config(section, name):
   config.read('../config.cfg')
   return config.get(section, name)
 
+############ Feature Loading Methods #############
+
 def load_visual_features():
   visual_features_filename = get_name_from_config('Filenames for Pickles', 'visual_features_filename')
   visual_features_filename = visual_features_filename.replace('##', 'all')
-  print_status("Loading visual_features from file ... ")
   visual_features = parse_json_file(visual_features_filename)
-  print "Done."
   return visual_features
+
+def load_cluster_for_synsets():
+  mcl_filename = get_name_from_config('Filenames for Pickles', 'mcl_clusters_filename')
+  cluster_for_synsets = read_clusters_from_file(mcl_filename)
+  return cluster_for_synsets
+
+def load_keywords_for_pictures():
+  keywords_for_pictures_filename = get_name_from_config('Filenames for Pickles', 'keywords_for_pictures_filename')
+  keywords_for_pictures = load_object(keywords_for_pictures_filename)
+  return keywords_for_pictures
+
+
 

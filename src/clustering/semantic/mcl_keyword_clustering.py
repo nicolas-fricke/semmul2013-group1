@@ -16,7 +16,7 @@ from collections import Counter, defaultdict
 from subprocess import call
 from nltk.corpus import wordnet as wn
 
-from helpers.general_helpers import *
+from helpers.general_helpers import print_status, read_clusters_from_file, load_object
 
 ################ create keyword clusters ##############################
 
@@ -95,16 +95,6 @@ def keyword_clustering_via_mcl(synset_filenames_dict):
 
 ################ create picture clusters ##############################
 
-def read_clusters_from_file(file_name):
-  cluster_for_synsets = dict()
-  cluster_file = open(file_name, 'r')
-  for number_of_cluster, line in enumerate(cluster_file):
-    for synset in line.rstrip('\n\r').split('\t'):
-      cluster_for_synsets[synset] = number_of_cluster
-  cluster_file.close()
-  return cluster_for_synsets
-
-
 def get_clusters_with_highest_counter(cluster_counter):
   result = []
   sorted_cluster_counter = sorted(cluster_counter.items(), key=operator.itemgetter(1), reverse=True)
@@ -119,14 +109,17 @@ def get_clusters_with_highest_counter(cluster_counter):
   return result
 
 
-def cluster_via_mcl(searchtree, mcl_clustering_threshold):
-  config = ConfigParser.SafeConfigParser()
-  config.read('../config.cfg')
-  mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
-  keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
+def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=None, url_and_keywords_for_pictures=None):
+  if url_and_keywords_for_pictures == None or cluster_for_synsets == None:
+    config = ConfigParser.SafeConfigParser()
+    config.read('../config.cfg')
+    if cluster_for_synsets == None:
+      mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
+      cluster_for_synsets = read_clusters_from_file(mcl_filename)
+    if url_and_keywords_for_pictures == None:
+      keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
+      url_and_keywords_for_pictures = load_object(keywords_for_pictures_filename)
 
-  cluster_for_synsets = read_clusters_from_file(mcl_filename)
-  url_and_keywords_for_pictures = load_object(keywords_for_pictures_filename)
   pictures_for_clusters = defaultdict(list)
 
   if len(searchtree.associated_pictures) >= mcl_clustering_threshold:

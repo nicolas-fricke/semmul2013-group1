@@ -7,12 +7,20 @@ from flask import render_template
 # import own modules
 from clustering.pipeline import get_clusters
 from clustering.semantic.wordnet_searchterm_analyzer import WordnetNodeJSONEncoder
-from helpers.general_helpers import load_visual_features
+from helpers.general_helpers import print_status, load_visual_features, load_cluster_for_synsets, load_keywords_for_pictures
 
 app = Flask(__name__)
 
 # Loading preprocessed features on startup
+print_status("Loading visual_features from file... ")
 visual_features = load_visual_features()
+print "Done."
+print_status("Loading cluster_for_synsets from mcl_clusters file... ")
+cluster_for_synsets = load_cluster_for_synsets()
+print "Done."
+print_status("Loading keywords_for_pictures from file... ")
+keywords_for_pictures = load_keywords_for_pictures()
+print "Done."
 
 @app.route("/")
 def hello():
@@ -20,7 +28,10 @@ def hello():
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
-  tree = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6, visual_features=visual_features)
+  tree = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
+                      visual_features=visual_features,
+                      cluster_for_synsets=cluster_for_synsets,
+                      keywords_for_pictures=keywords_for_pictures)
   #return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
   return Response(WordnetNodeJSONEncoder().encode(tree), mimetype='application/json')
 
