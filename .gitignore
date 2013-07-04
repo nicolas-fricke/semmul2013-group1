@@ -46,3 +46,7 @@ data/*
 
 # ignore Mac trash file
 .DS_Store
+
+# Flask-Asset files
+src/frontend/static/gen/
+src/frontend/static/.webassets-cache/
