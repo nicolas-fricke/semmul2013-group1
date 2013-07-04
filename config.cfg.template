@@ -3,6 +3,7 @@ data-dir: <full path to your dir for data>
 metadata-dir: %(data-dir)s/metadata
 downloaded-images-dir: %(data-dir)s/images
 html-dir: %(data-dir)s/html
+visual-data-dir: %(data-dir)s/preprocessed_visuals
 
 [Flickr API Key]                      ; Get key at: from http://www.flickr.com/services/apps/create/noncommercial/
 key: <your-flickr-key>                ; Replace with your key
