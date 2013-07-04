@@ -1,6 +1,7 @@
 import sys
 from flask import Flask, url_for, Response
 from flask import render_template
+from flask_assets import Environment, Bundle
 # from flask.ext.assets import Environment, Bundle
 # from flask import jsonify
 
@@ -10,6 +11,7 @@ from clustering.semantic.wordnet_searchterm_analyzer import WordnetNodeJSONEncod
 from helpers.general_helpers import print_status, load_visual_features, load_cluster_for_synsets, load_keywords_for_pictures
 
 app = Flask(__name__)
+assets = Environment(app)
 
 # Loading preprocessed features on startup
 print_status("Loading visual_features from file... ")
@@ -34,6 +36,7 @@ def search(searchterm):
                                    visual_features=visual_features,
                                    cluster_for_synsets=cluster_for_synsets,
                                    keywords_for_pictures=keywords_for_pictures)
+  print url_for('static', filename='assets/js/main.js')
   return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
