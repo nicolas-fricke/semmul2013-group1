@@ -6,8 +6,8 @@
 # Coordinate construction of searchtree as well as search and clustering of pictures
 #
 #
-# authors: 
-# mail: 
+# authors:
+# mail:
 ######################################################################################
 
 from clustering.semantic.wordnet_searchterm_analyzer import *
@@ -64,7 +64,7 @@ def get_searchtrees_with_filenames(search_term, use_meronyms):
 
   return searchtrees_with_pictures
 
-def get_clusters(search_term, use_meronyms, visual_clustering_threshold, mcl_clustering_threshold):
+def get_clusters(search_term, use_meronyms=True, visual_clustering_threshold=2, mcl_clustering_threshold=2, visual_features=None):
   searchtrees_with_pictures = get_searchtrees_with_filenames(search_term, use_meronyms)
 
   result_trees = []
@@ -72,7 +72,7 @@ def get_clusters(search_term, use_meronyms, visual_clustering_threshold, mcl_clu
     print_status("Assign pictures to most fitting keyword cluster.... ")
     mcl_clustered_searchtree = cluster_via_mcl(searchtree, mcl_clustering_threshold)
     print "Done.\n"
-    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold))
+    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold, visual_features))
 
   return result_trees
 

@@ -15,6 +15,7 @@ from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
+# Extracting features (live)
 def extract_features(image_cluster, metadata_dir):
   images = []
   for metajson_file, _ in image_cluster:
@@ -38,7 +39,7 @@ def extract_features(image_cluster, metadata_dir):
       images.append(data)
   return images
 
-
+# Reading preprocessed visual features from file
 def read_features_from_file(cluster, json_filename, metadata_dir):
   images = []
   json_file = parse_json_file(json_filename)
@@ -49,6 +50,21 @@ def read_features_from_file(cluster, json_filename, metadata_dir):
 
     if picture_json_file["stat"] == "ok":
       data = json_file[picture_json_file["id"]]
+      data["image_id"] = picture_json_file["id"]
+    images.append(data)
+
+  return images
+
+# Holding visual features in memory
+def assign_visual_features(cluster, visual_features, metadata_dir):
+  images = []
+  for picture_json_filename, _ in cluster:
+    relative_path_to_json = construct_path_to_json(picture_json_filename)
+    full_path_to_json = metadata_dir + relative_path_to_json
+    picture_json_file = parse_json_file(full_path_to_json)
+
+    if picture_json_file["stat"] == "ok":
+      data = visual_features[picture_json_file["id"]]
       data["image_id"] = picture_json_file["id"]
     images.append(data)
 
@@ -103,19 +119,25 @@ def cluster_by_features(images):
   return clusters
 
 
-def cluster_visually(tree_node, visual_clustering_threshold=8):
+def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=None):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
-  visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
-  visual_features_filename = visual_features_filename.replace('##', 'all')
+  if visual_features == None:
+    visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
+    visual_features_filename = visual_features_filename.replace('##', 'all')
 
   new_subclusters = []
   for cluster in tree_node.subclusters:
     if len(cluster) >= visual_clustering_threshold:
-      print_status("Extracting visual features (colors and edges) from images.... ")
-      images = read_features_from_file(cluster, visual_features_filename, metadata_dir)
-      # images = extract_features(cluster, metadata_dir)
+      if visual_features == None:
+        print_status("Reading visual features (colors and edges) from file.... ")
+        images = read_features_from_file(cluster, visual_features_filename, metadata_dir)
+        # print_status("Extracting visual features (colors and edges) from images.... ")
+        # images = extract_features(cluster, metadata_dir)
+      else:
+        print_status("Assign visual features (colors and edges).... ")
+        images = assign_visual_features(cluster, visual_features, metadata_dir)
       print "Done.\n"
 
       print_status("Clustering images by visual features via k-means algorithm.... ")

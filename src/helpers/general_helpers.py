@@ -4,6 +4,7 @@ import sys
 import time
 import os
 import cPickle as pickle
+import ConfigParser
 
 def print_status(message):
   sys.stdout.write(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()) + " - ")
@@ -99,9 +100,23 @@ def write_clusters_to_html(clusters, html_file_path="out.html", additional_colum
     except BaseException:
       return
 
+############ Config Imports #############
+
 def import_metadata_dir_of_config(path):
   config = ConfigParser.SafeConfigParser()
   config.read(path)
   return config.get('Directories', 'metadata-dir')
 
+def get_name_from_config(section, name):
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  return config.get(section, name)
+
+def load_visual_features():
+  visual_features_filename = get_name_from_config('Filenames for Pickles', 'visual_features_filename')
+  visual_features_filename = visual_features_filename.replace('##', 'all')
+  print_status("Loading visual_features from file ... ")
+  visual_features = parse_json_file(visual_features_filename)
+  print "Done."
+  return visual_features
 
