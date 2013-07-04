@@ -15,9 +15,6 @@ from helpers.visual_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
-# TODO: remove this import!!
-from time import sleep
-
 def extract_features(image_cluster, metadata_dir):
   images = []
   for metajson_file, _ in image_cluster:
