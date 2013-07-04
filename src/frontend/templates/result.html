@@ -57,6 +57,16 @@
     <div class="container">
       <div id="tree-canvas" style="width: 100%; min-height: 400px;"></div>
     </div>
+    <div id="cluster-detail-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
+      <div class="modal-header">
+        <h3>Loading data for &quot;<em id="loading-popup-searchterm">...</em>&quot;</h3>
+      </div>
+      <div class="modal-footer">
+        <div id="loading-progress" class="progress progress-info progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
 
     <div id="loading-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
       <div class="modal-header">
