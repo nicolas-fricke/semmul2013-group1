@@ -21,6 +21,7 @@ print "Done."
 print_status("Loading keywords_for_pictures from file... ")
 keywords_for_pictures = load_keywords_for_pictures()
 print "Done."
+bufferedSearches = {}
 
 @app.route("/")
 def hello():
@@ -28,12 +29,12 @@ def hello():
 
 @app.route("/search/<searchterm>")
 def search(searchterm):
-  tree = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
-                      visual_features=visual_features,
-                      cluster_for_synsets=cluster_for_synsets,
-                      keywords_for_pictures=keywords_for_pictures)
-  #return render_template('result_old.html', tree=tree, encodedtree=WordnetNodeJSONEncoder().encode(tree))
-  return render_template('index.html', tree=tree)
+  if searchterm not in bufferedSearches.keys():
+    bufferedSearches[searchterm] = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
+                                   visual_features=visual_features,
+                                   cluster_for_synsets=cluster_for_synsets,
+                                   keywords_for_pictures=keywords_for_pictures)
+  return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
   app.run(debug=True)
