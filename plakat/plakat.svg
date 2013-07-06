@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="790.67321"
-     inkscape:cy="571.23306"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="1396.756"
+     inkscape:cy="409.60865"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -418,6 +418,71 @@
          offset="0"
          style="stop-color:#ffffff;stop-opacity:1;" />
     </linearGradient>
+    <filter
+       id="filter6783"
+       inkscape:label="Edge detect"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Detect color edges in object"
+       color-interpolation-filters="sRGB">
+      <feColorMatrix
+         id="feColorMatrix6785"
+         type="saturate"
+         values="0"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix6875" />
+      <feConvolveMatrix
+         id="feConvolveMatrix6877"
+         order="3 3"
+         kernelMatrix="0 -0.15 0 -0.15 1.6 -0.15 0 -0.15 0"
+         divisor="1"
+         in="fbSourceGraphic"
+         targetX="1"
+         targetY="1"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix6879" />
+      <feConvolveMatrix
+         id="feConvolveMatrix6881"
+         targetY="1"
+         targetX="1"
+         in="fbSourceGraphic"
+         divisor="1"
+         kernelMatrix="0 -0.3 0 -0.3 2.2 -0.3 0 -0.3 0"
+         order="3 3"
+         result="result1" />
+      <feBlend
+         id="feBlend6883"
+         in2="fbSourceGraphic"
+         mode="normal"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix6885" />
+      <feConvolveMatrix
+         id="feConvolveMatrix6887"
+         order="3 3"
+         kernelMatrix="1 1 1 1 -8 1 1 1 1"
+         in="fbSourceGraphic"
+         divisor="3"
+         targetX="1"
+         targetY="1"
+         preserveAlpha="true"
+         result="result0"
+         bias="0" />
+    </filter>
   </defs>
   <metadata
      id="metadata7">
@@ -1093,7 +1158,8 @@
     </g>
     <g
        transform="matrix(0.60016115,0,0,0.60016115,1218.4123,564.14993)"
-       id="g4435-8-73-2">
+       id="g4435-8-73-2"
+       style="filter:url(#filter6783)">
       <g
          id="g4356-6-7-6"
          transform="matrix(1.4000226,0,0,0.75284951,-125.32288,83.189792)">
