@@ -24,16 +24,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.22963415"
-     inkscape:cx="152.60067"
-     inkscape:cy="1383.0855"
+     inkscape:zoom="0.9185366"
+     inkscape:cx="860.20643"
+     inkscape:cy="1252.4429"
      inkscape:document-units="px"
-     inkscape:current-layer="g6948"
+     inkscape:current-layer="g12810"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1358"
+     inkscape:window-y="-7"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -1046,6 +1046,216 @@
        y1="458.28278"
        x2="567.30292"
        y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4348-8-0-1-9"
+       id="linearGradient3411"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4342-2-1-2-1"
+       id="linearGradient3413"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4348-2-3-7"
+       id="linearGradient12806-1"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       id="linearGradient4348-2-3-7"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4350-5-5-4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4342-4-3-9"
+       id="linearGradient12808-0"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       id="linearGradient4342-4-3-9"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4344-1-2-4" />
+    </linearGradient>
+    <linearGradient
+       y2="458.28278"
+       x2="567.30292"
+       y1="458.28278"
+       x1="254"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3434"
+       xlink:href="#linearGradient4348-2-3-7"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="458.28278"
+       x2="567.30292"
+       y1="458.28278"
+       x1="254"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3436"
+       xlink:href="#linearGradient4342-4-3-9"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4348-8-0-1-9"
+       id="linearGradient3461"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4342-2-1-2-1"
+       id="linearGradient3463"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4348-2-3-7"
+       id="linearGradient3468"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4342-4-3-9"
+       id="linearGradient3470"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4348-2-3-7-2"
+       id="linearGradient3468-8"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       id="linearGradient4348-2-3-7-2"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4350-5-5-4-4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4342-4-3-9-5"
+       id="linearGradient3470-5"
+       gradientUnits="userSpaceOnUse"
+       x1="254"
+       y1="458.28278"
+       x2="567.30292"
+       y2="458.28278" />
+    <linearGradient
+       id="linearGradient4342-4-3-9-5"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4344-1-2-4-1" />
+    </linearGradient>
+    <linearGradient
+       y2="458.28278"
+       x2="567.30292"
+       y1="458.28278"
+       x1="254"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3492"
+       xlink:href="#linearGradient4348-2-3-7-2"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="458.28278"
+       x2="567.30292"
+       y1="458.28278"
+       x1="254"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3494"
+       xlink:href="#linearGradient4342-4-3-9-5"
+       inkscape:collect="always" />
+    <filter
+       id="filter3519"
+       inkscape:label="Edge detect"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Detect color edges in object"
+       color-interpolation-filters="sRGB">
+      <feConvolveMatrix
+         id="feConvolveMatrix3521"
+         targetY="1"
+         targetX="1"
+         in="SourceGraphic"
+         divisor="1"
+         kernelMatrix="0 -0.3 0 -0.3 2.2 -0.3 0 -0.3 0"
+         order="3 3"
+         result="result1" />
+      <feBlend
+         id="feBlend3523"
+         in2="SourceGraphic"
+         mode="normal"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix3529" />
+      <feColorMatrix
+         id="feColorMatrix3531"
+         type="saturate"
+         values="0"
+         in="fbSourceGraphic"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix3533" />
+      <feConvolveMatrix
+         id="feConvolveMatrix3535"
+         order="3 3"
+         kernelMatrix="1 1 1 1 -8 1 1 1 1"
+         in="fbSourceGraphic"
+         divisor="3"
+         targetX="1"
+         targetY="1"
+         preserveAlpha="true"
+         result="result0"
+         bias="0" />
+    </filter>
   </defs>
   <metadata
      id="metadata7">
@@ -1068,10 +1278,10 @@
        style="fill:#1cafbd;fill-opacity:1"
        id="rect3760"
        width="2118.47"
-       height="2786.1172"
+       height="2803.5361"
        x="-9.3906317"
-       y="-1045.6533"
-       transform="matrix(1,0,0,-1,0,1927.5592)" />
+       y="-2990.6316"
+       transform="scale(1,-1)" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -1548,53 +1758,39 @@
          d="m 1709.2406,1035.6324 c 0,84.1773 -117.4688,152.4164 -262.3739,152.4164 -144.9051,0 -262.3739,-68.2391 -262.3739,-152.4164 0,-84.17718 117.4688,-152.41631 262.3739,-152.41631 144.9051,0 262.3739,68.23913 262.3739,152.41631 z"
          transform="matrix(0.90727754,0,0,0.85048643,-259.16329,-605.89991)" />
     </g>
+    <image
+       style="fill:url(#linearGradient3492);fill-opacity:1;stroke:url(#linearGradient3494);stroke-opacity:1"
+       width="213.06593"
+       height="172.55162"
+       xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird4.jpg"
+       id="image4251-1-8-8-7"
+       x="1718.1085"
+       y="-467.71628" />
     <g
-       id="g12802"
-       transform="translate(1074.1654,-447.27413)">
-      <image
-         y="-19.86763"
-         x="646.07391"
-         id="image4251-1-8"
-         xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/macaw.jpg"
-         height="172.55162"
-         width="213.06593"
-         style="fill:url(#linearGradient12806);fill-opacity:1;stroke:url(#linearGradient12808);stroke-opacity:1" />
+       id="g3472">
       <rect
-         y="-20.621292"
-         x="644.23749"
+         y="-467.89542"
+         x="1718.4028"
          height="173.97534"
          width="214.83041"
          id="rect4354-3"
          style="fill:none;stroke:#ffffff;stroke-width:2.87337971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     </g>
-    <g
-       id="g12818"
-       transform="translate(350.55763,-15.241635)">
-      <g
-         transform="matrix(0.60016115,0,0,0.60016115,1378.9933,-331.4959)"
-         id="g4435-8-73-2"
-         style="filter:url(#filter6783)">
-        <g
-           id="g4356-6-7-6"
-           transform="matrix(1.4000226,0,0,0.75284951,-125.32288,83.189792)">
-          <image
-             style="fill:url(#linearGradient12824);fill-opacity:1;stroke:url(#linearGradient12826);stroke-opacity:1"
-             width="252.82408"
-             height="380.75909"
-             xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/macaw.jpg"
-             id="image4251-5-4-2-6"
-             x="239.41316"
-             y="234.13211" />
-        </g>
-      </g>
-      <rect
-         y="-176.45619"
-         x="1504.1112"
-         height="173.97534"
-         width="214.83041"
-         id="rect4354-3-1"
-         style="fill:none;stroke:#ffffff;stroke-width:2.87337971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    </g>
+    <image
+       style="fill:url(#linearGradient3468);fill-opacity:1;stroke:url(#linearGradient3470);stroke-opacity:1;filter:url(#filter3519)"
+       width="213.06593"
+       height="172.55162"
+       xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird4.jpg"
+       id="image4251-1-8-8"
+       x="1854.1946"
+       y="-192.27817" />
+    <rect
+       style="fill:none;stroke:#ffffff;stroke-width:2.87337971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4354-3-1"
+       width="214.83041"
+       height="173.97534"
+       x="1854.6688"
+       y="-191.69783" />
     <g
        id="g12810"
        transform="translate(481.20022,-195.96388)">
