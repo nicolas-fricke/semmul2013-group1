@@ -75,11 +75,14 @@
         top: 0px !important;
         left: 0px !important;
       }
+
+      footer {
+        margin-top: 40px;
+      }
     </style>
   </head>
   <body>
-    <div class="overlay"></div>
-    <div class="navbar navbar-fixed-top">
+    <div id="main-navigation" class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -102,7 +105,7 @@
         {%- for synset in tree recursive %}
           {% set node_loop = loop %}
           <div class="result-synset" rel="tooltip" title="{{ synset.name }}">
-              <div style="display: inline-block;">
+            <div style="display: inline-block;">
               <div class="result-name">{{ synset.name }}</div>
               <div class="result-preview">
                 {%- for mcl_cluster in synset.subclusters %}
@@ -121,16 +124,16 @@
                 {%- endfor %}
               </div>
             </div>
-            <div class="clearfix"></div>
             {%- if synset.hyponyms -%}
               {{ loop(synset.hyponyms) }}
             {%- endif %}
             {%- if synset.meronyms -%}
               {{ loop(synset.meronyms) }}
             {%- endif %}
-          </div>
+          </div> {# #result-synset #}
         {%- endfor %}
-      </div>
+        </div> {# #result-container #}
+      </div> {# #results .container #}
     </div>
     <div id="loading-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
       <div class="modal-header">
@@ -142,5 +145,15 @@
         </div>
       </div>
     </div>
+    <footer>
+      <div class="container">
+        <p>
+          &copy; 2013,
+          created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
+          during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
+          at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>
