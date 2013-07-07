@@ -16,7 +16,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="plakat.pdf">
+   sodipodi:docname="plakat.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32475173"
-     inkscape:cx="260.4621"
-     inkscape:cy="1513.8548"
+     inkscape:cx="685.88629"
+     inkscape:cy="1466.892"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g5590"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
@@ -44,6 +44,14 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="-12.317101,3026.9277"
+       id="guide5809" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="2109.3036,2173.9684"
+       id="guide5811" />
   </sodipodi:namedview>
   <defs
      id="defs4">
@@ -1780,7 +1788,7 @@
      sodipodi:insensitive="true">
     <image
        y="713.34546"
-       x="777.36298"
+       x="787.36298"
        id="image4306-1"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird4.jpg"
        height="81.393883"
@@ -1790,16 +1798,15 @@
        id="rect5060-57-33"
        width="103.79672"
        height="84.450676"
-       x="776.62317"
+       x="784.62317"
        y="711.86926" />
     <rect
-       transform="translate(0,1927.5592)"
        style="fill:#ffffff;fill-opacity:0.15873018;stroke:none"
        id="rect5060-57-12"
        width="104.69537"
        height="85.181831"
-       x="790.60394"
-       y="-1208.8469" />
+       x="802.60394"
+       y="720.71228" />
     <rect
        transform="translate(0,1927.5592)"
        style="fill:#ffffff;fill-opacity:0.15873018;stroke:none"
@@ -2035,35 +2042,35 @@
          style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster" /></text>
     <image
        y="-1507.261"
-       x="784.29169"
+       x="794.29169"
        id="image4184"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/african_prey.jpg"
        height="80.577354"
        width="96.154366" />
     <image
        y="-1509.261"
-       x="660.71393"
+       x="670.71393"
        id="image4262"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/raven.jpg"
        height="82.776382"
        width="124.28886" />
     <image
        y="-1507.6381"
-       x="564.46039"
+       x="574.46039"
        id="image4306"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird4.jpg"
        height="81.23172"
        width="101.53963" />
     <image
        y="-1507.6381"
-       x="454.77795"
+       x="464.77795"
        id="image4195"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/beak.jpg"
        height="80.698616"
        width="111.15511" />
     <image
        y="-1507.3965"
-       x="216.24257"
+       x="226.24257"
        id="image4273"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird1.jpg"
        height="80.720688"
@@ -2077,7 +2084,7 @@
        width="220" />
     <image
        y="-1507.261"
-       x="334.9064"
+       x="344.9064"
        id="image4284"
        xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/bird2.jpg"
        height="80.6483"
@@ -2541,54 +2548,54 @@
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="52.588333"
+       x="88.588333"
        y="-1224.7173"
        id="text3766-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-8"
-         x="52.588333"
+         x="88.588333"
          y="-1224.7173"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Beak</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="616.06097"
+       x="626.06097"
        y="-1225.6763"
        id="text3766-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-2"
-         x="616.06097"
+         x="626.06097"
          y="-1225.6763"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Parrot</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="917.79822"
-       y="-1226.7268"
+       x="927.79822"
+       y="-1224.7622"
        id="text3766-45"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-5"
-         x="917.79822"
-         y="-1226.7268"
+         x="927.79822"
+         y="-1224.7622"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Raven</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="175"
-       y="-933.63806"
+       x="182.23018"
+       y="-929.92157"
        id="text3766-4-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-8-6"
-         x="175"
-         y="-933.63806"
+         x="182.23018"
+         y="-929.92157"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Cockatoo</tspan></text>
     <g
        id="g5319"
-       transform="translate(-16,-36.354753)">
+       transform="translate(-6,-36.354753)">
       <image
          width="96.427658"
          height="80.806381"
@@ -2614,172 +2621,183 @@
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="522.56207"
+       x="532.56207"
        y="-929.92755"
        id="text3766-4-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-8-4"
-         x="522.56207"
+         x="532.56207"
          y="-929.92755"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">African Grey</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="101.2597"
+       x="111.2597"
        y="-1017.1855"
        id="text3995"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3997"
-         x="101.2597"
+         x="111.2597"
          y="-1017.1855"
          style="font-size:48px;font-weight:bold;fill:#a3ecf1;fill-opacity:1;-inkscape-font-specification:Sans Bold">凤头鹦鹉</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="50.892254"
+       x="60.892254"
        y="-962.29291"
        id="text3766-6"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-85"
-         x="50.892254"
+         x="60.892254"
          y="-962.29291"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">parot</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="474.58835"
+       x="484.58835"
        y="-1519.7173"
        id="text3766"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768"
-         x="474.58835"
+         x="484.58835"
          y="-1519.7173"
          style="font-size:100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Bird</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="321.34946"
+       x="331.34946"
        y="-1552.2344"
        id="text3766-6-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-85-6"
-         x="321.34946"
+         x="331.34946"
          y="-1552.2344"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">vogel</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="279.1915"
+       x="289.1915"
        y="-1606.4606"
        id="text3766-6-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-85-8"
-         x="279.1915"
+         x="289.1915"
          y="-1606.4606"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">wonderful world of birds</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="667.50342"
+       x="677.50342"
        y="-1535.5769"
        id="text3766-6-9"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-85-2"
-         x="667.50342"
+         x="677.50342"
          y="-1535.5769"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">avian excellence</tspan></text>
     <g
-       id="g11866"
-       transform="translate(-1758.4978,-1316.8194)">
+       id="g5768"
+       transform="translate(10,0)">
       <text
          sodipodi:linespacing="125%"
          id="text3766-0"
-         y="91.945549"
-         x="2053.1235"
+         y="-1224.8739"
+         x="294.62573"
          style="font-size:90px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Lobster;-inkscape-font-specification:Lobster"
          xml:space="preserve"><tspan
            style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster"
-           y="91.945549"
-           x="2053.1235"
+           y="-1224.8739"
+           x="294.62573"
            id="tspan3768-9"
            sodipodi:role="line">Feather</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text3766-6-79"
-         y="16.254631"
-         x="2026.3474"
+         y="-1300.5648"
+         x="267.84961"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
          xml:space="preserve"><tspan
            style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-           y="16.254631"
-           x="2026.3474"
+           y="-1300.5648"
+           x="267.84961"
            id="tspan3768-85-5"
            sodipodi:role="line">winged</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text3766-6-4"
-         y="35.133816"
-         x="2262.7534"
+         y="-1281.6855"
+         x="504.25562"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
          xml:space="preserve"><tspan
            style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-           y="35.133816"
-           x="2262.7534"
+           y="-1281.6855"
+           x="504.25562"
            id="tspan3768-85-3"
            sodipodi:role="line">feral</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text3766-6-12"
-         y="-7.3661861"
-         x="2212.6482"
+         y="-1324.1855"
+         x="454.15039"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
          xml:space="preserve"><tspan
            style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-           y="-7.3661861"
-           x="2212.6482"
+           y="-1324.1855"
+           x="454.15039"
            id="tspan3768-85-33"
            sodipodi:role="line">avian</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         x="-372.59232"
-         y="467.23245"
-         id="text4442"
-         sodipodi:linespacing="125%"
-         transform="translate(1778.4978,-610.7398)"><tspan
-           sodipodi:role="line"
-           id="tspan4444"
-           x="-372.59232"
-           y="467.23245" /></text>
     </g>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4442"
+       y="-1460.3268"
+       x="-352.59232"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="-1460.3268"
+         x="-352.59232"
+         id="tspan4444"
+         sodipodi:role="line" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="40.24612"
+       y="-1331.1853"
+       id="text3766-6-79-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3768-85-5-3"
+         x="40.24612"
+         y="-1331.1853"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">limicola</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:75%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="1030.9846"
+       x="1040.9846"
        y="-1286.2986"
        id="text3766-6-41"
        sodipodi:linespacing="75%"
        inkscape:transform-center-y="-16.171875"><tspan
          sodipodi:role="line"
          id="tspan3768-85-1"
-         x="1030.9846"
+         x="1040.9846"
          y="-1286.2986"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:75%;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">common </tspan><tspan
          sodipodi:role="line"
-         x="1030.9846"
+         x="1040.9846"
          y="-1250.2986"
          style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:75%;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
          id="tspan4478">        raven</tspan></text>
     <g
        id="g4779"
-       transform="translate(-16,-42)">
+       transform="translate(-6,-42)">
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -2802,23 +2820,23 @@
     <text
        xml:space="preserve"
        style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="1000"
+       x="1010"
        y="-929.63806"
        id="text3766-4-2"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3768-8-3"
-         x="1000"
+         x="1010"
          y="-929.63806"
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Macaw</tspan></text>
     <g
        id="g12773"
-       transform="translate(355.28604,-349.6134)">
+       transform="translate(354.62106,-342.32951)">
       <rect
          y="228.30803"
          x="1296.094"
          height="95.804565"
-         width="418.05627"
+         width="406.509"
          id="rect12000-2"
          style="fill:#971923;fill-opacity:1;stroke:none" />
       <text
@@ -2881,7 +2899,7 @@
        id="rect4354-8-4"
        width="664.60101"
        height="82.528786"
-       x="216.55971"
+       x="226.55971"
        y="-1508.3303" />
     <g
        id="g4587"
@@ -3128,7 +3146,7 @@
     </g>
     <g
        id="g4811"
-       transform="translate(-16,-32)">
+       transform="translate(-6,-32)">
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -3156,7 +3174,7 @@
     </g>
     <g
        id="g5213"
-       transform="translate(-20,-46)">
+       transform="translate(16,-44)">
       <image
          width="113.806"
          height="82.623161"
@@ -3174,7 +3192,7 @@
     </g>
     <g
        id="g5208"
-       transform="translate(-20,-45.142083)">
+       transform="translate(-10.769819,-44.656096)">
       <image
          transform="translate(4,0)"
          y="-1169.6381"
@@ -3207,7 +3225,7 @@
        style="fill:#ffffff;fill-opacity:0.40740739;stroke:none" />
     <g
        id="g5071"
-       transform="translate(20,0)">
+       transform="translate(30,0)">
       <image
          style="fill:url(#linearGradient5726);fill-opacity:1;stroke:url(#linearGradient5728);stroke-opacity:1"
          width="99.556175"
@@ -3233,7 +3251,7 @@
     </g>
     <g
        id="g5339"
-       transform="translate(-16,-43.068375)">
+       transform="translate(-6,-43.374358)">
       <image
          width="124.48131"
          height="82.904556"
@@ -3258,7 +3276,7 @@
     </g>
     <g
        id="g5324"
-       transform="translate(80.911312,-36.659789)">
+       transform="translate(90.911312,-36.659789)">
       <image
          y="-884.28046"
          x="990.26794"
@@ -3277,7 +3295,7 @@
     </g>
     <g
        id="g5344"
-       transform="translate(-167.79819,-38.923369)">
+       transform="translate(-157.79819,-36.923369)">
       <image
          width="97.00502"
          height="81.290207"
@@ -3775,7 +3793,7 @@
        ry="149.38486" />
     <g
        id="g12768-8"
-       transform="translate(989.4156,2115.0993)">
+       transform="translate(986.33632,2116.6389)">
       <rect
          y="-1547.6376"
          x="778.90588"
@@ -4011,15 +4029,15 @@
        id="g5590"
        transform="translate(-43.54753,81.804566)">
       <rect
-         ry="130.04138"
+         ry="131.15366"
          y="-724.73035"
          x="100.51974"
-         height="720.02277"
+         height="726.18134"
          width="637.87103"
          id="rect3508-4"
          style="fill:#1cafbd;fill-opacity:1;stroke:none" />
       <flowRoot
-         transform="translate(68.603623,-2449.42)"
+         transform="translate(68.603623,-2439.42)"
          style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          id="flowRoot5018"
          xml:space="preserve"><flowRegion
@@ -4031,7 +4049,7 @@
              width="490.39722"
              id="rect5022" /></flowRegion><flowPara
            style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-           id="flowPara5024">All pictures are then assigned to the keyword cluster they most strongly belong to based on their title and tags, which have been cleansed previously. This allows to take into account in which context the searched term appears in the picture.</flowPara></flowRoot>    </g>
+           id="flowPara5024">All pictures are then assigned to a keyword cluster. The cluster is chosen based on their title and tags, which have been cleansed previously. This step allows to take into account in which context the searched term appears in the picture.</flowPara></flowRoot>    </g>
     <flowRoot
        xml:space="preserve"
        id="flowRoot5026"
@@ -4080,12 +4098,12 @@
          sodipodi:linespacing="125%"
          id="text3762-2-2"
          y="-915.13202"
-         x="1455.7808"
+         x="1451.7808"
          style="font-size:64px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Lobster;-inkscape-font-specification:Lobster"
          xml:space="preserve"><tspan
            style="font-size:56px"
            y="-915.13202"
-           x="1455.7808"
+           x="1451.7808"
            id="tspan3764-7-65"
            sodipodi:role="line">Annotated Picture</tspan></text>
       <rect
@@ -4183,7 +4201,7 @@
          y="-88.583344"
          x="1419.6495"
          height="95.804565"
-         width="418.05627"
+         width="421.13556"
          id="rect12000"
          style="fill:#971923;fill-opacity:1;stroke:none" />
       <text
@@ -4222,5 +4240,17 @@
            id="tspan4992-8"
            sodipodi:role="line">find</tspan></text>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="6.4965706"
+       y="-1289.4646"
+       id="text3766-6-79-9-4"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3768-85-5-3-4"
+         x="6.4965706"
+         y="-1289.4646"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#a3ecf1;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">long</tspan></text>
   </g>
 </svg>
