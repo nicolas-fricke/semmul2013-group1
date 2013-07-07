@@ -8,7 +8,7 @@
     searchterm = $('#input-searchterm').val();
     $('#loading-popup-searchterm').text(searchterm);
     $('#loading-popup').modal('show');
-    return $('#result-container').load("http://localhost:5000/search/" + searchterm + " #result-container", searchDataArrived);
+    return $('#results').load("http://localhost:5000/search/" + searchterm + " #result-container", searchDataArrived).fadeIn("slow");
   };
 
   searchDataArrived = function(responseText, textStatus, XMLHttpRequest) {

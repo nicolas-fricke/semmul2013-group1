@@ -37,13 +37,24 @@
         width: 60px;
       }
 
-      .result-synset {
-        padding-left: 30px;
+      div.result-synset {
+        padding: 0 0 0 30px;
         overflow: hidden;
+        border: 1px solid #1cafbd;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      div#result-container > div.result-synset {
+        border-right: 1px solid #1cafbd;
+      }
+
+      div.result-synset:last-child + div.result-synset {
+        border-bottom: 1px solid #1cafbd;
       }
 
       .result-synset:nth-child(odd) {
-        background-color: #1cafbd;
+        background-color: #10939c;
       }
 
 
@@ -53,6 +64,7 @@
 
       .result-preview {
         white-space: nowrap;
+        padding-bottom: 10px;
       }
 
       .result-preview > img {
@@ -80,23 +92,27 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div id="results" class="container">
       <div id="result-container">
         {%- for synset in tree recursive %}
+          {% set node_loop = loop %}
           <div class="result-synset">
-            <div class="result-name pull-left">{{ synset.name }}</div>
-            <div class="result-preview pull-left">
-              {%- for mcl_cluster in synset.subclusters %}
-                {% set mcl_loop = loop %}
-                {%- for visual_cluster in mcl_cluster %}
-                  {% set visual_loop = loop %}
-                  {%- for _, image_url in visual_cluster %}
-                    <img src="{{ image_url }}"
-                         data-mcl-cluster="{{ mcl_loop.index }}"
-                         data-visual-cluster="{{ visual_loop.index }}"/>
+              <div style="display: inline-block;">
+              <div class="result-name">{{ synset.name }}</div>
+              <div class="result-preview">
+                {%- for mcl_cluster in synset.subclusters %}
+                  {% set mcl_loop = loop %}
+                  {%- for visual_cluster in mcl_cluster %}
+                    {% set visual_loop = loop %}
+                    {%- for _, image_url in visual_cluster %}
+                      <img src="{{ image_url }}"
+                           data-node-cluster="{{ node_loop.index }}"
+                           data-mcl-cluster="{{ mcl_loop.index }}"
+                           data-visual-cluster="{{ visual_loop.index }}"/>
+                    {%- endfor %}
                   {%- endfor %}
                 {%- endfor %}
-              {%- endfor %}
+              </div>
             </div>
             <div class="clearfix"></div>
             {%- if synset.hyponyms -%}

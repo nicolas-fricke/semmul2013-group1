@@ -2,7 +2,7 @@
   searchterm = $('#input-searchterm').val()
   $('#loading-popup-searchterm').text(searchterm)
   $('#loading-popup').modal('show')
-  $('#result-container').load("http://localhost:5000/search/" + searchterm + " #result-container", searchDataArrived)
+  $('#results').load("http://localhost:5000/search/" + searchterm + " #result-container", searchDataArrived).fadeIn("slow")
 
 searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   $('#loading-popup').modal('hide')
