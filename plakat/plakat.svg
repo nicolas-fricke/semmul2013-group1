@@ -24,11 +24,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.53913861"
-     inkscape:cx="1527.6248"
-     inkscape:cy="588.90535"
+     inkscape:zoom="0.31644949"
+     inkscape:cx="1735.4168"
+     inkscape:cy="1617.241"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
@@ -1723,8 +1723,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Background"
-     sodipodi:insensitive="true">
+     inkscape:label="Background">
     <rect
        style="fill:#1ebccb;fill-opacity:1"
        id="rect3760"
@@ -1767,17 +1766,17 @@
        style="fill:#1ebccb;fill-opacity:1;stroke:none"
        id="rect5361-1"
        width="1430.7363"
-       height="779.23431"
-       x="-163.08923"
+       height="765.82733"
+       x="-161.08923"
        y="1326.4108"
-       ry="92.591011" />
+       ry="97.701454" />
     <rect
        style="fill:#1cafbd;fill-opacity:1;stroke:none"
        id="rect5361-9"
        width="1087.2017"
        height="1020.1009"
-       x="1242.8029"
-       y="1967.4532"
+       x="1240.8029"
+       y="1959.4532"
        ry="142.49669" />
   </g>
   <g
@@ -2819,7 +2818,7 @@
          style="font-size:86px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Lobster;-inkscape-font-specification:Lobster">Macaw</tspan></text>
     <g
        id="g12773"
-       transform="translate(354.62106,-342.32951)">
+       transform="translate(354.62106,-366.32951)">
       <rect
          y="228.30803"
          x="1296.094"
@@ -2844,10 +2843,10 @@
        style="fill:#1ebccb;fill-opacity:1;stroke:none"
        id="rect3508"
        width="766.15948"
-       height="421.76376"
+       height="435.98404"
        x="1304.1808"
        y="-1592.7551"
-       ry="121.0853" />
+       ry="125.16783" />
     <g
        id="g12768"
        transform="translate(381.57258,-93.155125)">
@@ -3448,37 +3447,37 @@
        x="1415.4805"
        y="-1471.0239"
        id="text4338"
-       sodipodi:linespacing="110%"
+       sodipodi:linespacing="115%"
        transform="scale(0.98430118,1.0159492)"><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1471.0239"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4947">The search term spans a tree </tspan><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1418.2239"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4949">of hyponyms and partonyms. </tspan><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1365.424"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4951">Each node is enhanced with </tspan><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1312.6239"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4953">related terms, which are </tspan><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1259.824"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4988">included when searching </tspan><tspan
          sodipodi:role="line"
          x="1415.4805"
          y="-1207.0239"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;line-height:115%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
          id="tspan4955">for corresponding images.</tspan></text>
     <g
        id="g4630"
@@ -3815,20 +3814,27 @@
       <rect
          style="fill:#ffffff;fill-opacity:1;stroke:none"
          id="rect5041"
-         width="1075.624"
-         height="743.57404"
+         width="1051.1335"
+         height="245.86427"
          x="17.345699"
-         y="546.91119" />
+         y="508.91119" />
       <rect
          style="fill:#ffffff;fill-opacity:1;stroke:none"
          id="rect5045"
-         width="1952.9916"
-         height="278.14734"
-         x="44.651001"
-         y="1012.3008" />
+         width="1940.7462"
+         height="253.65686"
+         x="17.395466"
+         y="1045.4109" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none"
+         id="rect5043"
+         width="1151.0175"
+         height="244.62799"
+         x="17.376406"
+         y="776.94098" />
       <g
          id="g4887"
-         transform="translate(-4.1752302,-3.95582)">
+         transform="translate(-12.17523,-21.95582)">
         <image
            y="822.8009"
            x="450.53519"
@@ -3851,16 +3857,9 @@
            height="197.52277"
            width="263.36368" />
       </g>
-      <rect
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         id="rect5043"
-         width="330.78381"
-         height="498.22296"
-         x="876.32074"
-         y="782.94098" />
       <g
          id="g4892"
-         transform="matrix(0.97703131,0,0,0.97703131,-61.055908,18.763988)">
+         transform="matrix(0.97703131,0,0,0.97703131,-91.055908,0.763988)">
         <image
            y="816.93762"
            x="827.18671"
@@ -3879,7 +3878,7 @@
     </g>
     <g
        id="g4910"
-       transform="translate(53.822624,173.96388)">
+       transform="translate(47.336212,191.2594)">
       <g
          id="g4896">
         <image
@@ -3898,7 +3897,8 @@
            width="305.24857" />
       </g>
       <g
-         id="g4900">
+         id="g4900"
+         transform="translate(-10,0)">
         <image
            y="595.4101"
            x="867.13708"
@@ -3923,7 +3923,7 @@
       </g>
       <g
          id="g4905"
-         transform="translate(-72,0)">
+         transform="translate(-94,0)">
         <image
            y="594.65558"
            x="1414.3287"
@@ -3949,7 +3949,7 @@
     </g>
     <g
        id="g4932"
-       transform="translate(53.951477,-56.506252)">
+       transform="translate(45.951477,-110.50625)">
       <image
          width="259.56815"
          height="198.82921"
@@ -4025,7 +4025,7 @@
          id="rect3508-4"
          style="fill:#1cafbd;fill-opacity:1;stroke:none" />
       <flowRoot
-         transform="translate(68.603623,-2445.42)"
+         transform="translate(68.603623,-2457.42)"
          style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          id="flowRoot5018"
          xml:space="preserve"><flowRegion
@@ -4036,13 +4036,13 @@
              height="650.172"
              width="490.39722"
              id="rect5022" /></flowRegion><flowPara
-           style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:110.00000238%;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
-           id="flowPara5024">All pictures are then assigned to a keyword cluster. The cluster is chosen based on their title and tags, which have been cleansed previously. This allows to take into account in which context the searched term appears in the picture.</flowPara></flowRoot>    </g>
+           style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:114.99999762%;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin"
+           id="flowPara5024">All pictures are then assigned to a keyword cluster. The cluster is chosen based on their title and tags, which have been cleansed previously. This allows to take into account in which context the searched term (&quot;bird&quot;) appears in the picture.</flowPara></flowRoot>    </g>
     <flowRoot
        xml:space="preserve"
        id="flowRoot5026"
        style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(-8,-1963.5592)"><flowRegion
+       transform="translate(-8,-1967.5592)"><flowRegion
          id="flowRegion5028"><rect
            id="rect5030"
            width="566.58667"
@@ -4051,27 +4051,27 @@
            y="2148.5168"
            style="text-align:start;text-anchor:start" /></flowRegion><flowPara
          id="flowPara5032"
-         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:110.00000238%;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin">This is a subset of the result, depicting the &quot;parrot&quot; node. The vertical scale represents semantic groups, with subgroups obtained from the visual features where appropriate.</flowPara></flowRoot>    <rect
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:114.99999762%;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Cabin;-inkscape-font-specification:Cabin">This is a subset of the result, depicting the &quot;parrot&quot; node. The rows represent semantic groups, with subgroups obtained from the visual features where appropriate.</flowPara></flowRoot>    <rect
        style="fill:none;stroke:#ffffff;stroke-width:6.66775465;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect4354-7"
        width="999.83606"
        height="201.29262"
-       x="109.84635"
-       y="300.75397" />
+       x="101.84635"
+       y="246.51947" />
     <rect
        style="fill:none;stroke:#ffffff;stroke-width:7.03650665;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect4354-7-9"
        width="1121.6044"
        height="199.83517"
-       x="110.56099"
-       y="532.16748" />
+       x="102.56099"
+       y="514.16748" />
     <rect
-       style="fill:none;stroke:#ffffff;stroke-width:9.39887333;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#ffffff;stroke-width:9.35902405;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect4354-7-3"
-       width="1913.2026"
-       height="209.0201"
-       x="108.37744"
-       y="765.17084" />
+       width="1896.6522"
+       height="209.05995"
+       x="101.8711"
+       y="782.44647" />
     <g
        id="g5530"
        transform="translate(-2,26)">
