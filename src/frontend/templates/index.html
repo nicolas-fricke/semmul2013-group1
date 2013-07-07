@@ -70,6 +70,11 @@
       .result-preview > img {
         height: 100px;
       }
+
+      tooltip {
+        top: 0px !important;
+        left: 0px !important;
+      }
     </style>
   </head>
   <body>
@@ -96,7 +101,7 @@
       <div id="result-container">
         {%- for synset in tree recursive %}
           {% set node_loop = loop %}
-          <div class="result-synset">
+          <div class="result-synset" rel="tooltip" title="{{ synset.name }}">
               <div style="display: inline-block;">
               <div class="result-name">{{ synset.name }}</div>
               <div class="result-preview">
@@ -106,6 +111,8 @@
                     {% set visual_loop = loop %}
                     {%- for _, image_url in visual_cluster %}
                       <img src="{{ image_url }}"
+                           rel="tooltip"
+                           title="<img src='{{ image_url }}' />"
                            data-node-cluster="{{ node_loop.index }}"
                            data-mcl-cluster="{{ mcl_loop.index }}"
                            data-visual-cluster="{{ visual_loop.index }}"/>
