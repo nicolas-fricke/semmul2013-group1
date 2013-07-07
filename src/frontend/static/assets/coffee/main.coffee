@@ -11,7 +11,6 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   console.log "Search data arrived:", textStatus
   indentImages()
   activateTooltips()
-  shiftFooter()
 
 activateTooltips = ->
   $('.result-synset').tooltip
@@ -31,27 +30,18 @@ indentImages = ->
     if $(this).width() > max_width then max_width = $(this).width()
   $('.result-name').width(max_width)
 
-shiftFooter = ->
-  if $("body").height() - ($("#main-navigation").height() + $("#results").height()) > 0
-    $("footer").css
-      position: "absolute"
-      left: ($("body").width() - $(".container").width()) / 2
-      bottom: 0
-  else
-    $("footer").css
-      position: "relative"
-      left: 0
-      bottom: 0
-
-
 bindFunctions = ->
   # React on <Enter> on search field
   $('#input-searchterm').keyup (e) ->
     if e.keyCode is 13 # enter
       newSearch()
 
+setResultsMinHeight = ->
+  $("#results").css("min-height", $('body').height() - $('#main-navigation').height() - $('footer').height())
+
 $.ready = =>
   $('#loading-popup').modal('hide')
 #  bindFunctions()
   $("#input-searchterm").focus()
-  shiftFooter()
+  setResultsMinHeight()
+
