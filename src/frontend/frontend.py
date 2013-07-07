@@ -29,13 +29,26 @@ bufferedSearches = {}
 def hello():
   return render_template('index.html')
 
+def recursivelyCleanResult(results):
+  clean_results = []
+  for node in results:
+    if node.hyponyms:
+      node.hyponyms = recursivelyCleanResult(node.hyponyms)
+    if node.meronyms:
+      node.meronyms = recursivelyCleanResult(node.meronyms)
+    if node.meronyms or node.hyponyms or not node.subclusters == [[[]]]:
+      clean_results.append(node)
+  return clean_results
+
 @app.route("/search/<searchterm>")
 def search(searchterm):
   if searchterm not in bufferedSearches.keys():
-    bufferedSearches[searchterm] = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
-                                   visual_features=visual_features,
-                                   cluster_for_synsets=cluster_for_synsets,
-                                   keywords_for_pictures=keywords_for_pictures)
+    result = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
+                          visual_features=visual_features,
+                          cluster_for_synsets=cluster_for_synsets,
+                          keywords_for_pictures=keywords_for_pictures)
+
+    bufferedSearches[searchterm] = recursivelyCleanResult(result)
   return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
