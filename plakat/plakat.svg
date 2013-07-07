@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.32475173"
-     inkscape:cx="682.35891"
-     inkscape:cy="2125.2374"
+     inkscape:zoom="0.16237586"
+     inkscape:cx="453.19487"
+     inkscape:cy="1268.1374"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1527,8 +1527,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Background"
-     sodipodi:insensitive="true">
+     inkscape:label="Background">
     <rect
        style="fill:#1ebccb;fill-opacity:1"
        id="rect3760"
@@ -1571,10 +1570,10 @@
        style="fill:#1ebccb;fill-opacity:1;stroke:none"
        id="rect5361-1"
        width="1408.9625"
-       height="945.5152"
+       height="917.8017"
        x="-151.24184"
        y="1281.8986"
-       ry="70.076904" />
+       ry="68.022919" />
     <rect
        style="fill:#1cafbd;fill-opacity:1;stroke:none"
        id="rect5361-8-0-7"
@@ -2446,18 +2445,18 @@
        style="fill:#1ebccb;fill-opacity:1;stroke:none"
        id="rect3508"
        width="766.15948"
-       height="389.43137"
+       height="421.76376"
        x="1304.1808"
        y="-1592.7551"
-       ry="111.8029" />
+       ry="121.0853" />
     <g
        id="g12768"
-       transform="translate(357.57258,-93.155125)">
+       transform="translate(381.57258,-93.155125)">
       <rect
          y="-1547.6376"
          x="778.90588"
          height="95.804565"
-         width="418.05627"
+         width="370.32751"
          id="rect12000-5"
          style="fill:#971923;fill-opacity:1;stroke:none" />
       <text
@@ -2481,7 +2480,7 @@
          id="g5105">
         <g
            id="g12153"
-           transform="translate(1295.0095,-1485.5185)">
+           transform="translate(1291.0095,-1485.5185)">
           <rect
              y="513.70911"
              x="73.365585"
@@ -2570,7 +2569,29 @@
              x="1407.5223"
              sodipodi:role="line"
              id="tspan4920">bird&lt;3</tspan></text>
-      </g>
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4994"
+           style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:end;text-align:end"><flowRegion
+             id="flowRegion4996"><rect
+               id="rect4998"
+               width="515.77863"
+               height="327.94284"
+               x="1619.6989"
+               y="225.50932" /></flowRegion><flowPara
+             id="flowPara5000"></flowPara></flowRoot>        <flowRoot
+           xml:space="preserve"
+           id="flowRoot5002"
+           style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+           transform="translate(-58.27162,-1917.0833)"><flowRegion
+             id="flowRegion5004"><rect
+               id="rect5006"
+               width="917.62408"
+               height="275.59515"
+               x="117.01247"
+               y="1800.5587"
+               style="text-anchor:start;text-align:start;fill:#ffffff;fill-opacity:1" /></flowRegion><flowPara
+             id="flowPara5008">All pictures are then</flowPara></flowRoot>      </g>
     </g>
     <text
        xml:space="preserve"
@@ -3158,40 +3179,50 @@
        y="-1874.1284" />
     <text
        xml:space="preserve"
-       style="font-size:39.37204742px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="1405.3212"
-       y="-1443.4631"
+       style="font-size:39.37204742px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1399.2256"
+       y="-1459.2122"
        id="text4338"
-       sodipodi:linespacing="125%"
-       transform="scale(0.98430115,1.0159492)"><tspan
+       sodipodi:linespacing="100%"
+       transform="scale(0.98430118,1.0159492)"><tspan
          sodipodi:role="line"
-         x="1405.3212"
-         y="-1443.4631"
-         id="tspan4342"
-         style="font-size:48.00000082px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">This is a test text, I do not </tspan><tspan
+         x="1399.2256"
+         y="-1459.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4947">The search term spans a tree </tspan><tspan
          sodipodi:role="line"
-         x="1405.3212"
-         y="-1384.405"
-         id="tspan4346"
-         style="font-size:48.00000082px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">know what we will write here, </tspan><tspan
+         x="1399.2256"
+         y="-1411.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4949">of hyponyms and partonyms. </tspan><tspan
          sodipodi:role="line"
-         x="1405.3212"
-         y="-1325.3469"
-         id="tspan4348"
-         style="font-size:48.00000082px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">but it will be fantastic and </tspan><tspan
+         x="1399.2256"
+         y="-1363.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4951">Each node is enhanced with </tspan><tspan
          sodipodi:role="line"
-         x="1405.3212"
-         y="-1266.2889"
-         style="font-size:48.00000082px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
-         id="tspan4438">awesome</tspan></text>
+         x="1399.2256"
+         y="-1315.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4953">related terms, which are </tspan><tspan
+         sodipodi:role="line"
+         x="1399.2256"
+         y="-1267.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4988">included when searching </tspan><tspan
+         sodipodi:role="line"
+         x="1399.2256"
+         y="-1219.2122"
+         style="font-size:48.00000009px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:justify;writing-mode:lr"
+         id="tspan4955">for corresponding images.</tspan></text>
     <rect
        style="fill:#1cafbd;fill-opacity:1;stroke:none"
        id="rect3508-4"
        width="1030.3052"
-       height="380.72186"
+       height="314.51743"
        x="60.255852"
        y="-177.26825"
-       ry="109.30247" />
+       ry="90.295654" />
     <g
        id="g4630"
        transform="translate(-128.09154,-317.73857)">
@@ -3474,10 +3505,10 @@
        style="fill:#1ebccb;fill-opacity:1;stroke:none"
        id="rect3508-48"
        width="694.98914"
-       height="297.98157"
+       height="589.75"
        x="1359.0985"
        y="95.644897"
-       ry="85.548332" />
+       ry="169.31293" />
     <g
        id="g12768-8"
        transform="translate(578.31705,1644.7323)">
@@ -3501,5 +3532,209 @@
            id="tspan3764-7-3-5"
            sodipodi:role="line">The Result</tspan></text>
     </g>
-  </g>
+    <g
+       id="g4932"
+       transform="translate(-18,-18)">
+      <image
+         width="256.50204"
+         height="196.48058"
+         xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster00_img4.jpg"
+         id="image4686"
+         x="795.11462"
+         y="358.50241" />
+      <image
+         width="294.61139"
+         height="196.21118"
+         xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster00_img1.jpg"
+         id="image4697"
+         x="207.43713"
+         y="358.86819" />
+      <image
+         width="293.8468"
+         height="196.28966"
+         xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster00_img2.jpg"
+         id="image4708"
+         x="502.51923"
+         y="359.08331" />
+      <image
+         width="148.34207"
+         height="196.74016"
+         xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster00_img3.jpg"
+         id="image4719"
+         x="59.268982"
+         y="358.94626" />
+    </g>
+    <image
+       y="522.26123"
+       x="-878.28711"
+       id="image4796"
+       xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster11_img3.jpg"
+       height="196.38161"
+       width="130.79015" />
+    <g
+       id="g4910"
+       transform="translate(-16.177376,223.96388)">
+      <g
+         id="g4896">
+        <image
+           y="595.12299"
+           x="55.99527"
+           id="image4752"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/macaw.jpg"
+           height="196.64313"
+           width="240.90598" />
+        <image
+           y="595.10254"
+           x="273.41522"
+           id="image4730"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster10_img2.jpg"
+           height="196.65973"
+           width="295.28491" />
+      </g>
+      <g
+         id="g4900">
+        <image
+           y="595.4101"
+           x="871.13708"
+           id="image4774"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster11_img1.jpg"
+           height="196.67894"
+           width="293.55066" />
+        <image
+           y="594.87048"
+           x="1068.6863"
+           id="image4785"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster11_img2.jpg"
+           height="197.3918"
+           width="296.38406" />
+        <image
+           y="594.90826"
+           x="619.82214"
+           id="image4763"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster11_img4.jpg"
+           height="196.90587"
+           width="279.69583" />
+      </g>
+      <g
+         id="g4905">
+        <image
+           y="594.65558"
+           x="1422.3197"
+           id="image4807"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster12_img3.jpg"
+           height="197.74922"
+           width="263.66562" />
+        <image
+           y="594.21045"
+           x="1619.3934"
+           id="image4818"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster12_img1.jpg"
+           height="198.22212"
+           width="236.54192" />
+        <image
+           y="594.51086"
+           x="1838.022"
+           id="image4829"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster12_img2.jpg"
+           height="197.4612"
+           width="197.4612" />
+      </g>
+    </g>
+    <g
+       id="g4923"
+       transform="translate(-15.999975,-240.57567)">
+      <g
+         id="g4887">
+        <image
+           y="822.8009"
+           x="450.53519"
+           id="image4840"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster20_img3.jpg"
+           height="197.99954"
+           width="247.49942" />
+        <image
+           y="823.14709"
+           x="319.25449"
+           id="image4851"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster20_img1.jpg"
+           height="197.73778"
+           width="132.08884" />
+        <image
+           y="822.89343"
+           x="56.175205"
+           id="image4862"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster20_img2.jpg"
+           height="197.52277"
+           width="263.36368" />
+      </g>
+      <g
+         id="g4892"
+         transform="translate(-82,0)">
+        <image
+           y="823.052"
+           x="827.18671"
+           id="image4873"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster21_img2.jpg"
+           height="198.58733"
+           width="299.07727" />
+        <image
+           y="822.98224"
+           x="1125.9467"
+           id="image4884"
+           xlink:href="file:///C:/Users/kleiner%20Klotz/Documents/HPI/Semantic%20Multimedia/GitHub/semmul2013-group1/plakat/images/cluster21_img1.jpg"
+           height="199.16562"
+           width="130.25432" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1741.9012"
+       y="-1806.356"
+       id="text4990"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4992"
+         x="1741.9012"
+         y="-1806.356"
+         style="-inkscape-font-specification:Arial;font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:56px">search term</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5010"
+       style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,-1927.5592)"><flowRegion
+         id="flowRegion5012"><rect
+           id="rect5014"
+           width="869.89526"
+           height="250.96094"
+           x="144.72594"
+           y="1808.2568"
+           style="text-anchor:start;text-align:start;fill:#ffffff;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara5016" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5018"
+       style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(46,-1919.5592)"><flowRegion
+         id="flowRegion5020"><rect
+           id="rect5022"
+           width="871.48022"
+           height="256.21759"
+           x="123.17101"
+           y="1809.7965"
+           style="text-align:start;text-anchor:start" /></flowRegion><flowPara
+         id="flowPara5024"
+         style="font-size:48px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial">All pictures are then assigned to the keyword cluster they most strongly belong to based on their title and tags, which have been cleansed previously.</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot5026"
+       style="font-size:40px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(6,-1919.5592)"><flowRegion
+         id="flowRegion5028"><rect
+           id="rect5030"
+           width="566.58667"
+           height="480.36697"
+           x="1431.863"
+           y="2148.5168"
+           style="text-align:start;text-anchor:start" /></flowRegion><flowPara
+         id="flowPara5032"
+         style="font-size:48px;text-align:start;line-height:100%;text-anchor:start;fill:#ffffff;fill-opacity:1">This is a subset of the result, depicting the &quot;parrot&quot; node. The vertical scale represents semantic groups, with subgroups obtained from the visual features where appropriate.</flowPara></flowRoot>  </g>
 </svg>
