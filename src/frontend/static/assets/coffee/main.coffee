@@ -11,14 +11,14 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   activateTooltips()
 
 activateTooltips = ->
-  $( '.result-synset').tooltip
-    selector:''
-    placement:'left'
+  $('.result-synset').tooltip
+    selector: ''
+    placement: 'left'
     container: 'body'
     html: 'true'
-  $( 'img').tooltip
-    selector:''
-    placement:'bottom'
+  $('img').tooltip
+    selector: ''
+    placement: 'bottom'
     container: 'body'
     html: 'true'
 
