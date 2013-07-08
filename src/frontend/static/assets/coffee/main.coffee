@@ -11,6 +11,19 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   console.log "Search data arrived:", textStatus
   indentImages()
   activateTooltips()
+  addResultDetailsViewListener()
+
+openResultDetailsModalView = (targetNode) ->
+  $("#cluster-detail-popup").modal("show")
+  images = $(targetNode).children()
+  $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-name").text())
+  $("#cluster-detail-popup > .modal-body").empty()
+  $("#cluster-detail-popup > .modal-body").append(images.clone().height(120))
+  console.log targetNode
+
+addResultDetailsViewListener = ->
+  $(".result-preview").click (event) ->
+    openResultDetailsModalView(event.currentTarget)
 
 activateTooltips = ->
   $('.result-synset').tooltip
@@ -40,7 +53,12 @@ setResultsMinHeight = ->
   $("#results").css("min-height", $('body').height() - $('#main-navigation').height() - $('footer').height())
 
 $.ready = =>
+  $(".modal").modal().on("shown", ->
+    $("body").css "overflow", "hidden"
+  ).on("hidden", ->
+    $("body").css "overflow", "auto")
   $('#loading-popup').modal('hide')
+  $('#cluster-detail-popup').modal('hide')
 #  bindFunctions()
   $("#input-searchterm").focus()
   setResultsMinHeight()

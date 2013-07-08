@@ -40,17 +40,17 @@
       div.result-synset {
         padding: 0 0 0 30px;
         overflow: hidden;
-        border: 1px solid #1cafbd;
+        border: 2px solid #1cafbd;
         border-right: none;
         border-bottom: none;
       }
 
       div#result-container > div.result-synset {
-        border-right: 1px solid #1cafbd;
+        border-right: 2px solid #1cafbd;
       }
 
       div.result-synset:last-child + div.result-synset {
-        border-bottom: 1px solid #1cafbd;
+        border-bottom: 2px solid #1cafbd;
       }
 
       .result-synset:nth-child(odd) {
@@ -74,6 +74,14 @@
       tooltip {
         top: 0px !important;
         left: 0px !important;
+      }
+
+      #cluster-detail-popup {
+        width: 90%; /* desired relative width */
+        left: 5%; /* (100%-width)/2 */
+        /* place center */
+        margin-left:auto;
+        margin-right:auto;
       }
 
       footer {
@@ -143,6 +151,18 @@
         <div id="loading-progress" class="progress progress-info progress-striped active">
           <div class="bar" style="width: 100%;"></div>
         </div>
+      </div>
+    </div>
+    <div id="cluster-detail-popup" class="overlay-popup modal container hide fade" data-backdrop="true" data-keyboard="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Details on the &quot;<em id="cluster-detail-popup-synset">...</em>&quot; clusters</h3>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn">Close</button>
       </div>
     </div>
     <footer>
