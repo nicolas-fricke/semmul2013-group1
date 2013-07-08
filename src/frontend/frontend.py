@@ -43,7 +43,10 @@ def recursivelyCleanResult(results):
 @app.route("/search/<searchterm>")
 def search(searchterm):
   if searchterm not in bufferedSearches.keys():
-    result = get_clusters(searchterm, use_meronyms=False, visual_clustering_threshold=4, mcl_clustering_threshold=6,
+    result = get_clusters(searchterm, use_meronyms=False,
+                          visual_clustering_threshold=4,
+                          mcl_clustering_threshold=6,
+                          minimal_node_size=4,
                           visual_features=visual_features,
                           cluster_for_synsets=cluster_for_synsets,
                           keywords_for_pictures=keywords_for_pictures)
