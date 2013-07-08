@@ -62,6 +62,16 @@
         background-color: #1ebccb;
       }
 
+      .result-title h4 {
+        display: run-in;
+        color: white;
+        margin-right: 10px;
+      }
+
+      .result-title .result-description, #cluster-detail-popup-description{
+        font-style: italic;
+      }
+
       .result-preview {
         white-space: nowrap;
         padding-bottom: 10px;
@@ -88,6 +98,10 @@
         margin-right:auto;
       }
 
+      #cluster-detail-popup .modal-header button {
+        font-size: 2.4em;
+      }
+
       #cluster-detail-popup .modal-body {
         background-color: #1cafbd;
       }
@@ -107,6 +121,10 @@
 
       #cluster-detail-popup .mcl-cluster .visual-cluster img {
         margin: 2px;
+      }
+
+      #cluster-detail-popup-definition {
+        margin: 1px 0 2px;
       }
 
       footer {
@@ -139,7 +157,7 @@
           {% set node_loop = loop %}
           <div class="result-synset" rel="tooltip" title="{{ synset.name }}">
             <div style="display: inline-block;">
-              <div class="result-name">{{ synset.name }}</div>
+              <div class="result-title"><h4 class="result-name">{{ synset.name }}</h4><p class="result-description">{{ synset.definition }}</p></div>
               <div class="result-preview">
                 {%- for mcl_cluster in synset.subclusters %}
                   {% set mcl_loop = loop %}
@@ -181,13 +199,13 @@
     <div id="cluster-detail-popup" class="overlay-popup modal container hide fade" data-backdrop="true" data-keyboard="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>Details on the &quot;<em id="cluster-detail-popup-synset">...</em>&quot; clusters</h3>
+        <h3>Details view for &quot;<em id="cluster-detail-popup-synset">...</em>&quot; clusters</h3>
+        <p id="cluster-detail-popup-definition">Definition: <em>...</em></p>
       </div>
       <div class="modal-body">
 
       </div>
       <div class="modal-footer">
-{#        <button type="button" data-dismiss="modal" class="btn">Close</button>#}
       </div>
     </div>
     <footer>

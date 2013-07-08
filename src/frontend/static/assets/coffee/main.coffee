@@ -9,18 +9,19 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
     $('#loading-popup')
   $('#loading-popup').modal('hide')
   console.log "Search data arrived:", textStatus
-  indentImages()
   activateTooltips()
   addResultDetailsViewListener()
 
 openResultDetailsModalView = (targetNode) ->
   $("#cluster-detail-popup").modal("show")
   images = $(targetNode).children()
-  $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-name").text())
+  $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-title").children(".result-name").text())
+  $("#cluster-detail-popup-definition em").text($(targetNode).siblings(".result-title").children(".result-description").text())
   $("#cluster-detail-popup > .modal-body").empty()
   $("#cluster-detail-popup > .modal-body").append(images.clone().height(120))
   detailsViewOrderImagesByMclCluster()
 
+  window.deb = targetNode
   console.log targetNode
 
 detailsViewOrderImagesByMclCluster = ->
@@ -60,12 +61,6 @@ activateTooltips = ->
     placement: 'bottom'
     container: 'body'
     html: 'true'
-
-indentImages = ->
-  max_width = 0
-  $('.result-name').each ->
-    if $(this).width() > max_width then max_width = $(this).width()
-  $('.result-name').width(max_width)
 
 bindFunctions = ->
   # React on <Enter> on search field
