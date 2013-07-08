@@ -59,6 +59,7 @@
         $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='visual-cluster pull-left'></div>");
         $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child > .visual-cluster:last-child").append(visualCluster);
       }
+      $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child > .visual-cluster:last-child").append("<div class='clearfix'></div>");
       _results.push($("#cluster-detail-popup > .modal-body").append("<div class='clearfix'></div>"));
     }
     return _results;
