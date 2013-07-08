@@ -19,7 +19,24 @@ openResultDetailsModalView = (targetNode) ->
   $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-name").text())
   $("#cluster-detail-popup > .modal-body").empty()
   $("#cluster-detail-popup > .modal-body").append(images.clone().height(120))
+  detailsViewOrderImagesByMclCluster()
+
   console.log targetNode
+
+detailsViewOrderImagesByMclCluster = ->
+  $synsetImages = $("#cluster-detail-popup > .modal-body > img")
+  dict = {}
+
+  for domImage in $synsetImages
+    $image = $(domImage)
+    if not dict[$image.attr("data-mcl-cluster")]
+      dict[$image.attr("data-mcl-cluster")] = []
+    dict[$image.attr("data-mcl-cluster")].push $image[0]
+
+  for key, value of dict
+    $("#cluster-detail-popup > .modal-body").append("<div class='mcl-cluster'></div>")
+    $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append(value)
+    $("#cluster-detail-popup > .modal-body").append("<div class='clearfix'></div>")
 
 addResultDetailsViewListener = ->
   $(".result-preview").click (event) ->
