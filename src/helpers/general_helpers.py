@@ -38,7 +38,10 @@ def write_json_file(obj, filename):
 
 def parse_json_file(json_file):
   with open(json_file) as file:
-    return json.load(file)
+    try:
+      return json.load(file)
+    except ValueError:
+      return None
 
 def construct_path_to_json(metajson):
   parent_folder_name = metajson[:2]
@@ -129,6 +132,9 @@ def load_visual_features():
   visual_features_filename = get_name_from_config('Filenames for Pickles', 'visual_features_filename')
   visual_features_filename = visual_features_filename.replace('##', 'all')
   visual_features = parse_json_file(visual_features_filename)
+  if visual_features == None:
+    print "Could not read visual_features file %s" % visual_features_filename
+    return {}
   return visual_features
 
 def load_cluster_for_synsets():

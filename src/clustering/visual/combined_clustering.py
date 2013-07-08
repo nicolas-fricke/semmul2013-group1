@@ -22,7 +22,8 @@ def extract_features(image_cluster, metadata_dir):
     relative_path_to_json = construct_path_to_json(metajson_file)
     full_path_to_json = metadata_dir + relative_path_to_json
     metadata = parse_json_file(full_path_to_json)
-
+    if metadata == None:
+      continue
     if metadata["stat"] == "ok":
       data = {}
       url = get_small_image_url(metadata)
@@ -40,16 +41,20 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 # Reading preprocessed visual features from file
-def read_features_from_file(cluster, json_filename, metadata_dir):
+def read_features_from_file(cluster, features_json_filename, metadata_dir):
   images = []
-  json_file = parse_json_file(json_filename)
+  features_json_file = parse_json_file(features_json_filename)
+  if features_json_file == None:
+    return images
   for picture_json_filename, _ in cluster:
     relative_path_to_json = construct_path_to_json(picture_json_filename)
     full_path_to_json = metadata_dir + relative_path_to_json
     picture_json_file = parse_json_file(full_path_to_json)
+    if picture_json_file == None:
+      continue
 
     if picture_json_file["stat"] == "ok":
-      data = json_file[picture_json_file["id"]]
+      data = features_json_file[picture_json_file["id"]]
       data["image_id"] = picture_json_file["id"]
     images.append(data)
 
@@ -62,6 +67,8 @@ def assign_visual_features(cluster, visual_features, metadata_dir):
     relative_path_to_json = construct_path_to_json(picture_json_filename)
     full_path_to_json = metadata_dir + relative_path_to_json
     picture_json_file = parse_json_file(full_path_to_json)
+    if picture_json_file == None:
+      continue
 
     if picture_json_file["stat"] == "ok":
       data = visual_features[picture_json_file["id"]]
@@ -201,6 +208,10 @@ def main(argv):
     for metajson_file in metajson_files:
 
       metadata = parse_json_file(metajson_file)
+      if metadata == None:
+        print "Could not read json file %s" % metajson_file
+        continue
+
       print_status("ID: " + metadata["id"] + " File number: " + metajson_file + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):

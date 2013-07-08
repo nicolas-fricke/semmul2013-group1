@@ -31,7 +31,7 @@ from helpers.visual_helpers import *
 def distance_function(u, v):
   sum = 0
   for i in range(0, len(u)):
-    #if i < 
+    #if i <
     sum += (u[i] - v[i]) ** 2
   #sum_u = sum(u[20:30])
   #sum_v = sum(v[20:30])
@@ -72,6 +72,8 @@ def main(argv):
     file_number = 0
     for metajson_file in metajson_files:
       metadata = parse_json_file(metajson_file)
+      if metadata == None:
+        continue
       if metadata["stat"] == "ok":
         if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
           continue

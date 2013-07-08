@@ -12,7 +12,11 @@ def main():
   # combine all visual jsons in path to one json
   monster_json = {}
   for json_file in find_metajsons_to_process_in_dir(visual_data_dir):
-    monster_json.update(parse_json_file(json_file))
+    parsed_json = parse_json_file(json_file)
+    if parsed_json == None:
+      print "Could not read json file %s" % json_file
+      continue
+    monster_json.update(parsed_json)
 
   write_json_file(monster_json,visual_features_filename)
 

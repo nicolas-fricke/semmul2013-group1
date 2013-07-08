@@ -50,6 +50,10 @@ def main():
   images = []
   for file_number, metajson_file in enumerate(metajson_files):
     metadata = parse_json_file(metajson_file)
+    if metadata == None:
+      print "Could not read json file %s" % metajson_file
+      continue
+
     if metadata["stat"] == "ok":
       data = {}
       url      = get_small_image_url(metadata)
