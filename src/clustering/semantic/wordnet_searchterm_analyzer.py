@@ -21,8 +21,9 @@ from helpers.general_helpers import *
 from clustering.semantic.tag_preprocessing import *
 
 class WordnetNode:
-  def __init__(self, name, hyponyms, meronyms, co_occurring_tags=None):
+  def __init__(self, name, hyponyms, meronyms, definition, co_occurring_tags=None):
     self.name = name
+    self.definition = definition
     self.co_occurring_tags = co_occurring_tags if isinstance(co_occurring_tags, list) else [] 
     self.hyponyms = hyponyms if isinstance(hyponyms, list) else []
     self.meronyms = meronyms if isinstance(meronyms, list) else []
@@ -103,6 +104,7 @@ def recursively_find_all_hyponyms_on_wordnet(synset_name, tf_idf_tuple, synsets_
 
         hyponyms_of_synset.append(WordnetNode(
           name = hyponym.name,
+          definition = hyponym.definition,
           hyponyms = hyponym_subtrees,
           meronyms = meronym_subtrees,
           co_occurring_tags = find_strong_co_occurrences(hyponym.name, tf_idf_tuple)
@@ -127,6 +129,7 @@ def recursively_find_all_meronyms_on_wordnet(synset_name, tf_idf_tuple, synsets_
 
         meronyms_of_synset.append(WordnetNode(
           name = meronym.name,
+          definition = meronym.definition,
           hyponyms = hyponym_subtrees,
           meronyms = meronym_subtrees,
           co_occurring_tags = find_strong_co_occurrences(meronym.name, tf_idf_tuple)
@@ -149,6 +152,7 @@ def construct_searchtree(word, tf_idf_tuple, use_meronyms=False):
 
       hyponym_tree.append(WordnetNode(
         name = synset.name,
+        definition = synset.definition,
         hyponyms = hyponym_subtrees,
         meronyms = meronym_subtrees,
         co_occurring_tags = find_strong_co_occurrences(synset.name, tf_idf_tuple)
