@@ -13,16 +13,15 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   addResultDetailsViewListener()
 
 openResultDetailsModalView = (targetNode) ->
-  $("#cluster-detail-popup").modal("show")
   images = $(targetNode).children()
   $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-title").children(".result-name").text())
   $("#cluster-detail-popup-definition em").text($(targetNode).siblings(".result-title").children(".result-description").text())
   $("#cluster-detail-popup > .modal-body").empty()
   $("#cluster-detail-popup > .modal-body").append(images.clone().height(120))
   detailsViewOrderImagesByMclCluster()
-
-  window.deb = targetNode
-  console.log targetNode
+  $("#cluster-detail-popup .modal-body").css("max-height",
+      ($(window).height() * 0.95 - $("#cluster-detail-popup .modal-header").outerHeight() - $("#cluster-detail-popup .modal-footer").outerHeight()) * 0.8)
+  $("#cluster-detail-popup").modal("show")
 
 detailsViewOrderImagesByMclCluster = ->
   $synsetImages = $("#cluster-detail-popup > .modal-body > img")

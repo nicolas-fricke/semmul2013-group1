@@ -4,14 +4,14 @@
     <title>Semantic Multimedia – Flickr Clusterer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% assets output="gen/bootstrap-amilia.css",
-          "assets/css/bootstrap-amilia.css" %}
+            "assets/css/bootstrap-amilia.css" %}
       <link href="{{ ASSET_URL }}" rel="stylesheet" media="screen">
     {% endassets %}
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 
     {% assets output="gen/main.js",
-          "assets/js/bootstrap.js", "assets/js/main.js" %}
+            "assets/js/bootstrap.js", "assets/js/main.js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
@@ -21,7 +21,7 @@
       }
 
       .navbar-inner {
-        min-height: 50px;
+        min-height: 54px;
       }
 
       #loading-progress {
@@ -85,10 +85,10 @@
         height: 100px;
       }
 
-{#      .tooltip {#}
-{#        top: 0px !important;#}
-{#        left: 0px !important;#}
-{#      }#}
+      {#      .tooltip {#}
+      {#        top: 0px !important;#}
+      {#        left: 0px !important;#}
+      {#      }#}
 
       .tooltip.in {
         opacity: 1;
@@ -100,6 +100,10 @@
         /* place center */
         margin-left:auto;
         margin-right:auto;
+      }
+
+      #cluster-detail-popup.modal.fade.in {
+        top: 5%;
       }
 
       #cluster-detail-popup .modal-header button {
@@ -188,8 +192,8 @@
             {%- endif %}
           </div> {# #result-synset #}
         {%- endfor %}
-        </div> {# #result-container #}
-      </div> {# #results .container #}
+      </div> {# #result-container #}
+    </div> {# #results .container #}
     </div>
     <div id="loading-popup" class="overlay-popup modal hide fade" data-backdrop="static" data-keyboard="false">
       <div class="modal-header">
