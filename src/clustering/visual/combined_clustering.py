@@ -54,9 +54,12 @@ def read_features_from_file(cluster, features_json_filename, metadata_dir):
       continue
 
     if picture_json_file["stat"] == "ok":
-      data = features_json_file[picture_json_file["id"]]
-      data["image_id"] = picture_json_file["id"]
-    images.append(data)
+      try:
+        data = features_json_file[picture_json_file["id"]]
+        data["image_id"] = picture_json_file["id"]
+        images.append(data)
+      except KeyError:
+        continue
 
   return images
 
@@ -71,9 +74,12 @@ def assign_visual_features(cluster, visual_features, metadata_dir):
       continue
 
     if picture_json_file["stat"] == "ok":
-      data = visual_features[picture_json_file["id"]]
-      data["image_id"] = picture_json_file["id"]
-    images.append(data)
+      try:
+        data = visual_features[picture_json_file["id"]]
+        data["image_id"] = picture_json_file["id"]
+        images.append(data)
+      except KeyError:
+        continue
 
   return images
 
