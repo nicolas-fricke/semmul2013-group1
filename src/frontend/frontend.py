@@ -46,6 +46,7 @@ def search(searchterm):
     result = get_clusters(searchterm, use_meronyms=False,
                           visual_clustering_threshold=4,
                           mcl_clustering_threshold=6,
+                          minimal_mcl_cluster_size=2,
                           minimal_node_size=4,
                           visual_features=visual_features,
                           cluster_for_synsets=cluster_for_synsets,

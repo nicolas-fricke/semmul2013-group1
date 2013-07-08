@@ -109,7 +109,7 @@ def get_clusters_with_highest_counter(cluster_counter):
   return result
 
 
-def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=None, url_and_keywords_for_pictures=None):
+def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, url_and_keywords_for_pictures=None):
   if url_and_keywords_for_pictures == None or cluster_for_synsets == None:
     config = ConfigParser.SafeConfigParser()
     config.read('../config.cfg')
@@ -121,6 +121,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=
       url_and_keywords_for_pictures = load_object(keywords_for_pictures_filename)
 
   pictures_for_clusters = defaultdict(list)
+  subcluster_list = []
 
   if len(searchtree.associated_pictures) >= mcl_clustering_threshold:
     for picture in searchtree.associated_pictures:
@@ -138,7 +139,11 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=
         print "unassignable picture: ", picture[0]
         pictures_for_clusters[0].append(picture)
 
-    searchtree.subclusters = pictures_for_clusters.values()
+    for pictures in pictures_for_clusters.values():
+      if len(pictures) >= minimal_mcl_cluster_size:
+        subcluster_list.append(pictures)
+
+    searchtree.subclusters = subcluster_list
     print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
   else:
     searchtree.subclusters = [searchtree.associated_pictures]
@@ -146,9 +151,9 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, cluster_for_synsets=
   # Recursively traverse tree
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
-      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, cluster_for_synsets, url_and_keywords_for_pictures)
+      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, url_and_keywords_for_pictures)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
-      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, cluster_for_synsets, url_and_keywords_for_pictures)
+      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, url_and_keywords_for_pictures)
 
   return searchtree
