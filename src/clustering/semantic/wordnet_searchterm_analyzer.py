@@ -21,7 +21,7 @@ from helpers.general_helpers import *
 from clustering.semantic.tag_preprocessing import *
 
 class WordnetNode:
-  def __init__(self, name, hyponyms, meronyms, co_occurring_tags=None, definition):
+  def __init__(self, name, hyponyms, meronyms, definition, co_occurring_tags=None):
     self.name = name
     self.definition = definition
     self.co_occurring_tags = co_occurring_tags if isinstance(co_occurring_tags, list) else [] 
