@@ -29,13 +29,19 @@ detailsViewOrderImagesByMclCluster = ->
 
   for domImage in $synsetImages
     $image = $(domImage)
-    if not dict[$image.attr("data-mcl-cluster")]
-      dict[$image.attr("data-mcl-cluster")] = []
-    dict[$image.attr("data-mcl-cluster")].push $image[0]
+    mclClusterName = $image.attr("data-mcl-cluster")
+    visualClusterName = $image.attr("data-visual-cluster")
+    if not dict[mclClusterName]
+      dict[mclClusterName] = {}
+    if not dict[mclClusterName][visualClusterName]
+      dict[mclClusterName][visualClusterName] = []
+    dict[mclClusterName][visualClusterName].push $image[0]
 
-  for key, value of dict
+  for mclClusterName, mclCluster of dict
     $("#cluster-detail-popup > .modal-body").append("<div class='mcl-cluster'></div>")
-    $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append(value)
+    for visualClusterName, visualCluster of mclCluster
+      $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='visual-cluster pull-left'></div>")
+      $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child > .visual-cluster:last-child").append(visualCluster)
     $("#cluster-detail-popup > .modal-body").append("<div class='clearfix'></div>")
 
 addResultDetailsViewListener = ->
