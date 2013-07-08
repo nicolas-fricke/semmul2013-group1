@@ -141,7 +141,8 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
 
     for pictures in pictures_for_clusters.values():
       if len(pictures) >= minimal_mcl_cluster_size:
-        subcluster_list.append(pictures)
+        if pictures not in subcluster_list:
+          subcluster_list.append(pictures)
 
     searchtree.subclusters = subcluster_list
     print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
