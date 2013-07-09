@@ -11,6 +11,7 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   console.log "Search data arrived:", textStatus
   activateTooltips()
   addResultDetailsViewListener()
+  addResultSynsetMouseenterListener()
 
 openResultDetailsModalView = (targetNode) ->
   images = $(targetNode).children()
@@ -47,18 +48,36 @@ detailsViewOrderImagesByMclCluster = ->
 
 addResultDetailsViewListener = ->
   $(".result-preview").click (event) ->
+    $(".tooltip").remove()
     openResultDetailsModalView(event.currentTarget)
+
+addResultSynsetMouseenterListener = ->
+  $('.result-synset').mouseenter( (event) ->
+    event.stopPropagation()
+    $hoveredSynset = $(@)
+    recursivelyPositionTooltips $hoveredSynset, $hoveredSynset.position().top
+  )
+  $('.result-synset').mouseleave( ->
+    $(@).tooltip("hide")
+  )
+
+recursivelyPositionTooltips = (synsetNode, topPosition) ->
+  synsetNode.tooltip("show")
+  synsetNode.siblings('.tooltip').css("top", topPosition)
+  if synsetNode.parent().hasClass 'result-synset'
+    recursivelyPositionTooltips(synsetNode.parent(),
+        topPosition - (synsetNode.siblings('.tooltip').height() + 10))
+
 
 activateTooltips = ->
   $('.result-synset').tooltip
     selector: ''
     placement: 'left'
-    container: 'body'
     html: 'true'
+    trigger: 'manual'
   $('img').tooltip
     selector: ''
     placement: 'bottom'
-    container: 'body'
     html: 'true'
 
 bindFunctions = ->

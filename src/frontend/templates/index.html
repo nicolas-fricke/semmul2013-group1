@@ -49,16 +49,16 @@
         border-right: 2px solid #1cafbd;
       }
 
-      div.result-synset:last-child + div.result-synset {
+      .result-synset:last-child + div.result-synset {
         border-bottom: 2px solid #1cafbd;
       }
 
-      .result-synset:nth-child(odd) {
+      .result-synset.odd-row {
         background-color: #10939c;
       }
 
 
-      .result-synset:nth-child(even) {
+      .result-synset.even-row {
         background-color: #1ebccb;
       }
 
@@ -164,7 +164,9 @@
       <div id="result-container">
         {%- for synset in tree recursive %}
           {% set node_loop = loop %}
-          <div class="result-synset" rel="tooltip" title="{{ synset.name }}">
+          <div class="result-synset {% if (node_loop.index + loop.depth) is divisibleby 2 %} even-row
+                                    {% else %} odd-row
+                                    {% endif %}" rel="tooltip" title="{{ synset.name }}">
             <div style="display: inline-block;">
               <div class="result-title"><h4 class="result-name">{{ synset.name }}</h4><p class="result-description">{{ synset.definition }}</p></div>
               <div class="result-preview">
