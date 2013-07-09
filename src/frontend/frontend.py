@@ -56,4 +56,4 @@ def search(searchterm):
   return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
-  app.run(debug=False)
+  app.run(debug=True)
