@@ -96,7 +96,8 @@ $.ready = =>
     $("body").css "overflow", "auto")
   $('#loading-popup').modal('hide')
   $('#cluster-detail-popup').modal('hide')
-#  bindFunctions()
+  bindFunctions()
   $("#input-searchterm").focus()
   setResultsMinHeight()
+  window.onbeforeunload = -> 'Do you really want to leave the page?'
 

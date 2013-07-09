@@ -127,8 +127,12 @@
     });
     $('#loading-popup').modal('hide');
     $('#cluster-detail-popup').modal('hide');
+    bindFunctions();
     $("#input-searchterm").focus();
-    return setResultsMinHeight();
+    setResultsMinHeight();
+    return window.onbeforeunload = function() {
+      return 'Do you really want to leave the page?';
+    };
   };
 
 }).call(this);
