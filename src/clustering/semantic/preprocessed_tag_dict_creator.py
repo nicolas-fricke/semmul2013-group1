@@ -23,7 +23,7 @@ import gc
 from helpers.general_helpers import *
 
 from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
-from clustering.semantic.synset_detection import *
+from clustering.semantic.synset_detection_bestfirstsearch import *
 from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
