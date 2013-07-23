@@ -1,3 +1,4 @@
+import argparse
 import ConfigParser
 import json
 import bisect
@@ -69,15 +70,15 @@ def find_synsets_and_unmatched_tags(tag_list):
       current_distance = calculate_current_distance(possible_synset, assumed_synsets, 0)
       assumed_synsets.append(possible_synset)
       bisect.insort(possible_paths, (current_distance, assumed_synsets, 1))
-      #print possible_paths 
+      #print possible_paths
 
     found_solution = False
     while not found_solution:
       possible_paths, found_solution = extend_best_path(possible_paths, indefinite_synsets)
-      
-    synsets.extend(possible_paths[0][1])  
 
-  #for indefinite_synset in indefinite_synsets:  
+    synsets.extend(possible_paths[0][1])
+
+  #for indefinite_synset in indefinite_synsets:
     #initialize index to 0 so that if no tags with single synset (=synsets[index_of_json] empty), first synset will be chosen
     # max_sim_sum = (0, 0)
     # for index, synset in enumerate(indefinite_synset):
@@ -91,7 +92,7 @@ def find_synsets_and_unmatched_tags(tag_list):
 
   return synsets, unmatched_tags
 
-def parse_json_data(json_files, number_of_jsons):
+def parse_json_data(json_files, number_of_jsons=10000):
   synsets_for_pictures = dict()
   for index_of_json, json_file in enumerate(json_files):
     if index_of_json > number_of_jsons:
@@ -125,14 +126,19 @@ def restore_keywords_for_pictures(storable_keywords_for_pictures):
     keywords_for_pictures[photo_filename] = (photo_url, synsets, unmatched_tags)
   return keywords_for_pictures
 
-def synset_detection(number_of_jsons):
+def synset_detection(number_of_jsons=10000, subdirectory=None):
   # import configuration
   metadata_dir = import_metadata_dir_of_config('../config.cfg')
 
-  # read json files from metadata directory
-  print_status("Reading %d Json Files... " % number_of_jsons)
-  json_files = find_metajsons_to_process(metadata_dir)
-  print "Done."
+  if subdirectory == None:
+    # read json files from metadata directory
+    print_status("Reading %d Json Files... " % number_of_jsons)
+    json_files = find_metajsons_to_process(metadata_dir)
+    print "Done."
+  else:
+    metadata_dir += subdirectory
+    json_files = find_metajsons_to_process_in_dir(metadata_dir)
+    print "Using directory %s . %d files" % (metadata_dir, len(json_files))
 
   # parse data from json files
   print_status("Parsing json files and detecting synsets... ")
@@ -150,3 +156,19 @@ def synset_detection(number_of_jsons):
   print "Done."
 
   return keywords_for_pictures, storable_keywords_for_pictures
+
+def parse_command_line_arguments():
+  parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
+  parser.add_argument('-d','--directory_to_preprocess', dest='directory_to_preprocess', type=str,
+                      help='Specifies the directory which we want to preprocess')
+  args = parser.parse_args()
+  return args
+
+def main(argv):
+  arguments = parse_command_line_arguments()
+  print "Calling synset detection for dir", arguments.directory_to_preprocess
+  synset_detection(subdirectory=arguments.directory_to_preprocess)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+
