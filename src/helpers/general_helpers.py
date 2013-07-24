@@ -3,6 +3,7 @@ import json
 import sys
 import time
 import os
+import os.path
 import cPickle as pickle
 import ConfigParser
 
@@ -46,7 +47,7 @@ def parse_json_file(json_file):
 def construct_path_to_json(metajson):
   parent_folder_name = metajson[:2]
   grand_parent_folder_name = parent_folder_name[:1]+"0-"+parent_folder_name[:1]+"9"
-  return "/"+grand_parent_folder_name+"/"+parent_folder_name+"/"+metajson
+  return os.sep+grand_parent_folder_name+os.sep+parent_folder_name+os.sep+metajson
 
 def get_small_image_url(metajson):
   if not metajson.get("stat") == "ok":
