@@ -16,6 +16,7 @@
 
 import ConfigParser
 import json
+import os.path
 from collections import defaultdict
 from SimpleCV import Image
 from SimpleCV import EdgeHistogramFeatureExtractor
@@ -58,7 +59,7 @@ def main():
       data = {}
       url      = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = metajson_file
+      data["file_path"] = metajson_file.split(os.sep)[-1]
       data["url"]       = url
       try:
         image = Image(url)

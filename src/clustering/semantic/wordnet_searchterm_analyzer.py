@@ -79,7 +79,11 @@ def find_strong_co_occurrences(synset_name, tf_idf_tuple):
 
   threshold = max_tf_idf * 0.75
 
-  tag_tf_idf_list = synset_tag_tf_idf_dict[synset_name]
+  try:
+    tag_tf_idf_list = synset_tag_tf_idf_dict[synset_name]
+  except KeyError: 
+    tag_tf_idf_list = []
+
   for tag, tf_idf in tag_tf_idf_list:
     if tf_idf > threshold:
       tags_with_strong_co_occurrence.append(tag)

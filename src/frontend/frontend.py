@@ -26,6 +26,13 @@ bufferedSearches = {}
 def hello():
   return render_template('index.html')
 
+def node_subclusters_empty(subcluster_structure):
+  for mcl_cluster in subcluster_structure:
+    if mcl_cluster["subcluster"] != [[]]:
+      return False
+  return True
+
+
 def recursivelyCleanResult(results):
   clean_results = []
   for node in results:
@@ -33,7 +40,7 @@ def recursivelyCleanResult(results):
       node.hyponyms = recursivelyCleanResult(node.hyponyms)
     if node.meronyms:
       node.meronyms = recursivelyCleanResult(node.meronyms)
-    if node.meronyms or node.hyponyms or not node.subclusters == [[[]]]:
+    if node.meronyms or node.hyponyms or not node_subclusters_empty(node.subclusters):
       clean_results.append(node)
   return clean_results
 
@@ -42,8 +49,8 @@ def search(searchterm):
   if searchterm not in bufferedSearches.keys():
     result = get_clusters(searchterm, use_meronyms=False,
                           visual_clustering_threshold=4,
-                          mcl_clustering_threshold=6,
-                          minimal_mcl_cluster_size=2,
+                          mcl_clustering_threshold=4,
+                          minimal_mcl_cluster_size=6,
                           minimal_node_size=4,
                           cluster_for_synsets=cluster_for_synsets,
                           keywords_for_pictures=keywords_for_pictures)
