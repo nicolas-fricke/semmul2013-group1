@@ -2,6 +2,7 @@ import argparse
 import ConfigParser
 import json
 import numpy as np
+import os.path
 from collections import defaultdict
 from SimpleCV import Image
 from math import log, pow
@@ -204,7 +205,7 @@ def main(argv):
     if arguments.directory_to_preprocess:
       metadata_dir += arguments.directory_to_preprocess
       metajson_files = find_metajsons_to_process_in_dir(metadata_dir)
-      visual_features_filename = visual_features_filename.replace('##', arguments.directory_to_preprocess.split('/')[-1])
+      visual_features_filename = visual_features_filename.replace('##', arguments.directory_to_preprocess.split(os.sep)[-1])
     else:
       metajson_files = find_metajsons_to_process(metadata_dir)
       visual_features_filename = visual_features_filename.replace('##', 'all')

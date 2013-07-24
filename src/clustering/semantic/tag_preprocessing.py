@@ -76,7 +76,7 @@ def read_keywords_from_json(json_data):
   keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["title"]["_content"]))
 
   # Description
-  keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["description"]["_content"]))
+  # keyword_list.extend(get_keywords_for_key(json_data["metadata"]["info"]["description"]["_content"]))
 
   return keyword_list
 

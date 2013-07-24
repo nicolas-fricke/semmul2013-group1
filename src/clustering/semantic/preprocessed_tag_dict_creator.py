@@ -23,7 +23,7 @@ import gc
 from helpers.general_helpers import *
 
 from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
-from clustering.semantic.synset_detection import *
+from clustering.semantic.synset_detection_bestfirstsearch import *
 from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
@@ -71,7 +71,7 @@ def main():
   unmatched_tag_filenames_dict_filename = config.get('Filenames for Pickles', 'unmatched_tag_filenames_dict_filename')
 
   print_status("Detecting synsets for the tags of every picture... \n")
-  _, storable_keywords_for_pictures = synset_detection(number_of_jsons)
+  storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
   print_status("Done detecting synsets \n")
 
   print_status("Writing keywords_for_pictures... ")

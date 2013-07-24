@@ -139,7 +139,9 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
         print "unassignable picture: ", picture[0]
         pictures_for_clusters[0].append(picture)
 
-    for pictures in pictures_for_clusters.values():
+    # eliminate clusters which are subclusters of other clusters
+    # len_sorted_pictures = sorted(iterable)
+    for key, pictures in pictures_for_clusters.iteritems():
       if len(pictures) >= minimal_mcl_cluster_size:
         is_subset = False
         for subcluster in subcluster_list:
@@ -152,6 +154,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
             is_subset = True
             break
         if not is_subset:
+          print str(key) + ", "
           subcluster_list.append(pictures)
 
     searchtree.subclusters = subcluster_list
