@@ -23,18 +23,18 @@
   </head>
   <body>
     <div class="container">
-      <form method="POST">
+      <form method="POST" action="/add">
         <div class="images">
           <div class="image-container pull-left" id="image-1-container">
             <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
             <fieldset id="fieldset_image_1">
               <legend>Image 1</legend>
               <label class="radio">
-                <input type="radio" class="radio" name="image_1_food" value="yes" />
+                <input type="radio" class="radio" name="image_1_food" value="1" />
                 Shows food
               </label>
               <label class="radio">
-                <input type="radio" class="radio" name="image_1_food" value="no" />
+                <input type="radio" class="radio" name="image_1_food" value="0" />
                 Does not show food
               </label>
             </fieldset>
@@ -44,11 +44,11 @@
             <fieldset id="fieldset_image_2">
               <legend>Image 2</legend>
               <label class="radio">
-                <input type="radio" class="radio" name="image_2_food" value="yes" />
+                <input type="radio" class="radio" name="image_2_food" value="1" />
                 Shows food
               </label>
               <label class="radio">
-                <input type="radio" class="radio" name="image_2_food" value="no" />
+                <input type="radio" class="radio" name="image_2_food" value="2" />
                 Does not show food
               </label>
             </fieldset>
