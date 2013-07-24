@@ -29,7 +29,7 @@ def extract_features(image_cluster, metadata_dir):
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = full_path_to_json
+      data["file_name"] = metajson_file
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -129,7 +129,7 @@ def cluster_by_features(images):
   clusters = defaultdict(list)
   for index, cluster_color in enumerate(clustered_images_by_color):
     cluster_edges = clustered_images_by_edges[index]
-    clusters[str(cluster_color + cluster_edges * k_color)].append((images[index]["file_path"], images[index]["url"]))
+    clusters[str(cluster_color + cluster_edges * k_color)].append((images[index]["file_name"], images[index]["url"]))
   return clusters
 
 
@@ -213,27 +213,27 @@ def main(argv):
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... \n")
     images = {}
-    for metajson_file in metajson_files:
+    for metajson_file_path in metajson_files:
 
-      metadata = parse_json_file(metajson_file)
+      metadata = parse_json_file(metajson_file_path)
       if metadata == None:
-        print "Could not read json file %s" % metajson_file
+        print "Could not read json file %s" % metajson_file_path
         continue
 
-      print_status("ID: " + metadata["id"] + " File number: " + metajson_file + "\n")
+      print_status("ID: " + metadata["id"] + " File number: " + metajson_file_path + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
         #  continue
         data = {}
         url      = get_small_image_url(metadata)
         image_id = metadata["id"]
-        data["file_path"] = metajson_file
+        data["file_name"] = metajson_file_path.split(os.sep)[-1]
         data["url"]       = url
 
         try:
           if arguments.read_images_from_disk:
-            image_filename = metajson_file.split('/')[-1].replace('.json', '.jpg')
-            image_path = downloaded_images_dir + '/' + image_filename
+            image_filename = metajson_file_path.split(os.sep)[-1].replace('.json', '.jpg')
+            image_path = downloaded_images_dir + os.sep + image_filename
             image = Image(image_path).toHSV()
           else:
             image = Image(url).toHSV()
