@@ -4,6 +4,8 @@ metadata-dir: %(data-dir)s/metadata
 downloaded-images-dir: %(data-dir)s/images
 html-dir: %(data-dir)s/html
 visual-data-dir: %(data-dir)s/preprocessed_visuals
+keywords-for-pictures-dir: %(data-dir)s\preprocessed_data\keywords-for-pictures
+
 
 [Flickr API Key]                      ; Get key at: from http://www.flickr.com/services/apps/create/noncommercial/
 key: <your-flickr-key>                ; Replace with your key
@@ -11,11 +13,11 @@ secret: <your-flickr-secret>          ; Just not to loose your secret, put it he
 
 [Filenames for Pickles]
 preprocessed-data-dir: <full path to your dir for preprocessed data>
-synset-tag-cooccurrence-dict: %(preprocessed-data-dir)s/synset_tags_tf_idf_dict.pickle
-keywords_for_pictures_filename: %(preprocessed-data-dir)s/keywords_for_pictures.pickle
-synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.pickle
-unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.pickle
-color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.pickle
+synset-tag-cooccurrence-dict: %(preprocessed-data-dir)s/synset_tags_tf_idf_dict.json
+keywords_for_pictures_filename: %(keywords-for-pictures-dir)s/keywords_for_pictures_##.json
+synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.json
+unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.json
+color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.json
 mcl_clusters_filename: %(preprocessed-data-dir)s/mcl_clusters.txt
 edge_weightings_filename: %(preprocessed-data-dir)s/edge_weightings_for_mcl.txt
 visual_features_filename: %(preprocessed-data-dir)s/visual_features_##.json ; ## stands for the folder number of preprocessed data, automatically gets replaced
