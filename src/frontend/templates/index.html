@@ -170,7 +170,7 @@
               <div class="result-preview">
                 {%- for mcl_cluster in synset.subclusters %}
                   {% set mcl_loop = loop %}
-                  {%- for visual_cluster in mcl_cluster %}
+                  {%- for visual_cluster in mcl_cluster["subcluster"] %}
                     {% set visual_loop = loop %}
                     {%- for _, image_url in visual_cluster %}
                       <img src="{{ image_url }}"
