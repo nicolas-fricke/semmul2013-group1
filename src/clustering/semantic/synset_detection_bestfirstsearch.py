@@ -78,18 +78,6 @@ def find_synsets_and_unmatched_tags(tag_list):
 
     synsets.extend(possible_paths[0][1])
 
-  #for indefinite_synset in indefinite_synsets:
-    #initialize index to 0 so that if no tags with single synset (=synsets[index_of_json] empty), first synset will be chosen
-    # max_sim_sum = (0, 0)
-    # for index, synset in enumerate(indefinite_synset):
-    #   sim_sum = 0
-    #   for found_synset in synsets:
-    #     sim_sum += synset.lch_similarity(found_synset)
-    #   if sim_sum > max_sim_sum[0]:
-    #     max_sim_sum = (sim_sum, index)
-    # synsets.append(indefinite_synset[max_sim_sum[1]])
-    #print "Ermitteltes Synset: ", (indefinite_synset[max_sim_sum[1]]), " (", indefinite_synset[max_sim_sum[1]].definition, ")"
-
   return synsets, unmatched_tags
 
 def parse_json_data(json_files, number_of_jsons=10000):
@@ -128,7 +116,10 @@ def restore_keywords_for_pictures(storable_keywords_for_pictures):
 
 def synset_detection(number_of_jsons=10000, subdirectory=None):
   # import configuration
-  metadata_dir = import_metadata_dir_of_config('../config.cfg')
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
+  metadata_dir = config.get('Directories', 'metadata-dir')
 
   if subdirectory == None:
     # read json files from metadata directory
@@ -155,6 +146,7 @@ def synset_detection(number_of_jsons=10000, subdirectory=None):
   tag_list = tag_histogram.keys()
   print "Done."
 
+  save_object(storable_keywords_for_pictures, keywords_for_pictures_filename)
   return keywords_for_pictures, storable_keywords_for_pictures
 
 def parse_command_line_arguments():

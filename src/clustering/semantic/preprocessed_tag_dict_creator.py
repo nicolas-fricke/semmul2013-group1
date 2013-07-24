@@ -71,7 +71,7 @@ def main():
   unmatched_tag_filenames_dict_filename = config.get('Filenames for Pickles', 'unmatched_tag_filenames_dict_filename')
 
   print_status("Detecting synsets for the tags of every picture... \n")
-  _, storable_keywords_for_pictures = synset_detection(number_of_jsons)
+  storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
   print_status("Done detecting synsets \n")
 
   print_status("Writing keywords_for_pictures... ")
