@@ -6,47 +6,57 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
     <style type="text/css">
-      .images {
-        text-align: center;
+      #image-2-container {
+        padding-left: 30px;
       }
 
       .test-image {
         height: 300px;
         max-width: 400px;
       }
+
+      legend {
+        padding-top: 15px;
+        margin-bottom: 10px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="images">
-        <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
-        <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
-      </div>
       <form method="POST">
+        <div class="images">
+          <div class="image-container pull-left" id="image-1-container">
+            <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
+            <fieldset id="fieldset_image_1">
+              <legend>Image 1</legend>
+              <label class="radio">
+                <input type="radio" class="radio" name="image_1_food" value="yes" />
+                Shows food
+              </label>
+              <label class="radio">
+                <input type="radio" class="radio" name="image_1_food" value="no" />
+                Does not show food
+              </label>
+            </fieldset>
+          </div>
+          <div class="image-container pull-left" id="image-2-container">
+            <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
+            <fieldset id="fieldset_image_2">
+              <legend>Image 2</legend>
+              <label class="radio">
+                <input type="radio" class="radio" name="image_2_food" value="yes" />
+                Shows food
+              </label>
+              <label class="radio">
+                <input type="radio" class="radio" name="image_2_food" value="no" />
+                Does not show food
+              </label>
+            </fieldset>
+          </div>
+          <div class="clearfix"></div>
+        </div>
         <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
         <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
-        <fieldset id="fieldset_image_1">
-          <legend>Image 1</legend>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_1_food" value="yes" />
-            Shows food
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_1_food" value="no" />
-            Does not show food
-          </label>
-        </fieldset>
-        <fieldset id="fieldset_image_2">
-          <legend>Image 2</legend>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_2_food" value="yes" />
-            Shows food
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_2_food" value="no" />
-            Does not show food
-          </label>
-        </fieldset>
         <fieldset id="fieldset_image_similarity">
           <legend>Image similarity</legend>
           <label class="radio">
