@@ -145,6 +145,7 @@ def load_cluster_for_synsets():
 
 def load_keywords_for_pictures():
   keywords_for_pictures_filename = get_name_from_config('Filenames for Pickles', 'keywords_for_pictures_filename')
+  keywords_for_pictures_filename = keywords_for_pictures_filename.replace('##', 'all')
   keywords_for_pictures = parse_json_file(keywords_for_pictures_filename)
   return keywords_for_pictures
 
