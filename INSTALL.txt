@@ -1,0 +1,19 @@
+
+# clone git repository
+sudo apt-get install git # only if you do not have git already
+git clone https://github.com/nicolas-fricke/semmul2013-group1.git
+
+# install python packages
+sudo apt-get install python-pip # only if you do not have pip already
+sudo pip install flask
+sudo pip install flask_assets
+
+sudo easy_install -U distribute
+sudo pip install nltk
+sudo pip install Counter # not available for Python 2.6.*
+
+# start program
+cd semmul2013-group1/src/
+export PYTHONPATH=$PYTHONPATH:`pwd`
+
+http://packages.debian.org/squeeze/all/python-flask/download
