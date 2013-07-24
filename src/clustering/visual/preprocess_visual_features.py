@@ -22,7 +22,7 @@ from helpers.general_helpers import *
 from clustering.visual.color_clustering import extract_colors
 from clustering.visual.edge_clustering import extract_edges
 
-def preprocess_visual_features_for_jsons(metajson_files, read_images_from_disk=False):
+def preprocess_visual_features_for_jsons(metajson_files, downloaded_images_dir=None):
   for metajson_file in metajson_files:
 
     metadata = parse_json_file(metajson_file)
@@ -33,7 +33,7 @@ def preprocess_visual_features_for_jsons(metajson_files, read_images_from_disk=F
     print_status("ID: " + metadata["id"] + " File name: " + metajson_file + "\n")
     if metadata["stat"] == "ok":
       try:
-        if read_images_from_disk:
+        if not downloaded_images_dir == None:
           image_filename = metajson_file.split(os.sep)[-1].replace('.json', '.jpg')
           image_path = downloaded_images_dir + os.sep + image_filename
           image = Image(image_path).toHSV()
@@ -74,6 +74,8 @@ def main(argv):
   metadata_dir = config.get('Directories', 'metadata-dir')
   if arguments.read_images_from_disk:
     downloaded_images_dir = config.get('Directories', 'downloaded-images-dir')
+  else: 
+    downloaded_images_dir = None
 
   # read metajsons
   if arguments.directory_to_preprocess:
@@ -84,7 +86,7 @@ def main(argv):
 
   # preprocess visual features and write them to file
   print_status("Reading metadata files, loading images and calculating color and edge histograms.... \n")
-  preprocess_visual_features_for_jsons(metajson_files, arguments.read_images_from_disk)
+  preprocess_visual_features_for_jsons(metajson_files, downloaded_images_dir)
   print "Done."
 
 if __name__ == '__main__':
