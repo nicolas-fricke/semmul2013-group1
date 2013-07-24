@@ -147,7 +147,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
         for subcluster in subcluster_list:
           is_subset_candidate = True
           for picture in pictures:
-            if picture not in subcluster:
+            if picture not in subcluster["subcluster"]:
               is_subset_candidate = False
               break
           if is_subset_candidate:
@@ -159,7 +159,6 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
           subcluster_list.append({"synsets": "representatives here", "subcluster": pictures})
 
     searchtree.subclusters = subcluster_list
-    print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
   else:
     searchtree.subclusters = [{"synsets": None, "subcluster": searchtree.associated_pictures}]
 
