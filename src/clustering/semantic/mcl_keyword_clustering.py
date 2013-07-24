@@ -155,12 +155,13 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
             break
         if not is_subset:
           print str(key) + ", "
-          subcluster_list.append(pictures)
+
+          subcluster_list.append({"synsets": "representatives here", "subcluster": pictures})
 
     searchtree.subclusters = subcluster_list
     print "%s has %d subclusters." % (searchtree.name, len(searchtree.subclusters))
   else:
-    searchtree.subclusters = [searchtree.associated_pictures]
+    searchtree.subclusters = [{"synsets": None, "subcluster": searchtree.associated_pictures}]
 
   # Recursively traverse tree
   if searchtree.has_hyponyms():

@@ -142,7 +142,8 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
     visual_features_filename = visual_features_filename.replace('##', 'all')
 
   new_subclusters = []
-  for cluster in tree_node.subclusters:
+  for representatives_and_cluster_dict in tree_node.subclusters:
+    cluster = representatives_and_cluster_dict["subcluster"]
     if len(cluster) >= visual_clustering_threshold:
       if visual_features == None:
         print_status("Reading visual features (colors and edges) from file.... ")
@@ -156,13 +157,13 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
       clusters = cluster_by_features(images)
-      new_subclusters.append(clusters.values())
+      representatives_and_cluster_dict["subcluster"] = clusters.values()
       print "Done. %d subclusters for " % len(clusters), tree_node.name
     else:
-      new_subclusters.append([cluster])
+      representatives_and_cluster_dict["subcluster"] = [cluster]
 
   #print "previously %d subclusters" % len(tree_node.subclusters)
-  tree_node.subclusters = new_subclusters
+  #tree_node.subclusters = new_subclusters
   #print "now %d subclusters" % len(tree_node.subclusters)
 
   if tree_node.has_hyponyms():
