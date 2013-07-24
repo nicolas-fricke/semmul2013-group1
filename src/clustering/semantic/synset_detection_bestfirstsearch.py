@@ -146,7 +146,7 @@ def synset_detection(number_of_jsons=10000, subdirectory=None):
   tag_list = tag_histogram.keys()
   print "Done."
 
-  save_object(storable_keywords_for_pictures, keywords_for_pictures_filename)
+  write_json_file(storable_keywords_for_pictures, keywords_for_pictures_filename.replace('##', subdirectory[-2:-1]))
   return keywords_for_pictures, storable_keywords_for_pictures
 
 def parse_command_line_arguments():

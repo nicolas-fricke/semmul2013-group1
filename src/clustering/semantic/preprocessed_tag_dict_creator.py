@@ -41,7 +41,7 @@ def calculate_and_write_tf_idf_dict(synset_filenames_dict, unmatched_tag_filenam
   tf_idfs_dict = create_unmatched_tag_tf_idf_dict(synset_filenames_dict, unmatched_tag_filenames_dict)
   print len(tf_idfs_dict[1].keys())
 
-  save_object(tf_idfs_dict, tf_idf_dict_filename)
+  write_json_file(tf_idfs_dict, tf_idf_dict_filename)
 
 def parse_command_line_arguments():
   parser = argparse.ArgumentParser()
@@ -70,24 +70,25 @@ def main():
   synset_filenames_dict_filename = config.get('Filenames for Pickles', 'synset_filenames_dict_filename')
   unmatched_tag_filenames_dict_filename = config.get('Filenames for Pickles', 'unmatched_tag_filenames_dict_filename')
 
-  print_status("Detecting synsets for the tags of every picture... \n")
-  storable_keywords_for_pictures = load_object(keywords_for_pictures_filename)
-  print_status("Done detecting synsets \n")
+  keywords_for_pictures_all = {}
+  for keywords_for_pictures in find_metajsons_to_process_in_dir(keywords_for_pictures_dir):
+    keywords_for_pictures_all.extend(keywords_for_pictures)
 
   print_status("Writing keywords_for_pictures... ")
-  save_object(storable_keywords_for_pictures, keywords_for_pictures_filename)
+  keywords_for_pictures_filename.replace('##', 'all')
+  write_json_file(keywords_for_pictures_all, keywords_for_pictures_filename)
   print "Done."
 
   print_status("Create_inverse_keywords_for_pictures_dicts... ")
-  storable_synset_filenames_dict, unmatched_tag_filenames_dict = create_inverse_keywords_for_pictures_dict(storable_keywords_for_pictures)
+  storable_synset_filenames_dict, unmatched_tag_filenames_dict = create_inverse_keywords_for_pictures_dict(keywords_for_pictures_all)
   print "Done"
 
   print_status("Writing synset_filenames_dict... ")
-  save_object(storable_synset_filenames_dict, synset_filenames_dict_filename)
+  write_json_file(storable_synset_filenames_dict, synset_filenames_dict_filename)
   print "Done."
 
   print_status("Writing unmatched_tag_filenames_dict... ")
-  save_object(unmatched_tag_filenames_dict, unmatched_tag_filenames_dict_filename)
+  write_json_file(unmatched_tag_filenames_dict, unmatched_tag_filenames_dict_filename)
   print "Done."
 
   print_status("Calculate and write tf_idf dictionary...")
