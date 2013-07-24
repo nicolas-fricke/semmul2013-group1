@@ -42,7 +42,7 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 # Reading preprocessed visual features from file
-def read_features_from_file(cluster, features_json_filename, metadata_dir):
+def read_features_from_file(cluster, metadata_dir):
   images = []
 
   for picture_json_filename, _ in cluster:
