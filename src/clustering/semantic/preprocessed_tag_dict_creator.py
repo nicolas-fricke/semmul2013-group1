@@ -47,20 +47,11 @@ def parse_command_line_arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument('-m','--withmcl', dest='create_mcl_clusters', action='store_true',
                       help='If specified, cluster keywords with mcl, otherwise leave it out and be windows friendly')
-  parser.add_argument('-n','--number_of_jsons', dest='number_of_jsons', type=int,
-                      help='Specifies the number of jsons which will be processed')
   args = parser.parse_args()
   return args
 
 def main():
   arguments = parse_command_line_arguments()
-
-  if arguments.number_of_jsons:
-    number_of_jsons = arguments.number_of_jsons
-  else:
-    # Default if not in arguments
-    number_of_jsons = 100
-    print "Default: Running with %d json files" % number_of_jsons
 
   # import configuration
   config = ConfigParser.SafeConfigParser()
@@ -69,13 +60,17 @@ def main():
   keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
   synset_filenames_dict_filename = config.get('Filenames for Pickles', 'synset_filenames_dict_filename')
   unmatched_tag_filenames_dict_filename = config.get('Filenames for Pickles', 'unmatched_tag_filenames_dict_filename')
+  keywords_for_pictures_dir = config.get('Filenames for Pickles', 'keywords-for-pictures-dir')
 
-  keywords_for_pictures_all = {}
-  for keywords_for_pictures in find_metajsons_to_process_in_dir(keywords_for_pictures_dir):
-    keywords_for_pictures_all.extend(keywords_for_pictures)
+  print_status("Collecting keywords_for_pictures... ")
+  keywords_for_pictures_all = dict()
+  for keywords_for_pictures_json in find_metajsons_to_process_in_dir(keywords_for_pictures_dir):
+    keywords_for_pictures = parse_json_file(keywords_for_pictures_json)
+    keywords_for_pictures_all.update(keywords_for_pictures)
+  print "Done."
 
   print_status("Writing keywords_for_pictures... ")
-  keywords_for_pictures_filename.replace('##', 'all')
+  keywords_for_pictures_filename = keywords_for_pictures_filename.replace('##', 'all')
   write_json_file(keywords_for_pictures_all, keywords_for_pictures_filename)
   print "Done."
 
