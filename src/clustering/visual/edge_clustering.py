@@ -59,7 +59,7 @@ def main():
       data = {}
       url      = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_name"] = metajson_file.split(os.sep)[-1]
+      data["file_path"] = metajson_file.split(os.sep)[-1]
       data["url"]       = url
       try:
         image = Image(url)
