@@ -7,6 +7,7 @@ from collections import defaultdict
 import operator
 import os.path
 from copy import deepcopy
+import gc
 
 # Import own modules
 import sys
@@ -93,6 +94,7 @@ def parse_json_data(json_files, number_of_jsons=10000):
     json_file = json_file[json_file.rfind(os.sep)+1:]
     synsets_for_pictures[json_file] = (photo_data["url"], synsets, unmatched_tags)
     print synsets_for_pictures[json_file]
+    gc.collect()
 
   return synsets_for_pictures
 
@@ -146,7 +148,7 @@ def synset_detection(number_of_jsons=10000, subdirectory=None):
   tag_list = tag_histogram.keys()
   print "Done."
 
-  write_json_file(storable_keywords_for_pictures, keywords_for_pictures_filename.replace('##', subdirectory[-2:-1]))
+  write_json_file(storable_keywords_for_pictures, keywords_for_pictures_filename.replace('##', subdirectory[-2:]))
   return keywords_for_pictures, storable_keywords_for_pictures
 
 def parse_command_line_arguments():
