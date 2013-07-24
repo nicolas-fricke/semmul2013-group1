@@ -79,7 +79,7 @@ def get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
   return searchtrees_with_pictures
 
 def get_clusters(search_term, use_meronyms=True, visual_clustering_threshold=2, mcl_clustering_threshold=2,
-                 minimal_mcl_cluster_size=2, minimal_node_size=2, visual_features=None, cluster_for_synsets=None,
+                 minimal_mcl_cluster_size=2, minimal_node_size=2, cluster_for_synsets=None,
                  keywords_for_pictures=None):
 
   searchtrees_with_pictures = get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
@@ -89,7 +89,7 @@ def get_clusters(search_term, use_meronyms=True, visual_clustering_threshold=2, 
     print_status("Assign pictures to most fitting keyword cluster.... ")
     mcl_clustered_searchtree = cluster_via_mcl(searchtree, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, keywords_for_pictures)
     print "Done.\n"
-    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold, visual_features))
+    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold))
 
   return result_trees
 
