@@ -3,7 +3,7 @@
 
 \documentclass[11pt, a4paper]{article}
 
-\usepackage{ngerman}
+\usepackage[english]{babel}
 \usepackage[latin1]{inputenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
 \usepackage[T1]{fontenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
 \usepackage{makeidx} %Zur automatischen Indexerstellung
@@ -40,19 +40,19 @@
     \mbox{}
     \vspace{1cm}
     
-    {\huge Titel der Seminararbeit \\[1em] {\LARGE ggf.~mit Untertitel}}  
+    {\huge Semantic and Visual Image Clustering\\[1em] {\LARGE Retrieving Search Term Related Pictures in Structured Clusters}}  
         
     \vspace{5cm}
     
-    Seminararbeit im Seminar \\[1em]
-    {\large \sc Titel des Seminars} \\[1em]
-    Sommersemester 2013 \\[1em]
+    Seminar paper \\[1em]
+    {\large \sc Semantic Multimedia} \\[1em]
+    Summer Term 2013 \\[1em]
     Hasso-Plattner-Institut für Softwaresystemtechnik GmbH \\[1em]
     Universität Potsdam
     
     \vspace{4cm}
     
-		vorgelegt von
+		written by
 		
     \vspace{1em}
     
@@ -72,18 +72,15 @@
 
 % Zweite Seite = Kurzzusammenfassung
 \begin{center}
-{\bf Kurzzusammenfassung} 
+{\bf Abstract} 
 \end{center}
 
 \noindent
-An dieser Stelle erfolgt eine knappe Zusammenfassung der vorliegenden Arbeit ([engl.] Abstract)\index{Abstract}, die maximal ca.~200 Worte umfassen sollte. 
-Der Sinn und Zweck dieser Kurzzusammenfassung liegt darin, einem interessierten Leser die Entscheidung zu erleichtern, die vorliegende Arbeit überhaupt zu lesen bzw.~vor dem Lesen der Arbeit erst einmal in Erfahrung zu bringen, worum es geht.
-Also eine knappe, motivierende Hinführung zum Problem und wie sie es gelöst haben.
+Abstract goes here.
 
 \bigskip
 
-Wenn Sie eine Kurzzusammenfassung schreiben, bedenken Sie, dass diese oft auch alleine publiziert wird, d.h. sie sollte unabhängig vom nachfolgend explizit dargestellten Inhalt der Arbeit für den Leser verständlich sein.
-Daher ist es immer sinnvoll, diese Zusammenfassung erst ganz am Ende zu schreiben, wenn Sie die eigentliche Arbeit bereits abgeschlossen haben.
+Write it at the end.
 
 \newpage
 
@@ -103,7 +100,8 @@ Daher ist es immer sinnvoll, diese Zusammenfassung erst ganz am Ende zu schreibe
 \input{chapters/chapter_5.tex}
 \newpage
 \input{chapters/chapter_6.tex}
-
+\newpage
+\input{chapters/chapter_7.tex}
 
 %% Anhänge
 \newpage
@@ -118,7 +116,7 @@ Daher ist es immer sinnvoll, diese Zusammenfassung erst ganz am Ende zu schreibe
 %Hier kommt das Literaturverzeichnis
 \newpage
 
-\addcontentsline{toc}{section}{Literaturverzeichnis} % Zeile für das Inhaltsverzeichnis
+\addcontentsline{toc}{section}{References} % Zeile für das Inhaltsverzeichnis
 
 \bibliography{bibfile}
 \bibliographystyle{alphadin}
