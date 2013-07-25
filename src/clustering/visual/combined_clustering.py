@@ -29,7 +29,7 @@ def extract_features(image_cluster, metadata_dir):
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_name"] = metajson_file
+      data["file_path"] = metajson_file
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -129,7 +129,7 @@ def cluster_by_features(images):
   clusters = defaultdict(list)
   for index, cluster_color in enumerate(clustered_images_by_color):
     cluster_edges = clustered_images_by_edges[index]
-    clusters[str(cluster_color + cluster_edges * k_color)].append((images[index]["file_name"], images[index]["url"]))
+    clusters[str(cluster_color + cluster_edges * k_color)].append((images[index]["file_path"], images[index]["url"]))
   return clusters
 
 
@@ -227,7 +227,7 @@ def main(argv):
         data = {}
         url      = get_small_image_url(metadata)
         image_id = metadata["id"]
-        data["file_name"] = metajson_file_path.split(os.sep)[-1]
+        data["file_path"] = metajson_file_path.split(os.sep)[-1]
         data["url"]       = url
 
         try:
