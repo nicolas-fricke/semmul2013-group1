@@ -90,6 +90,24 @@
       {#        left: 0px !important;#}
       {#      }#}
 
+      .mcl-cluster-preview {
+        white-space: nowrap;
+        padding-bottom: 10px;
+      }
+
+      .mcl-cluster-preview > img {
+        height: 100px;
+      }
+
+      {#      .tooltip {#}
+      {#        top: 0px !important;#}
+      {#        left: 0px !important;#}
+      {#      }#}
+
+      .mcl-synsets-label {
+        color: white;
+      }
+
       .tooltip.in {
         opacity: 1;
       }
@@ -170,17 +188,21 @@
               <div class="result-preview">
                 {%- for mcl_cluster in synset.subclusters %}
                   {% set mcl_loop = loop %}
-                  {%- for visual_cluster in mcl_cluster["subcluster"] %}
-                    {% set visual_loop = loop %}
-                    {%- for _, image_url in visual_cluster %}
-                      <img src="{{ image_url }}"
-                           rel="tooltip"
-                           title="<img src='{{ image_url }}' />"
-                           data-node-cluster="{{ node_loop.index }}"
-                           data-mcl-cluster="{{ mcl_loop.index }}"
-                           data-visual-cluster="{{ visual_loop.index }}"/>
+                  <div class="mcl-cluster-preview"
+                       data-mcl-cluster-index="{{ mcl_loop.index }}"
+                       data-mcl-synset-description="{{ mcl_cluster['synsets'] }}">
+                    {%- for visual_cluster in mcl_cluster["subcluster"] %}
+                      {% set visual_loop = loop %}
+                      {%- for _, image_url in visual_cluster %}
+                        <img src="{{ image_url }}"
+                             rel="tooltip"
+                             title="<img src='{{ image_url }}' />"
+                             data-node-cluster="{{ node_loop.index }}"
+                             data-mcl-cluster="{{ mcl_loop.index }}"
+                             data-visual-cluster="{{ visual_loop.index }}"/>
+                      {%- endfor %}
                     {%- endfor %}
-                  {%- endfor %}
+                  </div>
                 {%- endfor %}
               </div>
             </div>
