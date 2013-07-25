@@ -112,8 +112,8 @@ def get_clusters_with_highest_counter(cluster_counter):
 def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, url_and_keywords_for_pictures=None):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
-  mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')    
-  cluster_representatives = read_cluster_representatives(mcl_filename) 
+  mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
+  cluster_representatives = read_cluster_representatives(mcl_filename)
   if url_and_keywords_for_pictures == None or cluster_for_synsets == None:
     if cluster_for_synsets == None:
       cluster_for_synsets = read_clusters_from_file(mcl_filename)
@@ -155,7 +155,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
             is_subset = True
             break
         if not is_subset:
-          print str(key) + ", "
+          # print str(key) + ", "
           subcluster_list.append({"synsets": cluster_representatives[key], "subcluster": pictures})
 
     searchtree.subclusters = subcluster_list
