@@ -3,6 +3,7 @@ import json
 import sys
 import time
 import os
+import os.path
 import cPickle as pickle
 import ConfigParser
 
@@ -33,7 +34,7 @@ def find_metajsons_to_process_in_dir(metatdata_dir):
   return glob(metatdata_dir + '/*.json')
 
 def write_json_file(obj, filename):
-  with open(filename, 'wb') as output:
+  with open(filename, 'w') as output:
     output.write(json.dumps(obj))
 
 def parse_json_file(json_file):
@@ -46,7 +47,7 @@ def parse_json_file(json_file):
 def construct_path_to_json(metajson):
   parent_folder_name = metajson[:2]
   grand_parent_folder_name = parent_folder_name[:1]+"0-"+parent_folder_name[:1]+"9"
-  return "/"+grand_parent_folder_name+"/"+parent_folder_name+"/"+metajson
+  return os.sep+grand_parent_folder_name+os.sep+parent_folder_name+os.sep+metajson
 
 def get_small_image_url(metajson):
   if not metajson.get("stat") == "ok":
@@ -113,6 +114,14 @@ def read_clusters_from_file(file_name):
   cluster_file.close()
   return cluster_for_synsets
 
+def read_cluster_representatives(file_name):
+  # some pictures cannot be assigned to a cluster, they get cluster representative ""
+  clusters = [""]
+  cluster_file = open(file_name, 'r')
+  for number_of_cluster, line in enumerate(cluster_file):
+    representatives = line.rstrip('\n\r').split('\t')
+    clusters.append(representatives)
+  return clusters
 
 ############ Config Import Methods #############
 
@@ -144,8 +153,23 @@ def load_cluster_for_synsets():
 
 def load_keywords_for_pictures():
   keywords_for_pictures_filename = get_name_from_config('Filenames for Pickles', 'keywords_for_pictures_filename')
-  keywords_for_pictures = load_object(keywords_for_pictures_filename)
+  keywords_for_pictures_filename = keywords_for_pictures_filename.replace('##', 'all')
+  keywords_for_pictures = parse_json_file(keywords_for_pictures_filename)
   return keywords_for_pictures
 
+def load_synset_filenames_dict():
+  synset_filenames_dict_filename = get_name_from_config('Filenames for Pickles', 'synset_filenames_dict_filename')
+  filenames_for_synsets = parse_json_file(synset_filenames_dict_filename)
+  return filenames_for_synsets
 
+def load_cluster_representatives(how_many_per_cluster=6):
+  mcl_json_filename = get_name_from_config('Filenames for Pickles', 'mcl_clusters_as_json_filename')
+  mcl_clusters = parse_json_file(mcl_json_filename)
+  representatives = []
+  for cluster in mcl_clusters:
+    if len(cluster) > how_many_per_cluster:
+      representatives.append(cluster[:how_many_per_cluster])
+    else:
+      representatives.append(cluster)
 
+  return representatives

@@ -1,0 +1,131 @@
+% Muster für die Seminarausarbeitung
+% HPI Potsdam
+
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
+\usepackage[T1]{fontenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
+\usepackage{makeidx} %Zur automatischen Indexerstellung
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{epsfig}   % Zum Einbinden von Bildern
+\usepackage{url}      % Korrekter Satz von URLs
+\usepackage{color}    % Verwendung von Farben
+\usepackage{listings} % Korrekter Satz von Listings und Quellcode
+
+
+%Hilfs-Fonts - ohne Serifen (hier für Tabellen)
+\newfont{\bib}{cmss8 scaled 1040}
+\newfont{\bibf}{cmssbx8 scaled 1040}
+
+\definecolor{lightgray}{gray}{0.85}
+
+%Seitenformat-Definitionen
+\topmargin0mm
+\textwidth147mm
+\textheight214mm
+\evensidemargin5mm
+\oddsidemargin5mm
+\footskip19mm
+\parindent=0in
+
+\makeindex % legt das Index-File an
+
+
+\begin{document}          
+
+\begin{titlepage}
+  \begin{center} 
+    \mbox{}
+    \vspace{1cm}
+    
+    {\huge Semantic and Visual Image Clustering\\[1em] {\LARGE Retrieving Search Term Related Pictures in Structured Clusters}}  
+        
+    \vspace{4.7cm}
+    
+    Seminar paper \\[1em]
+    {\large \sc Semantic Multimedia} \\[1em]
+    Summer Term 2013 \\[1em]
+    Hasso-Plattner-Institut für Softwaresystemtechnik GmbH \\[1em]
+    Universität Potsdam
+    
+    \vspace{3.7cm}
+    
+		written by
+		
+    \vspace{1em}
+    
+		{\Large Mandy Roick} \\
+		{\Large Claudia Exeler} \\
+		{\Large Tino Junge} \\
+		{\Large Nicolas Fricke}
+		
+    \vspace{4em}
+    
+    30.~August 2013
+  \end{center}
+\end{titlepage}
+
+
+\setcounter{page}{1}
+
+% Zweite Seite = Kurzzusammenfassung
+\begin{center}
+{\bf Abstract} 
+\end{center}
+
+\noindent
+Abstract goes here.
+
+\bigskip
+
+Write it at the end.
+
+\newpage
+
+% Dritte Seite = Inhaltsverzeichnis
+\tableofcontents 
+
+\newpage
+
+\input{chapters/chapter_1.tex} 
+\newpage
+\input{chapters/chapter_2.tex}
+\newpage
+\input{chapters/chapter_3.tex}
+\newpage
+\input{chapters/chapter_4.tex}
+\newpage
+\input{chapters/chapter_5.tex}
+\newpage
+\input{chapters/chapter_6.tex}
+\newpage
+\input{chapters/chapter_7.tex}
+
+%% Anhänge
+\newpage
+\begin{appendix}
+
+
+\input{chapters/appendix.tex}
+
+\end{appendix}
+
+
+%Hier kommt das Literaturverzeichnis
+\newpage
+
+\addcontentsline{toc}{section}{References} % Zeile für das Inhaltsverzeichnis
+
+\bibliography{bibfile}
+\bibliographystyle{alphadin}
+
+\newpage
+
+%Hierhin kommt der Index (Sachverzeichnis)
+\addcontentsline{toc}{section}{Index} % Dies ist die Zeile für das Inhaltsverzeichnis
+\flushbottom                                    
+\printindex
+
+\end{document}

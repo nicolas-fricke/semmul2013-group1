@@ -60,7 +60,7 @@ def get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
   synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
 
   ####### WordNet Search #######
-  tf_idf_tuple = load_object(synset_tag_tf_idf_dict_filename)
+  tf_idf_tuple = parse_json_file(synset_tag_tf_idf_dict_filename)
 
   print_status("Running WordNet Search for %s... " % search_term)
   hyponyms_trees = construct_searchtree(search_term, tf_idf_tuple, use_meronyms)
@@ -69,8 +69,8 @@ def get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
   #pretty_print_tree(hyponyms_trees)
   #print_status("Found %d entries.\n" % count_tree_nodes(hyponyms_trees))
 
-  synsets_to_filenames_dict = load_object(synset_filenames_dict_filename)
-  tags_to_filenames_dict = load_object(tag_filenames_dict_filename)
+  synsets_to_filenames_dict = parse_json_file(synset_filenames_dict_filename)
+  tags_to_filenames_dict = parse_json_file(tag_filenames_dict_filename)
 
   searchtrees_with_pictures, _ = recursively_find_pictures_for_synset_tree(hyponyms_trees, synsets_to_filenames_dict,
                                               find_pictures_for_hyponyms=True, find_pictures_for_meronyms=True,
@@ -80,14 +80,16 @@ def get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
 
 def get_clusters(search_term, use_meronyms=True, visual_clustering_threshold=2, mcl_clustering_threshold=2,
                  minimal_mcl_cluster_size=2, minimal_node_size=2, visual_features=None, cluster_for_synsets=None,
-                 keywords_for_pictures=None):
+                 keywords_for_pictures=None, cluster_representatives=None):
 
   searchtrees_with_pictures = get_searchtrees_with_filenames(search_term, use_meronyms, minimal_node_size)
 
   result_trees = []
   for searchtree in searchtrees_with_pictures:
     print_status("Assign pictures to most fitting keyword cluster.... ")
-    mcl_clustered_searchtree = cluster_via_mcl(searchtree, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, keywords_for_pictures)
+    mcl_clustered_searchtree = cluster_via_mcl(searchtree, mcl_clustering_threshold, 
+                                               minimal_mcl_cluster_size, cluster_for_synsets, 
+                                               keywords_for_pictures, cluster_representatives)
     print "Done.\n"
     result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold, visual_features))
 

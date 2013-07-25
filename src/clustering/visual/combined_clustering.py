@@ -3,6 +3,7 @@ import ConfigParser
 import json
 import numpy as np
 import os.path
+import math
 from collections import defaultdict
 from SimpleCV import Image
 from math import log, pow
@@ -29,7 +30,7 @@ def extract_features(image_cluster, metadata_dir):
       data = {}
       url = get_small_image_url(metadata)
       data["image_id"]  = metadata["id"]
-      data["file_path"] = full_path_to_json
+      data["file_path"] = metajson_file
       data["url"]       = url
       try:
         image = Image(url).toHSV()
@@ -86,16 +87,8 @@ def assign_visual_features(cluster, visual_features, metadata_dir):
 
 
 def cluster_by_single_feature(feature_matrix):
-  k = 1
-  error = 1
-  previous_error = 1
-  while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
-  #while error < 0.9 * previous_error:
-    clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
-    k += 1
-    previous_error = error
-  k -= 1
-
+  k = int(math.floor(math.sqrt(len(feature_matrix)/2.0)))
+  clustered_images_by_color, _, _ = kcluster(feature_matrix, k, npass=5)   
   return clustered_images_by_color, k
 
 
@@ -142,7 +135,8 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
     visual_features_filename = visual_features_filename.replace('##', 'all')
 
   new_subclusters = []
-  for cluster in tree_node.subclusters:
+  for representatives_and_cluster_dict in tree_node.subclusters:
+    cluster = representatives_and_cluster_dict["subcluster"]
     if len(cluster) >= visual_clustering_threshold:
       if visual_features == None:
         print_status("Reading visual features (colors and edges) from file.... ")
@@ -156,13 +150,13 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
       clusters = cluster_by_features(images)
-      new_subclusters.append(clusters.values())
+      representatives_and_cluster_dict["subcluster"] = clusters.values()
       print "Done. %d subclusters for " % len(clusters), tree_node.name
     else:
-      new_subclusters.append([cluster])
+      representatives_and_cluster_dict["subcluster"] = [cluster]
 
   #print "previously %d subclusters" % len(tree_node.subclusters)
-  tree_node.subclusters = new_subclusters
+  #tree_node.subclusters = new_subclusters
   #print "now %d subclusters" % len(tree_node.subclusters)
 
   if tree_node.has_hyponyms():
@@ -212,27 +206,27 @@ def main(argv):
 
     print_status("Reading metadata files, loading images and calculating color and edge histograms.... \n")
     images = {}
-    for metajson_file in metajson_files:
+    for metajson_file_path in metajson_files:
 
-      metadata = parse_json_file(metajson_file)
+      metadata = parse_json_file(metajson_file_path)
       if metadata == None:
-        print "Could not read json file %s" % metajson_file
+        print "Could not read json file %s" % metajson_file_path
         continue
 
-      print_status("ID: " + metadata["id"] + " File number: " + metajson_file + "\n")
+      print_status("ID: " + metadata["id"] + " File number: " + metajson_file_path + "\n")
       if metadata["stat"] == "ok":
         #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
         #  continue
         data = {}
         url      = get_small_image_url(metadata)
         image_id = metadata["id"]
-        data["file_path"] = metajson_file
+        data["file_path"] = metajson_file_path.split(os.sep)[-1]
         data["url"]       = url
 
         try:
           if arguments.read_images_from_disk:
-            image_filename = metajson_file.split('/')[-1].replace('.json', '.jpg')
-            image_path = downloaded_images_dir + '/' + image_filename
+            image_filename = metajson_file_path.split(os.sep)[-1].replace('.json', '.jpg')
+            image_path = downloaded_images_dir + os.sep + image_filename
             image = Image(image_path).toHSV()
           else:
             image = Image(url).toHSV()
