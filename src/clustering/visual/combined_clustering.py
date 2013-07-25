@@ -3,6 +3,7 @@ import ConfigParser
 import json
 import numpy as np
 import os.path
+import math
 from collections import defaultdict
 from SimpleCV import Image
 from math import log, pow
@@ -86,16 +87,8 @@ def assign_visual_features(cluster, visual_features, metadata_dir):
 
 
 def cluster_by_single_feature(feature_matrix):
-  k = 1
-  error = 1
-  previous_error = 1
-  while (k == 2 or 1/log(k+0.000001)*error > 1/log(k-0.999999)*previous_error) and k < len(feature_matrix):
-  #while error < 0.9 * previous_error:
-    clustered_images_by_color, error, _ = kcluster(feature_matrix, k, npass=5)
-    k += 1
-    previous_error = error
-  k -= 1
-
+  k = int(math.floor(math.sqrt(len(feature_matrix)/2.0)))
+  clustered_images_by_color, _, _ = kcluster(feature_matrix, k, npass=5)   
   return clustered_images_by_color, k
 
 
