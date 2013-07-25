@@ -17,8 +17,8 @@ from subprocess import call
 from nltk.corpus import wordnet as wn
 
 from helpers.general_helpers import print_status, read_clusters_from_file, read_cluster_representatives, load_object
-from helpers.general_helpers import load_cluster_for_synsets, load_keywords_for_pictures
-from helpers.general_helpers import write_json_file, load_cluster_representatives
+from helpers.general_helpers import load_cluster_for_synsets, load_keywords_for_pictures, load_cluster_representatives
+from helpers.general_helpers import write_json_file
 
 ################ create keyword clusters ##############################
 
@@ -136,13 +136,13 @@ def get_clusters_with_highest_counter(cluster_counter):
 
 
 def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, 
-                    url_and_keywords_for_pictures=None):
+                    url_and_keywords_for_pictures=None, cluster_representatives=None):
   if cluster_for_synsets == None:
     cluster_for_synsets = load_cluster_for_synsets()
   if url_and_keywords_for_pictures == None:
     url_and_keywords_for_pictures = load_keywords_for_pictures()
-  
-  best_cluster_representatives = load_cluster_representatives(how_many_per_cluster=6)
+  if cluster_representatives == None:
+    cluster_representatives = load_cluster_representatives()
 
   pictures_for_clusters = defaultdict(list)
   subcluster_list = []
@@ -181,7 +181,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
             break
         if not is_subset:
           # print str(key) + ", "
-          subcluster_list.append({"synsets": best_cluster_representatives[key], "subcluster": pictures})
+          subcluster_list.append({"synsets": cluster_representatives[key], "subcluster": pictures})
 
     searchtree.subclusters = subcluster_list
   else:
@@ -191,10 +191,10 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
       cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
-                      cluster_for_synsets, url_and_keywords_for_pictures)
+                      cluster_for_synsets, url_and_keywords_for_pictures, cluster_representatives)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
       cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
-                      cluster_for_synsets, url_and_keywords_for_pictures)
+                      cluster_for_synsets, url_and_keywords_for_pictures, cluster_representatives)
 
   return searchtree

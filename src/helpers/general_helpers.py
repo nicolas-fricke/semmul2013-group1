@@ -162,7 +162,7 @@ def load_synset_filenames_dict():
   filenames_for_synsets = parse_json_file(synset_filenames_dict_filename)
   return filenames_for_synsets
 
-def load_cluster_representatives(how_many_per_cluster):
+def load_cluster_representatives(how_many_per_cluster=6):
   mcl_json_filename = get_name_from_config('Filenames for Pickles', 'mcl_clusters_as_json_filename')
   mcl_clusters = parse_json_file(mcl_json_filename)
   representatives = []
