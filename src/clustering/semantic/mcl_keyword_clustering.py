@@ -121,7 +121,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
   if url_and_keywords_for_pictures == None:
     url_and_keywords_for_pictures = load_keywords_for_pictures()
   if filenames_for_synsets == None:
-    filenames_for_synsets = load_synset_filenames_dict
+    filenames_for_synsets = load_synset_filenames_dict()
 
   pictures_for_clusters = defaultdict(list)
   subcluster_list = []
