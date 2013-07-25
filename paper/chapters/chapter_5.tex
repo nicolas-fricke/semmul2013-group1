@@ -1,0 +1,75 @@
+%
+\section{Das Literaturverzeichnis und die korrekte Zitierweise\index{Zitierweise}\index{Literaturverzeichnis}}
+\label{sec_literatur}
+
+\subsection{Was wird zitiert?}\index{bibliografische Referenz}
+Jede Behauptung tatsächlicher Art, d.h. stets wenn Sie konkrete Werte oder Aussagen wiedergeben, gilt solange als Behauptung, bis Sie diese auch belegen können.
+Ein Beleg besteht entweder in einer korrekten Herleitung, wie z.B.~einem mathematischen Beweis, oder aber in einer Angabe der Fundstelle (Literatur oder WWW), aus der die besagte Behauptung gewonnen wurde (= bibliografische Referenz). 
+Erwähnen Sie in Ihrer Arbeit Internetdienste, Programme, Sprachen, Internetstandards oder bestimmte Werkzeuge, dann belegen Sie diese beim ersten Vorkommen in Ihrem Text mit einer bibliografischen Referenz.
+Im Allgemeinen wird immer stets an der Stelle zitiert, die es zu belegen gilt \cite{Marchionini}.
+
+Achten Sie darauf, dass der Zitierhinweis stets Bestandteil des Satzes ist, d.h. der Punkt kommt erst dahinter.
+Die Quellenangabe sollte auf das am Ende der Ausarbeitung vorhandene Literaturverzeichnis verweisen. 
+Gegebenenfalls kann man für diesen Zweck {\em zusätzlich} Fußnoten\index{Literaturverzeichnis!Fußnoten} verwenden.
+
+\subsection{Bibtex das Zitiersytem von \LaTeX}
+
+BibTeX ist ein Programm zur Erstellung von Literaturangaben und -verzeichnissen in TeX- oder \LaTeX-Dokumenten.
+
+Um ein Literaturverzeichnis zu erstellen, werden aus einem \LaTeX-Dokument alle Zitatverweise herausgesucht und über eine Literatur-Datenbank dem entsprechenden Werk zugeordnet. Bei der Literaturdatenbank handelt es sich um eine Textdatei (*.bib-Datei), in der alle bekannten Angaben über ein Werk (Buch, Wissenschaftliche Publikation, Webseite  etc.) in einer bestimmten Syntax notiert werden.
+
+Die zitierten Werke werden sortiert und durch eine entsprechende Anweisung im LaTeX-Dokument aufgelistet. Die Formatierung dieser Literaturliste ist variabel. Der im Dokument eingestellte BibTeX-Stil (engl. {\em style}) bestimmt, welche Angaben in welcher Formatierung dargestellt werden.
+
+BibTeX ist in der Lage, auch mit sehr großen Literaturbeständen sowie mit sehr großen Dokumenten problemlos zusammenzuarbeiten. BibTeX hat sich daher im wissenschaftlichen Umfeld schon seit Jahren als offenes Standardformat für Literaturangaben etabliert.
+
+Das folgende Beispiel (entnommen aus einer BibTeX-Datei)
+
+\begin{verbatim}
+ @article{lin1973,
+    author  = {Shen Lin and Brian W. Kernighan},
+    title   = {An Effective Algorithm for the Travelling-Salesman Problem},
+    journal = {Operations Research},
+    volume  = {21},
+    year    = {1973},
+    pages   = {498--516},
+ }
+\end{verbatim}
+
+wird durch den BibTeX-Stil {\em alphadin} in diese Ausgabe in der Literaturliste (engl. {\em bibliography}) überführt:
+
+\medskip
+[LK73] Lin, Shen; Kernighan, Brian W.: An Effective Algorithm for the Travelling-Salesman Problem. In: Operations Research 21 (1973), S. 498--516
+\medskip
+
+Der Befehl \verb+\cite{lin1973}+ innerhalb eines LaTeX-Dokuments wird durch die in der BibTeX-Datei mit dieser ID angegebene Referenz, im Beispiel '[LK73]', ersetzt.
+
+Neben dem BibTeX-Stil alphadin, gibt es den Stil {\em plain}, bei dem der Schlüssel lediglich aus Ziffern besteht, z.B. [12]. Daneben gibt es verschiedene Varianten dieser Stile, die sich hauptsächlich in der Darstellung der Literaturliste unterscheiden und oft spezifisch für verschiedene wissenschaftliche Verlage, Konferenzen und Zeitschriften sind (vgl.~\cite{bibstyle}).
+
+Wer nicht zitiert hat, aber eine Quelle nennen will, tut dies durch \verb+\nocite{lin1973}+.
+
+\nocite{lin1973}
+
+\nocite{*} % alle Einträge werden angezeigt
+
+\subsection{Zitieren und das Internet}\index{Internet}
+%%
+Auch wichtige Quellen, die nur im Internet publiziert wurden, müssen zitiert werden.
+Unterscheiden Sie bitte dabei, ob es sich lediglich um eine Web-Präsenz, wie z.B. ein Web-Portal oder eine Übersichtsseite handelt, deren Inhalt sich mit der Zeit verändern kann. 
+Dies kann z.B. der Fall sein, wenn Sie die Suchmaschine Google\footnote{http://www.google.com/} erwähnen und dazu den URL als Referenz angeben.\index{Google}
+In diesem Fall empfiehlt es sich, die URL als Fußnote anzugeben.
+
+Andererseits können Sie auch auf ein Web-Dokument verweisen, dessen Inhalt für sich selbst und der sich wahrscheinlich nicht so schnell wieder verändern wird.
+Dann müssen Sie den URL des Dokuments in die Bibliographie aufnehmen.
+Zur korrekten Formatierung und Silbentrennung von URLs verwenden Sie das \LaTeX-Paket {\tt URL}\index{\LaTeX!URL}; dieses sorgt für ein korrektes Umbrechen am Zeilenende.\index{URL}
+Beachten Sie hier zu jedem URL auch das Datum anzugeben, an dem sie den URL zuletzt erfolgreich zugegriffen haben, da Sie sich auf eine ganz bestimmte Version dieses Dokuments beziehen, dessen Inhalt sich eventuell mit der Zeit verändern könnte.
+
+
+\subsection{Zitieren und die Wikipedia}\index{Wikipedia}
+%%
+Das Zitieren der Online-Enzyklopädie Wikipedia\footnote{http://www.wikipedia.org/} wird aktuell noch kontrovers diskutiert.
+Schuld daran ist die mangelnde Persistenz der Inhalte, d.h. im Prinzip kann jeder Benutzer den Inhalt eines Wikipedia-Artikels willkürlich verändern, so dass dieser nicht als gesicherte Referenz herangezogen werden kann.
+Auch wenn in der Wikipedia mittlerweile ein hohes Maß an Selbstkontrolle vorherrscht, sollte bei der wissenschaftlichen Bibliografie Wert auf das Prinzip der Nachvollziehbarkeit gelegt werden.
+Verwenden Sie daher bitte möglichst stets gesicherte, d.h. regulär publizierte Quellenangaben.
+Dies ist insbesondere dann ratsam, wenn Sie Grundlagenarbeiten und Nachschlagewerke zitieren.
+
+

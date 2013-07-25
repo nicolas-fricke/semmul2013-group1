@@ -6,64 +6,119 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
     <style type="text/css">
-      .images {
-        text-align: center;
+      body {
+        padding-top: 65px;
+      }
+
+      .image-container {
+        width: 420px;
+      }
+
+      #image-2-container {
+        padding-left: 30px;
       }
 
       .test-image {
         height: 300px;
         max-width: 400px;
       }
+
+      legend {
+        padding-top: 15px;
+        margin-bottom: 10px;
+      }
+
+      #send-btn {
+        margin-top: 30px;
+        width: 200px;
+      }
+
+      footer {
+        margin-top: 40px;
+        font-size: 10pt;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="images">
-        <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
-        <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
+    <div id="main-navigation" class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand">Evaluation Tool - Group 1</a>
+        </div>
       </div>
-      <form method="POST">
-        <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
-        <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
-        <fieldset id="fieldset_image_1">
-          <legend>Image 1</legend>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_1_food" value="yes" />
-            Shows food
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_1_food" value="no" />
-            Does not show food
-          </label>
-        </fieldset>
-        <fieldset id="fieldset_image_2">
-          <legend>Image 2</legend>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_2_food" value="yes" />
-            Shows food
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_2_food" value="no" />
-            Does not show food
-          </label>
-        </fieldset>
-        <fieldset id="fieldset_image_similarity">
-          <legend>Image similarity</legend>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_similarity" value="none" />
-            Are not similar
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_similarity" value="same_object" />
-            Show same object in different context (e.g. both show an apple)
-          </label>
-          <label class="radio">
-            <input type="radio" class="radio" name="image_similarity" value="same_context" />
-            Show same object in same context (e.g. both show a child eating an apple)
-          </label>
-        </fieldset>
-        <input type="submit" value="senden" class="btn btn-success" id="send-btn" />
-      </form>
     </div>
+    <div class="container">
+      <div id="content">
+        <form method="POST" action="/add">
+          <div class="images">
+            <div class="image-container pull-left" id="image-1-container">
+              <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
+              <fieldset id="fieldset_image_1">
+                <legend>Image 1</legend>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_1_food" value="1" />
+                  Shows food
+                </label>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_1_food" value="0" />
+                  Does not show food
+                </label>
+              </fieldset>
+            </div>
+            <div class="image-container pull-left" id="image-2-container">
+              <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
+              <fieldset id="fieldset_image_2">
+                <legend>Image 2</legend>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_2_food" value="1" />
+                  Shows food
+                </label>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_2_food" value="2" />
+                  Does not show food
+                </label>
+              </fieldset>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
+          <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
+          <fieldset id="fieldset_image_similarity">
+            <legend>Image similarity</legend>
+            <label class="radio">
+              <input type="radio" class="radio" name="image_similarity" value="none" />
+              Not similar
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="image_similarity" value="same_object" />
+              Same object in different context (e.g. in both images contain an apple)
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="image_similarity" value="same_context" />
+              Same object in same context (e.g. both show a person eating an apple)
+            </label>
+          </fieldset>
+          <div class="text-center">
+            <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" />
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+        <p>
+          &copy; 2013,
+          created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
+          during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
+          at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
+          Please find the source code of this project on <a href="https://github.com/nicolas-fricke/semmul2013-group1">Github</a>.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

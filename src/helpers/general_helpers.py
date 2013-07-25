@@ -114,6 +114,15 @@ def read_clusters_from_file(file_name):
   cluster_file.close()
   return cluster_for_synsets
 
+def read_cluster_representatives(file_name):
+  clusters = [""]
+  cluster_file = open(file_name, 'r')
+  for number_of_cluster, line in enumerate(cluster_file):
+    representatives = line.rstrip('\n\r').split('\t')
+    if len(representatives) > 5:
+      representatives = representatives[:4]
+    clusters.append(representatives)
+  return clusters
 
 ############ Config Import Methods #############
 
