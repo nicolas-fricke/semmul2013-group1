@@ -12,7 +12,8 @@
 
 import ConfigParser
 import operator
-from collections import Counter, defaultdict
+from collections import defaultdict 
+from backports.collections import Counter # adaption for python 2.6., in python 2.7: from collections import Counter
 from subprocess import call
 from nltk.corpus import wordnet as wn
 

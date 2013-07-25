@@ -14,7 +14,7 @@
 ######################################################################################
 
 import ConfigParser
-from collections import Counter
+from backports.collections import Counter # adaption for python 2.6., in python 2.7: from collections import Counter
 import json
 import nltk
 from nltk.corpus import wordnet as wn
