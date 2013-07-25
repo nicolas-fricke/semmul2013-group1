@@ -17,6 +17,7 @@ from subprocess import call
 from nltk.corpus import wordnet as wn
 
 from helpers.general_helpers import print_status, read_clusters_from_file, read_cluster_representatives, load_object
+from helpers.general_helpers import load_cluster_for_synsets, load_keywords_for_pictures, load_synset_filenames_dict
 
 ################ create keyword clusters ##############################
 
@@ -109,17 +110,18 @@ def get_clusters_with_highest_counter(cluster_counter):
   return result
 
 
-def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, url_and_keywords_for_pictures=None):
+def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, 
+                    url_and_keywords_for_pictures=None, filenames_for_synsets=None):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
   cluster_representatives = read_cluster_representatives(mcl_filename)
-  if url_and_keywords_for_pictures == None or cluster_for_synsets == None:
-    if cluster_for_synsets == None:
-      cluster_for_synsets = read_clusters_from_file(mcl_filename)
-    if url_and_keywords_for_pictures == None:
-      keywords_for_pictures_filename = config.get('Filenames for Pickles', 'keywords_for_pictures_filename')
-      url_and_keywords_for_pictures = load_object(keywords_for_pictures_filename)
+  if cluster_for_synsets == None:
+    cluster_for_synsets = load_cluster_for_synsets()
+  if url_and_keywords_for_pictures == None:
+    url_and_keywords_for_pictures = load_keywords_for_pictures()
+  if filenames_for_synsets == None:
+    filenames_for_synsets = load_synset_filenames_dict
 
   pictures_for_clusters = defaultdict(list)
   subcluster_list = []
@@ -165,9 +167,11 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
   # Recursively traverse tree
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
-      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, url_and_keywords_for_pictures)
+      cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
+                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
-      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, cluster_for_synsets, url_and_keywords_for_pictures)
+      cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
+                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets)
 
   return searchtree

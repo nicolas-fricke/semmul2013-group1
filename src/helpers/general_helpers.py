@@ -119,8 +119,8 @@ def read_cluster_representatives(file_name):
   cluster_file = open(file_name, 'r')
   for number_of_cluster, line in enumerate(cluster_file):
     representatives = line.rstrip('\n\r').split('\t')
-    if len(representatives) > 5:
-      representatives = representatives[:4]
+    #if len(representatives) > 5:
+    #  representatives = representatives[:4]
     clusters.append(representatives)
   return clusters
 
@@ -157,6 +157,11 @@ def load_keywords_for_pictures():
   keywords_for_pictures_filename = keywords_for_pictures_filename.replace('##', 'all')
   keywords_for_pictures = parse_json_file(keywords_for_pictures_filename)
   return keywords_for_pictures
+
+def load_synset_filenames_dict():
+  synset_filenames_dict_filename = get_name_from_config('Filenames for Pickles', 'synset_filenames_dict_filename')
+  filenames_for_synsets = parse_json_file(synset_filenames_dict_filename)
+  return filenames_for_synsets
 
 
 
