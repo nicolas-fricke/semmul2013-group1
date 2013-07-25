@@ -115,6 +115,7 @@ def read_clusters_from_file(file_name):
   return cluster_for_synsets
 
 def read_cluster_representatives(file_name):
+  # some pictures cannot be assigned to a cluster, they get cluster representative ""
   clusters = [""]
   cluster_file = open(file_name, 'r')
   for number_of_cluster, line in enumerate(cluster_file):

@@ -96,6 +96,8 @@ def keyword_clustering_via_mcl(synset_filenames_dict):
 
 ################ create picture clusters ##############################
 
+filenames_for_synsets_global = None
+
 def get_clusters_with_highest_counter(cluster_counter):
   result = []
   sorted_cluster_counter = sorted(cluster_counter.items(), key=operator.itemgetter(1), reverse=True)
@@ -109,24 +111,45 @@ def get_clusters_with_highest_counter(cluster_counter):
       break
   return result
 
+def compare_representatives(x,y):
+  return cmp(len(filenames_for_synsets_global[x]),len(filenames_for_synsets_global[y]))
 
-def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, 
-                    url_and_keywords_for_pictures=None, filenames_for_synsets=None):
+def find_best_representatives():
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   mcl_filename = config.get('Filenames for Pickles', 'mcl_clusters_filename')
   cluster_representatives = read_cluster_representatives(mcl_filename)
+  best_cluster_representatives = []
+  for cluster in cluster_representatives:
+    sorted_cluster_representatives = sorted(cluster, cmp=compare_representatives, reverse=True)
+    if len(sorted_cluster_representatives) < 7:
+      best_cluster_representatives.append(sorted_cluster_representatives)
+    else:
+      best_cluster_representatives.append(sorted_cluster_representatives[:6]) 
+  return best_cluster_representatives
+
+
+def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_size=2, cluster_for_synsets=None, 
+                    url_and_keywords_for_pictures=None, filenames_for_synsets=None, best_cluster_representatives=None):
   if cluster_for_synsets == None:
     cluster_for_synsets = load_cluster_for_synsets()
   if url_and_keywords_for_pictures == None:
     url_and_keywords_for_pictures = load_keywords_for_pictures()
-  if filenames_for_synsets == None:
+  if filenames_for_synsets_global == None and filenames_for_synsets == None:
     filenames_for_synsets = load_synset_filenames_dict()
+  if filenames_for_synsets_global == None:
+    global filenames_for_synsets_global
+    filenames_for_synsets_global = filenames_for_synsets
+
+  if best_cluster_representatives == None:
+    best_cluster_representatives = find_best_representatives()
 
   pictures_for_clusters = defaultdict(list)
   subcluster_list = []
 
   if len(searchtree.associated_pictures) >= mcl_clustering_threshold:
+    
+    # cluster pictures via mcl
     for picture in searchtree.associated_pictures:
       cluster_counter = Counter()
       synsets_for_picture = url_and_keywords_for_pictures[picture[0]][1]
@@ -158,7 +181,7 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
             break
         if not is_subset:
           # print str(key) + ", "
-          subcluster_list.append({"synsets": cluster_representatives[key], "subcluster": pictures})
+          subcluster_list.append({"synsets": best_cluster_representatives[key], "subcluster": pictures})
 
     searchtree.subclusters = subcluster_list
   else:
@@ -168,10 +191,10 @@ def cluster_via_mcl(searchtree, mcl_clustering_threshold=2, minimal_mcl_cluster_
   if searchtree.has_hyponyms():
     for child_hyponym_node in searchtree.hyponyms:
       cluster_via_mcl(child_hyponym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
-                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets)
+                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets, best_cluster_representatives)
   if searchtree.has_meronyms():
     for child_meronym_node in searchtree.meronyms:
       cluster_via_mcl(child_meronym_node, mcl_clustering_threshold, minimal_mcl_cluster_size, 
-                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets)
+                      cluster_for_synsets, url_and_keywords_for_pictures, filenames_for_synsets, best_cluster_representatives)
 
   return searchtree
