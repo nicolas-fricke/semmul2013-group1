@@ -34,7 +34,7 @@ def find_metajsons_to_process_in_dir(metatdata_dir):
   return glob(metatdata_dir + '/*.json')
 
 def write_json_file(obj, filename):
-  with open(filename, 'wb') as output:
+  with open(filename, 'w') as output:
     output.write(json.dumps(obj))
 
 def parse_json_file(json_file):
@@ -120,8 +120,6 @@ def read_cluster_representatives(file_name):
   cluster_file = open(file_name, 'r')
   for number_of_cluster, line in enumerate(cluster_file):
     representatives = line.rstrip('\n\r').split('\t')
-    #if len(representatives) > 5:
-    #  representatives = representatives[:4]
     clusters.append(representatives)
   return clusters
 
@@ -164,5 +162,14 @@ def load_synset_filenames_dict():
   filenames_for_synsets = parse_json_file(synset_filenames_dict_filename)
   return filenames_for_synsets
 
+def load_cluster_representatives(how_many_per_cluster):
+  mcl_json_filename = get_name_from_config('Filenames for Pickles', 'mcl_clusters_as_json_filename')
+  mcl_clusters = parse_json_file(mcl_json_filename)
+  representatives = []
+  for cluster in mcl_clusters:
+    if len(cluster) > how_many_per_cluster:
+      representatives.append(cluster[:how_many_per_cluster])
+    else:
+      representatives.append(cluster)
 
-
+  return representatives

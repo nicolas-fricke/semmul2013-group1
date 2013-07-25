@@ -18,5 +18,6 @@ synset_filenames_dict_filename: %(preprocessed-data-dir)s/synset_filenames_dict.
 unmatched_tag_filenames_dict_filename: %(preprocessed-data-dir)s/unmatched_tag_filenames_dict.json
 color_and_edge_features_filename: %(preprocessed-data-dir)s/color_and_edge_features.json
 mcl_clusters_filename: %(preprocessed-data-dir)s/mcl_clusters.txt
+mcl_clusters_as_json_filename: %(preprocessed-data-dir)s/mcl_clusters.json
 edge_weightings_filename: %(preprocessed-data-dir)s/edge_weightings_for_mcl.txt
 visual_features_filename: %(preprocessed-data-dir)s/visual_features_##.json ; ## stands for the folder number of preprocessed data, automatically gets replaced
