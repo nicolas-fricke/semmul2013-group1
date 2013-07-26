@@ -84,7 +84,7 @@ def read_image_urls():
   testset_dir = '../testset'
   for filename in os.listdir(testset_dir):
     if os.path.isfile(testset_dir + os.sep + filename):
-      if os.path.splitext(filename)[1] == "json":
+      if os.path.splitext(filename)[1] == ".json":
         json_file = json.load(open(testset_dir + os.sep + filename, 'r'))
         try:
           for size in json_file['metadata']['sizes']['sizes']['size']:
