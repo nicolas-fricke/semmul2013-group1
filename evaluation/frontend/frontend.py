@@ -84,13 +84,14 @@ def read_image_urls():
   testset_dir = '../testset'
   for filename in os.listdir(testset_dir):
     if os.path.isfile(testset_dir + os.sep + filename):
-      json_file = json.load(open(testset_dir + os.sep + filename, 'r'))
-      try:
-        for size in json_file['metadata']['sizes']['sizes']['size']:
-          if size['label'] == 'Medium':
-            image_urls[int(filename.split('.')[0])] = size['source']
-      except KeyError:
-        continue
+      if os.path.splitext(filename)[1] == "json":
+        json_file = json.load(open(testset_dir + os.sep + filename, 'r'))
+        try:
+          for size in json_file['metadata']['sizes']['sizes']['size']:
+            if size['label'] == 'Medium':
+              image_urls[int(filename.split('.')[0])] = size['source']
+        except KeyError:
+          continue
   return image_urls
 
 if __name__ == "__main__":
