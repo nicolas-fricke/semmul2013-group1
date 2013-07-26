@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Semantic Multimedia – Testset Evaluator</title>
-
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
     <style type="text/css">
@@ -33,11 +32,66 @@
         width: 200px;
       }
 
+      .keyboard-inactive {
+        zoom: 1;
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+      }
+
       footer {
         margin-top: 40px;
         font-size: 10pt;
       }
     </style>
+    <script type="text/javascript">
+      selectNextFieldset = function(increment){
+        $("fieldset, #send-btn").removeClass("keyboard-focussed").addClass("keyboard-inactive");
+        window.activeElementIndex += increment;
+        if (window.activeElementIndex > 3) window.activeElementIndex = 0;
+        if (window.activeElementIndex < 0) window.activeElementIndex = 3;
+        var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
+        activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
+        if (activeElement.is($("#send-btn"))) {
+          activeElement.focus();
+        } else {
+          activeElement.children(":first-child").focus();
+        }
+      }
+
+      checkSelectBox = function(boxIndex) {
+        if ($("fieldset.keyboard-focussed input").length < boxIndex) return;
+        $("fieldset.keyboard-focussed input").prop('checked', false);
+        $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true);
+      }
+
+      $(document).ready(function(){
+        window.activeElementIndex = 3;
+        $('body').keydown(function(event) {
+          switch (event.keyCode) {
+            case 9: /* Tab */
+                event.preventDefault();
+                if (event.shiftKey) {
+                  selectNextFieldset(-1);
+                } else {
+                  selectNextFieldset(1);
+                }
+              break;
+            case 13: /* Enter */
+                if ($('input[type=radio]:checked').length != 3) event.preventDefault();
+              break;
+            case 49: /* < 1 > */
+                checkSelectBox(1);
+              break;
+            case 50: /* < 2 > */
+                checkSelectBox(2);
+              break;
+            case 51: /* < 3 > */
+                checkSelectBox(3);
+              break;
+          }
+        });
+      });
+    </script>
   </head>
   <body>
     <div id="main-navigation" class="navbar navbar-fixed-top">
