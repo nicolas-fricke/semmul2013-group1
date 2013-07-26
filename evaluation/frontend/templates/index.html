@@ -61,7 +61,7 @@
       checkSelectBox = function(boxIndex) {
         if ($("fieldset.keyboard-focussed input").length < boxIndex) return;
         $("fieldset.keyboard-focussed input").prop('checked', false);
-        $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true);
+        $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true).trigger('change');
       }
 
       $(document).ready(function(){
@@ -76,9 +76,6 @@
                   selectNextFieldset(1);
                 }
               break;
-            case 13: /* Enter */
-                if ($('input[type=radio]:checked').length != 3) event.preventDefault();
-              break;
             case 49: /* < 1 > */
                 checkSelectBox(1);
               break;
@@ -90,6 +87,19 @@
               break;
           }
         });
+        $("form").submit(function() {
+          if ($('input[type=radio]:checked').length == 3) {
+            return true;
+          }
+          return false;
+        });
+        $("input[type=radio]").change(function(){
+          if ($('input[type=radio]:checked').length == 3) {
+            $("#send-btn").attr("disabled", false);
+          } else {
+            $("#send-btn").attr("disabled", true);
+          }
+        })
       });
     </script>
   </head>
@@ -158,7 +168,7 @@
             </label>
           </fieldset>
           <div class="text-center">
-            <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" />
+            <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" disabled />
           </div>
         </form>
       </div>
