@@ -59,13 +59,15 @@
       }
 
       checkSelectBox = function(boxIndex) {
+        if (window.activeElementIndex == -1) selectNextFieldset(1);
         if ($("fieldset.keyboard-focussed input").length < boxIndex) return;
         $("fieldset.keyboard-focussed input").prop('checked', false);
         $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true).trigger('change');
+        selectNextFieldset(1);
       }
 
       $(document).ready(function(){
-        window.activeElementIndex = 3;
+        window.activeElementIndex = -1;
         $('body').keydown(function(event) {
           switch (event.keyCode) {
             case 9: /* Tab */
