@@ -122,13 +122,14 @@
             $("#send-btn").attr("disabled", true);
           }
         })
-        $("label em.keyboard-hint")
-            .attr('rel', 'tooltip')
-            .attr('data-placement', 'bottom')
-            .prop('title', 'Use keyboard keys [1], [2], [3] and [Tab] to navigate through form.');
+        $("label em.keyboard-hint").
+            tooltip({
+              'trigger': 'hover',
+              'title': 'Use keyboard keys [1], [2], [3], [Tab], and [Enter] to navigate through the form.',
+              'placement': 'right'});
         $('.navbar-inner input[type=text]').
             tooltip({
-              'trigger':'hover',
+              'trigger': 'hover',
               'title': 'Not required, only for statistics',
               'placement': 'bottom'});
       });
