@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import random
+import argparse
 from flask import Flask, url_for, request, _app_ctx_stack, g, \
   redirect, abort, flash, session
 from flask import Response, render_template
@@ -9,17 +10,19 @@ from flask_assets import Environment, Bundle
 import sqlite3
 import contextlib
 
-# database configuration
+# configuration:
+# database:
 DATABASE = '/tmp/evaluation.db'
-DEBUG = True
 SECRET_KEY = '123 - thats a hyper secret key'
-USERNAME = 'admin'
-PASSWORD = 'default'
+# server:
+SERVER_NAME = 'localhost:5000'
+DEBUG = True
+
 
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+app.config.from_envvar('SEMMUL_EVALUATION_SETTINGS', silent=True)
 assets = Environment(app)
 
 
@@ -95,6 +98,16 @@ def read_image_urls():
   return image_urls
 
 if __name__ == "__main__":
+  parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
+  parser.add_argument('-p','--port', type=int, help='Port the server will run on')
+  parser.add_argument('-db','--db-path', help='Path for the Sqlite database file')
+  parser.add_argument('-k','--secret-key', help='The secret key')
+  parser.add_argument('--production', help='Run program in production mode', action="store_true")
+  args = parser.parse_args()
+  if args.production: app.debug = False
+  if args.port: app.config.update(SERVER_NAME = 'localhost:' + str(args.port))
+  if args.secret_key: app.config.update(SECRET_KEY = args.secret_key)
+  if args.db_path: app.config.update(DATABASE = args.db_path)
   global image_urls
   image_urls = read_image_urls()
   init_db()
