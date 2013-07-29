@@ -31,6 +31,14 @@
         margin-bottom: 4px;
       }
 
+      label em.keyboard-hint {
+        font-style: inherit;
+        background-color: rgba(255,255,255,0.3);
+        padding: 2px;
+        margin-left: 10px;
+        color: green;
+      }
+
       #send-btn {
         margin-top: 30px;
         width: 200px;
@@ -106,6 +114,10 @@
             $("#send-btn").attr("disabled", true);
           }
         })
+        $("label em.keyboard-hint")
+            .attr('rel', 'tooltip')
+            .attr('data-placement', 'bottom')
+            .prop('title', 'Use keyboard keys [1], [2], [3] and [Tab] to navigate through form.');
       });
     </script>
   </head>
@@ -132,11 +144,11 @@
                 <legend>Image 1</legend>
                 <label class="radio">
                   <input type="radio" class="radio" name="image_1_food" value="1" />
-                  Shows food
+                  Shows food <em class="keyboard-hint">[1]</em>
                 </label>
                 <label class="radio">
                   <input type="radio" class="radio" name="image_1_food" value="0" />
-                  Does not show food
+                  Does not show food <em class="keyboard-hint">[2]</em>
                 </label>
               </fieldset>
             </div>
@@ -146,11 +158,11 @@
                 <legend>Image 2</legend>
                 <label class="radio">
                   <input type="radio" class="radio" name="image_2_food" value="1" />
-                  Shows food
+                  Shows food <em class="keyboard-hint">[1]</em>
                 </label>
                 <label class="radio">
                   <input type="radio" class="radio" name="image_2_food" value="0" />
-                  Does not show food
+                  Does not show food <em class="keyboard-hint">[2]</em>
                 </label>
               </fieldset>
             </div>
@@ -162,26 +174,26 @@
             <legend>Semantic similarity</legend>
             <label class="radio">
               <input type="radio" class="radio" name="semantic_similarity" value="not_semantically_similar" />
-              Not semantically similar
+              Not semantically similar <em class="keyboard-hint">[1]</em>
             </label>
             <label class="radio">
               <input type="radio" class="radio" name="semantic_similarity" value="same_object" />
-              Same object in different context (e.g. in both images contain an apple)
+              Same object in different context (e.g. in both images contain an apple) <em class="keyboard-hint">[2]</em>
             </label>
             <label class="radio">
               <input type="radio" class="radio" name="semantic_similarity" value="same_context" />
-              Same object in same context (e.g. both show a person eating an apple)
+              Same object in same context (e.g. both show a person eating an apple) <em class="keyboard-hint">[3]</em>
             </label>
           </fieldset>
           <fieldset id="fieldset_visual_similarity">
             <legend>Visual similarity</legend>
             <label class="radio">
               <input type="radio" class="radio" name="visual_similarity" value="not_visually_similar" />
-              Not visually similar
+              Not visually similar <em class="keyboard-hint">[1]</em>
             </label>
             <label class="radio">
               <input type="radio" class="radio" name="visual_similarity" value="visually_similar" />
-              Images are visually similar (eg. have same colors, structure, or textures)
+              Images are visually similar (eg. have same colors, structure, or textures) <em class="keyboard-hint">[2]</em>
             </label>
           </fieldset>
           <div class="text-center">
