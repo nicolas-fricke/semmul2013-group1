@@ -60,14 +60,14 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_entry():
   db = get_db()
-  db.execute('insert into semmul_images (image_id, contains_food) values (?, ?)',
-             [request.form['image_1_id'], request.form['image_1_food']])
+  db.execute('insert into semmul_images (image_id, contains_food, nicname, email) values (?, ?, ?, ?)',
+             [request.form['image_1_id'], request.form['image_1_food'], request.form['username'], request.form['email']])
   db.commit()
-  db.execute('insert into semmul_images (image_id, contains_food) values (?, ?)',
-             [request.form['image_2_id'], request.form['image_2_food']])
+  db.execute('insert into semmul_images (image_id, contains_food, nicname, email) values (?, ?, ?, ?)',
+             [request.form['image_2_id'], request.form['image_2_food'], request.form['username'], request.form['email']])
   db.commit()
-  db.execute('insert into semmul_image_similarity (image_1_id, image_2_id, semantic_similarity, visual_similarity) values (?, ?, ?, ?)',
-             [request.form['image_1_id'], request.form['image_2_id'], request.form['semantic_similarity'], request.form['visual_similarity']])
+  db.execute('insert into semmul_image_similarity (image_1_id, image_2_id, semantic_similarity, visual_similarity, nicname, email) values (?, ?, ?, ?, ?, ?)',
+             [request.form['image_1_id'], request.form['image_2_id'], request.form['semantic_similarity'], request.form['visual_similarity'], request.form['username'], request.form['email']])
   db.commit()
   flash('New entry was successfully posted')
   return redirect('/')
