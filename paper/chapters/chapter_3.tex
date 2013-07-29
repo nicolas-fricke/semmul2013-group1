@@ -9,15 +9,21 @@ network of synsets for discovering semantics between words \\
   
 
 \subsection{Constructing a Searchtree}
-two typical types 
-use hyponym relation to span tree of specializations \\
-if no hyponyms (usually the case for geographic terms), use part-meronyms \\
+two typical types of queries: more or less generic object descriptors, and places \\
+actually construct multiple searchtrees if more than one synset found for a searchterm (i.e. train coach and motorized vehicle for car)\\
+use hyponym relation to span tree of specializations (i.e. apple, banana for fruit; bus, sportscar for car)\\
+if no hyponyms (usually the case for geographic terms), use part-meronyms\\
 
 \subsection{Synset Detection}
-for each tag and word in title, try to find synset (limiting ourselves to nouns) \\
+for each tag and word in title, try to find synset (limiting ourselves to nouns, because they are usually the ones describing the depicted concepts). Further source options: description (named entity recognition necessary), comments (noticed little relation to picture), group and album names (for both preprocessing needed to match any to wordnet)  \\
 problem: multiple possible synsets for a word, how to find correct meaning? \\
-use best-first search with limited queue
+use best-first search (with limited queue for complexity reasons. idea is that paths at more than position x are unlikely to become best candidate anyways) \\
+still erroneous with words that are meant in a way that is unknown to WordNet, i.e. canon as the camera model is interpreted as [definition of canon.n.01]  \\
+therefore preprocessing removes all tags that include numbers. Blacklist could filter even more but would also filter canon in its real sense, and generally not desirable to be flexible with respect to the tag vocabulary.  \\
+also removes special characters (more likely to be found on WordNet, and more likely to be identical with other unmatchable tags) 
 
-\subsection{Assigning Synsets to Pictures}
+\subsection{Assigning Picture to Synsets}
 for higher recall: find strongly co-occurring tags that could not be mapped to synset \\
-take all pictures that are annotated with at least 
+strong co-occurrence defined on tf-idf (else camera models would be strong co-occurrence with many synsets)
+observed that it is useful to find translations etc. but of course also introduces noise \\
+take all pictures that are annotated with at least one of the related tags or the synset itself.
