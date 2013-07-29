@@ -85,7 +85,15 @@
         selectNextFieldset(1);
       }
 
+      $.params = function(param_name){
+        var value = new RegExp('[\\?&]' + param_name + '=([^&#]*)').exec(window.location.href);
+        if (value != null) return value[1];
+        else return null;
+      }
+
       $(document).ready(function(){
+        $("input[name=username]").prop("value", $.params("nicname"));
+        $("input[name=email]").prop("value", $.params("email"));
         window.activeElementIndex = -1;
         $('body').keydown(function(event) {
           if ($('input[type=text]').is(':focus')) return;
