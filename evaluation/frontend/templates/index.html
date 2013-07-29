@@ -27,7 +27,7 @@
       }
 
       legend {
-        padding-top: 6px;
+        padding-top: 12px;
         margin-bottom: 4px;
       }
 
@@ -51,8 +51,8 @@
       selectNextFieldset = function(increment){
         $("fieldset, #send-btn").removeClass("keyboard-focussed").addClass("keyboard-inactive");
         window.activeElementIndex += increment;
-        if (window.activeElementIndex > 3) window.activeElementIndex = 0;
-        if (window.activeElementIndex < 0) window.activeElementIndex = 3;
+        if (window.activeElementIndex > 4) window.activeElementIndex = 0;
+        if (window.activeElementIndex < 0) window.activeElementIndex = 4;
         var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
         activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
         if (activeElement.is($("#send-btn"))) {
@@ -94,13 +94,13 @@
           }
         });
         $("form").submit(function() {
-          if ($('input[type=radio]:checked').length == 3) {
+          if ($('input[type=radio]:checked').length == 4) {
             return true;
           }
           return false;
         });
         $("input[type=radio]").change(function(){
-          if ($('input[type=radio]:checked').length == 3) {
+          if ($('input[type=radio]:checked').length == 4) {
             $("#send-btn").attr("disabled", false);
           } else {
             $("#send-btn").attr("disabled", true);
@@ -158,19 +158,30 @@
           </div>
           <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
           <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
-          <fieldset id="fieldset_image_similarity">
-            <legend>Image similarity</legend>
+          <fieldset id="fieldset_semantic_similarity">
+            <legend>Semantic similarity</legend>
             <label class="radio">
-              <input type="radio" class="radio" name="image_similarity" value="none" />
-              Not similar
+              <input type="radio" class="radio" name="semantic_similarity" value="not_semantically_similar" />
+              Not semantically similar
             </label>
             <label class="radio">
-              <input type="radio" class="radio" name="image_similarity" value="same_object" />
+              <input type="radio" class="radio" name="semantic_similarity" value="same_object" />
               Same object in different context (e.g. in both images contain an apple)
             </label>
             <label class="radio">
-              <input type="radio" class="radio" name="image_similarity" value="same_context" />
+              <input type="radio" class="radio" name="semantic_similarity" value="same_context" />
               Same object in same context (e.g. both show a person eating an apple)
+            </label>
+          </fieldset>
+          <fieldset id="fieldset_visual_similarity">
+            <legend>Visual similarity</legend>
+            <label class="radio">
+              <input type="radio" class="radio" name="visual_similarity" value="not_visually_similar" />
+              Not visually similar
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="visual_similarity" value="visually_similar" />
+              Images are visually similar (eg. have same colors, structure, or textures)
             </label>
           </fieldset>
           <div class="text-center">

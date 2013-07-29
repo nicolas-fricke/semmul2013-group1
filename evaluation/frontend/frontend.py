@@ -67,7 +67,7 @@ def add_entry():
              [request.form['image_2_id'], request.form['image_2_food']])
   db.commit()
   db.execute('insert into semmul_image_similarity (image_1_id, image_2_id, semantic_similarity, visual_similarity) values (?, ?, ?, ?)',
-             [request.form['image_1_id'], request.form['image_2_id'], request.form['image_similarity'], '<not implemented>'])
+             [request.form['image_1_id'], request.form['image_2_id'], request.form['semantic_similarity'], request.form['visual_similarity']])
   db.commit()
   flash('New entry was successfully posted')
   return redirect('/')
