@@ -61,6 +61,7 @@
         window.activeElementIndex += increment;
         if (window.activeElementIndex > 4) window.activeElementIndex = 0;
         if (window.activeElementIndex < 0) window.activeElementIndex = 4;
+        if (window.activeElementIndex == 4 && $('input[type=radio]:checked').length != 4) window.activeElementIndex = 0;
         var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
         activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
         if (activeElement.is($("#send-btn"))) {
@@ -91,13 +92,13 @@
                 }
               break;
             case 49: /* < 1 > */
-                checkSelectBox(1);
+              checkSelectBox(1);
               break;
             case 50: /* < 2 > */
-                checkSelectBox(2);
+              checkSelectBox(2);
               break;
             case 51: /* < 3 > */
-                checkSelectBox(3);
+              checkSelectBox(3);
               break;
           }
         });
