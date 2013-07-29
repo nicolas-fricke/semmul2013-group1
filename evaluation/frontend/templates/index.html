@@ -4,6 +4,7 @@
     <title>Semantic Multimedia – Testset Evaluator</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <style type="text/css">
       body {
         padding-top: 65px;
@@ -11,6 +12,11 @@
 
       .container {
         width: 740px !important;
+      }
+
+      .navbar-inner input[type=text] {
+        margin-top: 10px;
+        width: 160px;
       }
 
       .image-container {
@@ -82,6 +88,7 @@
       $(document).ready(function(){
         window.activeElementIndex = -1;
         $('body').keydown(function(event) {
+          if ($('input[type=text]').is(':focus')) return;
           switch (event.keyCode) {
             case 9: /* Tab */
                 event.preventDefault();
@@ -119,25 +126,34 @@
             .attr('rel', 'tooltip')
             .attr('data-placement', 'bottom')
             .prop('title', 'Use keyboard keys [1], [2], [3] and [Tab] to navigate through form.');
+        $('.navbar-inner input[type=text]').
+            tooltip({
+              'trigger':'hover',
+              'title': 'Not required, only for statistics',
+              'placement': 'bottom'});
       });
     </script>
   </head>
   <body>
-    <div id="main-navigation" class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand">Evaluation Tool - Group 1</a>
+    <form method="POST" action="/add">
+      <div id="main-navigation" class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand">Evaluation Tool - Group 1</a>
+            <div class="pull-right">
+              <input type="text" name="username" placeholder="nicname" />
+              <input type="text" name="email" placeholder="email address" />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <div id="content">
-        <form method="POST" action="/add">
+      <div class="container">
+        <div id="content">
           <div class="images">
             <div class="image-container pull-left" id="image-1-container">
               <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
@@ -200,19 +216,19 @@
           <div class="text-center">
             <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" disabled />
           </div>
-        </form>
+        </div>
       </div>
-    </div>
-    <footer>
-      <div class="container">
-        <p>
-          &copy; 2013,
-          created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
-          during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
-          at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
-          Please find the source code of this project on <a href="https://github.com/nicolas-fricke/semmul2013-group1">Github</a>.
-        </p>
-      </div>
-    </footer>
+      <footer>
+        <div class="container">
+          <p>
+            &copy; 2013,
+            created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
+            during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
+            at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
+            Please find the source code of this project on <a href="https://github.com/nicolas-fricke/semmul2013-group1">Github</a>.
+          </p>
+        </div>
+      </footer>
+    </form>
   </body>
 </html>
