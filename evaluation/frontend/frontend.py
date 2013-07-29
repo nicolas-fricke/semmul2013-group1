@@ -45,6 +45,12 @@ def get_db():
     top.sqlite_db = sqlite_db
   return top.sqlite_db
 
+def add_get_param_to_url(url, parameter_name, parameter_value):
+  if url.find("?") == -1:
+    return url + "?" + parameter_name + "=" + parameter_value
+  else:
+    return url + "&" + parameter_name + "=" + parameter_value
+
 @app.teardown_appcontext
 def close_db_connection(exception):
   """Closes the database again at the end of the request."""
@@ -70,7 +76,12 @@ def add_entry():
              [request.form['image_1_id'], request.form['image_2_id'], request.form['semantic_similarity'], request.form['visual_similarity'], request.form['username'], request.form['email']])
   db.commit()
   flash('New entry was successfully posted')
-  return redirect('/')
+  redirect_url = '/'
+  if request.form['username'] != '':
+    redirect_url = add_get_param_to_url(redirect_url, 'nicname', request.form['username'])
+  if request.form['email'] != '':
+    redirect_url = add_get_param_to_url(redirect_url, 'email', request.form['email'])
+  return redirect(redirect_url)
 
 def choose_random_images():
   image_1_id = random.choice(image_urls.keys())
