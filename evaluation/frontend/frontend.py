@@ -91,7 +91,7 @@ def read_image_urls():
         json_file = json.load(open(testset_dir + os.sep + filename, 'r'))
         try:
           for size in json_file['metadata']['sizes']['sizes']['size']:
-            if size['label'] == 'Medium':
+            if size['label'] == 'Small':
               image_urls[int(filename.split('.')[0])] = size['source']
         except KeyError:
           continue
