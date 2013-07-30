@@ -21,6 +21,8 @@
 
       .image-container {
         width: 350px;
+        margin-top: 30px;
+        margin-bottom: 20px;
       }
 
       #image-2-container {
@@ -57,7 +59,7 @@
       }
 
       footer {
-        margin-top: 40px;
+        margin-top: 60px;
         font-size: 10pt;
       }
     </style>
@@ -65,9 +67,9 @@
       selectNextFieldset = function(increment){
         $("fieldset, #send-btn").removeClass("keyboard-focussed").addClass("keyboard-inactive");
         window.activeElementIndex += increment;
-        if (window.activeElementIndex > 4) window.activeElementIndex = 0;
-        if (window.activeElementIndex < 0) window.activeElementIndex = 4;
-        if (window.activeElementIndex == 4 && $('input[type=radio]:checked').length != 4) window.activeElementIndex = 0;
+        if (window.activeElementIndex > 2) window.activeElementIndex = 0;
+        if (window.activeElementIndex < 0) window.activeElementIndex = 2;
+        if (window.activeElementIndex == 2 && $('input[type=radio]:checked').length != 2) window.activeElementIndex = 0;
         var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
         activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
         if (activeElement.is($("#send-btn"))) {
@@ -118,13 +120,13 @@
           }
         });
         $("form").submit(function() {
-          if ($('input[type=radio]:checked').length == 4) {
+          if ($('input[type=radio]:checked').length == 2) {
             return true;
           }
           return false;
         });
         $("input[type=radio]").change(function(){
-          if ($('input[type=radio]:checked').length == 4) {
+          if ($('input[type=radio]:checked').length == 2) {
             $("#send-btn").attr("disabled", false);
           } else {
             $("#send-btn").attr("disabled", true);
@@ -165,32 +167,10 @@
         <div id="content">
           <div class="images">
             <div class="image-container pull-left" id="image-1-container">
-              <img class="test-image" id="image-1" src="{{ images[0]['url'] }}" />
-              <fieldset id="fieldset_image_1">
-                <legend>Image 1</legend>
-                <label class="radio">
-                  <input type="radio" class="radio" name="image_1_food" value="1" />
-                  Shows food <em class="keyboard-hint">[1]</em>
-                </label>
-                <label class="radio">
-                  <input type="radio" class="radio" name="image_1_food" value="0" />
-                  Does not show food <em class="keyboard-hint">[2]</em>
-                </label>
-              </fieldset>
+              <img class="test-image pull-right" id="image-1" src="{{ images[0]['url'] }}" />
             </div>
             <div class="image-container pull-left" id="image-2-container">
               <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
-              <fieldset id="fieldset_image_2">
-                <legend>Image 2</legend>
-                <label class="radio">
-                  <input type="radio" class="radio" name="image_2_food" value="1" />
-                  Shows food <em class="keyboard-hint">[1]</em>
-                </label>
-                <label class="radio">
-                  <input type="radio" class="radio" name="image_2_food" value="0" />
-                  Does not show food <em class="keyboard-hint">[2]</em>
-                </label>
-              </fieldset>
             </div>
             <div class="clearfix"></div>
           </div>

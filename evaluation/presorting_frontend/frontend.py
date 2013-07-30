@@ -12,7 +12,7 @@ import contextlib
 
 # configuration:
 # database:
-DATABASE = '/tmp/evaluation.db'
+DATABASE = '/tmp/presorting-evaluation.db'
 SECRET_KEY = '123 - thats a hyper secret key'
 # server:
 SERVER_NAME = 'localhost:5000'
@@ -60,20 +60,14 @@ def close_db_connection(exception):
 
 @app.route("/")
 def index():
-  images = choose_random_images()
-  return render_template('index.html', images=images)
+  image = choose_random_image()
+  return render_template('index.html', image=image)
 
 @app.route('/add', methods=['POST'])
 def add_entry():
   db = get_db()
   db.execute('insert into semmul_images (image_id, contains_food, nicname, email) values (?, ?, ?, ?)',
-             [request.form['image_1_id'], request.form['image_1_food'], request.form['username'], request.form['email']])
-  db.commit()
-  db.execute('insert into semmul_images (image_id, contains_food, nicname, email) values (?, ?, ?, ?)',
-             [request.form['image_2_id'], request.form['image_2_food'], request.form['username'], request.form['email']])
-  db.commit()
-  db.execute('insert into semmul_image_similarity (image_1_id, image_2_id, semantic_similarity, visual_similarity, nicname, email) values (?, ?, ?, ?, ?, ?)',
-             [request.form['image_1_id'], request.form['image_2_id'], request.form['semantic_similarity'], request.form['visual_similarity'], request.form['username'], request.form['email']])
+             [request.form['image_id'], request.form['image_food'], request.form['username'], request.form['email']])
   db.commit()
   flash('New entry was successfully posted')
   redirect_url = '/'
@@ -83,15 +77,9 @@ def add_entry():
     redirect_url = add_get_param_to_url(redirect_url, 'email', request.form['email'])
   return redirect(redirect_url)
 
-def choose_random_images():
-  image_1_id = random.choice(image_urls.keys())
-  image_2_id = image_1_id
-  while image_2_id == image_1_id:
-    image_1_id = random.choice(image_urls.keys())
-  if image_1_id < image_2_id:
-    return ({'id': image_1_id, 'url': image_urls[image_1_id]}, {'id': image_2_id, 'url': image_urls[image_2_id]})
-  else:
-    return ({'id': image_2_id, 'url': image_urls[image_2_id]}, {'id': image_1_id, 'url': image_urls[image_1_id]})
+def choose_random_image():
+  image_id = random.choice(image_urls.keys())
+  return {'id': image_id, 'url': image_urls[image_id]}
 
 def read_image_urls(testset_path):
   image_urls = {}
