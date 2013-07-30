@@ -87,23 +87,12 @@ def choose_random_images():
   else:
     return ({'id': image_2_id, 'url': image_urls[image_2_id]}, {'id': image_1_id, 'url': image_urls[image_1_id]})
 
-def read_image_urls(testset_path):
-  image_urls = {}
-  for filename in os.listdir(testset_path):
-    if os.path.isfile(testset_path + filename):
-      if os.path.splitext(filename)[1] == ".json":
-        json_file = json.load(open(testset_path + filename, 'r'))
-        try:
-          for size in json_file['metadata']['sizes']['sizes']['size']:
-            if size['label'] == 'Small':
-              image_urls[int(filename.split('.')[0])] = size['source']
-        except KeyError:
-          continue
-  return image_urls
+def load_image_urls(testset_file):
+  return json.load(open(testset_file, 'r'))
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
-  parser.add_argument('-t','--testset-path', help='Path to the directory the testset JSON files can be found in', required=True)
+  parser.add_argument('-t','--testset-file', help='Path to the testset JSON file', required=True)
   parser.add_argument('-p','--port', type=int, help='Port the server will run on')
   parser.add_argument('-db','--db-path', help='Path for the Sqlite database file')
   parser.add_argument('-k','--secret-key', help='The secret key')
@@ -114,6 +103,6 @@ if __name__ == "__main__":
   if args.secret_key: app.config.update(SECRET_KEY = args.secret_key)
   if args.db_path: app.config.update(DATABASE = args.db_path)
   global image_urls
-  image_urls = read_image_urls(args.testset_path)
+  image_urls = load_image_urls(args.testset_file)
   init_db()
   app.run(debug=True)
