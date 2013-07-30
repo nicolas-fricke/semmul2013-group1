@@ -94,8 +94,8 @@
       }
 
       $(document).ready(function(){
-        $("input[name=username]").prop("value", $.params("nicname"));
-        $("input[name=email]").prop("value", $.params("email"));
+        $("input[name=username]").prop("value", decodeURIComponent($.params("nicname")));
+        $("input[name=email]").prop("value", decodeURIComponent($.params("email")));
         window.activeElementIndex = -1;
         $('body').keydown(function(event) {
           if ($('input[type=text]').is(':focus')) return;
