@@ -96,9 +96,9 @@ def choose_random_images():
 def read_image_urls(testset_path):
   image_urls = {}
   for filename in os.listdir(testset_path):
-    if os.path.isfile(testset_path + os.sep + filename):
+    if os.path.isfile(testset_path + filename):
       if os.path.splitext(filename)[1] == ".json":
-        json_file = json.load(open(testset_path + os.sep + filename, 'r'))
+        json_file = json.load(open(testset_path + filename, 'r'))
         try:
           for size in json_file['metadata']['sizes']['sizes']['size']:
             if size['label'] == 'Small':
