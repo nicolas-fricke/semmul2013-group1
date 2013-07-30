@@ -62,3 +62,7 @@ paper/semmul_group1.dvi
 # Flask-Asset files
 src/frontend/static/gen/
 src/frontend/static/.webassets-cache/
+
+# Testset Folders
+evaluation/testset
+
