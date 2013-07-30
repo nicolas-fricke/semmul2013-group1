@@ -62,6 +62,18 @@
         margin-top: 40px;
         font-size: 10pt;
       }
+
+      .leaderboard {
+        padding : 15px;
+        margin-right: 20px;
+        width: 225px;
+        max-height: 80%;
+        overflow: scroll;
+      }
+
+      .leaderboard tr td:first-child, .leaderboard tr th:first-child {
+        text-align: right;
+      }
     </style>
     <script type="text/javascript">
       selectNextFieldset = function(increment){
@@ -141,6 +153,7 @@
               'trigger': 'hover',
               'title': 'Not required, only for chocolate and statistics ;)',
               'placement': 'bottom'});
+        $('.leaderboard tr td:contains("'+ $('input[name=username]').val() +'")').parent().addClass("success");
       });
     </script>
   </head>
@@ -161,6 +174,24 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="leaderboard pull-right">
+        <table class="table table-bordered table-striped table-hover table-condensed">
+          <thead>
+            <tr>
+              <th># Images</th>
+              <th>Nicname</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for player in highscore %}
+              <tr>
+                <td>{{ player["score"] }}</td>
+                <td>{{ player["nicname"] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
       <div class="container">
         <div id="content">

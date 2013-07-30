@@ -60,8 +60,19 @@ def close_db_connection(exception):
 
 @app.route("/")
 def index():
+  db = get_db()
+  curser = db.execute('''SELECT nicname, email, COUNT(*) as image_counter
+                         FROM semmul_images
+                         WHERE nicname != ""
+                         GROUP BY nicname
+                         ORDER BY image_counter DESC''')
+  highscore = [dict(score=row[2], nicname=row[0]) for row in curser.fetchall()]
+  # if request.args.get('nicname') != None:
+  #   user_score = (entry['score'] for entry in highscore if entry["nicname"] == request.args['nicname']).next()
+  # else:
+  #   user_score = None
   image = choose_random_image()
-  return render_template('index.html', image=image)
+  return render_template('index.html', image=image, highscore=highscore)
 
 @app.route('/add', methods=['POST'])
 def add_entry():
