@@ -153,7 +153,9 @@
               'trigger': 'hover',
               'title': 'Not required, only for chocolate and statistics ;)',
               'placement': 'bottom'});
-        $('.leaderboard tr td:contains("'+ $('input[name=username]').val() +'")').parent().addClass("success");
+        $('.leaderboard tr td').filter(function(){
+          return $(this).text() === $.params("nicname");
+        }).parent().addClass("success");
       });
     </script>
   </head>
