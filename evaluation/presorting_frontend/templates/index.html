@@ -69,8 +69,18 @@
         width: 225px;
       }
 
-      .leaderboard tr td:first-child, .leaderboard tr th:first-child {
+      .leaderboard tr td, .leaderboard tr th {
         text-align: right;
+      }
+
+      .leaderboard tr td:last-child, .leaderboard tr th:last-child {
+        text-align: left;
+      }
+
+      .leaderboard tr.collapsed td {
+        background-color: grey !important;
+        text-align: center;
+        cursor: pointer;
       }
     </style>
     <script type="text/javascript">
@@ -101,6 +111,29 @@
         var value = new RegExp('[\\?&]' + param_name + '=([^&#]*)').exec(window.location.href);
         if (value != null) return value[1];
         else return null;
+      }
+
+      collapseLeaderboard = function() {
+        $('tbody tr').hide();
+        $('tbody tr').slice(0,3).show();
+        userIndex = $('tbody tr').index($('tbody tr.success'));
+        $('tbody tr').slice(userIndex - 2, userIndex + 2).show();
+        if (userIndex < $('tbody tr').length - 2) {
+          $('tbody tr').slice(userIndex + 1,userIndex + 2)
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+        }
+        if (userIndex > 6) {
+          $('tbody tr').slice(userIndex - 3,userIndex -2)
+              .before('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+        }
+        $('tbody tr.collapsed').click(function(){
+            expandLeaderboard();
+        });
+      };
+
+      expandLeaderboard = function() {
+        $('.leaderboard tr.collapsed').remove();
+        $('.leaderboard tr').show();
       }
 
       $(document).ready(function(){
