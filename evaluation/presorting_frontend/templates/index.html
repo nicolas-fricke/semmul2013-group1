@@ -114,17 +114,20 @@
       }
 
       collapseLeaderboard = function() {
+        var number_show_top    = 5;
+        var number_show_before = 3;
+        var number_show_after  = 1;
         $('tbody tr').hide();
-        $('tbody tr').slice(0,3).show();
+        $('tbody tr').slice(0,number_show_top).show();
         userIndex = $('tbody tr').index($('tbody tr.success'));
-        $('tbody tr').slice(userIndex - 2, userIndex + 2).show();
-        if (userIndex < $('tbody tr').length - 2) {
-          $('tbody tr').slice(userIndex + 1,userIndex + 2)
+        $('tbody tr').slice(userIndex - number_show_before, userIndex + number_show_after + 1).show();
+        if (userIndex + number_show_after < $('tbody tr').length - 1) {
+          $('tbody tr').slice(userIndex + number_show_after,userIndex + number_show_after + 1)
               .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
         }
-        if (userIndex > 6) {
-          $('tbody tr').slice(userIndex - 3,userIndex -2)
-              .before('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+        if (userIndex > number_show_top + number_show_before) {
+          $('tbody tr').slice(number_show_top - 1, number_show_top)
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
         }
         $('tbody tr.collapsed').click(function(){
             expandLeaderboard();
@@ -187,6 +190,7 @@
         $('.leaderboard tr td').filter(function(){
           return $(this).text() === $.params("nicname");
         }).parent().addClass("success");
+        collapseLeaderboard();
       });
     </script>
   </head>
