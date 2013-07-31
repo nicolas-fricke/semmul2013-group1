@@ -140,7 +140,7 @@
         if ($.params("nicname") != null) $("input[name=username]").prop("value", decodeURIComponent($.params("nicname")));
         if ($.params("email") != null) $("input[name=email]").prop("value", decodeURIComponent($.params("email")));
         window.activeElementIndex = -1;
-        $('body').keydown(function(event) {
+        $('body').keyup(function(event) {
           if ($('input[type=text]').is(':focus')) return;
           switch (event.keyCode) {
             case 9: /* Tab */
