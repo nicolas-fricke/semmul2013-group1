@@ -2,7 +2,7 @@
 \section{Image Tree Based on Wordnet}
 \label{sec_wordnetsearchtree}
 
-\subsection{Wordnet}
+\subsection{Wordnet}\index{Wordnet}
 Related to the offical web page WordNet is described as a freely and publicly available "large lexical database of english nouns, verbs, adjectives and adverbs, grouped into sets of cognitive synonyms (synsets), each expressing a distinct concept." (ref: http://wordnet.princeton.edu/). Synsets are semantically linked with each other e.g. hyponyms and meronyms relations. 
 
 network of synsets for discovering semantics between words \\
@@ -21,8 +21,10 @@ use best-first search (with limited queue for complexity reasons. idea is that p
 still erroneous with words that are meant in a way that is unknown to WordNet, i.e. canon as the camera model is interpreted as [definition of canon.n.01]  \\
 therefore preprocessing removes all tags that include numbers. Blacklist could filter even more but would also filter canon in its real sense, and generally not desirable to be flexible with respect to the tag vocabulary.  \\
 also removes special characters (more likely to be found on WordNet, and more likely to be identical with other unmatchable tags) 
+problem: multiple possible synsets for a word, how to find correct meaning? \\
+use best-first search with limited queue, distances are based on Leacock and Chodorows Normalized Path Length (lch similarities, which is perceived as closer to human understanding than regular path similarity \cite{budanitsky01} )
 
-\subsection{Assigning Picture to Synsets}
+\subsection{Assigning Pictures to Tree Nodes}
 for higher recall: find strongly co-occurring tags that could not be mapped to synset \\
 strong co-occurrence defined on tf-idf (else camera models would be strong co-occurrence with many synsets)
 observed that it is useful to find translations etc. but of course also introduces noise \\

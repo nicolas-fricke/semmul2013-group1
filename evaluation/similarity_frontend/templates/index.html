@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Semantic Multimedia – Testset Evaluator</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      body {
+        padding-top: 65px;
+      }
+
+      .container {
+        width: 740px !important;
+      }
+
+      .navbar-inner input[type=text] {
+        margin-top: 10px;
+        width: 160px;
+      }
+
+      .image-container {
+        width: 350px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+      }
+
+      #image-2-container {
+        padding-left: 20px;
+      }
+
+      .test-image {
+        height: 200px;
+        max-width: 400px;
+      }
+
+      legend {
+        padding-top: 12px;
+        margin-bottom: 4px;
+      }
+
+      label em.keyboard-hint {
+        font-style: inherit;
+        background-color: rgba(255,255,255,0.3);
+        padding: 2px;
+        margin-left: 10px;
+        color: green;
+      }
+
+      #send-btn {
+        margin-top: 30px;
+        width: 200px;
+      }
+
+      .keyboard-inactive {
+        zoom: 1;
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+      }
+
+      footer {
+        margin-top: 60px;
+        font-size: 10pt;
+      }
+    </style>
+    <script type="text/javascript">
+      selectNextFieldset = function(increment){
+        $("fieldset, #send-btn").removeClass("keyboard-focussed").addClass("keyboard-inactive");
+        window.activeElementIndex += increment;
+        if (window.activeElementIndex > 2) window.activeElementIndex = 0;
+        if (window.activeElementIndex < 0) window.activeElementIndex = 2;
+        if (window.activeElementIndex == 2 && $('input[type=radio]:checked').length != 2) window.activeElementIndex = 0;
+        var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
+        activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
+        if (activeElement.is($("#send-btn"))) {
+          activeElement.focus();
+        } else {
+          activeElement.children(":first-child").focus();
+        }
+      }
+
+      checkSelectBox = function(boxIndex) {
+        if (window.activeElementIndex == -1) selectNextFieldset(1);
+        if ($("fieldset.keyboard-focussed input").length < boxIndex) return;
+        $("fieldset.keyboard-focussed input").prop('checked', false);
+        $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true).trigger('change');
+        selectNextFieldset(1);
+      }
+
+      $.params = function(param_name){
+        var value = new RegExp('[\\?&]' + param_name + '=([^&#]*)').exec(window.location.href);
+        if (value != null) return value[1];
+        else return null;
+      }
+
+      $(document).ready(function(){
+        if ($.params("nicname") != null) $("input[name=username]").prop("value", decodeURIComponent($.params("nicname")));
+        if ($.params("email") != null) $("input[name=email]").prop("value", decodeURIComponent($.params("email")));
+        window.activeElementIndex = -1;
+        $('body').keydown(function(event) {
+          if ($('input[type=text]').is(':focus')) return;
+          switch (event.keyCode) {
+            case 9: /* Tab */
+                event.preventDefault();
+                if (event.shiftKey) {
+                  selectNextFieldset(-1);
+                } else {
+                  selectNextFieldset(1);
+                }
+              break;
+            case 49: /* < 1 > */
+              checkSelectBox(1);
+              break;
+            case 50: /* < 2 > */
+              checkSelectBox(2);
+              break;
+            case 51: /* < 3 > */
+              checkSelectBox(3);
+              break;
+          }
+        });
+        $("form").submit(function() {
+          if ($('input[type=radio]:checked').length == 2) {
+            return true;
+          }
+          return false;
+        });
+        $("input[type=radio]").change(function(){
+          if ($('input[type=radio]:checked').length == 2) {
+            $("#send-btn").attr("disabled", false);
+          } else {
+            $("#send-btn").attr("disabled", true);
+          }
+        })
+        $("label em.keyboard-hint").
+            tooltip({
+              'trigger': 'hover',
+              'title': 'Use keyboard keys [1], [2], [3], [Tab], and [Enter] to navigate through the form.',
+              'placement': 'right'});
+        $('.navbar-inner input[type=text]').
+            tooltip({
+              'trigger': 'hover',
+              'title': 'Not required, only for statistics',
+              'placement': 'bottom'});
+      });
+    </script>
+  </head>
+  <body>
+    <form method="POST" action="/add">
+      <div id="main-navigation" class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand">Evaluation Tool - Group 1</a>
+            <div class="pull-right">
+              <input type="text" name="username" placeholder="nicname" />
+              <input type="text" name="email" placeholder="email address" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div id="content">
+          <div class="images">
+            <div class="image-container pull-left" id="image-1-container">
+              <img class="test-image pull-right" id="image-1" src="{{ images[0]['url'] }}" />
+            </div>
+            <div class="image-container pull-left" id="image-2-container">
+              <img class="test-image" id="image-2" src="{{ images[1]['url'] }}" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
+          <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
+          <fieldset id="fieldset_semantic_similarity">
+            <legend>Semantic similarity</legend>
+            <label class="radio">
+              <input type="radio" class="radio" name="semantic_similarity" value="not_semantically_similar" />
+              Not semantically similar <em class="keyboard-hint">[1]</em>
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="semantic_similarity" value="same_object" />
+              Same object in different context (e.g. in both images contain an apple) <em class="keyboard-hint">[2]</em>
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="semantic_similarity" value="same_context" />
+              Same object in same context (e.g. both show a person eating an apple) <em class="keyboard-hint">[3]</em>
+            </label>
+          </fieldset>
+          <fieldset id="fieldset_visual_similarity">
+            <legend>Visual similarity</legend>
+            <label class="radio">
+              <input type="radio" class="radio" name="visual_similarity" value="not_visually_similar" />
+              Not visually similar <em class="keyboard-hint">[1]</em>
+            </label>
+            <label class="radio">
+              <input type="radio" class="radio" name="visual_similarity" value="visually_similar" />
+              Images are visually similar (eg. have same colors, structure, or textures) <em class="keyboard-hint">[2]</em>
+            </label>
+          </fieldset>
+          <div class="text-center">
+            <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" disabled />
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="container">
+          <p>
+            &copy; 2013,
+            created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
+            during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
+            at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
+            Please find the source code of this project on <a href="https://github.com/nicolas-fricke/semmul2013-group1">Github</a>.
+          </p>
+        </div>
+      </footer>
+    </form>
+  </body>
+</html>
