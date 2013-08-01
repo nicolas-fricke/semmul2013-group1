@@ -99,5 +99,9 @@ def main():
     keyword_clustering_via_mcl(storable_synset_filenames_dict)
     print_status("Done.\n")
 
+    print_status("Sort mcl clusters according to synset frequencies... \n")
+    sort_mcl_clusters(storable_synset_filenames_dict)
+    print_status("Done.\n")
+
 if __name__ == '__main__':
     main()
