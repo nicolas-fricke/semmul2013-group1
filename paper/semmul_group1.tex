@@ -13,7 +13,7 @@
 \usepackage{url}      % Korrekter Satz von URLs
 \usepackage{color}    % Verwendung von Farben
 \usepackage{listings} % Korrekter Satz von Listings und Quellcode
-
+\usepackage{todonotes}
 
 %Hilfs-Fonts - ohne Serifen (hier für Tabellen)
 \newfont{\bib}{cmss8 scaled 1040}
@@ -86,7 +86,9 @@ Write it at the end.
 
 % Dritte Seite = Inhaltsverzeichnis
 \tableofcontents 
+\newpage
 
+\listoftodos
 \newpage
 
 \input{chapters/chapter_1.tex} 
