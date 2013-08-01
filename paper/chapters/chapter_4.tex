@@ -1,12 +1,15 @@
 %
 \section{Context-related and Visual Clustering}
 \label{sec_inhalt}
-Why do we do subclusters for nodes?
+
+nodes are generally large, somewhat semantically homogenous but very visually diverse. Therefore: create finer clusters within each node.
 
 \subsection{General Approach}
-
+clustering all images visually is expenisve
+semantics more important for humans
 
 \subsection{Keyword Clusters}
+good for context(?), outlier identification, basic clustering for part-meronym spanned trees (africa example)
 
 \subsubsection{Keyword Clustering}
 MANDY
@@ -16,7 +19,10 @@ MANDY
 \subsection{Visual Clusters}
 
 \subsubsection{Features}
-color  histogram, edge length and angle histogram
+color  histogram, edge length and angle histogram \\
+easy to calculate, obvious / humanly comprehensible, no need for complex features since only refinement of semantics (not trying to distinguish concepts by visual features)
 
 \subsubsection{Clustering}
-k-means, late fusion by intersecting
+k-means seperately for colors and edges with k chosen by rule of thumb \\
+feature vectors are pyramidal slices (up to 5)
+late fusion by intersecting
