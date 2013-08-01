@@ -2,14 +2,15 @@
 \section{Context-related and Visual Clustering}
 \label{sec_inhalt}
 
-nodes are generally large, somewhat semantically homogenous but very visually diverse. Therefore: create finer clusters within each node.
+nodes are generally large, somewhat semantically homogeneous but very visually diverse. Therefore: create finer clusters within each node.
 
 \subsection{General Approach}
-clustering all images visually is expenisve
-semantics more important for humans
+clustering all images visually is expensive \\
+semantics more important for humans \\
+idea: create clusters with semantically similar pictures and build subclusters within with visually similar pictures
 
 \subsection{Keyword Clusters}
-good for context(?), outlier identification, basic clustering for part-meronym spanned trees (africa example)
+good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
 
 \subsubsection{Keyword Clustering}
 MANDY
@@ -20,9 +21,12 @@ MANDY
 
 \subsubsection{Features}
 color  histogram, edge length and angle histogram \\
-easy to calculate, obvious / humanly comprehensible, no need for complex features since only refinement of semantics (not trying to distinguish concepts by visual features)
+easy to calculate, obvious / humanly comprehensible, no need for complex features since only refinement of semantics (not trying to distinguish concepts by visual features) \\
+visual clustering as a refinement for the semantic clustering, therefore basic visual features seem to be sufficient 
+\todo{Can we explain or prove that somehow?} 
+
 
 \subsubsection{Clustering}
-k-means seperately for colors and edges with k chosen by rule of thumb \\
+k-means separately for colors and edges with k chosen by rule of thumb \\
 feature vectors are pyramidal slices (up to 5)
 late fusion by intersecting
