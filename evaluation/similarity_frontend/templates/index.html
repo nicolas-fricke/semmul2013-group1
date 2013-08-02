@@ -34,6 +34,10 @@
         max-width: 400px;
       }
 
+      #fieldsets {
+        margin-left: 120px;
+      }
+
       legend {
         padding-top: 12px;
         margin-bottom: 4px;
@@ -61,6 +65,23 @@
       footer {
         margin-top: 60px;
         font-size: 10pt;
+      }
+
+      .leaderboard {
+        padding : 15px;
+        margin-right: 20px;
+        width: 225px;
+      }
+
+      .leaderboard tr td:first-child, .leaderboard tr th:first-child {
+        text-align: right;
+        width: 65px;
+      }
+
+      .leaderboard tr.collapsed td {
+        background-color: grey !important;
+        text-align: center;
+        cursor: pointer;
       }
     </style>
     <script type="text/javascript">
@@ -93,11 +114,45 @@
         else return null;
       }
 
+      collapseLeaderboard = function() {
+        var number_show_top    = 5;
+        var number_show_before = 3;
+        var number_show_after  = 1;
+
+        $('tbody tr.player-score').hide();
+
+        $('tbody tr.player-score').slice(0, number_show_top).show();
+        userIndex = $('tbody tr.player-score').index($('tbody tr.player-score.success'));
+        $('tbody tr.player-score').slice(userIndex - number_show_before, userIndex + number_show_after + 1).show();
+
+        // Show collapse-indicator in between
+        if (userIndex > number_show_top + number_show_before) {
+          $('tbody tr.player-score:nth(' + number_show_top + ')')
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr><tr class="collapsed" style="display: none;"></tr>');
+        }
+
+        // Show collapse-indicator at end of visible records
+        // Also gets triggered if no user is found
+        if (userIndex + number_show_after < $('tbody tr.player-score').length - 1) {
+          $('tbody tr.player-score:visible:last')
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+        }
+
+        $('tbody tr.collapsed').click(function(){
+          expandLeaderboard();
+        });
+      };
+
+      expandLeaderboard = function() {
+        $('.leaderboard tr.collapsed').remove();
+        $('.leaderboard tr').show();
+      }
+
       $(document).ready(function(){
         if ($.params("nicname") != null) $("input[name=username]").prop("value", decodeURIComponent($.params("nicname")));
         if ($.params("email") != null) $("input[name=email]").prop("value", decodeURIComponent($.params("email")));
         window.activeElementIndex = -1;
-        $('body').keydown(function(event) {
+        $('body').keyup(function(event) {
           if ($('input[type=text]').is(':focus')) return;
           switch (event.keyCode) {
             case 9: /* Tab */
@@ -140,8 +195,12 @@
         $('.navbar-inner input[type=text]').
             tooltip({
               'trigger': 'hover',
-              'title': 'Not required, only for statistics',
+              'title': 'Not required, only for chocolate and statistics',
               'placement': 'bottom'});
+        $('.leaderboard tr td').filter(function(){
+          return $(this).text() === $.params("nicname");
+        }).parent().addClass("success");
+        collapseLeaderboard();
       });
     </script>
   </head>
@@ -163,6 +222,24 @@
           </div>
         </div>
       </div>
+      <div class="leaderboard pull-right">
+        <table class="table table-bordered table-striped table-hover table-condensed">
+          <thead>
+            <tr>
+              <th># Images</th>
+              <th>Nicname</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for player in highscore %}
+              <tr class="player-score">
+                <td>{{ player["score"] }}</td>
+                <td>{{ player["nicname"] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       <div class="container">
         <div id="content">
           <div class="images">
@@ -174,34 +251,36 @@
             </div>
             <div class="clearfix"></div>
           </div>
-          <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
-          <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
-          <fieldset id="fieldset_semantic_similarity">
-            <legend>Semantic similarity</legend>
-            <label class="radio">
-              <input type="radio" class="radio" name="semantic_similarity" value="not_semantically_similar" />
-              Not semantically similar <em class="keyboard-hint">[1]</em>
-            </label>
-            <label class="radio">
-              <input type="radio" class="radio" name="semantic_similarity" value="same_object" />
-              Same object in different context (e.g. in both images contain an apple) <em class="keyboard-hint">[2]</em>
-            </label>
-            <label class="radio">
-              <input type="radio" class="radio" name="semantic_similarity" value="same_context" />
-              Same object in same context (e.g. both show a person eating an apple) <em class="keyboard-hint">[3]</em>
-            </label>
-          </fieldset>
-          <fieldset id="fieldset_visual_similarity">
-            <legend>Visual similarity</legend>
-            <label class="radio">
-              <input type="radio" class="radio" name="visual_similarity" value="not_visually_similar" />
-              Not visually similar <em class="keyboard-hint">[1]</em>
-            </label>
-            <label class="radio">
-              <input type="radio" class="radio" name="visual_similarity" value="visually_similar" />
-              Images are visually similar (eg. have same colors, structure, or textures) <em class="keyboard-hint">[2]</em>
-            </label>
-          </fieldset>
+          <div id="fieldsets">
+            <input type="hidden" name="image_1_id" value="{{ images[0]['id'] }}" />
+            <input type="hidden" name="image_2_id" value="{{ images[1]['id'] }}" />
+            <fieldset id="fieldset_semantic_similarity">
+              <legend>Semantic similarity</legend>
+              <label class="radio">
+                <input type="radio" class="radio" name="semantic_similarity" value="not_semantically_similar" />
+                Not semantically similar <em class="keyboard-hint">[1]</em>
+              </label>
+              <label class="radio">
+                <input type="radio" class="radio" name="semantic_similarity" value="same_object" />
+                Same object in different context (e.g. in both images contain an apple) <em class="keyboard-hint">[2]</em>
+              </label>
+              <label class="radio">
+                <input type="radio" class="radio" name="semantic_similarity" value="same_context" />
+                Same object in same context (e.g. both show a person eating an apple) <em class="keyboard-hint">[3]</em>
+              </label>
+            </fieldset>
+            <fieldset id="fieldset_visual_similarity">
+              <legend>Visual similarity</legend>
+              <label class="radio">
+                <input type="radio" class="radio" name="visual_similarity" value="not_visually_similar" />
+                Not visually similar <em class="keyboard-hint">[1]</em>
+              </label>
+              <label class="radio">
+                <input type="radio" class="radio" name="visual_similarity" value="visually_similar" />
+                Images are visually similar (eg. have same colors, structure, or textures) <em class="keyboard-hint">[2]</em>
+              </label>
+            </fieldset>
+          </div>
           <div class="text-center">
             <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" disabled />
           </div>
