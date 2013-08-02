@@ -66,7 +66,7 @@ def index():
                          WHERE nicname != ""
                          GROUP BY nicname
                          ORDER BY comparison_counter DESC''')
-  highscore = [dict(score=row[2], nicname=row[0]) for row in curser.fetchall()]
+  highscore = [dict(score=row[1], nicname=row[0]) for row in curser.fetchall()]
   images = choose_random_images()
   return render_template('index.html', images=images, highscore=highscore)
 
