@@ -2,18 +2,10 @@
 <html>
   <head>
     <title>Semantic Multimedia – Testset Evaluator</title>
-{#    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>#}
-{#    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">#}
-{#    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>#}
-    {% assets output="gen/bootstrap-amilia.css",
-            "bootstrap-amilia.css" %}
-      <link href="{{ ASSET_URL }}" rel="stylesheet" media="screen">
-    {% endassets %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
-    {% assets output="gen/main.js",
-            "jquery-1.9.1-debug.js", "bootstrap.js" %}
-      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
     <style type="text/css">
       body {
         padding-top: 65px;
@@ -133,7 +125,7 @@
         // Show collapse-indicator in between
         if (userIndex > number_show_top + number_show_before) {
           $('tbody tr.player-score:nth(' + number_show_top + ')')
-              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr><tr class="collapsed" style="display: none;"></tr>');
         }
 
         // Show collapse-indicator at end of visible records
