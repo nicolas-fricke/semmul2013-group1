@@ -1,5 +1,5 @@
 %
-\section{Context-related and Visual Clustering}
+\section{Semantic and Visual Clustering}
 \label{sec_inhalt}
 
 nodes are generally large, somewhat semantically homogeneous but very visually diverse. Therefore: create finer clusters within each node.
@@ -14,19 +14,29 @@ good for context(?), outlier identification, basic clustering for part-meronym s
 
 \subsubsection{Keyword Clustering}
 MANDY
+
 \subsubsection{Assigning Images to Keyword Clusters}
+for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple)
 
 
 \subsection{Visual Clusters}
 
+Difficulties are in visual clustering are choice of features and how to use them jointly in a suitable algorithm. 
+
 \subsubsection{Features}
-color  histogram, edge length and angle histogram \\
-easy to calculate, obvious / humanly comprehensible, no need for complex features since only refinement of semantics (not trying to distinguish concepts by visual features) \\
-visual clustering as a refinement for the semantic clustering, therefore basic visual features seem to be sufficient 
+Features finally chosen are:
+\begin{itemize}
+\item{Color histogram} in HSV color space with xx \todo{look up exact number in code} buckets
+\item{Edge histogram} lengths and angles \todo{look up structure of edage histogram}
+\end{itemize}
+The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features \\
+visual clustering as a refinement for the semantic clustering, therefore basic visual features seemed sufficient 
 \todo{Can we explain or prove that somehow?} 
 
 
 \subsubsection{Clustering}
-k-means separately for colors and edges with k chosen by rule of thumb \\
-feature vectors are pyramidal slices (up to 5)
-late fusion by intersecting
+k-means separately for colors and edges with k chosen by rule of thumb: $ k = \sqrt{n} $, where n is the number of items to be clustered. Chose it over hierarchical k-means (?) because it provided more well- and equally-sized clusters, the latter often just split off single images.
+Also tried adaptive choice of k but with slower performance no better results. For example in color clustering, usually would just separate black and white from others.\\
+For feature extraction, we use a pyramidal appraoch similar to the one proposed in  $http://hal.archives-ouvertes.fr/docs/00/54/85/85/PDF/cvpr06_lana.pdf$. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
+Same paper also states the appropriateness of this method especially in refining existing clusters.\\
+We combine the single-feature clusters by intersecting them, which is a simple and performant method. It ensures that all images within a cluster are similar in color as well as edge structure and leads to less or equal to $ 2\sqrt{k} $ subclusters.

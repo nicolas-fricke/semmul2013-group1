@@ -2,20 +2,25 @@
 \section{Evaluation}
 \label{sec_literatur}
 
-\subsection{Method}
-Picture annotation tool, 200 pictures \\
-compare two pictures: for each, does it display food? semantically not similar / same object / same object and same context? visually similar / not similar? \\
+\subsection{Crowd-sourced Testset}
+receive testset from users through web-based tool, crowdsource in two steps: \\
 
-receive testset from users \\
+\begin{enumerate}
+\item random picture, does it show food? identified xxxx images as showing food with xxxxx clicks, where those with at least 50 percent of positives votes are considered to show food \\
+\item For those, compare two pictures: semantically not similar / same object / same object and same context? visually similar / not similar? However, we limited the set of pictures for this step to 300 in order to have a feasible amount of necessary comparisons.\\
+\end{enumerate}
 
+\subsection{Evaluation Method}
 how are quality measures calculated? \\
 
 search food: precision  / recall of picture inclusion (compare synset detection mechanisms?) \\
 evaluate tree nodes based on same object annotations \\
 evaluate mcl clusters based on same object and on same context annotations (compare both, what does mcl actually do?) \\
 
-evaluate visuals with large minimal node size \\
+We evaluate visuals with large minimal node size to minimize impact of semantic clustering. A pair considered visually similar by users is a true positive if it is in the same visual cluster by algorithm, or false negative if not. Likewise, pairs explicitly voted visually dissimilar are false positives or true negatives. \\
 
-vary parameters given by frontend \\
+vary parameters given by frontend, trying to find best configuration \\
 
 \subsection{Results}
+
+\missingfigure{}
