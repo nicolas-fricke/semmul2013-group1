@@ -5,6 +5,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
     <style type="text/css">
       body {
         padding-top: 65px;
@@ -114,18 +115,26 @@
         var number_show_top    = 5;
         var number_show_before = 3;
         var number_show_after  = 1;
-        $('tbody tr').hide();
-        $('tbody tr').slice(0,number_show_top).show();
-        userIndex = $('tbody tr').index($('tbody tr.success'));
-        $('tbody tr').slice(userIndex - number_show_before, userIndex + number_show_after + 1).show();
-        if (userIndex + number_show_after < $('tbody tr').length - 1) {
-          $('tbody tr').slice(userIndex + number_show_after,userIndex + number_show_after + 1)
-              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
-        }
+
+        $('tbody tr.player-score').hide();
+
+        $('tbody tr.player-score').slice(0, number_show_top).show();
+        userIndex = $('tbody tr.player-score').index($('tbody tr.player-score.success'));
+        $('tbody tr.player-score').slice(userIndex - number_show_before, userIndex + number_show_after + 1).show();
+
+        // Show collapse-indicator in between
         if (userIndex > number_show_top + number_show_before) {
-          $('tbody tr').slice(number_show_top - 1, number_show_top)
+          $('tbody tr.player-score:nth(' + number_show_top + ')')
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr><tr class="collapsed" style="display: none;"></tr>');
+        }
+
+        // Show collapse-indicator at end of visible records
+        // Also gets triggered if no user is found
+        if (userIndex + number_show_after < $('tbody tr.player-score').length - 1) {
+          $('tbody tr.player-score:visible:last')
               .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
         }
+
         $('tbody tr.collapsed').click(function(){
             expandLeaderboard();
         });
@@ -219,7 +228,7 @@
           </thead>
           <tbody>
             {%- for player in highscore %}
-              <tr>
+              <tr class="player-score">
                 <td>{{ player["score"] }}</td>
                 <td>{{ player["nicname"] }}</td>
               </tr>

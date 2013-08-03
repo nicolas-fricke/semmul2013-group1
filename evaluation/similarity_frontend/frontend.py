@@ -12,7 +12,7 @@ import contextlib
 
 # configuration:
 # database:
-DATABASE = '/tmp/evaluation.db'
+DATABASE = '/tmp/final-evaluation.db'
 SECRET_KEY = '123 - thats a hyper secret key'
 # server:
 SERVER_NAME = 'localhost:5000'
@@ -60,8 +60,15 @@ def close_db_connection(exception):
 
 @app.route("/")
 def index():
+  db = get_db()
+  curser = db.execute('''SELECT nicname, COUNT(*) as comparison_counter
+                         FROM semmul_image_similarity
+                         WHERE nicname != ""
+                         GROUP BY nicname
+                         ORDER BY comparison_counter DESC''')
+  highscore = [dict(score=row[1], nicname=row[0]) for row in curser.fetchall()]
   images = choose_random_images()
-  return render_template('index.html', images=images)
+  return render_template('index.html', images=images, highscore=highscore)
 
 @app.route('/add', methods=['POST'])
 def add_entry():
