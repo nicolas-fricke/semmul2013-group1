@@ -206,6 +206,7 @@
         $('.leaderboard tr td').filter(function(){
           return $(this).text() === $.params("nicname");
         }).parent().addClass("success");
+        if ($.params("nicname") && $.params("email")) $('#info-leaderboard').hide();
         collapseLeaderboard();
       });
     </script>
@@ -245,6 +246,15 @@
             {% endfor %}
           </tbody>
         </table>
+        <div id="info-leaderboard" class="alert alert-block">
+          <strong>Leaderboard</strong>
+          <p>Don't forget to put in your name and email address in order to win the chocolate ;)</p>
+          <p>The top 3 helpers will win chocolate as well as one randomly selected helper.</p>
+        </div>
+        <div id="info-deadline" class="alert alert-info">
+          <strong>Still some time left...</strong>
+          <p>The evaluation will be open until Friday, 11:59 PM.</p>
+        </div>
       </div>
       <div class="container">
         <div id="content">
