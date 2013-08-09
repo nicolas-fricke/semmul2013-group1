@@ -13,7 +13,7 @@ idea: create clusters with semantically similar pictures and build subclusters w
 good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
 
 \subsubsection{Keyword Clustering}
-MANDY
+
 
 \subsubsection{Assigning Images to Keyword Clusters}
 for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple)
@@ -21,13 +21,13 @@ for each image, count how many synsets it shares with each cluster, and assign i
 
 \subsection{Visual Clusters}
 
-Difficulties are in visual clustering are choice of features and how to use them jointly in a suitable algorithm. 
+One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering. 
 
 \subsubsection{Features}
 Features finally chosen are:
 \begin{itemize}
-\item{Color histogram} in HSV color space with xx \todo{look up exact number in code} buckets
-\item{Edge histogram} lengths and angles \todo{look up structure of edage histogram}
+\item{Color histogram} in HSV color space with 20 bins each
+\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 length categories, and 10 angles, with a count of edges for each?) as combined vector \todo{look up structure of edge histogram}
 \end{itemize}
 The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features \\
 visual clustering as a refinement for the semantic clustering, therefore basic visual features seemed sufficient 
@@ -35,6 +35,10 @@ visual clustering as a refinement for the semantic clustering, therefore basic v
 
 
 \subsubsection{Clustering}
+A first, rather naive approach to clustering the visual characteristics extracted would be to concatenate the feature vectors (histograms), and apply one of the established clustering algorithms like k-means. \index{K-Means} The fact that remains unseen in this approach is that, generally, the values of different features are usually measured on different scales and therefore vary in their orders of magnitude: In color histogram, each bin's value represents a number of pixels, whereas in edge histograms the number of edges is counted, which is significantly smaller. \\
+This circumstances influences any algorithm based on the distance between two images. Since differences in the larger values will usually be larger in its absolute value, they will also be more influential to the overall distance than the dimensions with smaller values.
+
+
 k-means separately for colors and edges with k chosen by rule of thumb: $ k = \sqrt{n} $, where n is the number of items to be clustered. Chose it over hierarchical k-means (?) because it provided more well- and equally-sized clusters, the latter often just split off single images.
 Also tried adaptive choice of k but with slower performance no better results. For example in color clustering, usually would just separate black and white from others.\\
 For feature extraction, we use a pyramidal appraoch similar to the one proposed in  $http://hal.archives-ouvertes.fr/docs/00/54/85/85/PDF/cvpr06_lana.pdf$. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
