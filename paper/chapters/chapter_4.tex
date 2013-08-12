@@ -7,17 +7,20 @@ nodes are generally large, somewhat semantically homogeneous but very visually d
 \subsection{General Approach}
 clustering all images visually is expensive \\
 semantics more important for humans \\
-idea: create clusters with semantically similar pictures and build subclusters within with visually similar pictures
+idea: create clusters with semantically similar pictures and build subclusters within with visually similar pictures\\
+results in process depicted in 
+\missingfigure{process for each search}
+with precalculations that only need to take place once for each data set as in\\
+\includegraphics[width=\textwidth]{images/precalcs_activity_diagram.pdf}
+
 
 \subsection{Keyword Clusters}
 good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
-
-\subsubsection{Keyword Clustering}
-
-
-\subsubsection{Assigning Images to Keyword Clusters}
+\bigskip
+Use MCL graph clustering algorithm\cite{Dongen1998} \todo{basic explanation of mcl algorithm}.\\
+graph nodes are Synsets, edges their co-occurrence
+\bigskip
 for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple)
-
 
 \subsection{Visual Clusters}
 
@@ -27,7 +30,9 @@ One difficulty in the visual part of our work, besides the choice of appropriate
 Features finally chosen are:
 \begin{itemize}
 \item{Color histogram} in HSV color space with 20 bins each
-\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 length categories, and 10 angles, with a count of edges for each?) as combined vector \todo{look up structure of edge histogram}
+\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{look up structure of edge histogram}
+\\
+For EdgeHistogranm Extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates both an 1 dimensional edge length histogram and an 1 dimensional edge angle histogram. Therefore it takes an image, applies an edge detector and calculates length and direction of lines in the image. The parameter number of bins is used to define which and how many line directions are taken in consideration.  
 \end{itemize}
 The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features \\
 visual clustering as a refinement for the semantic clustering, therefore basic visual features seemed sufficient 
@@ -40,6 +45,6 @@ This circumstances influences any algorithm based on the distance between two im
 
 k-means separately for colors and edges, then late fusion, as explained below. k chosen by rule of thumb: $ k = \sqrt{n} $, where n is the number of items to be clustered. Chose it over hierarchical k-means (?) because it provided more well- and equally-sized clusters, the latter often just split off single images.
 Also tried adaptive choice of k but with slower performance no better results. For example in color clustering, usually would just separate black and white from others.\\
-For feature extraction, we use a pyramidal appraoch similar to the one proposed in  $http://hal.archives-ouvertes.fr/docs/00/54/85/85/PDF/cvpr06_lana.pdf$. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
+For feature extraction, we use a pyramidal appraoch similar to the one proposed in \cite{Lazebnik2006}. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
 Same paper also states the appropriateness of this method especially in refining existing clusters.\\
 We combine the single-feature clusters by intersecting them, which is a simple and performant late fusion method \index{Late fusion}. It ensures that all images within a cluster are similar in color as well as edge structure and leads to less or equal to $ 2\sqrt{k} $ subclusters.

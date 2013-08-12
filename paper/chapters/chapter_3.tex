@@ -15,7 +15,7 @@ two typical types of queries: more or less generic object descriptors, and place
 actually construct multiple searchtrees if more than one synset found for a searchterm (i.e. train coach and motorized vehicle for car)\\
 use hyponym relation to span tree of specializations (i.e. apple, banana for fruit; bus, sportscar for car)\\
 if no hyponyms (usually the case for geographic terms), use part-meronyms\\
-\includegraphics[width=\textwidth]{images/searchtree.png}
+\includegraphics[width=\textwidth]{images/searchtree.pdf}
 
 \subsection{Synset Detection}
 for each tag and word in title, try to find synset (limiting ourselves to nouns, because they are usually the ones describing the depicted concepts). Further source options: description (named entity recognition necessary), comments (noticed little relation to picture), group and album names (for both preprocessing needed to match any to wordnet)  \\
@@ -30,5 +30,5 @@ use best-first search with limited queue, distances are based on Leacock and Cho
 \subsection{Assigning Pictures to Tree Nodes}
 for higher recall: find strongly co-occurring tags that could not be mapped to synset \\
 strong co-occurrence defined on tf-idf (else camera models would be strong co-occurrence with many synsets)
-observed that it is useful to find translations etc. but of course also introduces noise; choice of threshold (currently $0.75 * max_tf_idf$, where max_tf_idf is the maximal score across all values) \\
+observed that it is useful to find translations etc. but of course also introduces noise; choice of threshold (currently $0.75 * max_tf_idf$, where max tfidf is the maximal score across all values) \\
 take all pictures that are annotated with at least one of the related tags or the synset itself. parameter \emph{minimal node size}: if not fulfilled, node is integrated into parent node (union pictures into parent's pictures)
