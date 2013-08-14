@@ -2,27 +2,41 @@
 \section{Semantic and Visual Clustering}
 \label{sec_inhalt}
 
-nodes are generally large, somewhat semantically homogeneous but very visually diverse. Therefore: create finer clusters within each node.
+The nodes received through the tree-based search are potentially very large (i.e., many pictures were found for the node). We found a rather small semantic and a large visual diversity within these nodes. It is therefore appropriate to refine especially the large nodes into smaller clusters.
 
 \subsection{General Approach}
-clustering all images visually is expensive \\
-semantics more important for humans \\
-idea: create clusters with semantically similar pictures and build subclusters within with visually similar pictures\\
-results in process depicted in 
-\missingfigure{process for each search}
-with precalculations that only need to take place once for each data set as in\\
-\includegraphics[width=\textwidth]{images/precalcs_activity_diagram.pdf}
+Since semantics are more perceivable to humans, and thus likely to be more important for our the given case, the refinement is done first on a semantic and then on a visual basis. That is, the results from the groups with semantically similar pictures are clustered again into subclusters with visually similar pictures. The steps are explained in more detail in sections \ref{sec_keywordclustering} and \ref{sec_visualclustering}.
+This approach has the additional advantage that outlier images, which have been assigned to a node but do not quite fit with the others because they show something different, can be filtered out in the semantic step. \\
+The resultig overall process is depicted in Figure \ref{fig_overallprocess}. \todo{explanation}
+
+\begin{figure}[h]
+\label{fig_overallprocess}
+\centering
+\includegraphics[width=0.9\textwidth]{images/searchprocess_diagram_wide.pdf}
+\caption{think of good caption}
+\end{figure}
+
+with precalculations that only need to take place once for each data set as in
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/precalcs_activity_diagram.pdf}
+\caption{think of good caption}
+\end{figure}
 
 
 \subsection{Keyword Clusters}
+\label{sec_keywordclustering}
 good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
 \bigskip
 Use MCL graph clustering algorithm\cite{Dongen1998} \todo{basic explanation of mcl algorithm}.\\
 graph nodes are Synsets, edges their co-occurrence
 \bigskip
-for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple)
+for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple)\\
+if only one image falls into a keyword cluster, consider it an outlier
 
 \subsection{Visual Clusters}
+\label{sec_visualclustering}
 
 One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering. 
 
