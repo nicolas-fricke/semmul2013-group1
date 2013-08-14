@@ -15,7 +15,12 @@ two typical types of queries: more or less generic object descriptors, and place
 actually construct multiple searchtrees if more than one synset found for a searchterm (i.e. train coach and motorized vehicle for car)\\
 use hyponym relation to span tree of specializations (i.e. apple, banana for fruit; bus, sportscar for car)\\
 if no hyponyms (usually the case for geographic terms), use part-meronyms\\
+
+\begin{figure}
 \includegraphics[width=\textwidth]{images/searchtree.pdf}
+\caption{todo}
+\label{fig_searchtree}
+\end{figure}
 
 \subsection{Synset Detection}
 for each tag and word in title, try to find synset (limiting ourselves to nouns, because they are usually the ones describing the depicted concepts). Further source options: description (named entity recognition necessary), comments (noticed little relation to picture), group and album names (for both preprocessing needed to match any to wordnet)  \\

@@ -10,18 +10,19 @@ This approach has the additional advantage that outlier images, which have been 
 The resultig overall process is depicted in Figure \ref{fig_overallprocess}. \todo{explanation}
 
 \begin{figure}[h]
-\label{fig_overallprocess}
 \centering
 \includegraphics[width=0.9\textwidth]{images/searchprocess_diagram_wide.pdf}
 \caption{think of good caption}
+\label{fig_overallprocess}
 \end{figure}
 
-with precalculations that only need to take place once for each data set as in
+The data structures used in the process, such as Image Lookup Structures and Visual Feature Vectors, need only be calculated once for each image set. The preparational processes are visualized by Figure \ref{fig_precalcprocess}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.8\textwidth]{images/precalcs_activity_diagram.pdf}
 \caption{think of good caption}
+\label{fig_precalcprocess}
 \end{figure}
 
 
@@ -46,7 +47,7 @@ Features finally chosen are:
 \item{Color histogram} in HSV color space with 20 bins each
 \item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{look up structure of edge histogram}
 \\
-For EdgeHistogranm Extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates both an 1 dimensional edge length histogram and an 1 dimensional edge angle histogram. Therefore it takes an image, applies an edge detector and calculates length and direction of lines in the image. The parameter number of bins is used to define which and how many line directions are taken in consideration.  
+For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates both a 1 dimensional edge length histogram and a 1 dimensional edge angle histogram. Therefore it takes an image, applies an edge detector and calculates length and direction of lines in the image. The parameter number of bins is used to define which and how many line directions are taken in consideration.  
 \end{itemize}
 The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features \\
 visual clustering as a refinement for the semantic clustering, therefore basic visual features seemed sufficient 
@@ -57,8 +58,8 @@ visual clustering as a refinement for the semantic clustering, therefore basic v
 A first, rather naive approach to clustering the visual characteristics extracted would be to concatenate the feature vectors (histograms), and apply one of the established clustering algorithms like k-means. \index{K-Means} The fact that remains unseen in this approach is that, generally, the values of different features are usually measured on different scales and therefore vary in their orders of magnitude: In color histogram, each bin's value represents a number of pixels, whereas in edge histograms the number of edges is counted, which is significantly smaller. \\
 This circumstances influences any algorithm based on the distance between two images. Since differences in the larger values will usually be larger in its absolute value, they will also be more influential to the overall distance than the dimensions with smaller values.
 
-k-means separately for colors and edges, then late fusion, as explained below. k chosen by rule of thumb: $ k = \sqrt{n} $, where n is the number of items to be clustered. Chose it over hierarchical k-means (?) because it provided more well- and equally-sized clusters, the latter often just split off single images.
-Also tried adaptive choice of k but with slower performance no better results. For example in color clustering, usually would just separate black and white from others.\\
+So, instead, we decided to apply k-means separately for colors and edges, and join the results later through \emph{late fusion}\index{Late Fusion}, as explained below. As no specific criteria exist for the number of clusters that should be achieved, k is chosen by the established rule of thumb: $ k = \sqrt{n} $ \todo{reference to rule of thumb}, where n is the number of items to be clustered. K-means was chosen over hierarchical clustering, because it provided more well- and equally-sized clusters, the latter often just split off single images.\\
+Initially, we planned to use an adaptive k, that is, start with a small k and increase it until the error (mean distance from centroids). Despite its higher computation complexity, it provides no better results than the rule of thumb. For example in color clustering, the adaptive approach will often just separate black and white images from colored ones.\\
 For feature extraction, we use a pyramidal appraoch similar to the one proposed in \cite{Lazebnik2006}. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
 Same paper also states the appropriateness of this method especially in refining existing clusters.\\
-We combine the single-feature clusters by intersecting them, which is a simple and performant late fusion method \index{Late fusion}. It ensures that all images within a cluster are similar in color as well as edge structure and leads to less or equal to $ 2\sqrt{k} $ subclusters.
+We combine the single-feature clusters by intersecting them, which is a simple and performant late fusion method \index{Late Fusion}. It ensures that all images within a cluster are similar in color as well as edge structure and leads to less or equal to $ 2\sqrt{k} $ subclusters.
