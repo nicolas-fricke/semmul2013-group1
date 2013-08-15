@@ -11,7 +11,7 @@ The resultig overall process is depicted in Figure \ref{fig_overallprocess}. \to
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\textwidth]{images/searchprocess_diagram_wide.pdf}
+\includegraphics[width=\textwidth]{images/searchprocess_diagram_color.pdf}
 \caption{think of good caption}
 \label{fig_overallprocess}
 \end{figure}
@@ -19,7 +19,6 @@ The resultig overall process is depicted in Figure \ref{fig_overallprocess}. \to
 The data structures used in the process, such as Image Lookup Structures and Visual Feature Vectors, need only be calculated once for each image set. The preparational processes are visualized by Figure \ref{fig_precalcprocess}.
 
 \begin{figure}[h]
-\centering
 \includegraphics[width=0.8\textwidth]{images/precalcs_activity_diagram.pdf}
 \caption{think of good caption}
 \label{fig_precalcprocess}
@@ -45,7 +44,7 @@ One difficulty in the visual part of our work, besides the choice of appropriate
 Features finally chosen are:
 \begin{itemize}
 \item{Color histogram} in HSV color space with 20 bins each
-\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{look up structure of edge histogram}
+\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{make the following sound less copied}
 \\
 For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates both a 1 dimensional edge length histogram and a 1 dimensional edge angle histogram. Therefore it takes an image, applies an edge detector and calculates length and direction of lines in the image. The parameter number of bins is used to define which and how many line directions are taken in consideration.  
 \end{itemize}
