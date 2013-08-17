@@ -12,22 +12,17 @@ sudo pip install flask_assets
 
 sudo easy_install -U distribute
 sudo pip install nltk
-http://argparse.googlecode.com/files/argparse-1.2.1.tar.gz # Download argparse
+# ? wget http://argparse.googlecode.com/files/argparse-1.2.1.tar.gz # Download argparse
 sudo pip install argparse
 sudo pip install SimpleCV
 sudo apt-get install python-scipy
 
 # install pygame
-wget http://www.libsdl.org/release/SDL-1.2.14.tar.gz
-tar -xzvf SDL-1.2.14.tar.gz
-cd SDL-1.2.14
-./configure --prefix=$HOME
-make
-make install
-
+sudo apt-get install libsdl1.2debian-all libsdl1.2-dev libsdl-console-dev
 wget http://pygame.seul.org/ftp/pygame-1.9.1release.tar.gz
-tar xzvf pygame-1.9.1release.tar.gz
+tar -xzvf pygame-1.9.1release.tar.gz
 cd pygame-1.9.1release
+sudo python setup.py
 
 # start program
 cd semmul2013-group1/src/
