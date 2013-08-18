@@ -17,23 +17,26 @@ We considered the following annoations provided by the Flickr API and evaluated 
 \item{\emph{Title.}} The title was usually a short but precise description of the image content and thus very valuable for semantic annotation.
 \item{\emph{Description.}} The description did often relate to the image content but with a lot of fill words and noise as well as context-dependent meanings, so it could be useful but would require additional preprocessing such as Named Entity Recognition.
 \item{\emph{Comments.}} Only very few comments described the image in any way - they were mostly used for social interaction with the photographer. 
-\item{\emph{Tags.}} \todo{describe what we found out about tags, groups, and albums and why we (do not) use them}
+\item{\emph{Tags.}} \todo{describe what we found out about tags, groups, and albums and why we (don't) use them}
 \item{\emph{Group Names.}}  preprocessing needed to match any to wordnet
 \item{\emph{Album Names.}}  preprocessing needed to match any to wordnet
 \end{itemize}
 
-Based on these findings, we use the separate words from the title as well as tags, and try to find the corresponding Synset. We limit this matching to nouns, for two reasons: First, nouns are usually the words describing the depicted concepts. Second, the method described below to find the best matching Synset does not work across different parts of speech. \\
+Based on these findings, we use the single words from the title (split by whitespace) as well as tags, and try to find the corresponding Synset. Before that, though, the keywords are cleansed: All those including digits are removed, since they more often represent image metadata (such as camera model, lense width, date, etc.) than information on the image contents. Additionally, all remaining keywords are stripped of special characters to achieve a more uniform representation. An endless number of filters could be introduced to avoid matching errors, but it must also be considered that potentially valuable information will also be removed by these filters.  \\
 
-The difficulty with the Synset\index{Synset} detection is that there are multiple possible Synsets for a word, and it is obvious to a human observer but not to a computer which meaning is correct. Assuming that annotations on each image are closely related because they describe the same image content, we use those Synsets that, altogether, give the smallest semantic distance across all annotations of an image. Semantic distance of two terms can be measured by the length of the path between them in the WordNet tree. We use the Leacock and Chodorow Normalized Path Length (LCH-Similarity) provided by WordNet, which uses adapted weights and normalization factors, because it is perceived as closer to human understanding than regular path similarity \cite{budanitsky01}.\\
+The difficulty in assigning Synsets\index{Synset} to images is that there are multiple possible Synsets for a word, and it is obvious to a human observer but not to a computer which meaning is correct. Assuming that annotations on each image are closely related because they describe the same image content, we use those Synsets that, altogether, give the smallest semantic distance across all annotations of an image. Semantic distance of two terms can be measured by the length of the path between them in the WordNet tree. We use the Leacock and Chodorow Normalized Path Length (LCH-Similarity) provided by WordNet, which uses adapted weights and normalization factors, because it is perceived as closer to human understanding than regular path similarity \cite{budanitsky01}. \\
 
 To efficiently find the set of Synsets with the smallest overall distance, a best-first search algorithm \footnote{Please refer to Artificial Intelligence literature for a detailed explanation.} is used. Note that such search algorithms require non-negative distances between options, but WordNet provides similarities. To convert them into distances without changing the scale, the similarity is simply subtracted from the maximally possible similarity, i.e. the similarity of a Synset to itself, which is roughly 3.7.
 For complexity reasons, only the best 100 candidates are considered at any time. Of course, this does not guarantee the perfect result anymore, but other paths are highly unlikely to become the best candidate in the end, and keeping all candidates would decrease performance significantly. \\
-still erroneous with words that are meant in a way that is unknown to WordNet, i.e. canon as the camera model is interpreted as [definition of canon.n.01]  \\
-therefore preprocessing removes all tags that include numbers. Blacklist could filter even more but would also filter canon in its real sense, and generally not desirable to be flexible with respect to the tag vocabulary.  \\
-also removes special characters (more likely to be found on WordNet, and more likely to be identical with other unmatchable tags) 
+We also limit the matching to nouns, for two reasons: First, nouns are usually the words describing the depicted concepts. Second, the LCH-Similarity described above is only available within a part of speech. \todo{reference?}
+
+This strategy provides decent results, although erroneous matching still occurrs. One cause are words that are meant in a way that is unknown to WordNet, i.e. canon as the camera model might be interpreted as the type of music piece. Another cause are adjectives, adverbs and verbs that also exist in a noun form. The most common cause of this effect are pictures tagged with colors, because most terms describing a color also exist as nouns, like ``orange'' for the fruit, or``whit'' for a caucasian person. We decided to add a filter to the preprocessing phase, so that all terms that can represent a color are removed. \\
+
+Even with preprocessing, not all keywords can be matched to a Synset, because they are simply not represented in WordNet. The information of these \emph{unmatched tags} is kept nevertheless, and later used for image retrieval, described in section \ref{sec_picturestonodes}.
 
 
 \subsection{Constructing a Searchtree} 
+\label{sec_searchtreeconstruction}
 In general, all words represented in WordNet can be used as a query term for our tool. For the given use case, however, queries will be limited to those that can be seen in pictures. This is mainly the case for object descriptors at various levels of specificity, and place names, so our work is focused on these types of search terms.
 
 When a term is entered into the tool, it is first used to retrieve all Synsets\index{Synset} that can be expressed by this term.
@@ -49,6 +52,7 @@ if no hyponyms (usually the case for geographic terms), use part-meronyms\\
 
 
 \subsection{Assigning Pictures to Tree Nodes}
+\label{sec_picturestonodes}
 for higher recall: find strongly co-occurring tags that could not be mapped to synset \\
 strong co-occurrence defined on tf-idf (else camera models would be strong co-occurrence with many synsets)
 observed that it is useful to find translations etc. but of course also introduces noise; choice of threshold (currently $0.75 * max_tf_idf$, where max tfidf is the maximal score across all values) \\
