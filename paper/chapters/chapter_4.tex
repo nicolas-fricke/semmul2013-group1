@@ -29,11 +29,13 @@ The data structures used in the process, such as Image Lookup Structures and Vis
 \subsection{Keyword Clusters}
 \label{sec_keywordclustering}
 good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
+
 \bigskip
 Semantic clustering is accomplished by using the assigned Synsets. Therefore, Synsets are clustered into groups and pictures are assigned to these groups. According to the paper of Grigory Begelman \cite{begelman2006automated}, our first approach of clustering Synsets used co-occurrences to span a graph of related Synsets. With the help of the proposed graph clustering algorithm, it is possible to group related Synsets. But, the algorithm requires calculation of eigenvalues and eigenvectors for large sparse matrices. Furthermore, it does not take edge weighting into account.
 
 Use MCL graph clustering algorithm\cite{Dongen1998} \todo{basic explanation of mcl algorithm}.\\
 graph nodes are Synsets, edges their cooccurrence
+
 \bigskip
 for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple), so all images with maximum tags in that keyword cluster form one semantic cluster. Example: some parrot pictures fall into keyword cluster with persons, others in those with trees. \\
 if only one image falls into a keyword cluster, consider it an outlier and remove it
