@@ -2,15 +2,16 @@
 \section{Evaluation}
 \label{sec_literatur}
 
-We evaluated our tool on a set of 9000 \todo{exact number?} images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.\\
+We evaluated our tool on a set of 9202 \todo{exact number?} images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
 \subsection{Testset}
-receive testset from users through web-based tool, crowdsource in two steps: \\
+No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
+What we did to receive evaluation data was to crowdsource the data we need from the general public. This was achieved in two phases:\\
 
-\begin{enumerate}
-\item random picture, does it show food? identified 1270 images out of 9202 as showing food with over 35000 clicks, where those with at least 50 percent of positives votes are considered to show food (normalized so that one vote per evaluator, value is this persons relation of positive and negative votes on this pictures) \\
-\item For those that are considered to show food, compare two pictures: semantically not similar / same object / same object and same context? visually similar / not similar?\\
-\end{enumerate}
+First, the users were shown random picture out of the 9202 test set images and asked whether it shows food. We normalized these answers, so that there is only one vote per user per picture, shoe value is determined by the ration of positive (``shows food'') and negative (``does not show food'') votes of that user on that picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by \todo{how many users?} users, 1270 images were identified to show food. \\
+
+We also need data on the semantic and visual similarity of the pictures. Therefore, in the second phase, the users were shown pairs of images and asked to compare them. They could choose between three levels of semantic similarity: \emph{not similar}, \emph{same object}, and \emph{same object and same context}, and two levels of visual similarity: \emph{similar}, and \emph{not similar}.\\
+Among the \todo{how many votes in phase 2?} votes were x pairs of images with same objects, x pairs with same object and same contex, as well as x pairs of visually similar images. The same normalization as in the first phase was applied.
 
 \subsection{Evaluation Method}
 The evaluation focusses on the three main aspects of our algorithm:
@@ -21,13 +22,12 @@ The evaluation focusses on the three main aspects of our algorithm:
 \item Visual clustering
 \end{enumerate}
 
-We measure the quality of the image retrieval by precision and recall of returned pictures, compared to those that were declared to show food by the test persons. 
+We measure the quality of the image retrieval (1.) by precision and recall of returned pictures, compared to those that were declared to show food by the test persons. (compare synset detection mechanisms?) 
 
-search food: precision  / recall of picture inclusion (compare synset detection mechanisms?) \\
-evaluate tree nodes based on same object / same context annotations: average minimal path distance for annotated pairs of pictures, use to calculate similarity $1/distance$. Optimal: 1 for positive pairs, 0 for negative pairs\\
-evaluate mcl clusters based on same object and on same context annotations (compare both, what does mcl actually do?)\todo{how do we actually evaluate mcls?} \\
+The quality of the hierarchy of the retrieved images (2.) is based on the same object / same context pairs: The  minimal path distance for annotated pairs of pictures can be calculated and used to determine the closeness of two images $c(x,y) = 1/distance(x,y)$. Averaging this value The optimal values 1 for positive pairs, 0 for negative pairs\\
+evaluate mcl clusters (3.)based on same object and on same context annotations (compare both, what does mcl actually do?)\todo{how do we actually evaluate mcls?} \\
 
-We evaluate visual similarity on the whole testset, because not enough comparison data to get valuable results if we only use comparisons within semantic clusters. Calculate precision and recall\\
+We evaluate visual similarity (4.) on the whole testset, because not enough comparison data to get valuable results if we only use comparisons within semantic clusters. Calculate precision and recall\\
 
 vary parameters given by frontend, trying to find best configuration \\
 
