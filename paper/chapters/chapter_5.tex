@@ -2,6 +2,8 @@
 \section{Evaluation}
 \label{sec_literatur}
 
+We evaluated our tool on a set of 9000 \todo{exact number?} images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.\\
+
 \subsection{Testset}
 receive testset from users through web-based tool, crowdsource in two steps: \\
 
@@ -11,7 +13,15 @@ receive testset from users through web-based tool, crowdsource in two steps: \\
 \end{enumerate}
 
 \subsection{Evaluation Method}
-how are quality measures calculated? \\
+The evaluation focusses on the three main aspects of our algorithm:
+\begin{enumerate}
+\item Retrieval of matching images
+\item Semantic hierarchy of retrieved images
+\item Semantic clustering
+\item Visual clustering
+\end{enumerate}
+
+We measure the quality of the image retrieval by precision and recall of returned pictures, compared to those that were declared to show food by the test persons. 
 
 search food: precision  / recall of picture inclusion (compare synset detection mechanisms?) \\
 evaluate tree nodes based on same object / same context annotations: average minimal path distance for annotated pairs of pictures, use to calculate similarity $1/distance$. Optimal: 1 for positive pairs, 0 for negative pairs\\
