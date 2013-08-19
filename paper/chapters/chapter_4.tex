@@ -31,6 +31,8 @@ The data structures used in the process, such as Image Lookup Structures and Vis
 \label{sec_keywordclustering}
 good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
 \bigskip
+Semantic clustering is accomplished by using the assigned Synsets. Therefore, Synsets are clustered into groups and pictures are assigned to these groups. According to the paper of Grigory Begelman \cite{begelman2006automated}, our first approach of clustering Synsets used co-occurrences to span a graph of related Synsets. With the help of the proposed graph clustering algorithm, it is possible to group related Synsets. But, the algorithm requires calculation of eigenvalues and eigenvectors for large sparse matrices. Furthermore, it does not take edge weighting into account.
+
 Use MCL graph clustering algorithm\cite{Dongen1998} \todo{basic explanation of mcl algorithm}.\\
 graph nodes are Synsets, edges their cooccurrence
 \bigskip
@@ -40,7 +42,7 @@ if only one image falls into a keyword cluster, consider it an outlier and remov
 \subsection{Visual Clusters}
 \label{sec_visualclustering}
 
-One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering. 
+One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering.
 
 \subsubsection{Features}
 The features we chose to use in our tool are:
@@ -48,10 +50,10 @@ The features we chose to use in our tool are:
 \item{Color histogram} in HSV color space with 20 bins each
 \item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{make the following sound less copied}
 \\
-For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.  
+For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.
 \end{itemize}
 The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features. \\
-\todo{Can we explain or prove that somehow?} 
+\todo{Can we explain or prove that somehow?}
 
 
 \subsubsection{Clustering}
