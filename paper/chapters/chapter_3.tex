@@ -11,11 +11,16 @@ The number is necessary because one word can have multiple meanings that will th
 
 Synsets are linked with each other through several semantic relations, e.g. part-of, member-of (meronyms) or type-of (hyponyms) relationships.
 In our work, we use this network of synsets to discover the semantics between terms describing the images as well as towards the search term. \\
+
+A popular alternative we could have used to explore semantic relationships is DBpedia\footnote{http://www.dbpedia.org}. \todo{Why did we chose WordNet over DBpedia?}
   
   
-\subsection{Synset Detection}
-\label{sec_synsetdetection}
-The first step now is to identify valuable image annotations and associate them with their meaning, i.e. find the Synset they represent. \\
+\subsection{Assigning Keywords to Pictures}
+\label{sec_keywordstopictures}
+The first step now is to identify valuable image annotations and associate them with their meanings, i.e. find the Synsets they represent.
+
+\subsubsection{Annotation Data}
+\label{sec_annotationdata}
 We considered the following annoations provided by the Flickr API and evaluated them on twenty randomly sampled pictures: 
 \begin{itemize} 
 \item{\emph{Title.}} The title was usually a short but precise description of the image content and thus very valuable for semantic annotation.
@@ -28,6 +33,8 @@ We considered the following annoations provided by the Flickr API and evaluated 
 
 Based on these findings, we use the single words from the title (split by whitespace) as well as tags, and try to find the corresponding Synset. Before that, though, the keywords are cleansed: All those including digits are removed, since they more often represent image metadata (such as camera model, lense width, date, etc.) than information on the image contents. Additionally, all remaining keywords are stripped of special characters to achieve a more uniform representation. An endless number of additional filters could be introduced to avoid matching errors, but it must also be considered that potentially valuable information will also be removed by these filters.  \\
 
+\subsubsection{Synset Detection}
+\label{sec_synsetdetection}
 The difficulty in assigning Synsets\index{Synset} to images is that there are multiple possible Synsets for a word, and it is obvious to a human observer but not to a computer which meaning is correct. Assuming that annotations on each image are closely related because they describe the same image content, we use those Synsets that, altogether, give the smallest semantic distance across all annotations of an image. Semantic distance of two terms can be measured by the length of the path between them in the WordNet tree. We use the Leacock and Chodorow Normalized Path Length (LCH-Similarity) provided by WordNet, which uses adapted weights and normalization factors, because it is perceived as closer to human understanding than regular path similarity \cite{budanitsky01}. \\
 
 To efficiently find the set of Synsets with the smallest overall distance, a best-first search algorithm \footnote{Please refer to Artificial Intelligence literature for a detailed explanation.} is used. Note that such search algorithms require non-negative distances between options, but WordNet provides similarities. To convert them into distances without changing the scale, the similarity is simply subtracted from the maximally possible similarity, i.e. the similarity of a Synset to itself, which is roughly 3.7.
