@@ -12,7 +12,7 @@ The resultig overall process is depicted in Figure \ref{fig_overallprocess}. \to
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/searchprocess_diagram_color.pdf}
-\caption{think of good caption}
+\caption{Image retrieval and clustering process for a given searchterm}
 \label{fig_overallprocess}
 \end{figure}
 
@@ -20,7 +20,7 @@ The data structures used in the process, such as Image Lookup Structures and Vis
 
 \begin{figure}[h]
 \includegraphics[width=0.8\textwidth]{images/precalcs_activity_diagram.pdf}
-\caption{think of good caption}
+\caption{Static structures creation processes}
 \label{fig_precalcprocess}
 \end{figure}
 
@@ -41,15 +41,14 @@ if only one image falls into a keyword cluster, consider it an outlier
 One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering. 
 
 \subsubsection{Features}
-Features finally chosen are:
+The features we chose to use in our tool are:
 \begin{itemize}
 \item{Color histogram} in HSV color space with 20 bins each
 \item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{make the following sound less copied}
 \\
 For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.  
 \end{itemize}
-The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features \\
-visual clustering as a refinement for the semantic clustering, therefore basic visual features seemed sufficient 
+The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features. \\
 \todo{Can we explain or prove that somehow?} 
 
 
