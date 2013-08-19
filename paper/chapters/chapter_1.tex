@@ -21,7 +21,14 @@ facing different challenges like: multiple meanings of the keyword, bad picture 
 
 \subsection{Clustered Tree Nodes Approach}
 We implemented a web application in Python using SimpleCV\footnote{http://www.simplecv.org} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} for the frontend.\\
-The tool provides ready-to-use semantically and visually homogeneous image clusters for a given topic. This is achieved by spanning a tree of subordinate terms with the help of WordNet\footnote{see section \ref{sec_wordnet} for details}, retrieving related images for each of them by their keywords  and then clustering the images by their predominant keywords as well as by colors and edge structure.
+The tool provides ready-to-use semantically and visually homogeneous image clusters for a given topic. This is achieved by first spanning a tree of subordinate terms, retrieving related images by their keywords for each term, and then clustering the images by their predominant keywords as well as by colors and edge structure. These two major phases are illustrated in figure \ref{fig_overallprocess}
+
+\begin{figure}[h]
+\centering
+\includegraphics[]{images/search_process_highlevel.pdf}
+\caption{The two main phases of our algorithm}
+\label{fig_overallprocess}
+\end{figure}
 
 \bigskip
 

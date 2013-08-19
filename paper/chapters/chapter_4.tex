@@ -7,14 +7,13 @@ The nodes received through the tree-based search are potentially very large (i.e
 \subsection{General Approach}
 Since semantics are more meaningful to humans, and thus likely to be more important for the given use case, the refinement is done first on a semantic and then on a visual basis. That is, the results from the groups with semantically similar pictures are clustered again into subclusters with visually similar pictures. The steps are explained in more detail in sections \ref{sec_keywordclustering} and \ref{sec_visualclustering}.
 This approach has the additional advantage that outlier images, which have been assigned to a node but do not quite fit with the others because they show something different, can be filtered out in the semantic step. \\
-The resulting overall process is depicted in Figure \ref{fig_overallprocess}. After the construction of the search tree as explained in section \ref{sec_searchtreeconstruction}, cooccurring tags and images are added to all nodes and nodes merged if necessary (section \ref{sec_picturestonodes}). \\
-The subclustering explained below will only take place for nodes/clusters with a certain minimum size and results in the structure of three nested Arrays of the WordnetNode class' attribute \emph{subclusters} shown in figure \ref{fig_nodestructure}.
+The subclustering explained below and summarized in figrue \ref{fig_semanticandvisual} will only take place for nodes/clusters with a certain minimum size and results in the structure of three nested Arrays of the WordnetNode class' attribute \emph{subclusters} shown in figure \ref{fig_nodestructure}.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{images/searchprocess_diagram_color.pdf}
-\caption{Image retrieval and clustering process for a given searchterm}
-\label{fig_overallprocess}
+\includegraphics[width=\textwidth]{images/semantic_and_visual_clustering.pdf}
+\caption{Process of Semantic and Visual Clustering}
+\label{fig_semanticandvisual}
 \end{figure}
 
 The data structures used in the process, such as Image Lookup Structures and Visual Feature Vectors, need only be calculated once for each image set. The preparational processes are visualized by Figure \ref{fig_precalcprocess}.
