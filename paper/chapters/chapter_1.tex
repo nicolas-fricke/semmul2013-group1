@@ -7,7 +7,7 @@
 training data for image categorization and content detection \\
 flickr and other online photo communities are good sources for annotated images \\
 problems: low annotation quality, only search for specific term (with different meanings and visual characteristics) \\
-for example, want to test the quality of my algorithm in identifying different foods: would have to think of all kinds of food and search and filter images manually
+for example, want to test the quality of my algorithm in identifying different foods: would have to think of all kinds of food, then search images and group them into homogeneous groups manually
 
 \bigskip
 
@@ -20,10 +20,9 @@ improving the complex task of searching for pictures according to a given keywor
 facing different challenges like: multiple meanings of the keyword, bad picture annotations, taking semantic and visual information of a picture into account \\
 
 \subsection{Clustered Tree Nodes Approach}
-idea: provide ready-to-use semantically and visually homogeneous image clusters for a given topic. Span tree of subordinate pictures, retrieve related images and cluster them to distinguish different settings of the pictures and to identify outliers.
-
-Implemented a web application in Python
+We implemented a web application in Python using SimpleCV\footnote{http://www.simplecv.org} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} for the frontend.\\
+The tool provides ready-to-use semantically and visually homogeneous image clusters for a given topic. This is achieved by spanning a tree of subordinate terms with the help of WordNet\footnote{see section \ref{sec_wordnet} for details}, retrieving related images for each of them by their keywords  and then clustering the images by their predominant keywords as well as by colors and edge structure.
 
 \bigskip
 
-After giving an overview of Related Work in chapter 2, we will present our methods for retrieving (chapter 3) and clustering (chapter 4) appropriate images. Chapter 5 explains how we evaluate our approach, while the evaluation results will be discussed in chapter 6. At last, chapter 7 gives ideas for improvement and possible future work.
+After giving an overview of Related Work in chapter 2, we will present how we analyze the image annotations and the user's search term to retrieve relevant images (chapter 3). Our methods to cluster these semantically and visually are described in chapter 4. Chapter 5 explains how we evaluate our approach, while the evaluation results will be discussed in chapter 6. At last, chapter 7 gives ideas for improvement and possible future work.
