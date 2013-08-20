@@ -3,6 +3,7 @@
 
 \documentclass[11pt, a4paper]{article}
 
+
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
 \usepackage[T1]{fontenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
@@ -15,6 +16,7 @@
 \usepackage{listings} % Korrekter Satz von Listings und Quellcode
 \usepackage{wrapfig}
 \usepackage{todonotes}
+\usepackage[numbers,round]{natbib}
 
 %Hilfs-Fonts - ohne Serifen (hier für Tabellen)
 \newfont{\bib}{cmss8 scaled 1040}
@@ -121,8 +123,8 @@ Write it at the end.
 
 \addcontentsline{toc}{section}{References} % Zeile für das Inhaltsverzeichnis
 
+\bibliographystyle{alpha}
 \bibliography{bibfile}
-\bibliographystyle{alphadin}
 
 \newpage
 
