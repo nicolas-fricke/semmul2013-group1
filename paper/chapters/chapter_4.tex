@@ -51,7 +51,7 @@ The features we chose to use in our tool are:
 \item{Color histogram} in HSV color space with 20 bins each
 \item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{make the following sound less copied}
 \\
-For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.
+For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \footnote{Reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.
 \end{itemize}
 The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features. \\
 \todo{Can we explain or prove that somehow?}
