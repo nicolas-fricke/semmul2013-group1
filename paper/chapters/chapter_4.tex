@@ -7,7 +7,7 @@ The nodes received through the tree-based search are potentially very large (i.e
 \subsection{General Approach}
 Since semantics are more meaningful to humans, and thus likely to be more important for the given use case, the refinement is done first on a semantic and then on a visual basis. That is, the results from the groups with semantically similar pictures are clustered again into subclusters with visually similar pictures. The steps are explained in more detail in sections \ref{sec_keywordclustering} and \ref{sec_visualclustering}.
 This approach has the additional advantage that outlier images, which have been assigned to a node but do not quite fit with the others because they show something different, can be filtered out in the semantic step. \\
-The subclustering explained below and summarized in figrue \ref{fig_semanticandvisual} will only take place for nodes/clusters with a certain minimum size and results in the structure of three nested Arrays of the WordnetNode class' attribute \emph{subclusters} shown in figure \ref{fig_nodestructure}.
+The subclustering explained below and summarized in figure \ref{fig_semanticandvisual} will only take place for nodes/clusters with a certain minimum size and results in the structure of three nested Arrays of the WordnetNode class' attribute \emph{subclusters} shown in figure \ref{fig_nodestructure}.
 
 \begin{figure}[h]
 \centering
@@ -16,7 +16,7 @@ The subclustering explained below and summarized in figrue \ref{fig_semanticandv
 \label{fig_semanticandvisual}
 \end{figure}
 
-The data structures used in the process, such as Image Lookup Structures and Visual Feature Vectors, need only be calculated once for each image set. The preparational processes are visualized by Figure \ref{fig_precalcprocess}.
+The data structures used in the process, such as Image Lookup Structures and Visual Feature Vectors, need only be calculated once for each image set. The preparational processes are visualized by figure \ref{fig_precalcprocess}.
 
 \begin{figure}[h]
 \centering
@@ -28,14 +28,12 @@ The data structures used in the process, such as Image Lookup Structures and Vis
 
 \subsection{Keyword Clusters}
 \label{sec_keywordclustering}
-good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
-
-\bigskip
-Semantic clustering is accomplished by using the assigned Synsets. Therefore, Synsets are clustered into groups and pictures are assigned to these groups. According to the paper of Grigory Begelman \cite{begelman2006automated}, our first approach of clustering Synsets used co-occurrences to span a graph of related Synsets. This graph consists of nodes representing the Synsets and edges representing the number of co-occurrences between Synsets. The paper describes a graph clustering algorithm to group related Synsets. But, the algorithm requires calculation of eigenvalues and eigenvectors for large sparse matrices. Furthermore, it does not take edge weighting into account. Consequently, the graph clustering algorithm is replaced by the Markov Cluster Algorithm (MCL) introduced by Dongen \cite{Dongen1998}. MCL is based on the Random Walk Model \cite{spitzer2001principles}. The basic idea is, if you start to walk from a node, it is more probable to stay inside a cluster than to leave it. Therefore, we calculate the probability to reach another node $B$ from a node $A$ in only one step and then walk steps until convergence of probabilities. The resulting probabilities inside a cluster are higher than outside. So, they can be used to determine groups of related Synsets.\\
+Semantic clustering is accomplished by using the assigned Synsets. Therefore, Synsets are clustered into groups and pictures are assigned to these groups. According to the paper of Grigory Begelman \cite{begelman2006automated}, our first approach of clustering Synsets used co-occurrences to span a graph of related Synsets. This graph consists of nodes representing the Synsets and edges representing the number of co-occurrences between Synsets. To include the advantages of Wordnet, we decided to combine the number of co-occurrences with the LCH-similarity  The paper describes a graph clustering algorithm to group related Synsets. But, the algorithm requires calculation of eigenvalues and eigenvectors for large sparse matrices. Furthermore, it does not take edge weighting into account. Consequently, the graph clustering algorithm is replaced by the Markov Cluster Algorithm (MCL) introduced by Dongen \cite{Dongen1998}. MCL is based on the Random Walk Model \cite{spitzer2001principles}. The basic idea is, if you start to walk from a node, it is more probable to stay inside a cluster than to leave it. Therefore, we calculate the probability to reach another node $B$ from a node $A$ in only one step and then walk steps until convergence of probabilities. The resulting probabilities inside a cluster are higher than outside. So, they can be used to determine groups of related Synsets.\\
 
 \bigskip
 for each image, count how many synsets it shares with each cluster, and assign it to maximum (can be multiple), so all images with maximum tags in that keyword cluster form one semantic cluster. Example: some parrot pictures fall into keyword cluster with persons, others in those with trees. \\
 if only one image falls into a keyword cluster, consider it an outlier and remove it
+good for context(?), outlier identification, basic clustering for part-meronym spanned trees (Africa example)
 
 \subsection{Visual Clusters}
 \label{sec_visualclustering}
