@@ -4,24 +4,16 @@
 \todo{introduce the introduction?}
 
 \subsection{Problem Statement \& Motivation}
-training data for image categorization and content detection \\
-flickr and other online photo communities are good sources for annotated images \\
-problems: low annotation quality, only search for specific term (with different meanings and visual characteristics) \\
-for example, want to test the quality of my algorithm in identifying different foods: would have to think of all kinds of food, then search images and group them into homogeneous groups manually
+Many algorithms, e.g. for image categorization or content detection, require training data on which the relevant features can be learned. Obtaining such training data can be a quite troublesome task, especially when building a training set manually from scratch. If, for example, an algorithm shall be trained to identify and differentiate kinds of food, one would have to think of all possible kinds of food, search corresponding images and group them into homogenous groups. \\
+Online photo communities like Flickr\footnote{https://www.flickr.com/} provide vast amounts of images, which are usually collaboratively tagged. These communities are therefore considered folksonomies\index{Folksonomy}, i.e. socially indexed collections.
+Floksonomies can be good sources for training data, but several problems exist: First of all, annotations are often of poor quality, since anyone can tag anything without control mechanisms. Secondly, one can only search for one specific term, and will obtain images for all of the term's meanings, while the retrieval is limited to those images with the exact tag already. Furthermore, the images will be of a very large visual diversity, which is often not desired. \\
 
-\bigskip
-
-\emph{What do we do?} \\
-clustering: creating homogeneous groups of semantically and visually similar pictures \\
-
-\emph{Why do we do that?} \\
-seminar challenge: cluster 1 million pictures of the MIR1M flickr file  \todo{what is flickr? folksonomy etc.} set \\
-improving the complex task of searching for pictures according to a given keyword \\
-facing different challenges like: multiple meanings of the keyword, bad picture annotations, taking semantic and visual information of a picture into account \\
+The above mentioned difficulties will be adressed by the tool presented in this work, whose main aim is to create homogeneous groups of semantically and visually similar pictures for a given topic in order to aid with the laborious assembly of training and test data sets. This is done based on the 1 million images of the MIRFLICKR-1M\footnote{http://press.liacs.nl/mirflickr/} file set. \\
+When creating such a tool, one faces serveral challenges, like homonymy\index{Homonymy} of keywords (that is, the fact that one word can have multiple meanings), low quality of tags and other annotations, and the consideration of both semantic and visual information about a picture. \todo{further challenges?} 
 
 \subsection{Clustered Tree Nodes Approach}
-We implemented a web application in Python using SimpleCV\footnote{http://www.simplecv.org} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} for the frontend.\\
-The tool provides ready-to-use semantically and visually homogeneous image clusters for a given topic. This is achieved by first spanning a tree of subordinate terms, retrieving related images by their keywords for each term, and then clustering the images by their predominant keywords as well as by colors and edge structure. These two major phases are illustrated in figure \ref{fig_overallprocess}
+To achieve the stated goal, a Python web application was implemented, using SimpleCV\footnote{http://www.simplecv.org/} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} for the frontend.\\
+The tool provides ready-to-use semantically and visually homogeneous image clusters for a given topic, or searchterm. This is achieved by first spanning a tree of subordinate terms, retrieving related images by their keywords for each term, and then clustering the images by their predominant keywords as well as by colors and edge structure. These two major phases are illustrated in figure \ref{fig_overallprocess}.
 
 \begin{figure}[h]
 \centering
@@ -30,6 +22,4 @@ The tool provides ready-to-use semantically and visually homogeneous image clust
 \label{fig_overallprocess}
 \end{figure}
 
-\bigskip
-
-After giving an overview of Related Work in chapter 2, we will present how we analyze the image annotations and the user's search term to retrieve relevant images (chapter 3). Our methods to cluster these semantically and visually are described in chapter 4. Chapter 5 explains how we evaluate our approach, while the evaluation results will be discussed in chapter 6. At last, chapter 7 gives ideas for improvement and possible future work.
+After giving an overview of Related Work in chapter 2, we will present how we analyze the image annotations and the user's search term to retrieve relevant images (chapter 3). The methods applied cluster these semantically and visually are described in chapter 4. Chapter 5 explains how we evaluate our approach, while the evaluation results will be discussed in chapter 6. At last, chapter 7 gives ideas for improvement and possible future work.
