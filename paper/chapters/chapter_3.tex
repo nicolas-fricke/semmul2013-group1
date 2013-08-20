@@ -12,8 +12,8 @@ The number is necessary because one word can have multiple meanings that will th
 Synsets are linked with each other through several semantic relations, e.g. part-of, member-of (meronyms) or type-of (hyponyms) relationships.
 In our work, we use this network of synsets to discover the semantics between terms describing the images as well as towards the search term. \\
 
-A popular alternative ontology\index{Ontology} we could have used to explore semantic relationships is DBpedia, which is a Linked Data Project based on Wikipedia's infoboxes\footnote{http://www.dbpedia.org}. \todo{Why did we chose WordNet over DBpedia?}
-multiple languages, but open data: not as well-structured and consistent, more information but strongly varying levels of detail.
+A popular alternative ontology\index{Ontology} we could have used to explore semantic relationships is DBpedia, which is a Linked Data Project based on Wikipedia's infoboxes\footnote{http://www.dbpedia.org/}. \todo{Why did we chose WordNet over DBpedia?}
+Compared to WordNet, DBpedia contains more information in terms of entities, relationships, and attributes, and has support for multiple languages. not as well-structured and consistent, more information but strongly varying levels of detail.
   
   
 \subsection{Assigning Keywords to Pictures}
@@ -26,7 +26,7 @@ We considered the following annoations provided by the Flickr API and evaluated 
 \begin{itemize} 
 \item{\emph{Title.}} The title was usually a short but precise description of the image content and thus very valuable for semantic annotation.
 \item{\emph{Description.}} The description did often relate to the image content but with a lot of fill words and noise as well as context-dependent meanings, so it could be useful but would require additional preprocessing such as Named Entity Recognition.
-\item{\emph{Comments.}} Only very few comments described the image in any way - they were mostly used for social interaction with the photographer. 
+\item{\emph{Comments.}} Only very few comments described the image in any way - they were mostly used for social interaction with the photographer.
 \item{\emph{Tags.}} Tags are short, precise keywords on various abstraction levels. The vast majority of them are directly related to the image contents, and only little noise present due to the absence of fill words.
 \item{\emph{Album Names.}} There are albums for diverse purposes, many of them related to the images' contents. Their names, however, tend to be obscurred with special characters and the like, so quite some effort would be necessary in preprocessing.
 \item{\emph{Group Names.}} The observations on group names were similar to those on albums.
