@@ -41,11 +41,13 @@ def main(args):
   sys.stdout.write("Done:\n\n")
 
   sys.stdout.write("Result size:     %d\n" % result_size)
-  sys.stdout.write("Testset size:    %d\n" % testset_size)
+  sys.stdout.write("Testset size:    %d\n\n" % testset_size)
   sys.stdout.write("True Positives:  %d\n" % true_positives)
   sys.stdout.write("True Negatives:  ???\n")
   sys.stdout.write("False Positives: %d\n" % false_positives)
-  sys.stdout.write("False Negatives: %d\n" % false_negatives)
+  sys.stdout.write("False Negatives: %d\n\n" % false_negatives)
+  sys.stdout.write("Precision:       %f (tp / (tp + fp))\n" % (float(true_positives) / (true_positives + false_positives)))
+  sys.stdout.write("Recall:          %f (tp / (tp + fn))\n" % (float(true_positives) / (true_positives + false_negatives)))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')

@@ -40,8 +40,9 @@ try:
                  AND all_votes = same_votes
                  GROUP BY s.image_1_id, s.image_2_id;''')
 
-  # data = dict: (image_1_id, image_2_id): {visual_similarity, semantic_similarity}
-  data = {(row[0], row[1]): dict(visual_similarity=row[2], semantic_similarity=row[3]) for row in cur.fetchall()}
+  # data = dict: "(image_1_id, image_2_id)": {visual_similarity, semantic_similarity}
+  #              key needs to be string for json serialization :-/
+  data = {str((row[0], row[1])): dict(visual_similarity=row[2], semantic_similarity=row[3]) for row in cur.fetchall()}
 
   json.dump(data, open(args.output_file, 'w'))
 
