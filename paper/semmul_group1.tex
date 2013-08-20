@@ -9,6 +9,7 @@
 \usepackage[T1]{fontenc} %Korrekte Kodierung der Umlaute nach ISO 8859-1
 \usepackage{makeidx} %Zur automatischen Indexerstellung
 \usepackage{amsfonts}
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{epsfig}   % Zum Einbinden von Bildern
 \usepackage{url}      % Korrekter Satz von URLs
@@ -36,36 +37,36 @@
 \makeindex % legt das Index-File an
 
 
-\begin{document}          
+\begin{document}
 
 \begin{titlepage}
   \begin{center}
     \mbox{}
     \vspace{1cm}
-    
+
     {\huge Semantic and Visual Image Clustering\\[1em] {\LARGE Retrieving Search Term Related Pictures in Structured Clusters}}
-        
+
     \vspace{4.7cm}
-    
+
     Seminar paper \\[1em]
     {\large \sc Semantic Multimedia} \\[1em]
     Summer Term 2013 \\[1em]
     Hasso-Plattner-Institut für Softwaresystemtechnik GmbH \\[1em]
     Universität Potsdam
-    
+
     \vspace{3.7cm}
-    
+
 		written by
 		
     \vspace{1em}
-    
+
 		{\Large Mandy Roick} \\
 		{\Large Claudia Exeler} \\
 		{\Large Tino Junge} \\
 		{\Large Nicolas Fricke}
 		
     \vspace{4em}
-    
+
     30.~August 2013
   \end{center}
 \end{titlepage}
@@ -75,7 +76,7 @@
 
 % Zweite Seite = Kurzzusammenfassung
 \begin{center}
-{\bf Abstract} 
+{\bf Abstract}
 \end{center}
 
 \noindent
@@ -88,13 +89,13 @@ Write it at the end.
 \newpage
 
 % Dritte Seite = Inhaltsverzeichnis
-\tableofcontents 
+\tableofcontents
 \newpage
 
 \listoftodos
 \newpage
 
-\input{chapters/chapter_1.tex} 
+\input{chapters/chapter_1.tex}
 \newpage
 \input{chapters/chapter_2.tex}
 \newpage
@@ -130,7 +131,7 @@ Write it at the end.
 
 %Hierhin kommt der Index (Sachverzeichnis)
 \addcontentsline{toc}{section}{Index} % Dies ist die Zeile für das Inhaltsverzeichnis
-\flushbottom                                    
+\flushbottom
 \printindex
 
 \end{document}
