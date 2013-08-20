@@ -14,19 +14,19 @@ In our work, we use this network of synsets to discover the semantics between te
 
 A popular alternative ontology\index{Ontology} we could have used to explore semantic relationships is DBpedia, which is a Linked Data Project based on Wikipedia's infoboxes\footnote{http://www.dbpedia.org}. \todo{Why did we chose WordNet over DBpedia?}
 multiple languages, but open data: not as well-structured and consistent, more information but strongly varying levels of detail.
-  
-  
+
+
 \subsection{Assigning Keywords to Pictures}
 \label{sec_keywordstopictures}
 The first step now is to identify valuable image annotations and associate them with their meanings, i.e. find the Synsets they represent.
 
 \subsubsection{Annotation Data}
 \label{sec_annotationdata}
-We considered the following annoations provided by the Flickr API and evaluated them on twenty randomly sampled pictures: 
-\begin{itemize} 
+We considered the following annoations provided by the Flickr API and evaluated them on twenty randomly sampled pictures:
+\begin{itemize}
 \item{\emph{Title.}} The title was usually a short but precise description of the image content and thus very valuable for semantic annotation.
 \item{\emph{Description.}} The description did often relate to the image content but with a lot of fill words and noise as well as context-dependent meanings, so it could be useful but would require additional preprocessing such as Named Entity Recognition.
-\item{\emph{Comments.}} Only very few comments described the image in any way - they were mostly used for social interaction with the photographer. 
+\item{\emph{Comments.}} Only very few comments described the image in any way - they were mostly used for social interaction with the photographer.
 \item{\emph{Tags.}} Tags are short, precise keywords on various abstraction levels. The vast majority of them are directly related to the image contents, and only little noise present due to the absence of fill words.
 \item{\emph{Album Names.}} There are albums for diverse purposes, many of them related to the images' contents. Their names, however, tend to be obscurred with special characters and the like, so quite some effort would be necessary in preprocessing.
 \item{\emph{Group Names.}} The observations on group names were similar to those on albums.
@@ -47,7 +47,7 @@ This strategy provides decent results, although erroneous matching still occurrs
 Even with preprocessing, not all keywords can be matched to a Synset, because they are simply not represented in WordNet. The information about these \emph{unmatched tags} is kept nevertheless, and later used for image retrieval, described in section \ref{sec_picturestonodes}.
 
 
-\subsection{Constructing a Searchtree} 
+\subsection{Constructing a Searchtree}
 \label{sec_searchtreeconstruction}
 In general, all words represented in WordNet can be used as a query term for our tool. \todo{Find better description of what search terms we expect} For the given use case, however, queries will be limited to those that can be seen in pictures. This is mainly the case for object descriptors at various levels of specificity, and place names, so our work is focused on these types of search terms.
 
@@ -62,7 +62,7 @@ When a term is entered into the tool, it is first used to retrieve all Synsets\i
 The same figure also visualizes that a searchtree is a tree of specializations. These specializations are retrieved using WordNet's hypnoym relations\index{Hyponym}. For some terms, especially geographic Synsets, specializations are not applicable, so we use part-meronyms\index{Part-meronym} (part-of relationships), when no hyponyms are available.\\
 
 
-Figure \ref{fig_nodestructure} shows the internal data structure of the tree. Each node represents one Synset, and references a list of more specific Synsets (\emph{hyponyms} or \emph{meronyms}). 
+Figure \ref{fig_nodestructure} shows the internal data structure of the tree. Each node represents one Synset, and references a list of more specific Synsets (\emph{hyponyms} or \emph{meronyms}).
 
 \begin{figure}[h]
 \centering
@@ -76,10 +76,10 @@ Figure \ref{fig_nodestructure} shows the internal data structure of the tree. Ea
 \label{sec_picturestonodes}
 Generally, assigning pictures to tree nodes is simple: Each node gets linked with all images that have been annotated with the Synset it represents during Synset detection. \\
 In addition, strongly co-occurring tags are used for a higher recall. Co-occurring tags are those keywords that could not be mapped to any Synset. They may, however, be closely related to certain Synsets, with which they often occurr together. When that is the case, the keyword is added to the list of \emph{co\_occurring\_tags} of the node. \\
-We define a \emph{strong} co-occurrence based on tf-idf \index{Tf-idf} values\todo{explain tf-idf}. If a simpler co-occurrence measure (e.g. the ratio of co-occurrences to the total number of occurrences of the term) was used, very common keywords like camera models would be strong co-occurrences with many Synsets despite the lack of an actual relation. \\
+We define a \emph{strong} co-occurrence based on term frequency and inverse document frequency (tf-idf) \index{Tf-idf} values\todo{explain tf-idf}.  If a simpler co-occurrence measure (e.g. the ratio of co-occurrences to the total number of occurrences of the term) was used, very common keywords like camera models would be strong co-occurrences with many Synsets despite the lack of an actual relation. \\
 We observed that the co-occurring keywords can be useful to find terms in foreign languages and proper nouns, but of course also introduces noise. The key to the quality of this features is the choice of the threshold. Reasonably good results were achieved with $0.75 * max\_tf\_idf$, where $max\_tf\_idf$ is the maximal score across all values. \\
 
-After adding all pictures that are annotated with the Synset itself or one of the related tags to the node's \emph{associated\_pictures}, some nodes may only have one or very few images. To create a balanced result with image sets of a significant size, nodes considered too small are merged into their parent node. Whether a node is too small is determined by the parameter \emph{minimal\_node\_size}, which states the minimal number of images a node must have. To avoid merging of small nodes completely, the parameter should be set to 0.\\ 
+After adding all pictures that are annotated with the Synset itself or one of the related tags to the node's \emph{associated\_pictures}, some nodes may only have one or very few images. To create a balanced result with image sets of a significant size, nodes considered too small are merged into their parent node. Whether a node is too small is determined by the parameter \emph{minimal\_node\_size}, which states the minimal number of images a node must have. To avoid merging of small nodes completely, the parameter should be set to 0.\\
 The merge process is simple: All associated pictures of the node are unioned into the parent node's pictures and the node itself deleted. \todo{What happens when subnodes exist?}
 
 The above described steps of the Image Tree Creation phase are summarized in figure \ref{fig_imagetreecreation}.
