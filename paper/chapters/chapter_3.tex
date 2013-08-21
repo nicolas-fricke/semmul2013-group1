@@ -4,24 +4,24 @@
 
 \todo{intro to chapter 3}
 
-\subsection{WordNet}\index{WordNet}
+\subsection{The WordNet Ontology}\index{WordNet}
 \label{sec_wordnet}
-The offical web page \footnote{http://wordnet.princeton.edu/} describes WordNet as a freely and publicly available``large lexical database of english nouns, verbs, adjectives and adverbs, grouped into sets of cognitive synonyms (\emph{Synsets}\index{Synset}), each expressing a distinct concept''. That is, a Synset is a particular concept which can be expressed by different terms but has one unique identifier. The identifier consists of the word most commonly used to describe the concept, the part of speech, and a number, e.g. \emph{drive.v.02}.\\
-The number is necessary because one word can have multiple meanings that will then be represented by different synsets, like in \emph{cherry.n.01} for the tree and \emph{cherry.n.02} for the fruit. All Synsets that may be represented by a certain term can be obtained by calling \emph{wn.synsets(``term'')}. This includes stemming of the term, so also its plural or conjugations will be matched.\\
+The offical web page\footnote{http://wordnet.princeton.edu/} describes WordNet as a freely and publicly available ``large lexical database of english nouns, verbs, adjectives and adverbs, grouped into sets of cognitive synonyms (\emph{Synsets}\index{Synset}), each expressing a distinct concept''. That means, a Synset is a particular concept which can be expressed by different terms but has one unique identifier. The identifier consists of the word most commonly used to describe the concept, the part of speech, and a number, e.g. \emph{drive.v.02}.\\
+The number is necessary because one word can have multiple meanings that will then be represented by different synsets, like in \emph{cherry.n.01} for the tree and \emph{cherry.n.02} for the fruit. All Synsets a certain term may represent can be obtained by calling \emph{wn.synsets(``term'')}. This call includes stemming the term, so its plural or conjugations will be matched as well.\\
 
-Synsets are linked with each other through several semantic relations, e.g. part-of, member-of (meronyms) or type-of (hyponyms) relationships.
+Synsets are linked with each other through several semantic relations, e.g. \emph{part-of}, \emph{member-of} (meronyms) or \emph{type-of} (hyponyms) relationships.
 In our work, we use this network of synsets to discover the semantics between terms describing the images as well as towards the search term. \\
 
-A popular alternative ontology\index{Ontology} we could have used to explore semantic relationships is DBpedia, which is a Linked Data Project based on Wikipedia's infoboxes\footnote{http://www.dbpedia.org/}. \todo{Why did we chose WordNet over DBpedia?}
-Compared to WordNet, DBpedia contains more information in terms of entities, relationships, and attributes, and has support for multiple languages. not as well-structured and consistent, more information but strongly varying levels of detail.
+Another popular ontology\index{Ontology} we could have used to explore semantic relationships is DBpedia\footnote{http://www.dbpedia.org/}, which is a Linked Data Project based on Wikipedia's infoboxes. 
+Compared to WordNet, DBpedia contains more information in terms of entities, relationships, and attributes, and has support for multiple languages. However, since it is open data, it is by far not as well-structured as WordNet, and 	often inconsistent or redundant.
 
 \subsection{Assigning Keywords to Pictures}
 \label{sec_keywordstopictures}
-The first step now is to identify valuable image annotations and associate them with their meanings, i.e. find the Synsets they represent.
+The first steps that had to be taken was to identify valuable image annotations, and to then find the terms' meanings in order to map them to the correct Synsets\index{Synset}.
 
 \subsubsection{Annotation Data}
 \label{sec_annotationdata}
-We considered the following annoations provided by the Flickr API and evaluated them on twenty randomly sampled pictures:
+We considered the following annotations provided by the Flickr API and evaluated them on twenty randomly sampled pictures:
 \begin{itemize}
 \item{\emph{Title.}} The title was usually a short but precise description of the image content and thus very valuable for semantic annotation.
 \item{\emph{Description.}} The description did often relate to the image content but with a lot of fill words and noise as well as context-dependent meanings, so it could be useful but would require additional preprocessing such as Named Entity Recognition.
@@ -31,7 +31,7 @@ We considered the following annoations provided by the Flickr API and evaluated 
 \item{\emph{Group Names.}} The observations on group names were similar to those on albums.
 \end{itemize}
 
-Based on these findings, we use the single words from the title (split by whitespace) as well as tags, and try to find the corresponding Synset. Before that, though, the keywords are cleansed: All those including digits are removed, since they more often represent image metadata (such as camera model, lense width, date, etc.) than information on the image contents. Additionally, all remaining keywords are stripped of special characters to achieve a more uniform representation. An endless number of additional filters could be introduced to avoid matching errors, but it must also be considered that potentially valuable information will also be removed by these filters.\\
+Based on these findings, we use the single words from the title (split by whitespace) as well as tags. Before trying to find their corresponding Synsets, the keywords are cleansed: All those including digits are removed, since they more often represent image metadata (such as camera model, lense width, date, etc.) than information on the image contents. Additionally, all remaining keywords are stripped of special characters to achieve a more uniform representation. An endless number of additional filters could be introduced to avoid matching errors, but it must also be considered that potentially valuable information will also be removed by these filters.\\
 
 \subsubsection{Synset Detection}
 \label{sec_synsetdetection}
