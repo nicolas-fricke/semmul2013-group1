@@ -1,9 +1,12 @@
 \section{Related Work}
 \label{sec_relatedwork}
 
-Much research has been done recently in image clustering and semantic clustering, with application areas in image segmentation, compact representation of large image sets, search space reduction and avoiding the semantic gap in content based image retrieval \cite{Lim2011}. \\
-However, most of these works present new algorithms for one of the above use cases, not methods to retrieve training data. \\
+Much research has been done recently in image clustering and semantic clustering, with application areas in image segmentation, compact representation of large image sets, search space reduction and avoiding the semantic gap in content based image retrieval \cite{Lim2011}.
 
+\bigskip
+However, most of these works present new algorithms for one of the above use cases, not methods to retrieve training data. The only algorithm for retrieving training data for image analysis was found in \cite{Orendovici2010}. The algorithm collects training data for computational analysis of the quality of photographs from Flickr. But, instead of analyzing pictures automatically according to their tags and comments, the paper presents a tool for collecting user votes. Comments were only used to retrieve terms for describing image quality.
+
+\bigskip
 Related Subjects: Image Annotation, semantic clustering, content-based image retrieval
 
 \subsection{Semantic Clustering and Tags}
@@ -16,6 +19,6 @@ Current issues with tag-based search and clustering are mostly related to the la
 
 Ideas exist to use visual features to semantically analyze and classify images. \cite{Liu2007} and \cite{Zhang2012} provide good summaries and evaluations of the different approaches how this could be done. Both conclude that this so-called \emph{Automatic Image Annotation} \index{Automatic Image Annotation} is computation-intensive and not yet fully mature.
 
-%% http://infolab.stanford.edu/~wangz/project/imsearch/review/MTA/neela.pdf: summary of semantic image interpretation; Overview of foundations 
+%% http://infolab.stanford.edu/~wangz/project/imsearch/review/MTA/neela.pdf: summary of semantic image interpretation; Overview of foundations
 
 One approach that combines semantics and visuals is \cite{Lindstaedt2009}, which tries to annotate images (with a defined vocabulary??) based on visual features and existing tags, so-called \emph{folksonomies}. Their goal, however, is to create additional annotations for not or poorly tagged images.
