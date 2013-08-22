@@ -35,6 +35,9 @@ vary parameters given by frontend, trying to find best configuration
 
 \subsection{Results}
 \label{sec_results}
+
+\subsubsection{Phase 1}
+
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
 After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
@@ -43,25 +46,27 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     \hline
     \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} & \emph{minimal node size} & \emph{precision} & \emph{recall} & \emph{f-measure} \\ \hline
     0 	& 0 	& 0 & 0.501532 & 0.859143 & 0.633344 \\ \hline
+    2	& 6	& 2	& 0.575916 & 0.769904 & 0.658929 \\ \hline    
+    4	& 2	& 2	& 0.518719 & 0.836395 & 0.640322 \\ \hline	      
+    4	& 2	& 4	& 0.520458 & 0.834646 & 0.641129 \\ \hline	
+    4	& 6	& 2	& 0.562267 & 0.790026 & 0.656966 \\ \hline     
     4 	& 4 	& 4 & 0.550663 & 0.798775 & 0.651910 \\ \hline
+ 	4	& 6	& 4	& 0.568766 & 0.774278 & 0.655798 \\ \hline    
     6 	& 6 	& 6 & 0.567619 & 0.782152 & 0.657837 \\ \hline  
-    10 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline
+	5 	& 10 & 5 & 0.612903 & 0.748031 & 0.673759 \\ \hline
+    5 	& 15 & 5 & 0.644391 & 0.708661 & 0.675000 \\ \hline  
+   	5 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline 
+    10 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline 
+    10 	& 10 & 20 & 0.578165 & 0.783027 & 0.665180 \\ \hline    
+    10 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
+    10 	& 15 & 10 & 0.631539 & 0.728784 & 0.676686 \\ \hline  
+    10 	& 20 & 10 & 0.666102 & 0.687664 & 0.676711 \\ \hline
+    15 	& 20 & 15 & 0.661716 & 0.701662 & 0.681104 \\ \hline    
+    15 	& 25 & 15 & 0.695298 & 0.672791 & 0.683859 \\ \hline
     20 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
+    20 	& 25 & 20 & 0.677951 & 0.683290 & 0.680610 \\ \hline  
     50	& 50 & 50 & 0.728135 & 0.604549 & 0.660612 \\ \hline
     100 	& 100 & 100 & 0.757858 & 0.569554 & 0.650350 \\ \hline
-  
-    10 	& 20 & 10 & 0.666102 & 0.687664 & 0.676711 \\ \hline
-    10 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
-    10 	& 10 & 20 & 0.578165 & 0.783027 & 0.665180 \\ \hline
-	5 	& 10 & 5 & 0.612903 & 0.748031 & 0.673759 \\ \hline
-   	5 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline
-
-    4	& 6	& 4	& 0.568766 & 0.774278 & 0.655798 \\ \hline    
-    4	& 6	& 2	& 0.562267 & 0.790026 & 0.656966 \\ \hline     
-    2	& 6	& 2	& 0.575916 & 0.769904 & 0.658929 \\ \hline    
-   
-    4	& 2	& 4	& 0.520458 & 0.834646 & 0.641129 \\ \hline	
-    4	& 2	& 2	& 0.518719 & 0.836395 & 0.640322 \\ \hline	      
     \end{tabular}
     \caption{Precision and recall of the image retrieval}
 	\label{tab_retrievalevaluation}
@@ -80,4 +85,10 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     \caption{The two main phases of our algorithm}
 	\label{tab_treeevaluation}
 \end{table}
+
+\subsubsection{Phase 2}
+
+Image tuples voted with same object: 757
+Image tuples voted with same object and same context: 1102
+Image tuples voted as visual similar: 1854
 
