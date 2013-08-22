@@ -16,11 +16,13 @@ class ImageTree(object):
     self.parent = parent
     self.type = type
     self.children = []
+    self.synset_name = None
     self.image_ids = []
 
 def recursively_parse_result_tree(pipeline_tree, parent_image_id_tree_node):
   for wordnet_node in pipeline_tree:
     new_synset_node = ImageTree(parent_image_id_tree_node, 'synset')
+    new_synset_node.synset_name = wordnet_node.name
     parent_image_id_tree_node.children.append(new_synset_node)
     for mcl_cluster in wordnet_node.subclusters:
       new_mcl_node =  ImageTree(new_synset_node, 'mcl')
@@ -35,6 +37,36 @@ def recursively_parse_result_tree(pipeline_tree, parent_image_id_tree_node):
 def parse_result_tree(pipeline_tree):
   return recursively_parse_result_tree(pipeline_tree, ImageTree(None, 'root'))
 
+def find_image_occurrences_in_tree(tree_node, id):
+  result_node_list = []
+  for child_node in tree_node.children:
+    if child_node.type == 'synset':
+      result_node_list += find_image_occurrences_in_tree(child_node, id)
+    elif id in child_node.image_ids:
+      result_node_list.append(child_node)
+  return result_node_list
+
+def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
+  distance = -1
+  check_nodes = find_image_occurrences_in_tree(result_tree_root, search_id_1)
+  already_checked_nodes = Set()
+  id_found = False
+  while not id_found:
+    distance += 1
+    next_check_nodes = set()
+    if not check_nodes:
+      return float("inf")
+    for node in check_nodes:
+      if search_id_2 in node.image_ids:
+        id_found = True
+        break
+      else:
+        if node.parent != None and node.parent not in already_checked_nodes:
+          next_check_nodes.add(node.parent)
+        next_check_nodes |= set([child for child in node.children if child not in already_checked_nodes])
+      already_checked_nodes.add(node)
+    check_nodes = next_check_nodes
+  return distance
 
 def retrieveTestsetResults(database_file):
   con = sqlite3.connect(database_file)
@@ -84,14 +116,26 @@ def main(args):
   print_status("Parsing result tree to easier accessible format...")
   parsed_result_tree = parse_result_tree(pipeline_result)
 
-
-  sys.stdout.write("Loading testset from database... \n")
+  print_status("Loading testset from database... \n")
   same_object_ids, same_object_same_context_ids = retrieveTestsetResults(args.database_file)
 
-  sys.stdout.write("Comparing result images to testset... \n")
+  print_status("Comparing result images to testset... \n")
+  id_tuples = [('221377', '260971')]
+  distances = []
 
-  ### TODO ###
+  for image_id_1, image_id_2 in id_tuples:
+    print_status("Checking for ids %s and %s ... " % (image_id_1, image_id_2))
+    distance = find_closest_match_to_nodes(parsed_result_tree, image_id_1, image_id_2)
+    if distance != float('inf'):
+      distances.append(distance)
+      sys.stdout.write("distance is: %s\n" % distance)
+    else:
+      sys.stdout.write("one image could not be found!")
 
+  average_distance = sum(distances) / len(distances)
+
+  print_status("Done!\n")
+  sys.stdout.write("Average distance is %s \n" % average_distance)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
