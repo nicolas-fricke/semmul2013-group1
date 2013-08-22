@@ -1,10 +1,11 @@
 %
 \section{Evaluation}
-\label{sec_literatur}
+\label{sec_evaluation}
 
-We evaluated our tool on a set of 9,201 \todo{exact number?} images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
+We evaluated our tool on a set of 9,201 images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
 \subsection{Testset}
+\label{sec_testset}
 No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
 What we did to receive evaluation data was to crowdsource the needed data from the general public. This was achieved in two phases:\\
 
@@ -33,20 +34,23 @@ Visual similarity (4.) is evaluated on the whole testset, because not enough com
 vary parameters given by frontend, trying to find best configuration
 
 \subsection{Results}
-\todo{which other parameters influence retrieval?}
+\label{sec_results}
+Our image retrieval has a precision of 0.50 and recall of 0.86 on the ``food'' query, before execution the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values changed slightly to p = 0.?? and r = 0.??.\todo{get actual values}
+After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
-    \begin{tabular}{| p{1.8cm} | p{1.8cm} || p{1.5cm} | p{1.5cm} |}
+    \begin{tabular}{| p{4.5cm} || p{1.5cm} | p{1.5cm} |}
     \hline
-    \emph{Synset detection strategy} & \emph{minimal mcl cluster size} & \emph{precision} & \emph{recall} \\ \hline
-    value 1 		& value 1 	& value 1	& value 1 \\ \hline
-    value 2 		& value 2 	& value 2	& value 2 \\ \hline
-    value 3	 	& value 3 	& value 3	& value 3 \\
+    \emph{minimal mcl cluster size} & \emph{precision} & \emph{recall} \\ \hline
+    value 1 		& value 1 	& value 1 \\ \hline
+    value 2 		& value 2 	& value 2 \\ \hline
+    value 3	 	& value 3 	& value 3 \\
     \hline
     \end{tabular}
-    \caption{The two main phases of our algorithm}
+    \caption{Precision and recall of the image retrieval}
 	\label{tab_retrievalevaluation}
 \end{table}
+
 
 \begin{table}[h]
     \begin{tabular}{| p{1.8cm} | p{1.8cm} || p{1.5cm} | p{1.5cm} | p{1.5cm} |}
