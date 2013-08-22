@@ -4,13 +4,14 @@ import sqlite3
 import json
 import argparse
 # import own modules
-from clustering.pipeline import get_searchtrees_with_filenames
+import clustering.pipeline as pipeline
 from helpers.general_helpers import print_status
+import helpers.general_helpers as general_helpers
 
 def recursively_collect_images(siblings):
   sibling_images = Set()
   for synset in siblings:
-    sibling_images |= Set([image[0].split(".")[0] for image in synset.associated_pictures])
+    sibling_images |= Set([image[0].split('\\')[-1].split('.')[0] for mcl_cluster in synset.subclusters for visual_cluster in mcl_cluster['subcluster'] for image in visual_cluster])
     sibling_images |= recursively_collect_images(synset.hyponyms)
   return sibling_images
 
@@ -41,8 +42,33 @@ def retrieveTestsetResults(database_file):
 
 def main(args):
   print_status("Checking images against testset:\n")
-  print_status("Retrieving images... \n")
-  image_tree = get_searchtrees_with_filenames("food", use_meronyms=False, minimal_node_size=1)
+
+  print_status("Loading visual_features from file... ")
+  visual_features = general_helpers.load_visual_features()
+  print "Done."
+  print_status("Loading cluster_for_synsets from mcl_clusters file... ")
+  cluster_for_synsets = general_helpers.load_cluster_for_synsets()
+  print "Done."
+  print_status("Loading keywords_for_pictures from file... ")
+  keywords_for_pictures = general_helpers.load_keywords_for_pictures()
+  print "Done."
+  print_status("Loading cluster_representatives from file... ")
+  cluster_representatives = general_helpers.load_cluster_representatives(how_many_per_cluster=6)
+  print "Done loading preprocessed data."
+
+  print_status("Checking images against testset:\n")
+  print_status("Retrieving clusters... \n")
+  # image_tree = get_searchtrees_with_filenames("food", use_meronyms=False, minimal_node_size=1)
+  image_tree = pipeline.get_clusters("food", use_meronyms=False,
+                                     visual_clustering_threshold=10000,
+                                     mcl_clustering_threshold=4,
+                                     minimal_mcl_cluster_size=4,
+                                     minimal_node_size=4,
+                                     visual_features=visual_features,
+                                     cluster_for_synsets=cluster_for_synsets,
+                                     keywords_for_pictures=keywords_for_pictures,
+                                     cluster_representatives=cluster_representatives)
+
   sys.stdout.write("Collecting images from tree... \n")
   result_ids = recursively_collect_images(image_tree)
 
@@ -68,6 +94,9 @@ def main(args):
 
   false_negatives = len(testset_positive_ids)
 
+  precision = float(true_positives) / (true_positives + false_positives)
+  recall = float(true_positives) / (true_positives + false_negatives)
+
   sys.stdout.write("Done:\n\n")
 
   sys.stdout.write("Testset size:    %d\n\n" % (testset_positive_size + testset_negative_size))
@@ -77,8 +106,9 @@ def main(args):
   sys.stdout.write("True Negatives:  ???\n")
   sys.stdout.write("False Positives: %d\n" % false_positives)
   sys.stdout.write("False Negatives: %d\n\n" % false_negatives)
-  sys.stdout.write("Precision:       %f (tp / (tp + fp))\n" % (float(true_positives) / (true_positives + false_positives)))
-  sys.stdout.write("Recall:          %f (tp / (tp + fn))\n" % (float(true_positives) / (true_positives + false_negatives)))
+  sys.stdout.write("Precision:       %f (tp / (tp + fp))\n" % precision)
+  sys.stdout.write("Recall:          %f (tp / (tp + fn))\n" % recall)
+  sys.stdout.write("F-Measure:       %f (2 * (p * r / (p + r)))\n" % (2 * (float(precision) * float(recall)) / (precision + recall)))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
