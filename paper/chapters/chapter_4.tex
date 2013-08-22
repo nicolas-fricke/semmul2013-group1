@@ -61,26 +61,25 @@ For feature extraction, we use a pyramidal approach similar to the one proposed 
 \label{fig_blackwhite}
 \end{figure}
 
-With the applied pyramid technique, the final feature vector is concatenated from several partial feature vectors. The image is first analyzed as a whole, than the top half, the bottom half, left half and right half, followed by horizontal and vertical thirds etc. up to splitting each picture in five parts. 
+With the applied pyramid technique, the final feature vector is concatenated from several partial feature vectors, labeled from 1 to 30 in figure \ref{fig_blackwhite}. The appropriateness of this method especially for refining existing clusters, is also discussed in \cite{Lazebnik2006}. 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.09\textwidth]{images/partitioning5h.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning5v.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning4h.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning4v.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning3h.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning3v.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning2h.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning2v.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning1h.pdf}
-\includegraphics[width=0.09\textwidth]{images/partitioning1v.pdf}
-
-\caption{Two images that have the same color histogram regarding the entire picture but different histograms on the marked regions}
+\includegraphics[width=0.19\textwidth]{images/partitioning5h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning4h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning3h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning2h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning1h.pdf}\vspace{1mm}
+\includegraphics[width=0.19\textwidth]{images/partitioning5v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning4v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning3v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning2v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning1v.pdf}
+\caption{Pyramidal image splitting for feature extraction}
 \label{fig_blackwhite}
 \end{figure}
 
-\cite{Lazebnik2006} also states the appropriateness of this method especially in refining existing clusters.\\
+
 
 \subsubsection{Clustering}
 A first, rather naive approach to clustering the visual characteristics extracted would be to concatenate the feature vectors (histograms), and apply one of the established clustering algorithms like k-means. \index{K-Means} The fact that remains unseen in this approach is that, generally, the values of different features are usually measured on different scales and therefore vary in their orders of magnitude: In color histogram, each bin's value represents a number of pixels, whereas in edge histograms the number of edges is counted, which is significantly smaller. \\
