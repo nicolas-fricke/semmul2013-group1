@@ -1,5 +1,4 @@
 import sys
-from sets import Set
 import sqlite3
 import json
 import argparse
@@ -49,7 +48,7 @@ def find_image_occurrences_in_tree(tree_node, id):
 def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
   distance = -1
   check_nodes = find_image_occurrences_in_tree(result_tree_root, search_id_1)
-  already_checked_nodes = Set()
+  already_checked_nodes = set()
   id_found = False
   while not id_found:
     distance += 1
@@ -94,7 +93,7 @@ def retrieveTestsetResults(database_file):
                   AND s.semantic_similarity == 'same_object'
                   GROUP BY s.image_1_id, s.image_2_id; ''')
 
-  same_object_ids = Set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
+  same_object_ids = set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
 
   # Retrieve id tuples of same object and same context images
   cur = con.cursor()
@@ -119,7 +118,7 @@ def retrieveTestsetResults(database_file):
                     AND s.semantic_similarity == 'same_context'
                     GROUP BY s.image_1_id, s.image_2_id; ''')
 
-  same_context_ids = Set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
+  same_context_ids = set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
 
   same_object_same_context_ids  =  same_context_ids | same_object_ids
 
