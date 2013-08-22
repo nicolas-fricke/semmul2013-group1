@@ -2,14 +2,14 @@
 \section{Evaluation}
 \label{sec_evaluation}
 
-We evaluated our tool on a set of 9,201 images and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
+We evaluated our tool on a set of 9,201 images, which are a subset of the MIRFLICKR-1M file set, and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
-\subsection{Testset}
+\subsection{Test set}
 \label{sec_testset}
 No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
 What we did to receive evaluation data was to crowdsource the needed data from the general public. This was achieved in two phases:\\
 
-First, the users were shown random picture out of the 9,201 test set images and asked whether it shows food. We normalized these answers, so that there is only one vote per user per picture, shoe value is determined by the ration of positive (``shows food'') and negative (``does not show food'') votes of that user on that picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by more than 40 participants, 1,142 images were identified to show food. \\
+First, the users were shown random picture out of the 9,201 test set images and asked whether it shows food or not. We normalized these answers, so that there is only one vote per user per picture. In the case a user rated a picture more than once, the value is determined by the ration of positive (``shows food'') and negative (``does not show food'') votes of that user on that picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by more than 40 participants, 1,142 images out of the total 9,201 images were identified to show food. \\
 
 We also need data on the semantic and visual similarity of the pictures. Therefore, in the second phase, the users were shown pairs of images and asked to compare them. They could choose between three levels of semantic similarity: \emph{not similar}, \emph{same object}, and \emph{same object and same context}, and two levels of visual similarity: \emph{similar}, and \emph{not similar}.\\
 Among the 12,962 votes were 771 pairs of images with same objects, 354 pairs with same object and same context, as well as 1,885 pairs of visually similar images. The same normalization as in the first phase was applied.
@@ -29,23 +29,27 @@ The quality of the hierarchy of the retrieved images (2.) is based on the same o
 
 The same object and same context annotations can also be used to examine the quality of the keyword clusters (3.).  (compare both, what does mcl actually do?)\todo{how do we actually evaluate mcls?}
 
-Visual similarity (4.) is evaluated on the whole testset, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, precision and recall are used as indicators.
+Visual similarity (4.) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, precision and recall are used as indicators.
 
 vary parameters given by frontend, trying to find best configuration
 
 \subsection{Results}
 \label{sec_results}
-Our image retrieval has a precision of 0.50 and recall of 0.86 on the ``food'' query, before execution the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values changed slightly to p = 0.?? and r = 0.??.\todo{get actual values}
+Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
 After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
-    \begin{tabular}{| p{4.5cm} || p{1.5cm} | p{1.5cm} |}
+    \begin{tabular}{| p{2.5cm}| p{2.5cm}| p{2.5cm} || p{1.5cm} | p{1.5cm} | p{1.7cm} |}
     \hline
-    \emph{minimal mcl cluster size} & \emph{precision} & \emph{recall} \\ \hline
-    value 1 		& value 1 	& value 1 \\ \hline
-    value 2 		& value 2 	& value 2 \\ \hline
-    value 3	 	& value 3 	& value 3 \\
-    \hline
+    \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} & \emph{minimal node size} & \emph{precision} & \emph{recall} & \emph{f-measure} \\ \hline
+    0 &	0 & 	0 &	0.501532 & 0.859143 & x \\ \hline
+    4 & 4 & 	4 & 0.550663 & 0.798775 & 0.651910 \\ \hline
+    
+    4	&	6	& 	4	&	0.568766		&	0.774278 &x\\ \hline
+    4	&	6	& 	2	&	0.562267		&	0.790026 &x\\ \hline    
+    2	&	6	& 	2	&	0.575916		&	0.769904 &x\\ \hline    
+    4	&	2	& 	4	&	0.520458		&	0.834646 &x\\ \hline	
+    4	&	2	& 	2	&	0.518719		&	0.836395 &x\\ \hline	      
     \end{tabular}
     \caption{Precision and recall of the image retrieval}
 	\label{tab_retrievalevaluation}
