@@ -41,15 +41,55 @@ def retrieveTestsetResults(database_file):
 
   # Retrieve id tuples of same object images
   cur = con.cursor()
-  cur.execute('''SELECT "something smart"''')
+  cur.execute(''' SELECT s.image_1_id, s.image_2_id
+                  FROM
+                    semmul_image_similarity AS s,
+                    (
+                      SELECT image_1_id, image_2_id, COUNT(*) AS all_votes
+                      FROM semmul_image_similarity
+                      GROUP BY image_1_id, image_2_id
+                    ) AS a,
+                    (
+                      SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
+                      FROM semmul_image_similarity
+                      GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                    ) AS b
+                  WHERE s.image_1_id = a.image_1_id
+                  AND s.image_2_id = a.image_2_id
+                  AND a.image_1_id = b.image_1_id
+                  AND a.image_2_id = b.image_2_id
+                  AND all_votes = same_votes
+                  AND s.semantic_similarity == 'same_object'
+                  GROUP BY s.image_1_id, s.image_2_id; ''')
 
-  same_object_ids = Set([str(row[0]) for row in cur.fetchall()])
+  same_object_ids = Set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
 
   # Retrieve id tuples of same object and same context images
   cur = con.cursor()
-  cur.execute('''SELECT "something smart"''')
+  cur.execute(''' SELECT s.image_1_id, s.image_2_id
+                    FROM
+                      semmul_image_similarity AS s,
+                      (
+                        SELECT image_1_id, image_2_id, COUNT(*) AS all_votes
+                        FROM semmul_image_similarity
+                        GROUP BY image_1_id, image_2_id
+                      ) AS a,
+                      (
+                        SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
+                        FROM semmul_image_similarity
+                        GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                      ) AS b
+                    WHERE s.image_1_id = a.image_1_id
+                    AND s.image_2_id = a.image_2_id
+                    AND a.image_1_id = b.image_1_id
+                    AND a.image_2_id = b.image_2_id
+                    AND all_votes = same_votes
+                    AND s.semantic_similarity == 'same_context'
+                    GROUP BY s.image_1_id, s.image_2_id; ''')
 
-  same_object_same_context_ids  = Set([str(row[0]) for row in cur.fetchall()])
+  same_context_ids = Set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
+
+  same_object_same_context_ids  =  same_context_ids | same_object_ids
 
   return same_object_ids, same_object_same_context_ids
 
