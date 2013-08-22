@@ -45,15 +45,40 @@ The advantages of an additional semantic clustering in each node of the image tr
 One difficulty in the visual part of our work, besides the choice of appropriate features and their implementation, is the question how to use them jointly in a suitable algorithm for clustering.
 
 \subsubsection{Features}
-The features we chose to use in our tool are:
+The features we chose for our tool are:
 \begin{itemize}
-\item{Color histogram} in HSV color space with 20 bins each
-\item{Edge histogram} lengths and angles, histograms with 10 bins (i.e., separation into 10 angles, with count of edges and sum of lengths for each) as combined vector \todo{make the following sound less copied}
-\\
-For edge histogranm extraction we use the EdgeHistogramFeatureExtractor class from the SimpleCV library. Referring to the official SimpleCV documentation \todo{reference: http://simplecv.sourceforge.net/doc/SimpleCV.Features.html}  the method creates histograms for the edge lengths and angles. The number of bins is used to define which and how many line directions are taken in consideration.
+\item{Color histogram} in HSV color space with 20 bins (i.e., 20 ranges) each
+\item{Edge histogram} length and angle histograms with 10 bins (i.e., 10 different angles considered) as combined vector 
 \end{itemize}
-The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features. \\
-\todo{Can we explain or prove that somehow?}
+The reasons we chose these are that they are easy to calculate, rather obvious and humanly comprehensible. Since the purpose of this visual clustering is only in refining the semantic clusters, and not in trying to distinguish concepts by visual features, there is no apparent need for the use of more complex features.\\
+For feature extraction, we use a pyramidal approach similar to the one proposed in \cite{Lazebnik2006}. Its advantage is that it combines features extracted over the entire image with features extracted on separate regions. The advantage of splitting images into regions for feature extraction is that, for example, two images with the same colors but in different structures will not automatically have the same color feature vectors (as visualized in figure \ref{fig_blackwhite}). At the same time, the images' structure gains an unproportionally high importance, especially when using a large number of regions. When using 5x5 rectangles, for example, it can be observed that images with same-colored borders were considered very similar, independent of their actual content.\\
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.35\textwidth]{images/blackwhite1.pdf}
+\includegraphics[width=0.35\textwidth]{images/blackwhite2.pdf}
+\caption{Two images that have the same color histogram regarding the entire picture but different histograms on the marked regions}
+\label{fig_blackwhite}
+\end{figure}
+
+With the applied pyramid technique, the final feature vector is concatenated from several partial feature vectors, labeled from 1 to 30 in figure \ref{fig_blackwhite}. The appropriateness of this method especially for refining existing clusters, is also discussed in \cite{Lazebnik2006}. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.19\textwidth]{images/partitioning5h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning4h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning3h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning2h.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning1h.pdf}\vspace{1mm}
+\includegraphics[width=0.19\textwidth]{images/partitioning5v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning4v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning3v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning2v.pdf}
+\includegraphics[width=0.19\textwidth]{images/partitioning1v.pdf}
+\caption{Pyramidal image splitting for feature extraction}
+\label{fig_blackwhite}
+\end{figure}
+
 
 
 \subsubsection{Clustering}
@@ -62,6 +87,4 @@ This circumstances influences any algorithm based on the distance between two im
 
 So, instead, we decided to apply k-means separately for colors and edges, and join the results later through \emph{late fusion}\index{Late Fusion}, as explained below. As no specific criteria exist for the number of clusters that should be achieved, k is chosen by the established rule of thumb: $ k = \sqrt{n/2} $ \cite[p.365]{mardia1979}, where n is the number of items to be clustered. K-means was chosen over hierarchical clustering, because it provided more well- and equally-sized clusters, the latter often just split off single images.\\
 Initially, we planned to use an adaptive k, that is, start with a small k and increase it until the error (mean distance from centroids). Despite its higher computation complexity, it provides no better results than the rule of thumb. For example in color clustering, the adaptive approach will often just separate black and white images from colored ones.\\
-For feature extraction, we use a pyramidal approach similar to the one proposed in \cite{Lazebnik2006}. Its advantage is that ... \todo{Explain advantages of pyramidal feature extraction}\\
-Same paper also states the appropriateness of this method especially in refining existing clusters.\\
 We combine the single-feature clusters by intersecting them, which is a simple and performant late fusion method \index{Late Fusion}. It ensures that all images within a cluster are similar in color as well as edge structure and leads to less or equal to $ n/2 $ subclusters.
