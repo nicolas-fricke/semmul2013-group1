@@ -42,14 +42,26 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     \begin{tabular}{| p{2.5cm}| p{2.5cm}| p{2.5cm} || p{1.5cm} | p{1.5cm} | p{1.7cm} |}
     \hline
     \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} & \emph{minimal node size} & \emph{precision} & \emph{recall} & \emph{f-measure} \\ \hline
-    0 &	0 & 	0 &	0.501532 & 0.859143 & x \\ \hline
-    4 & 4 & 	4 & 0.550663 & 0.798775 & 0.651910 \\ \hline
-    
-    4	&	6	& 	4	&	0.568766		&	0.774278 &x\\ \hline
-    4	&	6	& 	2	&	0.562267		&	0.790026 &x\\ \hline    
-    2	&	6	& 	2	&	0.575916		&	0.769904 &x\\ \hline    
-    4	&	2	& 	4	&	0.520458		&	0.834646 &x\\ \hline	
-    4	&	2	& 	2	&	0.518719		&	0.836395 &x\\ \hline	      
+    0 	& 0 	& 0 & 0.501532 & 0.859143 & 0.633344 \\ \hline
+    4 	& 4 	& 4 & 0.550663 & 0.798775 & 0.651910 \\ \hline
+    6 	& 6 	& 6 & 0.567619 & 0.782152 & 0.657837 \\ \hline  
+    10 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline
+    20 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
+    50	& 50 & 50 & 0.728135 & 0.604549 & 0.660612 \\ \hline
+    100 	& 100 & 100 & 0.757858 & 0.569554 & 0.650350 \\ \hline
+  
+    10 	& 20 & 10 & 0.666102 & 0.687664 & 0.676711 \\ \hline
+    10 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
+    10 	& 10 & 20 & 0.578165 & 0.783027 & 0.665180 \\ \hline
+	5 	& 10 & 5 & 0.612903 & 0.748031 & 0.673759 \\ \hline
+   	5 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline
+
+    4	& 6	& 4	& 0.568766 & 0.774278 & 0.655798 \\ \hline    
+    4	& 6	& 2	& 0.562267 & 0.790026 & 0.656966 \\ \hline     
+    2	& 6	& 2	& 0.575916 & 0.769904 & 0.658929 \\ \hline    
+   
+    4	& 2	& 4	& 0.520458 & 0.834646 & 0.641129 \\ \hline	
+    4	& 2	& 2	& 0.518719 & 0.836395 & 0.640322 \\ \hline	      
     \end{tabular}
     \caption{Precision and recall of the image retrieval}
 	\label{tab_retrievalevaluation}
