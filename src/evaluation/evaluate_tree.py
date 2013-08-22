@@ -122,7 +122,34 @@ def retrieveTestsetResults(database_file):
 
   same_object_same_context_ids  =  same_context_ids | same_object_ids
 
-  return same_object_ids, same_object_same_context_ids
+
+
+  # Retrieve id tuples of same object and same context images
+  cur = con.cursor()
+  cur.execute(''' SELECT s.image_1_id, s.image_2_id
+                    FROM
+                      semmul_image_similarity AS s,
+                      (
+                        SELECT image_1_id, image_2_id, COUNT(*) AS all_votes
+                        FROM semmul_image_similarity
+                        GROUP BY image_1_id, image_2_id
+                      ) AS a,
+                      (
+                        SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
+                        FROM semmul_image_similarity
+                        GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                      ) AS b
+                    WHERE s.image_1_id = a.image_1_id
+                    AND s.image_2_id = a.image_2_id
+                    AND a.image_1_id = b.image_1_id
+                    AND a.image_2_id = b.image_2_id
+                    AND all_votes = same_votes
+                    AND s.semantic_similarity == 'not_semantically_similar'
+                    GROUP BY s.image_1_id, s.image_2_id; ''')
+
+  not_similar_ids = set([(str(row[0]), str(row[1])) for row in cur.fetchall()])
+
+  return same_object_ids, same_object_same_context_ids, not_similar_ids
 
 
 def calculate_average_distance(parsed_result_tree, image_id_tuples, id_type, verbose=False):
@@ -139,48 +166,50 @@ def calculate_average_distance(parsed_result_tree, image_id_tuples, id_type, ver
 
 
 def main(args):
-  # # Loading preprocessed features on startup
-  # print_status("Loading visual_features from file... ")
-  # visual_features = general_helpers.load_visual_features()
-  # print "Done."
-  # print_status("Loading cluster_for_synsets from mcl_clusters file... ")
-  # cluster_for_synsets = general_helpers.load_cluster_for_synsets()
-  # print "Done."
-  # print_status("Loading keywords_for_pictures from file... ")
-  # keywords_for_pictures = general_helpers.load_keywords_for_pictures()
-  # print "Done."
-  # print_status("Loading cluster_representatives from file... ")
-  # cluster_representatives = general_helpers.load_cluster_representatives(how_many_per_cluster=6)
-  # print "Done loading preprocessed data."
-  #
-  # print_status("Checking images against testset:\n")
-  # print_status("Retrieving clusters... \n")
-  # pipeline_result = pipeline.get_clusters("food", use_meronyms=False,
-  #                                    visual_clustering_threshold=4,
-  #                                    mcl_clustering_threshold=4,
-  #                                    minimal_mcl_cluster_size=6,
-  #                                    minimal_node_size=4,
-  #                                    visual_features=visual_features,
-  #                                    cluster_for_synsets=cluster_for_synsets,
-  #                                    keywords_for_pictures=keywords_for_pictures,
-  #                                    cluster_representatives=cluster_representatives)
-  pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
+  # Loading preprocessed features on startup
+  print_status("Loading visual_features from file... ")
+  visual_features = general_helpers.load_visual_features()
+  print "Done."
+  print_status("Loading cluster_for_synsets from mcl_clusters file... ")
+  cluster_for_synsets = general_helpers.load_cluster_for_synsets()
+  print "Done."
+  print_status("Loading keywords_for_pictures from file... ")
+  keywords_for_pictures = general_helpers.load_keywords_for_pictures()
+  print "Done."
+  print_status("Loading cluster_representatives from file... ")
+  cluster_representatives = general_helpers.load_cluster_representatives(how_many_per_cluster=6)
+  print "Done loading preprocessed data."
+
+  print_status("Checking images against testset:\n")
+  print_status("Retrieving clusters... \n")
+  pipeline_result = pipeline.get_clusters("food", use_meronyms=False,
+                                     visual_clustering_threshold=4,
+                                     mcl_clustering_threshold=4,
+                                     minimal_mcl_cluster_size=6,
+                                     minimal_node_size=4,
+                                     visual_features=visual_features,
+                                     cluster_for_synsets=cluster_for_synsets,
+                                     keywords_for_pictures=keywords_for_pictures,
+                                     cluster_representatives=cluster_representatives)
+  # pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
 
   print_status("Parsing result tree to easier accessible format...")
   parsed_result_tree = parse_result_tree(pipeline_result)
 
   print_status("Loading testset from database... \n")
-  same_object_ids, same_object_same_context_ids = retrieveTestsetResults(args.database_file)
+  same_object_ids, same_object_same_context_ids, not_similar_ids = retrieveTestsetResults(args.database_file)
 
 
   print_status("Comparing result images to testset... \n")
 
   average_same_object_distance  = calculate_average_distance(parsed_result_tree, same_object_ids, "same object", verbose=True)
   average_same_context_distance = calculate_average_distance(parsed_result_tree, same_object_same_context_ids, "same context", verbose=True)
+  average_not_similar_distance  = calculate_average_distance(parsed_result_tree, not_similar_ids, "not_similar", verbose=True)
 
   print_status("Done!\n")
   sys.stdout.write("Average distance for same object  is %s \n" % average_same_object_distance)
   sys.stdout.write("Average distance for same context is %s \n" % average_same_context_distance)
+  sys.stdout.write("Average distance for not similar  is %s \n" % average_not_similar_distance)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
