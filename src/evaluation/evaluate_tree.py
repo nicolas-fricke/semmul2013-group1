@@ -46,7 +46,7 @@ def find_image_occurrences_in_tree(tree_node, id):
   return result_node_list
 
 def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
-  distance = 0
+  distance = -1
   check_nodes = find_image_occurrences_in_tree(result_tree_root, search_id_1)
   already_checked_nodes = set()
   id_found = False
@@ -65,9 +65,9 @@ def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
         next_check_nodes |= set([child for child in node.children if child not in already_checked_nodes])
       already_checked_nodes.add(node)
     check_nodes = next_check_nodes
-  if distance > 2:
-    return distance - 1 
-  else 
+  if distance > 1:
+    return distance - 1
+  else:
     return distance
 
 def retrieveTestsetResults(database_file):
@@ -186,10 +186,10 @@ def main(args):
   print_status("Checking images against testset:\n")
   print_status("Retrieving clusters... \n")
   pipeline_result = pipeline.get_clusters("food", use_meronyms=False,
-                                     visual_clustering_threshold=4,
-                                     mcl_clustering_threshold=4,
+                                     visual_clustering_threshold=100000,
+                                     mcl_clustering_threshold=6,
                                      minimal_mcl_cluster_size=6,
-                                     minimal_node_size=4,
+                                     minimal_node_size=6,
                                      visual_features=visual_features,
                                      cluster_for_synsets=cluster_for_synsets,
                                      keywords_for_pictures=keywords_for_pictures,
