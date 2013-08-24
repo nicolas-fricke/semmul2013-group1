@@ -126,6 +126,7 @@ def synset_detection(number_of_jsons=10000, subdirectory=None):
   if subdirectory == None:
     # read json files from metadata directory
     print_status("Reading %d Json Files... " % number_of_jsons)
+    subdirectory = "all"
     json_files = find_metajsons_to_process(metadata_dir)
     print "Done."
   else:
@@ -148,7 +149,7 @@ def synset_detection(number_of_jsons=10000, subdirectory=None):
   tag_list = tag_histogram.keys()
   print "Done."
 
-  write_json_file(storable_keywords_for_pictures, keywords_for_pictures_filename.replace('##', subdirectory[-2:]))
+  write_json_file(storable_keywords_for_pictures, keywords_for_pictures_filename.replace('##', subdirectory))
   return keywords_for_pictures, storable_keywords_for_pictures
 
 def parse_command_line_arguments():
