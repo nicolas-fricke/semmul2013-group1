@@ -56,6 +56,7 @@ def read_features_from_file(cluster, metadata_dir):
 
     if metadata_json["stat"] == "ok":
       try:
+        data = {}
         data.update(visual_features_json)
         data["image_id"] = metadata_json["id"]
         data["file_path"] = picture_json_filename
@@ -108,11 +109,11 @@ def cluster_by_edges(edges):
   return clustered_images_by_edges, k_edges
 
 
-def cluster_by_features(images_data):
+def cluster_by_features(images):
   colors = []
   edges = []
 
-  for image_data in images_data:
+  for image_data in images:
     colors.append(image_data["colors"])
     edges.append(image_data["edge-angles"] + image_data["edge-lengths"])
 
