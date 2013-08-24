@@ -10,7 +10,7 @@ sudo pip install nltk
 sudo pip install SimpleCV
 sudo pip install Pycluster
 
-sudo apt-get install python-scipy python-pygame python-opencv
+sudo apt-get install python-scipy python-pygame python-opencv mcl
 
 # start program
 cd semmul2013-group1/
@@ -21,8 +21,8 @@ vim config.cfg
 #	2. metadata-dir: should be the path to the folder, where metadata jsons for Flickr-images can be found, for example .../semmul2013-group1/data/metadata
 #	3. downloaded-images-dir: if Flickr-images are already downloaded, this is the path to the folder, where they can be found
 #	4. preprocessed-data-dir: should be the path to the folder, where preprocessed data can be stored, for example .../semmul2013-group1/data/preprocessed_data
-mkdir preprocessed_data
-echo `pwd` # Pfad der ausgegeben wird kopieren
+
+cd src/
 export PYTHONPATH=$PYTHONPATH:`pwd`
-...
+python 
 python frontend/frontend.py
