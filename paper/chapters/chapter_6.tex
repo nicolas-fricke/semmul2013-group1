@@ -11,9 +11,10 @@ It also has to be assumed that people have different opinions on what images are
 
 \subsection{Image Retrieval}
 One of the reasons for the generally poor precision of the image retrieval may lie in poorly annotated images.
-Other, more controllable reasons, whatsoever, are to be searched in the Synset detection mechanism. First, the limitation to nouns leads to incorrectly identified Synsets, because adjectives, adverbs and verbs are wrongly matched to nouns if such exist. 
-Second, words in other languages than English may be incorrectly matched if they exist in a different meaning in English.\todo{Examples!},
-And third, 
+Other, more controllable reasons, whatsoever, are to be searched in the Synset detection mechanism. First, the limitation to nouns leads to incorrectly identified Synsets because adjectives, adverbs and verbs are wrongly matched to nouns if such exist. 
+Second, words in other languages than English may be incorrectly matched if they exist in a different meaning in English.\todo{Examples for each reason!}
+And third, the assumption that tags on the same picture are semantically close does not hold in all cases. \\
+The first two reasons can be addressed by using a more sophisticated ontology and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
 
 
 \subsection{Semantic Clusters}
