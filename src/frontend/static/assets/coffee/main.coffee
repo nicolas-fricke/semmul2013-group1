@@ -14,17 +14,27 @@ searchDataArrived = (responseText, textStatus, XMLHttpRequest) =>
   addResultSynsetMouseenterListener()
 
 openResultDetailsModalView = (targetNode) ->
-  images = $(targetNode).children()
   $("#cluster-detail-popup-synset").text($(targetNode).siblings(".result-title").children(".result-name").text())
   $("#cluster-detail-popup-definition em").text($(targetNode).siblings(".result-title").children(".result-description").text())
   $("#cluster-detail-popup > .modal-body").empty()
+  mclClusters = $(targetNode).children()
+  mclClusterLabels = createMclClusterLabelsDict(mclClusters)
+  images = $(mclClusters).children()
   $("#cluster-detail-popup > .modal-body").append(images.clone().height(120))
-  detailsViewOrderImagesByMclCluster()
+  detailsViewOrderImagesByMclCluster(mclClusterLabels)
   $("#cluster-detail-popup .modal-body").css("max-height",
       ($(window).height() * 0.95 - $("#cluster-detail-popup .modal-header").outerHeight() - $("#cluster-detail-popup .modal-footer").outerHeight()) * 0.8)
   $("#cluster-detail-popup").modal("show")
 
-detailsViewOrderImagesByMclCluster = ->
+createMclClusterLabelsDict = (mclClusters) ->
+  mclClusterLabels = {}
+  for mclCluster in mclClusters
+    mclClusterNr = $(mclCluster).attr("data-mcl-cluster-index")
+    if mclClusterNr not in mclClusterLabels
+      mclClusterLabels[mclClusterNr] = $(mclCluster).attr("data-mcl-synset-description")
+  return mclClusterLabels
+
+detailsViewOrderImagesByMclCluster = (mclClusterLabels) ->
   $synsetImages = $("#cluster-detail-popup > .modal-body > img")
   dict = {}
 
@@ -40,6 +50,7 @@ detailsViewOrderImagesByMclCluster = ->
 
   for mclClusterName, mclCluster of dict
     $("#cluster-detail-popup > .modal-body").append("<div class='mcl-cluster'></div>")
+    $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='mcl-synsets-label pull-right'>#{mclClusterLabels[mclClusterName]}</div>")
     for visualClusterName, visualCluster of mclCluster
       $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='visual-cluster pull-left'></div>")
       $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child > .visual-cluster:last-child").append(visualCluster)

@@ -9,6 +9,7 @@ from flask_assets import Environment, Bundle
 from clustering.pipeline import get_clusters
 from clustering.semantic.wordnet_searchterm_analyzer import WordnetNodeJSONEncoder
 from helpers.general_helpers import print_status, load_visual_features, load_cluster_for_synsets, load_keywords_for_pictures
+from helpers.general_helpers import load_cluster_representatives
 
 app = Flask(__name__)
 assets = Environment(app)
@@ -19,6 +20,9 @@ cluster_for_synsets = load_cluster_for_synsets()
 print "Done."
 print_status("Loading keywords_for_pictures from file... ")
 keywords_for_pictures = load_keywords_for_pictures()
+print "Done."
+print_status("Loading cluster_representatives from file... ")
+cluster_representatives = load_cluster_representatives(how_many_per_cluster=6)
 print "Done."
 bufferedSearches = {}
 
@@ -53,7 +57,8 @@ def search(searchterm):
                           minimal_mcl_cluster_size=6,
                           minimal_node_size=4,
                           cluster_for_synsets=cluster_for_synsets,
-                          keywords_for_pictures=keywords_for_pictures)
+                          keywords_for_pictures=keywords_for_pictures,
+                          cluster_representatives=cluster_representatives)
 
     bufferedSearches[searchterm] = recursivelyCleanResult(result)
   return render_template('index.html', tree=bufferedSearches[searchterm])

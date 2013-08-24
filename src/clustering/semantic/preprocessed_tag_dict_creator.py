@@ -24,7 +24,7 @@ from helpers.general_helpers import *
 
 from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
 from clustering.semantic.synset_detection_bestfirstsearch import *
-from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl
+from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl, sorted_cluster_representatives
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
   synset_filenames_dict = defaultdict(list)
@@ -97,6 +97,10 @@ def main():
   if arguments.create_mcl_clusters:
     print_status("Create MCL clusters and write them to file... \n")
     keyword_clustering_via_mcl(storable_synset_filenames_dict)
+    print_status("Done.\n")
+
+    print_status("Sort mcl clusters according to synset frequencies... \n")
+    sorted_cluster_representatives(storable_synset_filenames_dict)
     print_status("Done.\n")
 
 if __name__ == '__main__':

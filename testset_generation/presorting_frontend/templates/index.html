@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Semantic Multimedia – Testset Evaluator</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/amelia/bootstrap.min.css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+      body {
+        padding-top: 65px;
+      }
+
+      .container {
+        width: 740px !important;
+      }
+
+      .navbar-inner input[type=text] {
+        margin-top: 10px;
+        width: 160px;
+      }
+
+      .image-container {
+        text-align: center;
+      }
+
+      .test-image {
+        height: 200px;
+        max-width: 400px;
+      }
+
+      .image-container fieldset {
+        width: 190px;
+        text-align: left;
+        margin: auto;
+      }
+
+      legend {
+        padding-top: 12px;
+        margin-bottom: 4px;
+      }
+
+      label em.keyboard-hint {
+        font-style: inherit;
+        background-color: rgba(255,255,255,0.3);
+        padding: 2px;
+        margin-left: 10px;
+        color: green;
+      }
+
+      #send-btn {
+        margin-top: 30px;
+        width: 200px;
+      }
+
+      .keyboard-inactive {
+        zoom: 1;
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+      }
+
+      footer {
+        margin-top: 40px;
+        font-size: 10pt;
+      }
+
+      .leaderboard {
+        padding : 15px;
+        margin-right: 20px;
+        width: 225px;
+      }
+
+      .leaderboard tr td:first-child, .leaderboard tr th:first-child {
+        text-align: right;
+        width: 65px;
+      }
+
+      .leaderboard tr.collapsed td {
+        background-color: grey !important;
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+    <script type="text/javascript">
+      selectNextFieldset = function(increment){
+        $("fieldset, #send-btn").removeClass("keyboard-focussed").addClass("keyboard-inactive");
+        window.activeElementIndex += increment;
+        if (window.activeElementIndex > 1) window.activeElementIndex = 0;
+        if (window.activeElementIndex < 0) window.activeElementIndex = 1;
+        if (window.activeElementIndex == 1 && $('input[type=radio]:checked').length != 1) window.activeElementIndex = 0;
+        var activeElement = $($("fieldset, #send-btn")[window.activeElementIndex]);
+        activeElement.removeClass("keyboard-inactive").addClass("keyboard-focussed");
+        if (activeElement.is($("#send-btn"))) {
+          activeElement.focus();
+        } else {
+          activeElement.children(":first-child").focus();
+        }
+      }
+
+      checkSelectBox = function(boxIndex) {
+        if (window.activeElementIndex == -1) selectNextFieldset(1);
+        if ($("fieldset.keyboard-focussed input").length < boxIndex) return;
+        $("fieldset.keyboard-focussed input").prop('checked', false);
+        $($("fieldset.keyboard-focussed input")[boxIndex - 1]).prop('checked', true).trigger('change');
+        selectNextFieldset(1);
+      }
+
+      $.params = function(param_name){
+        var value = new RegExp('[\\?&]' + param_name + '=([^&#]*)').exec(window.location.href);
+        if (value != null) return value[1];
+        else return null;
+      }
+
+      collapseLeaderboard = function() {
+        var number_show_top    = 5;
+        var number_show_before = 3;
+        var number_show_after  = 1;
+
+        $('tbody tr.player-score').hide();
+
+        $('tbody tr.player-score').slice(0, number_show_top).show();
+        userIndex = $('tbody tr.player-score').index($('tbody tr.player-score.success'));
+        $('tbody tr.player-score').slice(userIndex - number_show_before, userIndex + number_show_after + 1).show();
+
+        // Show collapse-indicator in between
+        if (userIndex > number_show_top + number_show_before) {
+          $('tbody tr.player-score:nth(' + number_show_top + ')')
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr><tr class="collapsed" style="display: none;"></tr>');
+        }
+
+        // Show collapse-indicator at end of visible records
+        // Also gets triggered if no user is found
+        if (userIndex + number_show_after < $('tbody tr.player-score').length - 1) {
+          $('tbody tr.player-score:visible:last')
+              .after('<tr class="collapsed"><td colspan="3">&#183;&nbsp;&#183;&nbsp;&#183;</td></tr>');
+        }
+
+        $('tbody tr.collapsed').click(function(){
+            expandLeaderboard();
+        });
+      };
+
+      expandLeaderboard = function() {
+        $('.leaderboard tr.collapsed').remove();
+        $('.leaderboard tr').show();
+      }
+
+      $(document).ready(function(){
+        if ($.params("nicname") != null) $("input[name=username]").prop("value", decodeURIComponent($.params("nicname")));
+        if ($.params("email") != null) $("input[name=email]").prop("value", decodeURIComponent($.params("email")));
+        window.activeElementIndex = -1;
+        $('body').keyup(function(event) {
+          if ($('input[type=text]').is(':focus')) return;
+          switch (event.keyCode) {
+            case 9: /* Tab */
+                event.preventDefault();
+                if (event.shiftKey) {
+                  selectNextFieldset(-1);
+                } else {
+                  selectNextFieldset(1);
+                }
+              break;
+            case 49: /* < 1 > */
+              checkSelectBox(1);
+              $('form').submit();
+              break;
+            case 50: /* < 2 > */
+              checkSelectBox(2);
+              $('form').submit();
+              break;
+          }
+        });
+        $("form").submit(function() {
+          if ($('input[type=radio]:checked').length == 1) {
+            return true;
+          }
+          return false;
+        });
+        $("input[type=radio]").change(function(){
+          if ($('input[type=radio]:checked').length == 1) {
+            $("#send-btn").attr("disabled", false);
+          } else {
+            $("#send-btn").attr("disabled", true);
+          }
+        })
+        $("label em.keyboard-hint").
+            tooltip({
+              'trigger': 'hover',
+              'title': 'Use keyboard keys [1], and [2] to select radio buttons AND immediately submit the form.',
+              'placement': 'right'});
+        $('.navbar-inner input[type=text]').
+            tooltip({
+              'trigger': 'hover',
+              'title': 'Not required, only for chocolate and statistics ;)',
+              'placement': 'bottom'});
+        $('.leaderboard tr td').filter(function(){
+          return $(this).text() === $.params("nicname");
+        }).parent().addClass("success");
+        collapseLeaderboard();
+      });
+    </script>
+  </head>
+  <body>
+    <form method="POST" action="/add">
+      <div id="main-navigation" class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand">Evaluation Tool - Group 1</a>
+            <div class="pull-right">
+              <input type="text" name="username" placeholder="nicname" />
+              <input type="text" name="email" placeholder="email address" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="leaderboard pull-right">
+        <table class="table table-bordered table-striped table-hover table-condensed">
+          <thead>
+            <tr>
+              <th># Images</th>
+              <th>Nicname</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for player in highscore %}
+              <tr class="player-score">
+                <td>{{ player["score"] }}</td>
+                <td>{{ player["nicname"] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="container">
+        <div id="content">
+          <div class="image">
+            <div class="image-container" id="image-container">
+              <img class="test-image" id="image" src="{{ image['url'] }}" />
+              <fieldset id="fieldset_image">
+                <legend>Image</legend>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_food" value="1" />
+                  Shows food <em class="keyboard-hint">[1]</em>
+                </label>
+                <label class="radio">
+                  <input type="radio" class="radio" name="image_food" value="0" />
+                  Does not show food <em class="keyboard-hint">[2]</em>
+                </label>
+              </fieldset>
+            </div>
+          </div>
+          <input type="hidden" name="image_id" value="{{ image['id'] }}" />
+          <div class="text-center">
+            <input type="submit" value="send" class="btn btn-success text-center" id="send-btn" disabled />
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="container">
+          <p>
+            &copy; 2013,
+            created by Claudia Exeler, Mandy Roick, Nicolas Fricke, and Tino Junge
+            during the <a href="http://semmul2013.blogspot.de/">Semantic Multimedia Seminar</a>
+            at the <a href="http://www.hpi.uni-potsdam.de/">Hasso Plattner Institute</a> in Potsdam, Germany.
+            Please find the source code of this project on <a href="https://github.com/nicolas-fricke/semmul2013-group1">Github</a>.
+          </p>
+        </div>
+      </footer>
+    </form>
+  </body>
+</html>

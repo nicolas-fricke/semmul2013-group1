@@ -47,6 +47,19 @@ data/*
 # ignore Mac trash file
 .DS_Store
 
+# latex generated files
+paper/semmul_group1.aux
+paper/semmul_group1.idx
+paper/semmul_group1.ilg
+paper/semmul_group1.ind
+paper/semmul_group1.log
+paper/semmul_group1.pdf
+paper/semmul_group1.toc
+paper/semmul_group1.bbl
+paper/semmul_group1.blg
+paper/semmul_group1.dvi
+paper/semmul_group1.tdo
+
 # Flask-Asset files
 src/frontend/static/gen/
 src/frontend/static/.webassets-cache/

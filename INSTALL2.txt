@@ -1,0 +1,28 @@
+# clone git repository
+sudo apt-get install git # only if you do not have git already
+git clone https://github.com/nicolas-fricke/semmul2013-group1.git
+
+# install python packages
+sudo apt-get install python-pip # only if you do not have pip already
+sudo pip install flask
+sudo pip install flask_assets
+sudo pip install nltk
+sudo pip install SimpleCV
+sudo pip install Pycluster
+
+sudo apt-get install python-scipy python-pygame python-opencv
+
+# start program
+cd semmul2013-group1/
+cp config.cfg.template config.cfg
+vim config.cfg
+# adapt config: 
+# 	1. data-dir: should be the path to the folder, where metadata and images can be found, for example .../semmul2013-group1/data/
+#	2. metadata-dir: should be the path to the folder, where metadata jsons for Flickr-images can be found, for example .../semmul2013-group1/data/metadata
+#	3. downloaded-images-dir: if Flickr-images are already downloaded, this is the path to the folder, where they can be found
+#	4. preprocessed-data-dir: should be the path to the folder, where preprocessed data can be stored, for example .../semmul2013-group1/data/preprocessed_data
+mkdir preprocessed_data
+echo `pwd` # Pfad der ausgegeben wird kopieren
+export PYTHONPATH=$PYTHONPATH:`pwd`
+...
+python frontend/frontend.py
