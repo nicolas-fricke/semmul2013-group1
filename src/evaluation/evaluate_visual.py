@@ -150,7 +150,7 @@ def main(args):
 
   print_status("Done clustering %d images into %d visual clusters. \n" % (image_counter, len(visual_clusters)))
 
-  # Comment in to load preprocessed visual_clusters for dev mode
+  # # Comment in to load preprocessed visual_clusters for dev mode
   # visual_clusters = pickle.load(open('visual_clusters.pickle', 'r'))
 
   print_status("Loading testset from database... \n")
@@ -179,10 +179,12 @@ def main(args):
         different_tp += 1
 
   print_status("Done!\n\n")
-  sys.stdout.write("Similar   images, true  positives: %s \n" % similar_tp)
-  sys.stdout.write("Similar   images, false negatives: %s \n" % similar_fn)
-  sys.stdout.write("Different images, true  positives: %s \n" % different_tp)
-  sys.stdout.write("Different images, false negatives: %s \n" % different_fn)
+  sys.stdout.write("Testset contains %5d visually similar   image tuples \n" % len(visually_similar_tuples))
+  sys.stdout.write("And there are    %5d visually different image tuples \n\n" % len(visually_different_tuples))
+  sys.stdout.write("Similar   images, true  positives: %d \n" % similar_tp)
+  sys.stdout.write("Similar   images, false negatives: %d \n" % similar_fn)
+  sys.stdout.write("Different images, true  positives: %d \n" % different_tp)
+  sys.stdout.write("Different images, false negatives: %d \n" % different_fn)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
