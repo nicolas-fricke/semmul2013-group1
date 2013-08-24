@@ -67,7 +67,7 @@ def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
     check_nodes = next_check_nodes
   if distance > 2:
     return distance - 1 
-  else 
+  else:
     return distance
 
 def retrieveTestsetResults(database_file):
