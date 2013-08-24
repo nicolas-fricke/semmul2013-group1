@@ -1,9 +1,7 @@
 %
 \section{Image Tree Based on WordNet}
 \label{sec_wordnetsearchtree}
-This chapter describes how the WordNet ontology is used to retrieve relevant images for a given search term.
-
-The following chapter describes the creation of an image tree based on semantic information given by WordNet. An ontology is the ``explicit specification of a conceptualization'' \cite{gruber1995ontology}, and therefore characterizes entities and their relationships. The ontology can be used to detect semantic concepts represented by images (sections \ref{sec_wordnet} and \ref{sec_keywordstopictures}) as well as to create a tree of concepts related to the search term (section \ref{sec_searchtreeconstruction}). Images are then assigned to nodes of the search tree according to their detected semantic concepts (section \ref{sec_picturestonodes}).
+This chapter describes how the WordNet ontology is used to retrieve relevant images for a given search term. An ontology is the ``explicit specification of a conceptualization'' \cite{gruber1995ontology}, and therefore characterizes entities and their relationships. The ontology can be used to detect semantic concepts represented by images (sections \ref{sec_wordnet} and \ref{sec_keywordstopictures}) as well as to create a tree of concepts related to the search term (section \ref{sec_searchtreeconstruction}). Images are then assigned to nodes of the search tree according to their detected semantic concepts (section \ref{sec_picturestonodes}).
 
 \subsection{The WordNet Ontology}\index{WordNet}
 \label{sec_wordnet}
@@ -40,26 +38,26 @@ The difficulty in assigning Synsets\index{Synset} to images is that there are mu
 
 To efficiently find the set of Synsets with the smallest overall distance, a best-first search algorithm \footnote{Please refer to Artificial Intelligence literature, i.e. \cite{kumar2008} for a detailed explanation.} is used. Note that such search algorithms require non-negative distances between options, but WordNet provides similarities. To convert them into distances without changing the scale, the similarity is simply subtracted from the maximally possible similarity, i.e. the similarity of a Synset to itself, which is roughly 3.7.
 For complexity reasons, only the best 100 candidates are considered at any time. Of course, this does not guarantee the perfect result anymore, but other paths are highly unlikely to become the best candidate in the end, and keeping all candidates would decrease performance significantly. \\
-We also limit the matching to nouns, for two reasons: First, nouns are usually the words describing the depicted concepts. Second, the LCH-Similarity described above is only available within a part of speech. \todo{reference?}
+We also limit the matching to nouns, for two reasons: First, nouns are usually the words describing the depicted concepts. Second, the LCH-Similarity described above is only available within a part of speech\cite{pedersen2004wordnet}.
 
 This strategy provides decent results, although erroneous matching still occurs. One cause are words that are meant in a way that is unknown to WordNet, i.e. canon as the camera model might be interpreted as the type of music piece. Another cause are adjectives, adverbs and verbs that also exist in a noun form. The most common cause of this effect are pictures tagged with colors, because most terms describing a color also exist as nouns, like ``orange'' for the fruit, or ``white'' for a Caucasian person. We decided to add a filter to the preprocessing phase, so that all terms that can represent a color are removed. \\
 
 Even with preprocessing, not all keywords can be matched to a Synset, because they are simply not represented in WordNet. The information about these \emph{unmatched tags} is kept nevertheless, and later used for image retrieval, described in section \ref{sec_picturestonodes}.
 
 
-\subsection{Constructing a Searchtree}
+\subsection{Constructing a Search Tree}
 \label{sec_searchtreeconstruction}
-In general, all words represented in WordNet can be used as a query term for our tool. \todo{Find better description of what search terms we expect} For the given use case, however, queries will be limited to those that can be seen in pictures. This is mainly the case for object descriptors at various levels of specificity, and place names, so our work is focused on these types of search terms.
+In general, all words represented in WordNet can be used as a query term for our tool. For the given use case, however, most query terms represent visible concepts like object descriptors at various levels of specificity, and place names. So our work is focused on these types of search terms.
 
-When a term is entered into the tool, it is first used to retrieve all Synsets\index{Synset} that can be expressed by this term. For each of them, a separate searchtree is constructed, as can be seen in Figure \ref{fig_searchtree}, showing excerpts of the searchtrees for ``bird'' (\emph{bird.n.01} and \emph{bird.n.02}).
+When a term is entered into the tool, it is first used to retrieve all Synsets\index{Synset} that can be expressed by this term. For each of them, a separate search tree is constructed, as can be seen in Figure \ref{fig_searchtree}, showing excerpts of the search trees for ``bird'' (\emph{bird.n.01} and \emph{bird.n.02}).
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{images/searchtree.pdf}
-\caption{Examplary searchtree (excerpt) for search term ``bird''}
+\caption{Examplary search tree (excerpt) for search term ``bird''}
 \label{fig_searchtree}
 \end{figure}
 
-The same figure also visualizes that a searchtree is a tree of specializations. These specializations are retrieved using WordNet's hypnoym relations\index{Hyponym}. For some terms, especially geographic Synsets, specializations are not applicable, so we use part-meronyms\index{Part-meronym} (part-of relationships), when no hyponyms are available.\\
+The same figure also visualizes that a search tree is a tree of specializations. These specializations are retrieved using WordNet's hypnoym relations\index{Hyponym}. For some terms, especially geographic Synsets, specializations are not applicable, so we use part-meronyms\index{Part-meronym} (part-of relationships), when no hyponyms are available.\\
 
 
 Figure \ref{fig_nodestructure} shows the internal data structure of the tree. Each node represents one Synset, and references a list of more specific Synsets (\emph{hyponyms} or \emph{meronyms}).
