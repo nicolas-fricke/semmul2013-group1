@@ -46,7 +46,7 @@ def find_image_occurrences_in_tree(tree_node, id):
   return result_node_list
 
 def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
-  distance = -1
+  distance = 0
   check_nodes = find_image_occurrences_in_tree(result_tree_root, search_id_1)
   already_checked_nodes = set()
   id_found = False
@@ -65,7 +65,10 @@ def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
         next_check_nodes |= set([child for child in node.children if child not in already_checked_nodes])
       already_checked_nodes.add(node)
     check_nodes = next_check_nodes
-  return distance
+  if distance > 2:
+    return distance - 1 
+  else:
+    return distance
 
 def retrieveTestsetResults(database_file):
   con = sqlite3.connect(database_file)
@@ -83,7 +86,7 @@ def retrieveTestsetResults(database_file):
                     (
                       SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
                       FROM semmul_image_similarity
-                      GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                      GROUP BY image_1_id, image_2_id, semantic_similarity
                     ) AS b
                   WHERE s.image_1_id = a.image_1_id
                   AND s.image_2_id = a.image_2_id
@@ -108,7 +111,7 @@ def retrieveTestsetResults(database_file):
                       (
                         SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
                         FROM semmul_image_similarity
-                        GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                        GROUP BY image_1_id, image_2_id, semantic_similarity
                       ) AS b
                     WHERE s.image_1_id = a.image_1_id
                     AND s.image_2_id = a.image_2_id

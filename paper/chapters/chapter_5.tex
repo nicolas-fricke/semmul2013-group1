@@ -18,18 +18,15 @@ Among the 12,962 votes were 771 pairs of images with same objects, 354 pairs wit
 The evaluation focusses on the following four main aspects of our algorithm:
 \begin{enumerate}
 \item Retrieval of matching images
-\item Semantic hierarchy of retrieved images
-\item Semantic clustering
+\item Semantic hierarchy and clusters
 \item Visual clustering
 \end{enumerate}
 
 We measure the quality of the image retrieval (1.) by precision and recall of returned pictures, compared to those that were declared to show food by the test persons. \todo{should we compare synset detection mechanisms?} 
 
-The quality of the hierarchy of the retrieved images (2.) is based on the same object and same object and context pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images $closeness(x,y) = 1/distance(x,y)$. Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs.
+The quality of the hierarchy of the retrieved images (2.) is based on the same object and same object and context pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images $closeness(x,y) = 1/distance(x,y)$. Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when to semantically similar images are not only in the same node but also in the same semantic subcluster.
 
-The same object and same context annotations can also be used to examine the quality of the keyword clusters (3.).  (compare both, what does mcl actually do?)\todo{how do we actually evaluate mcls?}
-
-Visual similarity (4.) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, precision and recall are used as indicators.
+Visual similarity (3.) is evaluated on the whole testset, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, precision and recall are used as indicators.
 
 vary parameters given by frontend, trying to find best configuration
 
@@ -82,7 +79,7 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     value 3	 	& value 3	& value 3 	& value 3	& value 3 \\
     \hline
     \end{tabular}
-    \caption{The two main phases of our algorithm}
+    \caption{Semantic quality measures}
 	\label{tab_treeevaluation}
 \end{table}
 
@@ -96,8 +93,8 @@ Image tuples voted as visual similar: 1854 \\
 
 After retrieving our evaluation votes from the users, we compared the result of our tool with one from the evaluation. Therefore we calculated the distance between every two images, which are declared as similar or not, within our calculated search tree. \todo{Picture of a search tree, which illustrates the evaluation script concerning how the distance is calculated?}
 
-Average distance for same object  is 3.70286885246  \\
-Average distance for same object and same context is 3.54583921016 \\
-Average distance for not similar  is 3.81995379729 \\
+Average distance for same object  is 2.77091633466  \\
+Average distance for same object and same context is 2.64246575342 \\
+Average distance for not similar  is 2.87943462898 \\
 
 
