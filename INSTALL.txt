@@ -28,5 +28,5 @@ sudo python setup.py
 cd semmul2013-group1/src/
 export PYTHONPATH=$PYTHONPATH:`pwd`
 
-# unused
+# unusedsudo
 http://packages.debian.org/squeeze/all/python-flask/download
