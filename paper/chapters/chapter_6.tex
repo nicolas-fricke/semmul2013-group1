@@ -6,13 +6,13 @@ It can generally been said that the quality of the results highly depends on the
 
 \subsection{Test Set Quality}
 The evaluation results also depend on the test set, which, unfortunately, cannot be clearly right or wrong. Different users will expect different images to be returned according to their definition of food: When some of the participants of the test set creation were asked which items they considered food, the answers ranged from ``Those that I would like to eat'' to ``Anything that some living organism would eat''. \\
-Another problem lies in the fact that pictures often contain small or processed items, which makes it hard to identify the exact contents of that picture. That's why during test set creation participants could probably not see the described content or interpret the image different in contrast to the original tags of the image. 
+Another problem lies in the fact that pictures often contain small or processed items, which makes it hard to identify the exact contents of that picture. That's why during test set creation participants could probably not see the described content or interpret the image different in contrast to the original tags of the image.
 It also has to be assumed that people have different opinions on what images are visually similar, especially since no definition or hints were given to the participants. We used crowdsourcing to deal with these problems and obtain a test set that is supported by the majority of users. So the key question to the quality of the test set is whether there are enough participants to obtain a representative result.
 
 \subsection{Image Retrieval}
 One of the reasons for the generally poor precision of the image retrieval may lie in poorly annotated images.
 Other, more controllable reasons, whatsoever, are to be searched in the Synset detection mechanism.
-First, the limitation to nouns leads to incorrectly identified Synsets because adjectives, adverbs and verbs are wrongly matched to nouns if such exist, e.g. \emph{fall} as a verb for falling under the influence of gravity and as a noun for autumn. 
+First, the limitation to nouns leads to incorrectly identified Synsets because adjectives, adverbs and verbs are wrongly matched to nouns if such exist, e.g. \emph{fall} as a verb for falling under the influence of gravity and as a noun for autumn.
 Second, words in other languages than English may be incorrectly matched if they exist in a different meaning in English, e.g. \emph{gift} for present in English and poison in German.
 And third, the assumption that tags on the same picture are semantically close does not hold in all cases (like words with different meanings also known as homographs), e.g. a \emph{cherry} on a plate made of \emph{wood} would be assigned to the cherry tree meaning instead of cherry as a fruit. \\
 The first two reasons can be addressed by using a more sophisticated ontology and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
@@ -21,12 +21,13 @@ The first two reasons can be addressed by using a more sophisticated ontology an
 Key points on MCL: generally useful (removes more non-food images than food images, else recall would go down with precision staying the same), interestingly best results when minimal mcl cluster size larger than minimal node size (i.e. small nodes are deleted anyways)
 
 \subsection{Semantic Clusters}
-Our semantic evaluation method presents a good method to get an overview of the semantic clustering in the complete search tree. But we also have to consider the dependencies between our semantic cluster approaches. The result of the MCL based clusters highly depend on the quality of their corresponding keyword clusters. That's why MCL clusters are hard to evaluate, because they cannot be isolated from their dependent keyword cluster.\\	
+In our opinion, our semantic evaluation method presents a good method to get an overview of the semantic clustering in the complete search tree. But, the semantic clustering includes the generation of the search tree as well as the clustering inside nodes via keyword clusters. Therefore, we also have to consider the dependencies between our semantic cluster approaches. Furthermore, the results of the second part of semantic clustering highly depend on the quality of their corresponding keyword clusters. That is why, the semantic clustering of images cannot be isolated from the dependent keyword clusters.
+	
 \bigskip
 good: same object and same object distance closures are close to each other
-bad: distances to high for same context/object 
+bad: distances to high for same context/object
 	 distances to low for not semantic similar
-	 no correlation between recall/precision and semantic similarity 
+	 no correlation between recall/precision and semantic similarity
 interpretation: depend on test set -> did users interpret pictures concerning similarity with same granularity
 
 \subsection{Visual Clusters}
