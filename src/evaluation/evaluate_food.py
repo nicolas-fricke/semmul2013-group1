@@ -61,9 +61,9 @@ def main(args):
   # image_tree = get_searchtrees_with_filenames("food", use_meronyms=False, minimal_node_size=1)
   image_tree = pipeline.get_clusters("food", use_meronyms=False,
                                      visual_clustering_threshold=10000,
-                                     mcl_clustering_threshold=4,
-                                     minimal_mcl_cluster_size=2,
-                                     minimal_node_size=2,
+                                     mcl_clustering_threshold=15,
+                                     minimal_mcl_cluster_size=10,
+                                     minimal_node_size=15,
                                      visual_features=visual_features,
                                      cluster_for_synsets=cluster_for_synsets,
                                      keywords_for_pictures=keywords_for_pictures,

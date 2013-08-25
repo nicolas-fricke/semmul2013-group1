@@ -46,7 +46,7 @@ def find_image_occurrences_in_tree(tree_node, id):
   return result_node_list
 
 def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
-  distance = -1
+  distance = 0
   check_nodes = find_image_occurrences_in_tree(result_tree_root, search_id_1)
   already_checked_nodes = set()
   id_found = False
@@ -187,9 +187,9 @@ def main(args):
   print_status("Retrieving clusters... \n")
   pipeline_result = pipeline.get_clusters("food", use_meronyms=False,
                                      visual_clustering_threshold=100000,
-                                     mcl_clustering_threshold=6,
-                                     minimal_mcl_cluster_size=6,
-                                     minimal_node_size=6,
+                                     mcl_clustering_threshold=10,
+                                     minimal_mcl_cluster_size=1,
+                                     minimal_node_size=10,
                                      visual_features=visual_features,
                                      cluster_for_synsets=cluster_for_synsets,
                                      keywords_for_pictures=keywords_for_pictures,
@@ -210,9 +210,10 @@ def main(args):
   average_not_similar_distance  = calculate_average_distance(parsed_result_tree, not_similar_ids, "not_similar", verbose=True)
 
   print_status("Done!\n")
-  sys.stdout.write("Average distance for same object  is %s \n" % average_same_object_distance)
-  sys.stdout.write("Average distance for same context is %s \n" % average_same_context_distance)
-  sys.stdout.write("Average distance for not similar  is %s \n" % average_not_similar_distance)
+  sys.stdout.write("Average distance for same object  is %s with closeness %s \n" % (average_same_object_distance, float(1)/average_same_object_distance))
+  sys.stdout.write("Average distance for same context is %s with closeness %s \n" % (average_same_context_distance, float(1)/average_same_context_distance))
+  sys.stdout.write("Average distance for not similar  is %s with closeness %s \n" % (average_not_similar_distance, float(1)/average_not_similar_distance))
+  sys.stdout.write("Distance %s \n" % (float(1)/average_same_object_distance - float(1)/average_not_similar_distance))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
