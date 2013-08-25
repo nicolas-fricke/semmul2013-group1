@@ -3,7 +3,7 @@
 \label{sec_discussion}
 
 \todo{Are our results good? Are they biased by something?}
-It can generally be said that the quality of the results highly depends on the original image annotations: an inappropriate tag leads the algorithm to ``believe'' that the picture shows something that is actually not present.
+It can generally been said that the quality of the results highly depends on the original image annotations: an inappropriate tag leads the algorithm to ``believe'' that the picture shows something that is actually not present.
 
 \subsection{Testset Quality}
 The evaluation results also depend on the test set, which, unfortunately, cannot be clearly right or wrong. Different users will expect different images to be returned according to their defintion of food: When some of the participants of the test set creation were asked which items they considered food, the answers ranged from ``Those that I would like to eat'' to ``Anything that some living organism would eat''. \\
@@ -16,6 +16,8 @@ Second, words in other languages than English may be incorrectly matched if they
 And third, the assumption that tags on the same picture are semantically close does not hold in all cases. \\
 The first two reasons can be addressed by using a more sophisticated ontology and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
 
+\bigskip
+Key points on MCL: generally useful (removes more non-food images than food images, else recall would go down with precision staying the same), interestingly best results when minimal mcl cluster size larger than minimal node size (i.e. small nodes are deleted anyways)
 
 \subsection{Semantic Clusters}
 MCL based clusters highly depend on quality of keyword clusters. Hard to evaluate, cannot be isolated.\\

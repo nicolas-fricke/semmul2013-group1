@@ -12,7 +12,7 @@ What we did to receive evaluation data was to crowdsource the needed data from t
 First, the users were shown random picture out of the 9,201 test set images and asked whether it shows food or not. We normalized these answers, so that there is only one vote per user per picture. In the case a user rated a picture more than once, the value is determined by the ration of positive (``shows food'') and negative (``does not show food'') votes of that user on that picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by more than 40 participants, 1,142 images out of the total 9,201 images were identified to show food. \\
 
 We also need data on the semantic and visual similarity of the pictures. Therefore, in the second phase, the users were shown pairs of images and asked to compare them. They could choose between three levels of semantic similarity: \emph{not similar}, \emph{same object}, and \emph{same object and same context}, and two levels of visual similarity: \emph{similar}, and \emph{not similar}.\\
-Among the 12,962 votes were 757 pairs of images with same objects, 345 pairs with same object and same context, as well as 1,854 pairs of visually similar images. Multiple votes on one pair were rare (xx cases), and therefore simply not taken into account if they contradicted each other.
+Among the 12,962 votes were 771 pairs of images with same objects, 354 pairs with same object and same context, as well as 1,885 pairs of visually similar images. The same normalization as in the first phase was applied.
 
 \subsection{Quality Indicators}
 The evaluation focuses on the following four main aspects of our algorithm:
@@ -35,7 +35,7 @@ vary parameters given by frontend, trying to find best configuration
 
 \subsubsection*{Image retrieval}
 
-Our image retrieval has a precision of p = 50.2\% and recall of r = 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
+Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
 After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
@@ -84,13 +84,17 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
 
 
 \begin{table}[h]
-    \begin{tabular}{| p{1.8cm} | p{1.8cm} || p{1.5cm} | p{1.5cm} | p{1.5cm} |}
-    \hline
-    ?	& \emph{minimal node size} & $c_o $ & $c_c$ & $c_n$ \\ \hline
-    value 1 		& value 1 	& value 1 	& value 1	& value 1 \\ \hline
-    value 2 		& value 2	& value 2 	& value 2	& value 2 \\ \hline
-    value 3	 	& value 3	& value 3 	& value 3	& value 3 \\
-    \hline
+    \begin{tabular}{| p{2.2cm} | p{2.2cm} | p{2cm} || p{1.4cm} | p{1.4cm} | p{1.4cm} | p{1.4cm} |}
+	\hline    
+    \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} 	& \emph{minimal node size} & $c_o $ & $c_c$ & $c_n$ & $c_o - c_n$ \\ \hline
+    0 	& 0 	& 0 & 0.25075 & 0.25483 & 0.23430 & 0.01645 \\ \hline
+    0 	& 5 	& 0 & 0.25707 & 0.26691 & 0.24857 & 0.00850 \\ \hline
+    5 	& 5 	& 5 & 0.26129 & 0.27160 & 0.25347 & 0.00782 \\ \hline     
+    15 	& 25 &  5 & 0.24118 & 0.24927 & 0.23345 & 0.00773\\ \hline
+    15 	& 0 & 15 & 0.27757 & 0.28242 & 0.25897 & 0.01860 \\ \hline
+    15 	& 10 & 15 & 0.28285 & 0.29194 & 0.26884 & 0.01401 \\ \hline
+    15 	& 25 & 15 & 0.28571 & 0.29391 & 0.27563 & 0.01008 \\ \hline
+    	100 	& 100 & 100 & 0.32578 & 0.34126 & 0.31711 & 0.00867 \\ \hline
     \end{tabular}
     \caption{Semantic quality measures}
 	\label{tab_treeevaluation}
