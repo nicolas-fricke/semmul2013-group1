@@ -21,13 +21,14 @@ The first two reasons can be addressed by using a more sophisticated ontology an
 Key points on MCL: generally useful (removes more non-food images than food images, else recall would go down with precision staying the same), interestingly best results when minimal mcl cluster size larger than minimal node size (i.e. small nodes are deleted anyways)
 
 \subsection{Semantic Clusters}
-Our semantic evaluation method presents a good method to get an overview of the semantic clustering in the complete search tree. But we also have to consider the dependencies between our semantic cluster approaches. The result of the MCL based clusters highly depend on the quality of their corresponding keyword clusters. That's why MCL clusters are hard to evaluate, because they cannot be isolated from their dependent keyword cluster.\\	
+closeness confirms idea that semantically close images are closer to each other in the tree than semantically different ones
+however, all values seem rather close to average tree distance. average is also what mostly varies with mcl parameters
+same objects should at least be in same node -> closeness >= 0.5; same context also in same cluster -> closeness 1.0
+major reason: testset. some  users only participated in second phase, did not know all images contained food already (so voted very different kinds of food as same). but also for others, since no definition of 'same object' given, difficult choice of level of abstraction / granularity (are cake and cupcake the same? cake and cookie?). participants later stated insecurity about these votes and own inconsistency when no pairs appeared they considered same.\\
+unfortunately for tool, best parameters for recall/precision do not correlate with best parameter values for semantic similarity 
 \bigskip
-good: same object and same object distance closures are close to each other
-bad: distances to high for same context/object 
-	 distances to low for not semantic similar
-	 no correlation between recall/precision and semantic similarity 
-interpretation: depend on test set -> did users interpret pictures concerning similarity with same granularity
+Our semantic evaluation method is a good method to get an quality measure of the complete semantic hierarchy. However, this makes it hard to make statements about the individual semantic clustering steps. For example, the results of the keyword based clustering highly depend on the quality of the calculated keyword clusters. Those are hard to judge in isolation, though.\\	
+
 
 \subsection{Visual Clusters}
 also rather hard to look at in isolation, because method specifically designed for final subclustering. But lack of data for evaluation within subclusters for appropriately sized semantic clusters
