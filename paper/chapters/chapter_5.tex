@@ -4,7 +4,7 @@
 
 We evaluated our tool on a set of 9,201 images, which are a subset of the 1 million images of the MIRFLICKR-1M\footnote{http://press.liacs.nl/mirflickr/} file set, and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
-\subsection{Test set}
+\subsection{Test Set}
 \label{sec_testset}
 No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
 To test the quality of our algorithm, we wrote a tool allowing us a crowdsourced generation of the needed reference data by the general public. This was achieved in two phases:\\
@@ -22,14 +22,12 @@ The evaluation focuses on the following four main aspects of our algorithm:
 \item Visual clustering
 \end{enumerate}
 
-We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. \todo{should we compare synset detection mechanisms?} 
+We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. 
 
 The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\] Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
 We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
 
 Visual similarity (\emph{3.}) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, F-Measure is used as indicator.
-
-\todo{vary parameters given by frontend, trying to find best configuration}
 
 \subsection{Results}
 \label{sec_results}
@@ -37,7 +35,7 @@ Visual similarity (\emph{3.}) is evaluated on the whole test set, because not en
 \subsubsection*{Image Retrieval}
 
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
-After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
+After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of these parameters are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
    \begin{tabular}{| p{2.2cm}| p{2.2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
@@ -79,6 +77,56 @@ The results of the semantic hierarchy and cluster evaluation also depend on the 
 
 It can generally be observed that varying the parameters most strongly influences the amount of the closeness measures, that is, all their values rise or drop somewhat consistently.
  
+
 \subsubsection*{Visual Clustering}
+
+As described in chapter \ref{sec_visualclustering}, we divide the already formed semantic clusters again into smaller visual clusters. 
+To test the performance of this visual subclustering, we preformed another precision- and recall-analysis. 
+As reference we used the test set from phase 2 of the crowdsourced generation. 
+The test set contains 1841 visually similar image associations and 10894 associations annotated as visually not similar. 
+Since there are approximately 1.3 million possible combinations between two images within the images annotated as food, this is only an approximate 1\% coverage, meaning we know only for every 100th combination, if or if not it is considered visually similar. 
+Therefore it was not possible to gain any valuable information on the subclustering we do within the semantic clusters.
+
+For being able to anyhow test the performance of our visual clustering, we decided to preform this clustering on the semantically unclustered images. 
+Therefore we filtered the results our algorithm provides for the search term ``food'' and took only those into account, which users voted to contain food, 883 images remained. 
+This way, we prevent to visually cluster irrelevant images, the quality of our retrieval has been discussed in chapter \ref{tab_retrievalevaluation}. 
+Since our clustering algorithm for visual features uses k-means which is based on a random distribution, we preformed multiple measurements to reduce the error. 
+
+The 883 images were clustered into 21 visual clusters (see chapter \ref{sec_visualclustering}). After 10 passes, we retrieved a precision of 18.6\% with a recall of 8.1\%. The F-Measure therefore is 11.2\%.
+
+Since our visual clustering algorithm is supposed to be preformed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. Therefore we did a second measurement with 100 randomly picked images which were then clustered 100 times into 7 buckets. Here we could achieve a recall of 24.1\% with a only little dip in the precision (16.8\%). The F-Measure was raised to 19.8\%.
+
+
+\iffalse{begin comment}
+Analysis data:
+
+100 images, 7 visual clusters (average over 100x):
+  Testset contains  1841 visually similar   image tuples 
+  And there are    10894 visually different image tuples 
+
+  Similar   images, average true  positives: 3.140000 
+  Similar   images, average false negatives: 9.860000 
+  Different images, average true  negatives: 71.490000 
+  Different images, average false positives: 15.510000 
+
+  Precision: 0.168365 (tp / (tp + fp))
+  Recall:    0.241538 (tp / (tp + fn))
+  F-Measure: 0.198420 (2 * (p * r / (p + r)))
+
+all 883 images, 21 visual clusters (average over 10x):
+  Testset contains  1841 visually similar   image tuples 
+  And there are    10894 visually different image tuples 
+
+  Similar   images, average true  positives: 95.800000 
+  Similar   images, average false negatives: 1086.200000 
+  Different images, average true  negatives: 6012.100000 
+  Different images, average false positives: 417.900000 
+
+  Precision: 0.186490 (tp / (tp + fp))
+  Recall:    0.081049 (tp / (tp + fn))
+  F-Measure: 0.112992 (2 * (p * r / (p + r)))
+\fi
+
+
 
 

@@ -2,6 +2,8 @@ import sys
 import sqlite3
 import json
 import argparse
+import copy
+
 # import own modules
 import clustering.pipeline as pipeline
 from helpers.general_helpers import print_status
@@ -24,10 +26,10 @@ def recursively_collect_images(siblings):
     sibling_image_tuples = dict(sibling_image_tuples, **recursively_collect_images(synset.hyponyms))
   return sibling_image_tuples
 
-def flatten_result_tree(pipeline_tree):
+def flatten_result_tree(pipeline_tree, annotated_food_dict, size_from_id=0, size_to_id=-1):
   # collect all image tuples
   image_dict = recursively_collect_images(pipeline_tree)
-  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems()]
+  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems() if image_id.split('.')[0] in annotated_food_dict.keys()][size_from_id:size_to_id]
   # empty first tree node
   pipeline_tree_node = pipeline_tree[0]
   pipeline_tree_node.hyponyms = []
@@ -142,64 +144,82 @@ def main(args):
   # # Comment in to load preprocessed pipeline_result for dev mode
   # pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
 
-  print_status("Parsing result tree to easier accessible format... \n")
-  flattened_mcl_tree = flatten_result_tree(pipeline_result)
+  annotated_food_dict = json.load(open(args.food_id_file, 'r'))
+
+  print_status("Flattening result tree... \n")
+  flattened_mcl_tree = flatten_result_tree(pipeline_result, annotated_food_dict, size_from_id=0, size_to_id=-1)
   image_counter = len(flattened_mcl_tree.subclusters[0]['subcluster'])
 
   print_status("Loading visual_features from file... \n")
   visual_features = general_helpers.load_visual_features()
 
-  print_status("Calculating visual clusters... \n")
-  visually_clustered_result = combined_clustering.cluster_visually(flattened_mcl_tree,
-                                                                   visual_clustering_threshold=4,
-                                                                   visual_features=visual_features)
+  true_positives_total  = []
+  false_negatives_total = []
+  true_negatives_total  = []
+  false_positives_total = []
 
-  print_status("Convert visual clusters to simpler structure... \n")
-  visual_clusters = []
-  for visual_cluster in visually_clustered_result.subclusters[0]['subcluster']:
-    visual_clusters.append(set([image_tuple[0].split('\\')[-1].split('.')[0] for image_tuple in visual_cluster]))
+  for i in range(0, 10):
+    print_status("Calculating visual clusters (%d x)... \n" % i)
+    visually_clustered_result = combined_clustering.cluster_visually(copy.deepcopy(flattened_mcl_tree),
+                                                                     visual_clustering_threshold=4,
+                                                                     visual_features=visual_features)
+  
+    print_status("Convert visual clusters to simpler structure... \n")
+    visual_clusters = []
+    for visual_cluster in visually_clustered_result.subclusters[0]['subcluster']:
+      visual_clusters.append(set([image_tuple[0].split('\\')[-1].split('.')[0] for image_tuple in visual_cluster]))
+  
+    print_status("Done clustering %d images into %d visual clusters. \n" % (image_counter, len(visual_clusters)))
+  
+    # # Comment in to load preprocessed visual_clusters for dev mode
+    # visual_clusters = pickle.load(open('visual_clusters.pickle', 'r'))
+  
+    print_status("Loading testset from database... \n")
+    visually_similar_tuples, visually_different_tuples = retrieveTestsetResults(args.database_file)
+  
+    print_status("Comparing clusters to testset... \n")
+  
+    print_status("Starting with visually similar tuples... \n")
+    true_positives  = 0
+    false_negatives = 0
+    for id_tuple in visually_similar_tuples:
+      if both_ids_are_found(id_tuple, visual_clusters):
+        if one_cluster_contains_both_ids(id_tuple, visual_clusters):
+          true_positives += 1
+        else:
+          false_negatives += 1
+  
+    print_status("Now checking different image tuples... \n")
+    true_negatives  = 0
+    false_positives = 0
+    for id_tuple in visually_different_tuples:
+      if both_ids_are_found(id_tuple, visual_clusters):
+        if one_cluster_contains_both_ids(id_tuple, visual_clusters):
+          false_positives += 1
+        else:
+          true_negatives += 1
 
-  print_status("Done clustering %d images into %d visual clusters. \n" % (image_counter, len(visual_clusters)))
+    true_positives_total.append(true_positives)
+    false_negatives_total.append(false_negatives)
+    true_negatives_total.append(true_negatives)
+    false_positives_total.append(false_positives)
 
-  # # Comment in to load preprocessed visual_clusters for dev mode
-  # visual_clusters = pickle.load(open('visual_clusters.pickle', 'r'))
+  average_true_positives  = float(sum(true_positives_total))  / len(true_positives_total)
+  average_false_negatives = float(sum(false_negatives_total)) / len(false_negatives_total)
+  average_true_negatives  = float(sum(true_negatives_total))  / len(true_negatives_total)
+  average_false_positives = float(sum(false_positives_total)) / len(false_positives_total)
 
-  print_status("Loading testset from database... \n")
-  visually_similar_tuples, visually_different_tuples = retrieveTestsetResults(args.database_file)
-
-  print_status("Comparing clusters to testset... \n")
-
-  print_status("Starting with visually similar tuples... \n")
-  true_positives  = 0
-  false_negatives = 0
-  for id_tuple in visually_similar_tuples:
-    if both_ids_are_found(id_tuple, visual_clusters):
-      if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-        true_positives += 1
-      else:
-        false_negatives += 1
-
-  print_status("Now checking different image tuples... \n")
-  true_negatives  = 0
-  false_positives = 0
-  for id_tuple in visually_different_tuples:
-    if both_ids_are_found(id_tuple, visual_clusters):
-      if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-        false_positives += 1
-      else:
-        true_negatives += 1
-
-  precision = float(true_positives) / (true_positives + false_positives)
-  recall    = float(true_positives) / (true_positives + false_negatives)
+  precision = float(average_true_positives) / (average_true_positives + average_false_positives)
+  recall    = float(average_true_positives) / (average_true_positives + average_false_negatives)
 
   print_status("Done!\n\n")
   sys.stdout.write("Testset contains %5d visually similar   image tuples \n" % len(visually_similar_tuples))
   sys.stdout.write("And there are    %5d visually different image tuples \n\n" % len(visually_different_tuples))
 
-  sys.stdout.write("Similar   images, true  positives: %d \n" % true_positives)
-  sys.stdout.write("Similar   images, false negatives: %d \n" % false_negatives)
-  sys.stdout.write("Different images, true  negatives: %d \n" % true_negatives)
-  sys.stdout.write("Different images, false positives: %d \n\n" % false_positives)
+  sys.stdout.write("Similar   images, average true  positives: %f \n"   % average_true_positives)
+  sys.stdout.write("Similar   images, average false negatives: %f \n"   % average_false_negatives)
+  sys.stdout.write("Different images, average true  negatives: %f \n"   % average_true_negatives)
+  sys.stdout.write("Different images, average false positives: %f \n\n" % average_false_positives)
 
   sys.stdout.write("Precision: %f (tp / (tp + fp))\n" % precision)
   sys.stdout.write("Recall:    %f (tp / (tp + fn))\n" % recall)
@@ -207,6 +227,7 @@ def main(args):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
-  parser.add_argument('-d','--database-file', help='Path to the database file (phase 1)', required=True)
+  parser.add_argument('-d','--database-file', help='Path to the database file (phase 2)', required=True)
+  parser.add_argument('-f','--food-id-file', help='Path to the json file with for food-annotated images', required=True)
   args = parser.parse_args()
   main(args)
