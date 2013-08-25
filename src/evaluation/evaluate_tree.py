@@ -65,7 +65,10 @@ def find_closest_match_to_nodes(result_tree_root, search_id_1, search_id_2):
         next_check_nodes |= set([child for child in node.children if child not in already_checked_nodes])
       already_checked_nodes.add(node)
     check_nodes = next_check_nodes
-  return distance
+  if distance > 1:
+    return distance - 1
+  else:
+    return distance
 
 def retrieveTestsetResults(database_file):
   con = sqlite3.connect(database_file)
@@ -83,7 +86,7 @@ def retrieveTestsetResults(database_file):
                     (
                       SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
                       FROM semmul_image_similarity
-                      GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                      GROUP BY image_1_id, image_2_id, semantic_similarity
                     ) AS b
                   WHERE s.image_1_id = a.image_1_id
                   AND s.image_2_id = a.image_2_id
@@ -108,7 +111,7 @@ def retrieveTestsetResults(database_file):
                       (
                         SELECT image_1_id, image_2_id, COUNT(*) AS same_votes
                         FROM semmul_image_similarity
-                        GROUP BY image_1_id, image_2_id, visual_similarity, semantic_similarity
+                        GROUP BY image_1_id, image_2_id, semantic_similarity
                       ) AS b
                     WHERE s.image_1_id = a.image_1_id
                     AND s.image_2_id = a.image_2_id
@@ -183,10 +186,10 @@ def main(args):
   print_status("Checking images against testset:\n")
   print_status("Retrieving clusters... \n")
   pipeline_result = pipeline.get_clusters("food", use_meronyms=False,
-                                     visual_clustering_threshold=4,
-                                     mcl_clustering_threshold=4,
+                                     visual_clustering_threshold=100000,
+                                     mcl_clustering_threshold=6,
                                      minimal_mcl_cluster_size=6,
-                                     minimal_node_size=4,
+                                     minimal_node_size=6,
                                      visual_features=visual_features,
                                      cluster_for_synsets=cluster_for_synsets,
                                      keywords_for_pictures=keywords_for_pictures,

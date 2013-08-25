@@ -2,7 +2,7 @@
 \section{Evaluation}
 \label{sec_evaluation}
 
-We evaluated our tool on a set of 9,201 images, which are a subset of the MIRFLICKR-1M file set, and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
+We evaluated our tool on a set of 9,201 images, which are a subset of the MIRFLICKR-1M \todo{cite mirflickr, explain structure and size of the flickr metafiles} file set, and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
 \subsection{Test set}
 \label{sec_testset}
@@ -15,7 +15,7 @@ We also need data on the semantic and visual similarity of the pictures. Therefo
 Among the 12,962 votes were 757 pairs of images with same objects, 345 pairs with same object and same context, as well as 1,854 pairs of visually similar images. Multiple votes on one pair were rare (xx cases), and therefore simply not taken into account if they contradicted each other.
 
 \subsection{Quality Indicators}
-The evaluation focusses on the following four main aspects of our algorithm:
+The evaluation focuses on the following four main aspects of our algorithm:
 \begin{enumerate}
 \item Retrieval of matching images
 \item Semantic hierarchy and clusters
@@ -33,7 +33,7 @@ vary parameters given by frontend, trying to find best configuration
 \subsection{Results}
 \label{sec_results}
 
-\subsubsection{Phase 1}
+\subsubsection*{Image retrieval}
 
 Our image retrieval has a precision of p = 50.2\% and recall of r = 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
 After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
@@ -83,7 +83,7 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
 	\label{tab_treeevaluation}
 \end{table}
 
-\subsubsection{Phase 2}
+\subsubsection*{Semantic and visual clustering}
 
 Within our second phase we let users decide which of the pictures declared as showing food are semantically and visually similar. 
 
@@ -93,8 +93,8 @@ Image tuples voted as visual similar: 1854 \\
 
 After retrieving our evaluation votes from the users, we compared the result of our tool with one from the evaluation. Therefore we calculated the distance between every two images, which are declared as similar or not, within our calculated search tree. \todo{Picture of a search tree, which illustrates the evaluation script concerning how the distance is calculated?}
 
-Average distance for same object  is 3.70286885246  \\
-Average distance for same object and same context is 3.54583921016 \\
-Average distance for not similar  is 3.81995379729 \\
+Average distance for same object  is 2.77091633466  \\
+Average distance for same object and same context is 2.64246575342 \\
+Average distance for not similar  is 2.87943462898 \\
 
 
