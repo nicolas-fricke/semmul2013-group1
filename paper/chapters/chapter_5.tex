@@ -24,7 +24,7 @@ The evaluation focuses on the following three main aspects of our algorithm:
 
 We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of the first phase.
 
-The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\] 
+The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\]
 Averaging this value over all pairs of a similarity category returns a value between 0 and 1. Optimal values are 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. The similarity categories are below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs.
 We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
 
@@ -47,7 +47,7 @@ Since our clustering algorithm for visual features uses k-means which is based o
 \subsubsection*{Image Retrieval}
 
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
-After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of these parameters are presented in table \ref{tab_retrievalevaluation}.\\
+After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
    \begin{tabular}{| p{2.2cm}| p{2.2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
@@ -73,7 +73,7 @@ The results of the semantic hierarchy and cluster evaluation also depend on the 
 \begin{table}[h]
     \begin{tabular}{| p{2.2cm} | p{2.2cm} | p{2cm} || p{1.4cm} | p{1.4cm} | p{1.4cm} | p{1.4cm} |}
 	\hline
-    \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} 	& \emph{minimal node size} & $c_o $ & $c_c$ & $c_n$ & $c_o - c_n$ \\ \hline
+    \emph{mcl clustering threshold} & \emph{minimal mcl cluster size}		& \emph{minimal node size} & $c_o $ & $c_c$ & $c_n$ & $c_o-c_n$ \\ \hline
     0 	& 0 	& 0 & 0.25075 & 0.25483 & 0.23430 & 0.01645 \\ \hline
     0 	& 5 	& 0 & 0.25707 & 0.26691 & 0.24857 & 0.00850 \\ \hline
     5 	& 5 	& 5 & 0.26129 & 0.27160 & 0.25347 & 0.00782 \\ \hline
