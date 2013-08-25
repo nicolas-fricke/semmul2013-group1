@@ -4,7 +4,7 @@
 
 We evaluated our tool on a set of 9,201 images, which are a subset of the 1 million images of the MIRFLICKR-1M\footnote{http://press.liacs.nl/mirflickr/} file set, and the query term ``food''. Since no comparable algorithms exist, the evaluation is mainly aimed at obtaining the best values for the parameters and at providing a basis for comparison of further improvements and future work.
 
-\subsection{Test set}
+\subsection{Test Set}
 \label{sec_testset}
 No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
 To test the quality of our algorithm, we wrote a tool allowing us a crowdsourced generation of the needed reference data by the general public. This was achieved in two phases:\\
@@ -77,6 +77,56 @@ The results of the semantic hierarchy and cluster evaluation also depend on the 
 
 It can generally be observed that varying the parameters most strongly influences the amount of the closeness measures, that is, all their values rise or drop somewhat consistently.
  
+
 \subsubsection*{Visual Clustering}
+
+As described in chapter \ref{sec_visualclustering}, we divide the already formed semantic clusters again into smaller visual clusters. 
+To test the performance of this visual subclustering, we preformed another precision- and recall-analysis. 
+As reference we used the test set from phase 2 of the crowdsourced generation. 
+The test set contains 1841 visually similar image associations and 10894 associations annotated as visually not similar. 
+Since there are approximately 1.3 million possible combinations between two images within the images annotated as food, this is only an approximate 1\% coverage, meaning we know only for every 100th combination, if or if not it is considered visually similar. 
+Therefore it was not possible to gain any valuable information on the subclustering we do within the semantic clusters.
+
+For being able to anyhow test the performance of our visual clustering, we decided to preform this clustering on the semantically unclustered images. 
+Therefore we filtered the results our algorithm provides for the search term ``food'' and took only those into account, which users voted to contain food, 883 images remained. 
+This way, we prevent to visually cluster irrelevant images, the quality of our retrieval has been discussed in chapter \ref{tab_retrievalevaluation}. 
+Since our clustering algorithm for visual features uses k-means which is based on a random distribution, we preformed multiple measurements to reduce the error. 
+
+The 883 images were clustered into 21 visual clusters (see chapter \ref{sec_visualclustering}). After 10 passes, we retrieved a precision of 18.6\% with a recall of 8.1\%. The F-Measure therefore is 11.2\%.
+
+Since our visual clustering algorithm is supposed to be preformed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. Therefore we did a second measurement with 100 randomly picked images which were then clustered 100 times into 7 buckets. Here we could achieve a recall of 24.1\% with a only little dip in the precision (16.8\%). The F-Measure was raised to 19.8\%.
+
+
+\iffalse{begin comment}
+Analysis data:
+
+100 images, 7 visual clusters (average over 100x):
+  Testset contains  1841 visually similar   image tuples 
+  And there are    10894 visually different image tuples 
+
+  Similar   images, average true  positives: 3.140000 
+  Similar   images, average false negatives: 9.860000 
+  Different images, average true  negatives: 71.490000 
+  Different images, average false positives: 15.510000 
+
+  Precision: 0.168365 (tp / (tp + fp))
+  Recall:    0.241538 (tp / (tp + fn))
+  F-Measure: 0.198420 (2 * (p * r / (p + r)))
+
+all 883 images, 21 visual clusters (average over 10x):
+  Testset contains  1841 visually similar   image tuples 
+  And there are    10894 visually different image tuples 
+
+  Similar   images, average true  positives: 95.800000 
+  Similar   images, average false negatives: 1086.200000 
+  Different images, average true  negatives: 6012.100000 
+  Different images, average false positives: 417.900000 
+
+  Precision: 0.186490 (tp / (tp + fp))
+  Recall:    0.081049 (tp / (tp + fn))
+  F-Measure: 0.112992 (2 * (p * r / (p + r)))
+\fi
+
+
 
 
