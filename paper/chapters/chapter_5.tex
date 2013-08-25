@@ -24,7 +24,7 @@ The evaluation focuses on the following four main aspects of our algorithm:
 
 We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. \todo{should we compare synset detection mechanisms?} 
 
-The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images $closeness(x,y) = 1/distance(x,y)$. Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
+The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\] Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
 We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
 
 Visual similarity (\emph{3.}) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, F-Measure is used as indicator.
@@ -56,6 +56,10 @@ After the semantic clustering, the measures depend on the  parameters \emph{mini
 \end{table}
 
 
+\subsubsection*{Semantic Hierarchy and Clusters}
+
+The results of the semantic hierarchy and cluster evaluation also depend on the parameters mentioned for image retrieval. The measurements listed in table \ref{tab_treeevaluation} indicate that the best distinction between images showing the same objects and images showing different objects is achieved with low \emph{minimal mcl cluster size}, that is, without outlier removal. The other parameters' values correlate with those of the image retrieval evaluation above.\\
+
 \begin{table}[h]
     \begin{tabular}{| p{2.2cm} | p{2.2cm} | p{2cm} || p{1.4cm} | p{1.4cm} | p{1.4cm} | p{1.4cm} |}
 	\hline    
@@ -73,10 +77,7 @@ After the semantic clustering, the measures depend on the  parameters \emph{mini
 	\label{tab_treeevaluation}
 \end{table}
 
-
-\subsubsection*{Semantic Hierarchy and Clusters}
-
-The results of the semantic hierarchy and cluster evaluation also depend on the parameters mentioned for image retrieval. The measurements listed in table \ref{tab_treeevaluation} indicate that the best distinction between images showing the same objects and images showing different objects is achieved with low \emph{minimal mcl cluster size}, that is, without outlier removal. The other parameters' values correlate with those of the image retrieval evaluation above.\\
+It can generally be observed that varying the parameters most strongly influences the amount of the closeness measures, that is, all their values rise or drop somewhat consistently.
  
 \subsubsection*{Visual Clustering}
 
