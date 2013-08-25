@@ -25,4 +25,11 @@ vim config.cfg
 cd src/
 export PYTHONPATH=$PYTHONPATH:`pwd`
 python 
+	import nltk
+	nltk.download()
+	...
+
+python clustering/semantic/synset_detection_bestfirstsearch.py
+python clustering/semantic/preprocessed_tag_dict_creator.py
+python clustering/visual/preprocess_visual_features.py
 python frontend/frontend.py
