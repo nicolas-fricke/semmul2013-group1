@@ -22,7 +22,7 @@ The evaluation focuses on the following four main aspects of our algorithm:
 \item Visual clustering
 \end{enumerate}
 
-We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. \todo{should we compare synset detection mechanisms?} 
+We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. 
 
 The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\] Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
 We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
@@ -38,8 +38,6 @@ For being able to anyhow test the performance of our visual clustering, we decid
 Therefore we filtered the results our algorithm provides for the search term ``food'' and took only those into account, which users voted to contain food, 883 images remained. 
 This way, we prevent to visually cluster irrelevant images, the quality of our retrieval has been discussed in chapter \ref{tab_retrievalevaluation}. 
 Since our clustering algorithm for visual features uses k-means which is based on a random distribution, we preformed multiple measurements to reduce the error. 
-
-\todo{vary parameters given by frontend, trying to find best configuration}
 
 \subsection{Results}
 \label{sec_results}
