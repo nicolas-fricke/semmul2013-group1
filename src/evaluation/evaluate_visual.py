@@ -24,10 +24,10 @@ def recursively_collect_images(siblings):
     sibling_image_tuples = dict(sibling_image_tuples, **recursively_collect_images(synset.hyponyms))
   return sibling_image_tuples
 
-def flatten_result_tree(pipeline_tree):
+def flatten_result_tree(pipeline_tree, annotated_food_dict):
   # collect all image tuples
   image_dict = recursively_collect_images(pipeline_tree)
-  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems()]
+  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems() if image_id.split('.')[0] in annotated_food_dict.keys()]
   # empty first tree node
   pipeline_tree_node = pipeline_tree[0]
   pipeline_tree_node.hyponyms = []
@@ -142,8 +142,10 @@ def main(args):
   # # Comment in to load preprocessed pipeline_result for dev mode
   # pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
 
+  annotated_food_dict = json.load(open(args.food_id_file, 'r'))
+
   print_status("Parsing result tree to easier accessible format... \n")
-  flattened_mcl_tree = flatten_result_tree(pipeline_result)
+  flattened_mcl_tree = flatten_result_tree(pipeline_result, annotated_food_dict)
   image_counter = len(flattened_mcl_tree.subclusters[0]['subcluster'])
 
   print_status("Loading visual_features from file... \n")
@@ -207,6 +209,7 @@ def main(args):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
-  parser.add_argument('-d','--database-file', help='Path to the database file (phase 1)', required=True)
+  parser.add_argument('-d','--database-file', help='Path to the database file (phase 2)', required=True)
+  parser.add_argument('-f','--food-id-file', help='Path to the json file with for food-annotated images', required=True)
   args = parser.parse_args()
   main(args)
