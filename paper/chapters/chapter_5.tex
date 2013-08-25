@@ -34,10 +34,10 @@ Visual similarity (\emph{3.}) is evaluated on the whole test set, because not en
 \subsection{Results}
 \label{sec_results}
 
-\subsubsection*{Image retrieval}
+\subsubsection*{Image Retrieval}
 
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
-After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
+After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
    \begin{tabular}{| p{2.2cm}| p{2.2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
@@ -53,34 +53,6 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     \end{tabular}
     \caption{Precision and recall of the image retrieval}
 	\label{tab_retrievalevaluation}
-\end{table}
-
-\begin{table}[h]
-    \begin{tabular}{| p{2cm}| p{2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
-    \hline
-    2	& 6	& 2	& 0.575916 & 0.769904 & 0.658929 \\ \hline    
-    4	& 2	& 2	& 0.518719 & 0.836395 & 0.640322 \\ \hline	      
-    4	& 2	& 4	& 0.520458 & 0.834646 & 0.641129 \\ \hline	
-    4	& 6	& 2	& 0.562267 & 0.790026 & 0.656966 \\ \hline     
-    4 	& 4 	& 4 & 0.550663 & 0.798775 & 0.651910 \\ \hline
- 	4	& 6	& 4	& 0.568766 & 0.774278 & 0.655798 \\ \hline    
-    6 	& 6 	& 6 & 0.567619 & 0.782152 & 0.657837 \\ \hline  
-	5 	& 10 & 5 & 0.612903 & 0.748031 & 0.673759 \\ \hline
-    5 	& 15 & 5 & 0.644391 & 0.708661 & 0.675000 \\ \hline  
-   	5 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline 
-    10 	& 10 & 10 & 0.598080 & 0.762905 & 0.670511 \\ \hline 
-    10 	& 10 & 20 & 0.578165 & 0.783027 & 0.665180 \\ \hline    
-    10 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
-    10 	& 15 & 10 & 0.631539 & 0.728784 & 0.676686 \\ \hline  
-    10 	& 20 & 10 & 0.666102 & 0.687664 & 0.676711 \\ \hline
-    15 	& 25 & 10 & 0.655201 & 0.714286 & 0.683469 \\ \hline
-    15 	& 20 & 15 & 0.661716 & 0.701662 & 0.681104 \\ \hline    
-    20 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
-    20 	& 25 & 20 & 0.677951 & 0.683290 & 0.680610 \\ \hline  
-    50	& 50 & 50 & 0.728135 & 0.604549 & 0.660612 \\ \hline
-    100 	& 100 & 100 & 0.757858 & 0.569554 & 0.650350 \\ \hline
-    \end{tabular}
-    \caption{Additional precision and recall of the image retrieval}
 \end{table}
 
 
@@ -101,18 +73,11 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
 	\label{tab_treeevaluation}
 \end{table}
 
-\subsubsection*{Semantic and visual clustering}
 
-Within our second phase we let users decide which of the pictures declared as showing food are semantically and visually similar. 
+\subsubsection*{Semantic Hierarchy and Clusters}
 
-Image tuples voted with same object: 757 \\
-Image tuples voted with same object and same context: 1102 \\
-Image tuples voted as visual similar: 1854 \\
-
-After retrieving our evaluation votes from the users, we compared the result of our tool with one from the evaluation. Therefore we calculated the distance between every two images, which are declared as similar or not, within our calculated search tree. \todo{Picture of a search tree, which illustrates the evaluation script concerning how the distance is calculated?}
-
-Average distance for same object  is 2.77091633466  \\
-Average distance for same object and same context is 2.64246575342 \\
-Average distance for not similar  is 2.87943462898 \\
+The results of the semantic hierarchy and cluster evaluation also depend on the parameters mentioned for image retrieval. The measurements listed in table \ref{tab_treeevaluation} indicate that the best distinction between images showing the same objects and images showing different objects is achieved with low \emph{minimal mcl cluster size}, that is, without outlier removal. The other parameters' values correlate with those of the image retrieval evaluation above.\\
+ 
+\subsubsection*{Visual Clustering}
 
 
