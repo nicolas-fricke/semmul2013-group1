@@ -12,15 +12,22 @@ import clustering.visual.combined_clustering as combined_clustering
 import cPickle as pickle
 
 def recursively_collect_images(siblings):
-  sibling_image_tuples = []
+  sibling_image_tuples = {}
   for synset in siblings:
-    sibling_image_tuples += [[image_tuple[0].split('\\')[-1], image_tuple[1]] for subcluster in synset.subclusters for subsubcluster in subcluster['subcluster'] for image_tuple in subsubcluster]
-    sibling_image_tuples += recursively_collect_images(synset.hyponyms)
+    for subcluster in synset.subclusters:
+      for subsubcluster in subcluster['subcluster']:
+        for image_tuple in subsubcluster:
+          image_id  = image_tuple[0].split('\\')[-1]
+          image_url = image_tuple[1]
+          sibling_image_tuples[image_id] = image_url
+
+    sibling_image_tuples = dict(sibling_image_tuples, **recursively_collect_images(synset.hyponyms))
   return sibling_image_tuples
 
 def flatten_result_tree(pipeline_tree):
   # collect all image tuples
-  image_tuples = list(recursively_collect_images(pipeline_tree))
+  image_dict = recursively_collect_images(pipeline_tree)
+  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems()]
   # empty first tree node
   pipeline_tree_node = pipeline_tree[0]
   pipeline_tree_node.hyponyms = []
@@ -131,6 +138,10 @@ def main(args):
                                      keywords_for_pictures=keywords_for_pictures,
                                      cluster_representatives=cluster_representatives)
 
+
+  # # Comment in to load preprocessed pipeline_result for dev mode
+  # pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
+
   print_status("Parsing result tree to easier accessible format... \n")
   flattened_mcl_tree = flatten_result_tree(pipeline_result)
   image_counter = len(flattened_mcl_tree.subclusters[0]['subcluster'])
@@ -159,32 +170,40 @@ def main(args):
   print_status("Comparing clusters to testset... \n")
 
   print_status("Starting with visually similar tuples... \n")
-  similar_tp = 0
-  similar_fn = 0
+  true_positives  = 0
+  false_negatives = 0
   for id_tuple in visually_similar_tuples:
     if both_ids_are_found(id_tuple, visual_clusters):
       if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-        similar_tp += 1
+        true_positives += 1
       else:
-        similar_fn += 1
+        false_negatives += 1
 
   print_status("Now checking different image tuples... \n")
-  different_tp = 0
-  different_fn = 0
+  true_negatives  = 0
+  false_positives = 0
   for id_tuple in visually_different_tuples:
     if both_ids_are_found(id_tuple, visual_clusters):
       if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-        different_fn += 1
+        false_positives += 1
       else:
-        different_tp += 1
+        true_negatives += 1
+
+  precision = float(true_positives) / (true_positives + false_positives)
+  recall    = float(true_positives) / (true_positives + false_negatives)
 
   print_status("Done!\n\n")
   sys.stdout.write("Testset contains %5d visually similar   image tuples \n" % len(visually_similar_tuples))
   sys.stdout.write("And there are    %5d visually different image tuples \n\n" % len(visually_different_tuples))
-  sys.stdout.write("Similar   images, true  positives: %d \n" % similar_tp)
-  sys.stdout.write("Similar   images, false negatives: %d \n" % similar_fn)
-  sys.stdout.write("Different images, true  positives: %d \n" % different_tp)
-  sys.stdout.write("Different images, false negatives: %d \n" % different_fn)
+
+  sys.stdout.write("Similar   images, true  positives: %d \n" % true_positives)
+  sys.stdout.write("Similar   images, false negatives: %d \n" % false_negatives)
+  sys.stdout.write("Different images, true  negatives: %d \n" % true_negatives)
+  sys.stdout.write("Different images, false positives: %d \n\n" % false_positives)
+
+  sys.stdout.write("Precision: %f (tp / (tp + fp))\n" % precision)
+  sys.stdout.write("Recall:    %f (tp / (tp + fn))\n" % recall)
+  sys.stdout.write("F-Measure: %f (2 * (p * r / (p + r)))\n" % (2 * (float(precision) * float(recall)) / (precision + recall)))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
