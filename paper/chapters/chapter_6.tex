@@ -2,7 +2,6 @@
 \section{Results Discussion}
 \label{sec_discussion}
 
-\todo{Are our results good? Are they biased by something?}
 It can generally been said that the quality of the results highly depends on the original image annotations: an inappropriate tag leads the algorithm to ``believe'' that the picture shows something that is actually not present.
 
 \subsection{Test Set Quality}
@@ -22,7 +21,13 @@ The first two reasons can be addressed by using a more sophisticated ontology an
 Key points on MCL: generally useful (removes more non-food images than food images, else recall would go down with precision staying the same), interestingly best results when minimal mcl cluster size larger than minimal node size (i.e. small nodes are deleted anyways)
 
 \subsection{Semantic Clusters}
-Our semantic evaluation method presents a good method to get an overview of the semantic clustering in the complete search tree. But we also have to consider the inner dependencies of the semantic clusters. The result of the MCL based clusters highly depend on the quality of their parent keyword clusters. That's why MCL clusters are hard to evaluate, because they cannot be isolated from their dependent keyword cluster.\\
+Our semantic evaluation method presents a good method to get an overview of the semantic clustering in the complete search tree. But we also have to consider the dependencies between our semantic cluster approaches. The result of the MCL based clusters highly depend on the quality of their corresponding keyword clusters. That's why MCL clusters are hard to evaluate, because they cannot be isolated from their dependent keyword cluster.\\	
+\bigskip
+good: same object and same object distance closures are close to each other
+bad: distances to high for same context/object 
+	 distances to low for not semantic similar
+	 no correlation between recall/precision and semantic similarity 
+interpretation: depend on test set -> did users interpret pictures concerning similarity with same granularity
 
 \subsection{Visual Clusters}
 also rather hard to look at in isolation, because method specifically designed for final subclustering. But lack of data for evaluation within subclusters for appropriately sized semantic clusters
