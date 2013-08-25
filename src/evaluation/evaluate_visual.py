@@ -12,15 +12,22 @@ import clustering.visual.combined_clustering as combined_clustering
 import cPickle as pickle
 
 def recursively_collect_images(siblings):
-  sibling_image_tuples = []
+  sibling_image_tuples = {}
   for synset in siblings:
-    sibling_image_tuples += [[image_tuple[0].split('\\')[-1], image_tuple[1]] for subcluster in synset.subclusters for subsubcluster in subcluster['subcluster'] for image_tuple in subsubcluster]
-    sibling_image_tuples += recursively_collect_images(synset.hyponyms)
+    for subcluster in synset.subclusters:
+      for subsubcluster in subcluster['subcluster']:
+        for image_tuple in subsubcluster:
+          image_id  = image_tuple[0].split('\\')[-1]
+          image_url = image_tuple[1]
+          sibling_image_tuples[image_id] = image_url
+
+    sibling_image_tuples = dict(sibling_image_tuples, **recursively_collect_images(synset.hyponyms))
   return sibling_image_tuples
 
 def flatten_result_tree(pipeline_tree):
   # collect all image tuples
-  image_tuples = list(recursively_collect_images(pipeline_tree))
+  image_dict = recursively_collect_images(pipeline_tree)
+  image_tuples = [[image_id, image_url] for image_id, image_url in image_dict.iteritems()]
   # empty first tree node
   pipeline_tree_node = pipeline_tree[0]
   pipeline_tree_node.hyponyms = []
@@ -130,6 +137,10 @@ def main(args):
                                      cluster_for_synsets=cluster_for_synsets,
                                      keywords_for_pictures=keywords_for_pictures,
                                      cluster_representatives=cluster_representatives)
+
+
+  # # Comment in to load preprocessed pipeline_result for dev mode
+  # pipeline_result = pickle.load(open('image_tree.pickle', 'r'))
 
   print_status("Parsing result tree to easier accessible format... \n")
   flattened_mcl_tree = flatten_result_tree(pipeline_result)
