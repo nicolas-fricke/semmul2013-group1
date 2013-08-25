@@ -16,20 +16,24 @@ Current issues with tag-based search and clustering are mostly related to the la
 
 \bigskip
 
-There are already some approaches using WordNet for finding semantic similarities between different Words, like \cite{richardson1994using}. They motivate using a knowledge base like WordNet to deal with general problems of the natural language, facing different meanings of a word and strong relations between different words. With the help of a hierarchical concept graph (HCG), consisting of hyponymns and meronyms for a specific entity, the semantic similarity between different words can be determined. \todo{Conclusion, Problems?} 
+There are already some approaches using WordNet for finding semantic similarities between different words, like \cite{richardson1994using}. They motivate using a knowledge base like WordNet to deal with general problems of the natural language. This means facing different meanings of a word and strong relations between different words. With the help of a hierarchical concept graph (HCG), consisting of hyponymns and meronyms for a specific entity, the semantic similarity between different words can be determined. In conclusion, the main challenge is to have a very accurate disambiguator which automatically and correctly assign words to their WordNet meaning. The existence of such a tool is indispensable for all classification approaches and they analyzed the semantic tagger as very promising. 
+We want to use the advantages of WordNet within our tool while using this semantic information e.g. to map tags of an image to their correct meaning, in relation to other tags of the image. 
 
 Another approach is using a WordNet-based clustering technique for text documents, which is described in \cite{sedding2004wordnet}.  They tried to solve the problem of synonyms and ambiguity of words within texts, while adding a part-of-speech tag to every word based on knowledge provided by WordNet. Unfortunately the found out, that including synonyms and hypernyms does not improve the effectiveness of clustering, which they mainly relate to noise which comes with incorrect word interpretation of WordNet. 
-
-\todo{More semantic related word?}
 
 \subsection{Image Annotation and Content-Based Image Retrieval}
 %% ?? http://ganges.usc.edu/pgroupW/images/6/6b/Cvm2012.pdf: detect objects and organize images based on the relations of the objects within.
 %% http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=718510: review of visual features for cbir
 
-Ideas exist to use visual features to semantically analyze and classify images. \cite{Liu2007} and \cite{Zhang2012} provide good summaries and evaluations of the different approaches how this could be done. Both conclude that this so-called \emph{Automatic Image Annotation} \index{Automatic Image Annotation} is computation-intensive and not yet fully mature.
+Ideas exist to use visual features to semantically analyze and classify images. \cite{Liu2007} and \cite{Zhang2012} provide good summaries and evaluations of the different approaches how this could be done. Both conclude that this so-called \emph{Automatic Image Annotation} \index{Automatic Image Annotation} is computation-intensive and not yet fully mature. \\
+Often the automatic annotation of images is based on the existence of a training set of previously annotated images.  \cite{jeon2003automatic}	uses an approach to annotate images with the help of blobs generated from an image. The idea using formal information to tag images with their correct meaning differs from our basic idea to rely on the given metadata, annotated by users from flickr.
 
-\todo{Include more Related Work for Image Annotation}
+\bigskip
+
+Another approach is presented in \cite{wenyin2001semi} where user feedback and automatic image annotation are combined in order to get more accurate and efficient. The idea is based on the automatic assignment of keywords for an image which receive positive user feedback. That's why problems which come with both manual annotation (low efficiency) and automatic annotation (low accuracy) can be avoided. As an inspiration from that we used user feedback for our test set generation in the evaluation process to get a representative result how different user would tag a specific image.
+	
 %% http://infolab.stanford.edu/~wangz/project/imsearch/review/MTA/neela.pdf: summary of semantic image interpretation; Overview of foundations
 \bigskip
+
 One approach that combines semantics and visuals to analyze pictures in a so called \emph{visual folksonomy} is \cite{Lindstaedt2009}. The idea is trying to annotate images, with a controlled vocabulary, based on visual features and existing tags. Their goal, however, is to create additional annotations for not or poorly tagged images. \\
 Another approach is presented by \cite{cai2004hierarchical} with the aim to cluster images returned by a WWW image search. In contrast to pictures from a folksonomy, image search results are connected to a web page with context and link information which is used by the algorithm to cluster images.
