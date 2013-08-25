@@ -39,10 +39,24 @@ Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food
 After the semantic clustering, the measures depend on the \emph{minimal mcl cluster size} parameter. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
-    \begin{tabular}{| p{2.5cm}| p{2.5cm}| p{2.5cm} || p{1.5cm} | p{1.5cm} | p{1.7cm} |}
+   \begin{tabular}{| p{2.2cm}| p{2.2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
     \hline
     \emph{mcl clustering threshold} & \emph{minimal mcl cluster size} & \emph{minimal node size} & \emph{precision} & \emph{recall} & \emph{f-measure} \\ \hline
     0 	& 0 	& 0 & 0.501532 & 0.859143 & 0.633344 \\ \hline
+    0 	& 5 	& 0 & 0.559668 & 0.783036 & 0.652773 \\ \hline
+    5 	& 5 	& 5 & 0.549815 & 0.798214 & 0.651129 \\ \hline     
+    15 	& 25 &  5 & 0.615894 & 0.747321 & 0.675272 \\ \hline
+    15 	& 10 & 15 & 0.585333 & 0.783929 & 0.670229 \\ \hline
+    15 	& 25 & 15 & 0.695298 & 0.672791 & 0.683859 \\ \hline
+    	100 	& 100 & 100 & 0.757858 & 0.569554 & 0.650350 \\ \hline
+    \end{tabular}
+    \caption{Precision and recall of the image retrieval}
+	\label{tab_retrievalevaluation}
+\end{table}
+
+\begin{table}[h]
+    \begin{tabular}{| p{2cm}| p{2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
+    \hline
     2	& 6	& 2	& 0.575916 & 0.769904 & 0.658929 \\ \hline    
     4	& 2	& 2	& 0.518719 & 0.836395 & 0.640322 \\ \hline	      
     4	& 2	& 4	& 0.520458 & 0.834646 & 0.641129 \\ \hline	
@@ -58,15 +72,14 @@ After the semantic clustering, the measures depend on the \emph{minimal mcl clus
     10 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
     10 	& 15 & 10 & 0.631539 & 0.728784 & 0.676686 \\ \hline  
     10 	& 20 & 10 & 0.666102 & 0.687664 & 0.676711 \\ \hline
+    15 	& 25 & 10 & 0.655201 & 0.714286 & 0.683469 \\ \hline
     15 	& 20 & 15 & 0.661716 & 0.701662 & 0.681104 \\ \hline    
-    15 	& 25 & 15 & 0.695298 & 0.672791 & 0.683859 \\ \hline
     20 	& 20 & 20 & 0.642631 & 0.709536 & 0.674428 \\ \hline
     20 	& 25 & 20 & 0.677951 & 0.683290 & 0.680610 \\ \hline  
     50	& 50 & 50 & 0.728135 & 0.604549 & 0.660612 \\ \hline
     100 	& 100 & 100 & 0.757858 & 0.569554 & 0.650350 \\ \hline
     \end{tabular}
-    \caption{Precision and recall of the image retrieval}
-	\label{tab_retrievalevaluation}
+    \caption{Additional precision and recall of the image retrieval}
 \end{table}
 
 
