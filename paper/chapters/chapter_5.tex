@@ -7,12 +7,12 @@ We evaluated our tool on a set of 9,201 images, which are a subset of the MIRFLI
 \subsection{Test set}
 \label{sec_testset}
 No gold standard is available to tell us which pictures show food and how similar the images are. The creation of such standards and training data is exactly the task we want to facilitate with this work.\\ 
-What we did to receive evaluation data was to crowdsource the needed data from the general public. This was achieved in two phases:\\
+To test the quality of our algorithm, we wrote a tool allowing us a crowdsourced generation of the needed reference data by the general public. This was achieved in two phases:\\
 
-First, the users were shown random picture out of the 9,201 test set images and asked whether it shows food or not. We normalized these answers, so that there is only one vote per user per picture. In the case a user rated a picture more than once, the value is determined by the ration of positive (``shows food'') and negative (``does not show food'') votes of that user on that picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by more than 40 participants, 1,142 images out of the total 9,201 images were identified to show food. \\
+First, the users were shown random picture out of the 9,201 test set images and asked whether it shows food or not. We normalized these answers, so that there is only one vote per user per picture. In the case a user rated a picture multiple times, the value is determined by the ratio of positive (\emph{``shows food''}) and negative (\emph{``does not show food''}) votes of each user on one picture. We consider all those images as showing food that received at least 50\% positive votes. With over 35,000 clicks by more than 20 participants, 1,142 images out of the total 9,201 images were identified to show food. \\
 
-We also need data on the semantic and visual similarity of the pictures. Therefore, in the second phase, the users were shown pairs of images and asked to compare them. They could choose between three levels of semantic similarity: \emph{not similar}, \emph{same object}, and \emph{same object and same context}, and two levels of visual similarity: \emph{similar}, and \emph{not similar}.\\
-Among the 12,962 votes were 757 pairs of images with same objects, 345 pairs with same object and same context, as well as 1,854 pairs of visually similar images. Multiple votes on one pair were rare (xx cases), and therefore simply not taken into account if they contradicted each other.
+We then also required data on the semantic and visual similarity of these pictures. Therefore, in the second phase, the users were shown pairs of images, on which we knew from phase 1 that they contain food, and asked to compare them. They could choose between three levels of semantic similarity: \emph{not similar}, \emph{same object}, and \emph{same object and same context}, and two levels of visual similarity: \emph{similar}, and \emph{not similar}.\\
+Among the 12,962 votes of more than 30 participants were 757 pairs of images with same objects, 345 pairs with same object and same context, as well as 1,854 pairs of visually similar images. Multiple votes on one pair were rare (39 cases), and therefore simply not taken into account if they contradicted each other.
 
 \subsection{Quality Indicators}
 The evaluation focuses on the following four main aspects of our algorithm:
@@ -22,13 +22,14 @@ The evaluation focuses on the following four main aspects of our algorithm:
 \item Visual clustering
 \end{enumerate}
 
-We measure the quality of the image retrieval (1.) by precision and recall of returned pictures, compared to those that were declared to show food by the test persons. \todo{should we compare synset detection mechanisms?} 
+We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. \todo{should we compare synset detection mechanisms?} 
 
-The quality of the hierarchy of the retrieved images (2.) is based on the same object and same object and context pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images $closeness(x,y) = 1/distance(x,y)$. Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when to semantically similar images are not only in the same node but also in the same semantic subcluster.
+The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images $closeness(x,y) = 1/distance(x,y)$. Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
+We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
 
-Visual similarity (3.) is evaluated on the whole testset, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, precision and recall are used as indicators.
+Visual similarity (\emph{3.}) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, F-Measure is used as indicator.
 
-vary parameters given by frontend, trying to find best configuration
+\todo{vary parameters given by frontend, trying to find best configuration}
 
 \subsection{Results}
 \label{sec_results}
