@@ -31,4 +31,11 @@ Our semantic evaluation method is a good method to get an quality measure of the
 
 
 \subsection{Visual Clusters}
-also rather hard to look at in isolation, because method specifically designed for final subclustering. But lack of data for evaluation within subclusters for appropriately sized semantic clusters
+
+\begin{enumerate}
+\item hard to evaluate isolated, method designed for final subclustering with few images (5-50 images) => lack of data forces us
+\item it's also hard for humans to differentiate more than ...7?... visual clusters based on color and edginess, if we now have > 20 visual clusters, some might be quite similar for humans => many false negatives
+\item we still only have few votes on visually similar images, the percentage of not similar votes outnumbers the similar votes by almost factor 10. this way, we have few hits for true positives.
+\item users may have quite different opinions on when two images are regarded to be visually similar
+\item testset generation always showed two images and asked "similar or not", there was no way to say two images are more similar than two others (which may still be sort of similar)
+\end{enumerate}
