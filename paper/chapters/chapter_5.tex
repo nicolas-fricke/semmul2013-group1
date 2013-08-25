@@ -22,12 +22,14 @@ The evaluation focuses on the following four main aspects of our algorithm:
 \item Visual clustering
 \end{enumerate}
 
-We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. 
+We measure the quality of the image retrieval (\emph{1.}) by calculating the F-Measure for the returned pictures, comparing our algorithm's result to the crowdsourced generated test set of phase 1. \todo{should we compare synset detection mechanisms?} 
 
 The quality of the hierarchy of the retrieved images (\emph{2.}) is based on the \emph{same object} and \emph{same object and context} pairs: The  minimal path distance for an annotated pair of pictures can be calculated and used to determine the closeness of two images: \[closeness(x,y) = 1/distance(x,y)\] Averaging this value over all pairs of a similarity category returns a value between 0 and 1 (below referenced as $c_o$ for same object pairs, $c_c$ for same object and same context pairs, and $c_n$ for not similar pairs), with the optimal values being 1 for positive (similar) pairs, and 0 for negative (non-similar) pairs. 
 We include the keyword clustering in this evaluation by handling the clusters in a node as its children. Consequentially, the perfect score of 1 can only be reached when two semantically similar images are not only in the same node but also in the same semantic subcluster.
 
 Visual similarity (\emph{3.}) is evaluated on the whole test set, because not enough comparison data is available to get valuable results if only comparisons within semantic clusters were used. Once again, F-Measure is used as indicator.
+
+\todo{vary parameters given by frontend, trying to find best configuration}
 
 \subsection{Results}
 \label{sec_results}
@@ -35,7 +37,7 @@ Visual similarity (\emph{3.}) is evaluated on the whole test set, because not en
 \subsubsection*{Image Retrieval}
 
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the ``food'' query, before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
-After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of these parameters are presented in table \ref{tab_retrievalevaluation}.\\
+After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of this parameter are presented in table \ref{tab_retrievalevaluation}.\\
 
 \begin{table}[h]
    \begin{tabular}{| p{2.2cm}| p{2.2cm}| p{2cm} || p{2cm} | p{2cm} | p{2cm} |}
