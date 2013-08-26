@@ -2,6 +2,7 @@ import sys
 from flask import Flask, url_for, Response
 from flask import render_template
 from flask_assets import Environment, Bundle
+import string
 # from flask.ext.assets import Environment, Bundle
 # from flask import jsonify
 
@@ -26,8 +27,10 @@ keywords_for_pictures = load_keywords_for_pictures()
 print "Done."
 print_status("Loading cluster_representatives from file... ")
 cluster_representatives = load_cluster_representatives(how_many_per_cluster=6)
-print "Done."
+print "Done.\n\n"
 bufferedSearches = {}
+
+print_status("Server is ready!\n\n")
 
 @app.route("/")
 def hello():
@@ -43,6 +46,11 @@ def node_subclusters_empty(subcluster_structure):
 def recursivelyCleanResult(results):
   clean_results = []
   for node in results:
+    for subcluster in node.subclusters:
+      if subcluster['synsets'] != None:
+        subcluster['synsets_string'] = str(u", ".join(subcluster['synsets']))
+      else:
+        subcluster['synsets_string'] = ''
     if node.hyponyms:
       node.hyponyms = recursivelyCleanResult(node.hyponyms)
     if node.meronyms:

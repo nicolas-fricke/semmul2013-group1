@@ -50,7 +50,7 @@ detailsViewOrderImagesByMclCluster = (mclClusterLabels) ->
 
   for mclClusterName, mclCluster of dict
     $("#cluster-detail-popup > .modal-body").append("<div class='mcl-cluster'></div>")
-    $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='mcl-synsets-label pull-right'>#{mclClusterLabels[mclClusterName]}</div>")
+    $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='mcl-synsets-label'><h4>Most dominant tags:</h4> <p class='mcl-dominant-lables'>#{mclClusterLabels[mclClusterName]}</p></div>")
     for visualClusterName, visualCluster of mclCluster
       $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='visual-cluster pull-left'></div>")
       $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child > .visual-cluster:last-child").append(visualCluster)
@@ -107,6 +107,7 @@ $.ready = =>
     $("body").css "overflow", "auto")
   $('#loading-popup').modal('hide')
   $('#cluster-detail-popup').modal('hide')
+  $("#results").css('minHeight', ($(window).height() - $("footer").outerHeight(true) - $("#main-navigation").height()))
   bindFunctions()
   $("#input-searchterm").focus()
   setResultsMinHeight()

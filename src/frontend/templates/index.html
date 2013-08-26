@@ -66,26 +66,21 @@
         margin-top: 5px;
       }
 
-      .result-title h4 {
+      .result-title h4, .mcl-synsets-label h4 {
         display: run-in;
         color: white;
         margin-right: 10px;
       }
 
-      .result-title .result-description, #cluster-detail-popup-description{
+      .result-title .result-description, #cluster-detail-popup-description, .mcl-dominant-lables{
         font-style: italic;
       }
 
       .result-preview {
         white-space: nowrap;
         clear: both;
-      }
-
-      .mcl-cluster-preview {
-        white-space: nowrap;
-        padding-bottom: 10px;
-        float: left;
-        padding-left: 3px;
+        padding-bottom: 12px;
+        padding-left: 4px;
       }
 
       .mcl-cluster-preview > img {
@@ -99,8 +94,9 @@
 
       .mcl-synsets-label {
         color: white;
-        width: 120px;
-        text-align: right;
+        font-size: 1.1em;
+        line-height: 2em;
+        width: 100%;
       }
 
       .tooltip.in {
@@ -183,9 +179,9 @@
               <div class="result-preview">
                 {%- for mcl_cluster in synset.subclusters %}
                   {% set mcl_loop = loop %}
-                  <div class="mcl-cluster-preview"
+                  <span class="mcl-cluster-preview"
                        data-mcl-cluster-index="{{ mcl_loop.index }}"
-                       data-mcl-synset-description="{{ mcl_cluster['synsets'] }}">
+                       data-mcl-synset-description="{{ mcl_cluster['synsets_string'] }}">
                     {%- for visual_cluster in mcl_cluster["subcluster"] %}
                       {% set visual_loop = loop %}
                       {%- for _, image_url in visual_cluster %}
@@ -197,7 +193,7 @@
                              data-visual-cluster="{{ visual_loop.index }}"/>
                       {%- endfor %}
                     {%- endfor %}
-                  </div>
+                  </span>
                 {%- endfor %}
               </div>
             </div>
