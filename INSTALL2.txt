@@ -24,10 +24,15 @@ vim config.cfg
 
 cd src/
 export PYTHONPATH=$PYTHONPATH:`pwd`
+
+# install wordnet for python
 python 
-	import nltk
-	nltk.download()
-	...
+>>> import nltk
+>>> nltk.download()
+	# opens download tool
+	# enter d for download
+	# enter wordnet for downloading wordnet
+	# enter q for quit
 
 python clustering/semantic/synset_detection_bestfirstsearch.py
 python clustering/semantic/preprocessed_tag_dict_creator.py
