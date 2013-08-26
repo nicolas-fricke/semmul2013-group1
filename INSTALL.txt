@@ -24,6 +24,8 @@ tar -xzvf pygame-1.9.1release.tar.gz
 cd pygame-1.9.1release
 sudo python setup.py
 
+...
+
 # start program
 cd semmul2013-group1/src/
 export PYTHONPATH=$PYTHONPATH:`pwd`
