@@ -31,6 +31,21 @@ Our semantic evaluation method is a good method to get a quality measure of the 
 
 \subsection{Visual Clusters}
 
+\begin{enumerate}
+\item Already quite good results, with precision and recall both > 80\%
+\item This means our algorithm is good in putting images a human considers visually different into different visual clusters
+\item We tested initially on 883 images and got 23 clusters, which may be quite a lot for humans, since it may be hard to think of more than 10 different clusters of color and "edginess" combinations. Number of clusters is determined by "rule of thumb"
+\item Good thing: our algorithm is intended to run on smaller image sets, since these are already semantically pre-clustered.
+\item When preforming analysis on smaller subset with 100 images (still quite big, our sets are rather 10-20 images! but then we have to little reference id tuples in test set) the precision went up to an astonishing > 87\%! 
+\item The 100 images were clustered into 7 clusters. That's great, because for a human it may be easier to differentiate between these clusters (=> the one may be black and white with hard edges, the other rather bluish with smooth curves). Naturally this way, it is more likely that images our test set users considered different wind up in the same visual cluster (since there are fewer, they are less fine grained)
+\item This way the recall went "down" to 82\%, which still is a very good value!
+\item Clustering is always a difficult task for humans: It's easy to compare two images and say if they are similar or not, but it's hard to draw a border (1 is equal to 2, 2 to 3, 3 to 4. But 1 is not equal to 4. where to draw the line?) – also true for semantic clustering
+\item Since it is likely to be easier for users to understand the now fewer clusters (the borders / differences between the clusters), this recall dip is acceptable
+\item We're awesome! :)
+\end{enumerate}
+
+
+\iffalse{deprecated}
 The visual clusters are also difficult to evaluate in isolation, because we chose our approach for the use case of refining the semantic clusters. The method was explicitly designed to build subclusters on small image sets (about 5 to 50 images). As stated in section \ref{sec_qualityindicators}, the lack of comparison data rendered it impossible to perform the evaluation on the previously calculated semantic clusters.
 \begin{enumerate}
 \item it's also hard for humans to differentiate more than ...7?... visual clusters based on color and edginess, if we now have > 20 visual clusters, some might be quite similar for humans => many false negatives
@@ -38,3 +53,4 @@ The visual clusters are also difficult to evaluate in isolation, because we chos
 \item users may have quite different opinions on when two images are regarded to be visually similar
 \item testset generation always showed two images and asked "similar or not", there was no way to say two images are more similar than two others (which may still be sort of similar)
 \end{enumerate}
+\fi
