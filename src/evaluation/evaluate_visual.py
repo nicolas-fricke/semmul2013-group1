@@ -178,26 +178,27 @@ def main(args):
     visually_similar_tuples, visually_different_tuples = retrieveTestsetResults(args.database_file)
   
     print_status("Comparing clusters to testset... \n")
-  
-    print_status("Starting with visually similar tuples... \n")
+
+    true_negatives  = 0
+    false_positives = 0
     true_positives  = 0
     false_negatives = 0
+
+    print_status("Starting with visually similar tuples... \n")
     for id_tuple in visually_similar_tuples:
       if both_ids_are_found(id_tuple, visual_clusters):
         if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-          true_positives += 1
+          true_negatives += 1
         else:
-          false_negatives += 1
+          false_positives += 1
   
     print_status("Now checking different image tuples... \n")
-    true_negatives  = 0
-    false_positives = 0
     for id_tuple in visually_different_tuples:
       if both_ids_are_found(id_tuple, visual_clusters):
         if one_cluster_contains_both_ids(id_tuple, visual_clusters):
-          false_positives += 1
+          false_negatives += 1
         else:
-          true_negatives += 1
+          true_positives += 1
 
     true_positives_total.append(true_positives)
     false_negatives_total.append(false_negatives)
@@ -216,10 +217,10 @@ def main(args):
   sys.stdout.write("Testset contains %5d visually similar   image tuples \n" % len(visually_similar_tuples))
   sys.stdout.write("And there are    %5d visually different image tuples \n\n" % len(visually_different_tuples))
 
-  sys.stdout.write("Similar   images, average true  positives: %f \n"   % average_true_positives)
-  sys.stdout.write("Similar   images, average false negatives: %f \n"   % average_false_negatives)
-  sys.stdout.write("Different images, average true  negatives: %f \n"   % average_true_negatives)
-  sys.stdout.write("Different images, average false positives: %f \n\n" % average_false_positives)
+  sys.stdout.write("Average true  positives: %f \n"   % average_true_positives)
+  sys.stdout.write("Average false negatives: %f \n"   % average_false_negatives)
+  sys.stdout.write("Average true  negatives: %f \n"   % average_true_negatives)
+  sys.stdout.write("Average false positives: %f \n\n" % average_false_positives)
 
   sys.stdout.write("Precision: %f (tp / (tp + fp))\n" % precision)
   sys.stdout.write("Recall:    %f (tp / (tp + fn))\n" % recall)
