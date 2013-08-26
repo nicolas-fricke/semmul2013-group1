@@ -71,7 +71,7 @@
     for (mclClusterName in dict) {
       mclCluster = dict[mclClusterName];
       $("#cluster-detail-popup > .modal-body").append("<div class='mcl-cluster'></div>");
-      $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='mcl-synsets-label pull-right'>" + mclClusterLabels[mclClusterName] + "</div>");
+      $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='mcl-synsets-label'><h4>Most dominant tags:</h4> <p class='mcl-dominant-lables'>" + mclClusterLabels[mclClusterName] + "</p></div>");
       for (visualClusterName in mclCluster) {
         visualCluster = mclCluster[visualClusterName];
         $("#cluster-detail-popup > .modal-body > .mcl-cluster:last-child").append("<div class='visual-cluster pull-left'></div>");
@@ -144,6 +144,7 @@
     });
     $('#loading-popup').modal('hide');
     $('#cluster-detail-popup').modal('hide');
+    $("#results").css('minHeight', $(window).height() - $("footer").outerHeight(true) - $("#main-navigation").height());
     bindFunctions();
     $("#input-searchterm").focus();
     setResultsMinHeight();
