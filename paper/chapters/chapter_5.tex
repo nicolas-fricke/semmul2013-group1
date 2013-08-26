@@ -93,9 +93,9 @@ Varying the parameters most strongly influences the amount of the closeness meas
 
 \subsubsection*{Visual Clustering}
 
-The 883 images, which our algorithm retrieves for the search term ``food'', and which users voted to contain food, were clustered into 21 visual clusters (see chapter \ref{sec_visualclustering}). After 10 passes, we gain a precision of 18.6\% with a recall of 8.1\%. The F-Measure is 11.2\%.
+The 883 images, which our algorithm retrieves for the search term ``food'', and which users voted to contain food, were clustered into 21 visual clusters (see chapter \ref{sec_visualclustering}). After 10 passes, we gain a precision of 84.7\% with a recall of 93.5\%. The F-Measure is 88.9\%.
 
-Since, our visual clustering algorithm is supposed to be performed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. We did a second measurement with 100 randomly picked images which were then clustered 100 times into 7 buckets. Here, we could achieve a recall of 24.1\% with only a little dip in the precision (16.8\%). The F-Measure was raised to 19.8\%.
+Since, our visual clustering algorithm is supposed to be performed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. We did a second measurement with 100 randomly picked images which were then clustered 100 times into 7 buckets. Here, we could achieve a precision of 87.9\% with a little dip in the recall (82.2\%). The F-Measure was raised to 84.9\%.
 
 
 \iffalse{begin comment}
@@ -105,27 +105,27 @@ Analysis data:
   Testset contains  1841 visually similar   image tuples
   And there are    10894 visually different image tuples
 
-  Similar   images, average true  positives: 3.140000
-  Similar   images, average false negatives: 9.860000
-  Different images, average true  negatives: 71.490000
-  Different images, average false positives: 15.510000
+  Similar   images, average true  negatives: 3.140000
+  Similar   images, average false positives: 9.860000
+  Different images, average true  positives: 71.490000
+  Different images, average false negatives: 15.510000
 
-  Precision: 0.168365 (tp / (tp + fp))
-  Recall:    0.241538 (tp / (tp + fn))
-  F-Measure: 0.198420 (2 * (p * r / (p + r)))
+  Precision: 0.878795 (tp / (tp + fp)) = 71.49/81.35
+  Recall:    0.821724 (tp / (tp + fn))
+  F-Measure: 0.849302 (2 * (p * r / (p + r)))
 
 all 883 images, 21 visual clusters (average over 10x):
   Testset contains  1841 visually similar   image tuples
   And there are    10894 visually different image tuples
 
-  Similar   images, average true  positives: 95.800000
-  Similar   images, average false negatives: 1086.200000
-  Different images, average true  negatives: 6012.100000
-  Different images, average false positives: 417.900000
+  Similar   images, average true  negatives: 95.800000
+  Similar   images, average false positives: 1086.200000
+  Different images, average true  positives: 6012.100000
+  Different images, average false negatives: 417.900000
 
-  Precision: 0.186490 (tp / (tp + fp))
-  Recall:    0.081049 (tp / (tp + fn))
-  F-Measure: 0.112992 (2 * (p * r / (p + r)))
+  Precision: 0.846977 (tp / (tp + fp))
+  Recall:    0.935008 (tp / (tp + fn))
+  F-Measure: 0.888818 (2 * (p * r / (p + r)))
 \fi
 
 
