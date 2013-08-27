@@ -32,7 +32,7 @@ We include the keyword clustering in this evaluation by handling the clusters in
 \bigskip
 As described in chapter \ref{sec_visualclustering}, we divide the already formed semantic clusters again into smaller visual clusters.
 To test the performance of this visual subclustering (\emph{3.}), we compared the results of our algorithm again to the test set from the second phase of the crowdsourced generation.
-We calculate precision and recall as measurements of how good our algorithm divides the images into different visual clusters if they are marked as \emph{visually not similar} in our test set.
+Precision and recall are calculated by analysing how many images, which are annotated as \emph{visually not similar}, are actually separated in different visual clusters.
 The test set contains 10,894 associations annotated as \emph{visually not similar} and 1,841 as \emph{visually similar} annotated image pairs.
 Since there are approximately 1.3 million possible combinations between two images within the images annotated as food, this is an approximate 1\% coverage, meaning we know only for every 100th combination, if or if not it is considered visually similar.
 Therefore, it was not possible to gain any valuable information on the subclustering we do within the semantic clusters.
