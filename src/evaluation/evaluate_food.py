@@ -1,3 +1,15 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+#########################################################################################
+# Evaluates the image retrieval
+#
+# usage: python evaluate_food.py --database-file <Path to the database file (phase 1)>
+#
+# authors: Nicolas Fricke, Tino Junge
+# mail: nicolas.fricke@student.hpi.uni-potsdam.de, tino.junge@student.hpi.uni-potsdam.de
+#########################################################################################
+
 import sys
 from sets import Set
 import sqlite3

@@ -1,3 +1,14 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+#########################################################################################
+# Evaluates the semantic clustering
+#
+# usage: python evaluate_tree.py --database-file <Path to the database file (phase 2)>
+# authors: Nicolas Fricke
+# mail: nicolas.fricke@student.hpi.uni-potsdam.de
+#########################################################################################
+
 import sys
 import sqlite3
 import json
@@ -217,6 +228,6 @@ def main(args):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Frontend for the Flickr image similarity evaluation programm')
-  parser.add_argument('-d','--database-file', help='Path to the database file (phase 1)', required=True)
+  parser.add_argument('-d','--database-file', help='Path to the database file (phase 2)', required=True)
   args = parser.parse_args()
   main(args)

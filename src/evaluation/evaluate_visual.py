@@ -1,3 +1,16 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+#########################################################################################
+# Evaluates the visual clustering
+#
+# usage: python evaluate_visual.py --database-file <Path to the database file (phase 2)>
+#                                  --food-id-file <Path to the json file with for food-annotated images>
+# authors: Nicolas Fricke
+# mail: nicolas.fricke@student.hpi.uni-potsdam.de
+#########################################################################################
+#
+
 import sys
 import sqlite3
 import json
