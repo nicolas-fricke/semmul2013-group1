@@ -17,14 +17,12 @@ Within this work we described a new approach to cluster images in homogeneous gr
 The approach is a combination of algorithms which have not yet been combined in this way. Our aim was to retrieve training data for semantic image analysis. However, this work is only a starting point. Our tool permits a general differentiation of images. During our evaluation, we found out that, especially in the semantic analysis, challenges still exist concerning evaluation and level of granularity.
 
 \subsection{Semantic}
-To continue our work, there are several points of action. One main issue is the fact that our keyword clusters are of different levels of abstraction. Some clusters are too large, and could be separated, and others are too small, and should be merged. Another challenge is the correct synset detection. Additionally to title and tags, groups and albums could be used for semantic clustering. With the help of named-entity recognition, the description can be also valuable. As alternative to WordNet, it could be possible to use DBpedia \footnote{http://dbpedia.org/About}. Probably, even a combination can be helpful.
+To continue our work, there are several points of action. One main issue is the fact that our keyword clusters are of different levels of abstraction. Some clusters are too large, and could be separated, and others are too small, and should be merged. Another challenge is the correct synset detection. Additionally more meta information could be used for semantic clustering, like \emph{groups} and \emph{albums}. With the help of named-entity recognition, the \emph{description} can be also valuable. As alternative to WordNet, it could be possible to use DBpedia\footnote{http://dbpedia.org/About}. Probably, even a combination can be helpful.
 
-use more or other WordNet relations\\
+use more or other WordNet relations
 
 \subsection{Visuals}
 
-Because of the challenges in semantic clustering, our visual clustering remains on a basic level. Therefore, further improvements are feasible in the extraction of visual features. The usage of high level features for visual clustering could lead to an improvement, but the risk exists that clustering results are no longer intuitive. 
+Because of the challenges in semantic clustering, our visual clustering remains on a basic level. Therefore, further improvements are feasible in the extraction of visual features. The usage of high level features for visual clustering could lead to better results, but the risk exists that clustering results are no longer intuitive. 
 
-\bigskip
-- adaptive k?
-- late fusion?
+Another point of action is the calculation of the number of clusters for k-means. A basic adaptive k algorithm does not increment the quality of our algorithm, but a new abort criterion could be an improvement. Additional enhancements can be achieved by using a more sophisticated approach for late fusion, like ... 
