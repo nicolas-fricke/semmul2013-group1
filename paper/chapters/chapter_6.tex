@@ -18,7 +18,7 @@ And third, the assumption that tags on the same picture are semantically close d
 The first two reasons can be addressed by using a more sophisticated ontology and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
 
 \bigskip
-The evaluation also shows the effectiveness of an additional semantic clustering via keyword clusters for the image retrieval. One assumption was, that if only few pictures are assigned to the same keyword cluster, they can be declared as outliers and therefore be deleted from the retrieval result. The parameter \emph{minimal mcl cluster size} determines which clusters are deleted. The results show that increasing the \emph{minimal mcl cluster size} parameter in fact also increases the F-Measure. The best results are achieved if the \emph{minimal mcl cluster size} is greater than \emph{minimal node size}. That means deleting pictures is more effective than merging with parent node.
+The evaluation also indicates the effectiveness of an additional semantic clustering via keyword clusters for the image retrieval. One assumption was, that if only few pictures are assigned to the same keyword cluster, they can be declared as outliers and therefore be deleted from the retrieval result. The parameter \emph{minimal mcl cluster size} determines which clusters are deleted. The results show that increasing the \emph{minimal mcl cluster size} parameter in fact also increases the F-Measure. The best results are achieved if the \emph{minimal mcl cluster size} is greater than \emph{minimal node size}. That means deleting pictures is more effective than merging with parent node.
 
 \subsection{Semantic Clusters}	
 The closeness of nodes shows, that images, which were annotated as semantically similar, are in the tree closer to each other than as semantically not similar annotated ones. However, all values are rather close to average tree distance. Furthermore, the varying of parameters influences only the average tree distance, not the difference between distances. In our opinion, pictures, annotated as showing same object, should at least be in the same node, which means closeness should have value greater than 0.5. Images with same context should be in the same cluster, therefore, closeness should be 1. Unfortunately the results are best with other parameters than for a good image retrieval.
@@ -31,26 +31,22 @@ Our semantic evaluation method is a good method to get a quality measure of the 
 
 \subsection{Visual Clusters}
 
+The visual clustering shows good results in the evaluation, i.e. the clustering puts images a human considers visually different in the majority of cases into different visual clusters. Yet, in the case of 883 images, our algorithm separates the pictures in 23 different clusters, which may be a lot for humans to differentiate. Fortunately, the visual clustering is intended to run on smaller image sets, since the image sets are already semantically pre-clustered. 
+
+\bigskip
+When performing the analysis on a smaller subset with 100 images, the precision went up to 87\%. Additionally, the images were clustered in only 7 clusters. But, the recall fell to 82.2\%, because less clusters lead to less differentiation. \todo{one sentence why falling recall not bad, see last point in notes}
+
+\iffalse{deprecated}
 \begin{enumerate}
 \item Already quite good results, with precision and recall both > 80\%
 \item This means our algorithm is good in putting images a human considers visually different into different visual clusters
 \item We tested initially on 883 images and got 23 clusters, which may be quite a lot for humans, since it may be hard to think of more than 10 different clusters of color and "edginess" combinations. Number of clusters is determined by "rule of thumb"
 \item Good thing: our algorithm is intended to run on smaller image sets, since these are already semantically pre-clustered.
-\item When preforming analysis on smaller subset with 100 images (still quite big, our sets are rather 10-20 images! but then we have to little reference id tuples in test set) the precision went up to an astonishing > 87\%!
+\item When performing analysis on smaller subset with 100 images (still quite big, our sets are rather 10-20 images! but then we have to little reference id tuples in test set) the precision went up to an astonishing > 87\%!
 \item The 100 images were clustered into 7 clusters. That's great, because for a human it may be easier to differentiate between these clusters (=> the one may be black and white with hard edges, the other rather bluish with smooth curves). Naturally this way, it is more likely that images our test set users considered different wind up in the same visual cluster (since there are fewer, they are less fine grained)
 \item This way the recall went "down" to 82\%, which still is a very good value!
 \item Clustering is always a difficult task for humans: It's easy to compare two images and say if they are similar or not, but it's hard to draw a border (1 is equal to 2, 2 to 3, 3 to 4. But 1 is not equal to 4. where to draw the line?) - also true for semantic clustering
 \item Since it is likely to be easier for users to understand the now fewer clusters (the borders / differences between the clusters), this recall dip is acceptable
 \item We're awesome! :)
-\end{enumerate}
-
-
-\iffalse{deprecated}
-The visual clusters are also difficult to evaluate in isolation, because we chose our approach for the use case of refining the semantic clusters. The method was explicitly designed to build subclusters on small image sets (about 5 to 50 images). As stated in section \ref{sec_qualityindicators}, the lack of comparison data rendered it impossible to perform the evaluation on the previously calculated semantic clusters.
-\begin{enumerate}
-\item it's also hard for humans to differentiate more than ...7?... visual clusters based on color and edginess, if we now have > 20 visual clusters, some might be quite similar for humans => many false negatives
-\item we still only have few votes on visually similar images, the percentage of not similar votes outnumbers the similar votes by almost factor 10. this way, we have few hits for true positives.
-\item users may have quite different opinions on when two images are regarded to be visually similar
-\item testset generation always showed two images and asked "similar or not", there was no way to say two images are more similar than two others (which may still be sort of similar)
 \end{enumerate}
 \fi
