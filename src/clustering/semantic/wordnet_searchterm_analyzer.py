@@ -45,10 +45,6 @@ class WordnetNode:
   def has_pictures(self):
     return isinstance(self.associated_pictures, list) and len(self.associated_pictures) > 0
 
-class WordnetNodeJSONEncoder(JSONEncoder):
-  def default(self, o):
-    return o.__dict__
-
 def parse_command_line_arguments(argv):
 	####### Reading Commandline arguments ########
 
@@ -196,10 +192,6 @@ def count_tree_nodes(wordnet_node_list):
 def main(argv):
 	####### Reading Commandline arguments ########
 	word = parse_command_line_arguments(argv)
-
-  #config = ConfigParser.SafeConfigParser()
-  #config.read('../config.cfg')
-  #synset_tag_tf_idf_dict_filename = config.get('Filenames for Pickles', 'synset-tag-cooccurrence-dict')
 
   ####### WordNet Search #######
 	print_status("Running WordNet Search for %s... " % word)

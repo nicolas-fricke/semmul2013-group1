@@ -1,3 +1,14 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+######################################################################################
+#
+# Assigns Synsets to images according to title and tags, uses a naive approach
+#
+# authors: tino junge, claudia exeler
+# mail: {tino.junge claudia.exeler}@student.hpi.uni-potsdam.de
+######################################################################################
+
 import ConfigParser
 import json
 from nltk.corpus import wordnet as wn

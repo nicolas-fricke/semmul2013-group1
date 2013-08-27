@@ -61,8 +61,8 @@ $ vim config.cfg
 $ cd src/
 $ export PYTHONPATH=$PYTHONPATH:`pwd`
 
-$ python clustering/semantic/preprocess_synsets_for_pictures.py # can be processed in parallel by using parameter -d
-$ python clustering/semantic/preprocess_keyword_cluster.py
+$ python clustering/semantic/preprocess_synset_detection_bestfirstsearch.py # can be processed in parallel by using parameter -d
+$ python clustering/semantic/preprocess_keyword_clusters.py
 $ python clustering/visual/preprocess_visual_features.py # can be processed in parallel by using parameter -d
 $ python frontend/frontend.py
 ```

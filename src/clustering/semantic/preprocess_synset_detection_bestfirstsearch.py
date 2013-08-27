@@ -1,3 +1,17 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+######################################################################################
+#
+# Assigns Synsets to images according to title and tags, uses best-first-search
+#
+# usage: python preprocess_synset_detection_bestfirstsearch.py
+#                   --directory_to_preprocess <directory to preprocess>
+#
+# authors: tino junge, claudia exeler
+# mail: {tino.junge claudia.exeler}@student.hpi.uni-potsdam.de
+######################################################################################
+
 import argparse
 import ConfigParser
 import json

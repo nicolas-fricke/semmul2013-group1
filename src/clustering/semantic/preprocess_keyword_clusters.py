@@ -4,6 +4,8 @@
 #########################################################################################
 # Create picture and synset/tag dictionaries and write them on disk
 #
+# usage: python preprocess_keyword_clusters.py
+#
 # filename -> list(synsets) list(tags) url
 # synset -> list(filename,url)
 # tag -> list(filename,url)
@@ -23,7 +25,7 @@ import gc
 from helpers.general_helpers import *
 
 from clustering.semantic.co_occurrence_detection import create_unmatched_tag_tf_idf_dict
-from clustering.semantic.synset_detection_bestfirstsearch import *
+from clustering.semantic.preprocess_synset_detection_bestfirstsearch import *
 from clustering.semantic.mcl_keyword_clustering import keyword_clustering_via_mcl, sorted_cluster_representatives
 
 def create_inverse_keywords_for_pictures_dict(keywords_for_pictures):
