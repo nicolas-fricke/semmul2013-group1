@@ -30,8 +30,11 @@ def load_object(filename):
 def find_metajsons_to_process(metadata_path):
   return find_metajsons_to_process_in_dir(metadata_path + '/*/*')
 
-def find_metajsons_to_process_in_dir(metatdata_dir):
-  return glob(metatdata_dir + '/*[0-9].json')
+def find_metajsons_to_process_in_dir(metadata_dir):
+  return glob(metadata_dir + '/*[0-9].json')
+
+def find_jsons_in_dir(data_dir):
+  return glob(data_dir + '/*.json')
 
 def write_json_file(obj, filename):
   with open(filename, 'w') as output:

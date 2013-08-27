@@ -57,7 +57,7 @@ def main():
 
   print_status("Collecting keywords_for_pictures... ")
   keywords_for_pictures_all = dict()
-  for keywords_for_pictures_json in find_metajsons_to_process_in_dir(keywords_for_pictures_dir):
+  for keywords_for_pictures_json in find_jsons_in_dir(keywords_for_pictures_dir):
     keywords_for_pictures = parse_json_file(keywords_for_pictures_json)
     keywords_for_pictures_all.update(keywords_for_pictures)
   print "Done."
