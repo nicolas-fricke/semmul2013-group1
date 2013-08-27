@@ -9,6 +9,7 @@ Since semantics are more meaningful to humans, and thus likely to be more import
 This approach has the additional advantage that outlier images, which have been assigned to a node but do not quite fit with the others because they show something different, can be filtered out in the semantic step. \\
 The subclustering explained below and summarized in figure \ref{fig_semanticandvisual} will only take place for nodes/clusters with a certain minimum size and results in the structure of three nested Arrays of the WordnetNode class' attribute \emph{subclusters} shown in figure \ref{fig_nodestructure}.
 
+\todo{add Search Term to graphic}
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/semantic_and_visual_clustering.pdf}
@@ -32,7 +33,7 @@ Semantic clustering is accomplished by using the associated Synsets which the Sy
 
 \bigskip
 The paper ``Automated Tag Clustering'' by Grigory Begelman \cite{begelman2006automated} presents an algorithm for tag clustering based on graph clustering. It uses co-occurrences of tags to span a graph whose nodes represent tags and whose edges represent co-occurrences. We adapt the algorithm to include the advantages of WordNet. That is why, we replace the number of co-occurrences by a combination of co-occurrences and LCH-Similarity\index{LCH-Similarity}.
-A disadvantage of this algorithm is the graph clustering via eigenvalues and eigenvectors that is expensive for large graphs. Furthermore, this algorithm does not take edge weighting into account. 
+A disadvantage of this algorithm is the graph clustering via eigenvalues and eigenvectors that is expensive for large graphs. Furthermore, this algorithm does not take edge weighting into account.
 
 Consequently, we replace the graph clustering algorithm by the Markov Cluster Algorithm (MCL)\index{Markov Cluster Algorithm} introduced by Dongen \cite{Dongen1998}. MCL is based on the Random Walk Model \cite{spitzer2001principles}. The basic idea is, if you start to walk from a node, it is more likely to stay inside a cluster than to leave it. Therefore, we calculate the probability to reach a node $B$ from another node $A$ in only one step. Then, we walk steps through the graph until the probabilities converge. The resulting probabilities inside a cluster are higher than outside. So, they can be used to determine groups of related Synsets.
 
