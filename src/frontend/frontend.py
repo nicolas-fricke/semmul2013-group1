@@ -26,9 +26,6 @@ app = Flask(__name__)
 assets = Environment(app)
 
 # Loading preprocessed features on startup
-print_status("Loading visual_features from file... ")
-visual_features = load_visual_features()
-print "Done."
 print_status("Loading cluster_for_synsets from mcl_clusters file... ")
 cluster_for_synsets = load_cluster_for_synsets()
 print "Done."
@@ -77,7 +74,6 @@ def search(searchterm):
                           mcl_clustering_threshold=4,
                           minimal_mcl_cluster_size=6,
                           minimal_node_size=4,
-                          visual_features=visual_features,
                           cluster_for_synsets=cluster_for_synsets,
                           keywords_for_pictures=keywords_for_pictures,
                           cluster_representatives=cluster_representatives)

@@ -88,7 +88,7 @@ def get_clusters(search_term, use_meronyms=True, visual_clustering_threshold=2, 
                                                minimal_mcl_cluster_size, cluster_for_synsets, 
                                                keywords_for_pictures, cluster_representatives)
     print "Done.\n"
-    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold, visual_features))
+    result_trees.append(cluster_visually(mcl_clustered_searchtree, visual_clustering_threshold))
 
   return result_trees
 

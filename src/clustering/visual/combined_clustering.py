@@ -167,3 +167,82 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
       cluster_visually(child_meronym_node, visual_clustering_threshold, visual_features)
 
   return tree_node
+
+
+def parse_command_line_arguments():
+  parser = argparse.ArgumentParser(description='ADD DESCRIPTION TEXT.')
+  parser.add_argument('-p','--preprocessed', dest='use_preprocessed_data', action='store_true',
+                   help='If specified, use preprocessed image data, otherwise download and process images and save values to file for next use')
+  parser.add_argument('-d','--directory_to_preprocess', dest='directory_to_preprocess', type=str,
+                      help='Specifies the directory which we want to preprocess')
+  parser.add_argument('-r','--read_images_from_disk', dest='read_images_from_disk', action='store_true',
+                      help='Specifies whether image files should be read from disk rather than downloaded from flickr, specify image path in config file')
+  args = parser.parse_args()
+  return args
+
+
+def main(argv):
+  arguments = parse_command_line_arguments()
+
+  print_status("Use preprocessed data: " + str(arguments.use_preprocessed_data) + "\n\n")
+
+  # import configuration
+  config = ConfigParser.SafeConfigParser()
+  config.read('../config.cfg')
+  #color_and_edge_features_filename = config.get('Filenames for Pickles', 'color_and_edge_features_filename')
+  visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
+  downloaded_images_dir = config.get('Directories', 'downloaded-images-dir')
+
+  if not arguments.use_preprocessed_data:
+
+    metadata_dir = config.get('Directories', 'metadata-dir')
+    if arguments.directory_to_preprocess:
+      metadata_dir += arguments.directory_to_preprocess
+      metajson_files = find_metajsons_to_process_in_dir(metadata_dir)
+      visual_features_filename = visual_features_filename.replace('##', arguments.directory_to_preprocess.split(os.sep)[-1])
+    else:
+      metajson_files = find_metajsons_to_process(metadata_dir)
+      visual_features_filename = visual_features_filename.replace('##', 'all')
+
+    print_status("Reading metadata files, loading images and calculating color and edge histograms.... \n")
+    images = {}
+    for metajson_file_path in metajson_files:
+
+      metadata = parse_json_file(metajson_file_path)
+      if metadata == None:
+        print "Could not read json file %s" % metajson_file_path
+        continue
+
+      print_status("ID: " + metadata["id"] + " File number: " + metajson_file_path + "\n")
+      if metadata["stat"] == "ok":
+        #if not tag_is_present("car", metadata["metadata"]["info"]["tags"]["tag"]):
+        #  continue
+        data = {}
+        url      = get_small_image_url(metadata)
+        image_id = metadata["id"]
+        data["file_path"] = metajson_file_path.split(os.sep)[-1]
+        data["url"]       = url
+
+        try:
+          if arguments.read_images_from_disk:
+            image_filename = metajson_file_path.split(os.sep)[-1].replace('.json', '.jpg')
+            image_path = downloaded_images_dir + os.sep + image_filename
+            image = Image(image_path).toHSV()
+          else:
+            image = Image(url).toHSV()
+        except Exception:
+          print "Could not get image:", metadata["id"]
+          continue
+
+        data = extract_colors(image, data, 5)
+        data = extract_edges(image, data, 5)
+        images[image_id] = data
+
+      else:
+        print "Status was not ok:", metadata["id"]
+
+    print "Done."
+    write_json_file(images, visual_features_filename)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
