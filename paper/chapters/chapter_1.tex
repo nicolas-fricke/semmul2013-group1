@@ -8,14 +8,13 @@ Although folksonomies can be good sources for training data due to the semantic 
 This work presents a tool whose main aim is to create homogeneous groups of semantically and visually similar pictures for a given topic in order to aid with the laborious assembly of training and test data sets. The main challenges encountered were homonymy\index{Homonymy} of keywords (the fact that one word can have multiple meanings), low quality of tags and other annotations, and the consideration of both semantic and visual information about a picture.
 
 \subsection{Clustered Tree Nodes Approach}
-The tool has been implemented as a Python web application, using WordNet\footnote{http://wordnet.princeton.edu/} for semantic image analysis, SimpleCV\footnote{http://www.simplecv.org/} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} together with Bootstrap\footnote{http://getbootstrap.com/} for the frontend presentation.\\
+The tool has been implemented as a Python web application, using WordNet\footnote{http://wordnet.princeton.edu/} for semantic image analysis, SimpleCV\footnote{http://www.simplecv.org/} for visual image analysis and Flask\footnote{http://flask.pocoo.org/} together with Bootstrap\footnote{http://getbootstrap.com/} for the frontend presentation. \\
 \begin{figure}[h]
 \centering
 \includegraphics[]{images/search_process_highlevel.pdf}
 \caption{The two main phases of the clustered image search}
 \label{fig_overallprocess}
 \end{figure}
-
 It provides ready-to-use semantically and visually homogeneous image clusters for a given topic, or search term. This is achieved by 2 major phases: First, spanning a tree of subordinate terms of the topic and retrieving related images by their keywords for each node of the tree. Second, clustering the images by their predominant keywords as well as by colors and edge structure. The following figure \ref{fig_overallprocess} illustrates these two main phases of the tool.
 
 \subsection{Web Interface}
@@ -37,7 +36,6 @@ Hyponyms of each node will then be rendered as sub nodes.
 This continues, until no more hyponyms can be found.
 As figure \ref{fig_webinerface_1}.2 shows, this hierarchy can then also be seen when hovering over the image rows.
 For each row, the users now see a preview of the images found for this particular meaning of their search term (\ref{fig_webinerface_1}.3). \\
-
 If one search term now strikes the user's attention, they can get detailed information by clicking on the images.
 Figure \ref{fig_webinerface_2} shows the \emph{details view}, where the definition of the particular hyponym can be found (\ref{fig_webinerface_2}.1).
 In the details view, the images now appear in more fine grained clusters.
