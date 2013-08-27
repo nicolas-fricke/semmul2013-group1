@@ -5,9 +5,6 @@
 #
 # Coordinate construction of searchtree as well as search and clustering of pictures
 #
-#
-# authors:
-# mail:
 ######################################################################################
 
 from clustering.semantic.wordnet_searchterm_analyzer import *

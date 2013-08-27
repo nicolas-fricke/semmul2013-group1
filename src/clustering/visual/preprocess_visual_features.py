@@ -6,8 +6,11 @@
 # Preprocess all the given pictures' visual features and write them into the 
 #  pictures' json-file
 #
+# usage: python preprocess_visual_features.py
+#               --directory_to_preprocess <directory which should be preprocessed>
+#               --read_images_from_disk <if set, read images from directory instead of redownload from flickr>
 #
-# authors: andy.roick
+# authors: Mandy Roick
 # mail: mandy.roick@student.hpi.uni-potsdam.de
 ######################################################################################
 
