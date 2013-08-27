@@ -31,7 +31,7 @@ def find_metajsons_to_process(metadata_path):
   return find_metajsons_to_process_in_dir(metadata_path + '/*/*')
 
 def find_metajsons_to_process_in_dir(metatdata_dir):
-  return glob(metatdata_dir + '/*.json')
+  return glob(metatdata_dir + '/*[0-9].json')
 
 def write_json_file(obj, filename):
   with open(filename, 'w') as output:
