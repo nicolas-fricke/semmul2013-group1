@@ -67,4 +67,5 @@ $ python clustering/semantic/preprocess_synset_detection_bestfirstsearch.py # ca
 $ python clustering/semantic/preprocess_keyword_clusters.py
 $ python clustering/visual/preprocess_visual_features.py # can be processed in parallel by using parameter -d
 $ python frontend/frontend.py
+# now start a browser (preferably google chrome) and browse to localhost:5000
 ```
