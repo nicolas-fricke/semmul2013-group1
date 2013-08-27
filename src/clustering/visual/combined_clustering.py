@@ -43,22 +43,24 @@ def extract_features(image_cluster, metadata_dir):
   return images
 
 # Reading preprocessed visual features from file
-def read_features_from_file(cluster, features_json_filename, metadata_dir):
+def read_features_from_file(cluster, metadata_dir):
   images = []
-  features_json_file = parse_json_file(features_json_filename)
-  if features_json_file == None:
-    return images
+
   for picture_json_filename, _ in cluster:
     relative_path_to_json = construct_path_to_json(picture_json_filename)
     full_path_to_json = metadata_dir + relative_path_to_json
-    picture_json_file = parse_json_file(full_path_to_json)
-    if picture_json_file == None:
+    metadata_json = parse_json_file(full_path_to_json)
+    visual_features_json = parse_json_file(full_path_to_json.replace(".json", "_visual.json"))
+    if metadata_json == None or visual_features_json == None:
       continue
 
-    if picture_json_file["stat"] == "ok":
+    if metadata_json["stat"] == "ok":
       try:
-        data = features_json_file[picture_json_file["id"]]
-        data["image_id"] = picture_json_file["id"]
+        data = {}
+        data.update(visual_features_json)
+        data["image_id"] = metadata_json["id"]
+        data["file_path"] = picture_json_filename
+        data["url"]       = get_small_image_url(metadata_json)
         images.append(data)
       except KeyError:
         continue
@@ -126,30 +128,21 @@ def cluster_by_features(images):
   return clusters
 
 
-def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=None):
+def cluster_visually(tree_node, visual_clustering_threshold=8):
   config = ConfigParser.SafeConfigParser()
   config.read('../config.cfg')
   metadata_dir = config.get('Directories', 'metadata-dir')
-  if visual_features == None:
-    visual_features_filename = config.get('Filenames for Pickles', 'visual_features_filename')
-    visual_features_filename = visual_features_filename.replace('##', 'all')
 
   new_subclusters = []
   for representatives_and_cluster_dict in tree_node.subclusters:
     cluster = representatives_and_cluster_dict["subcluster"]
     if len(cluster) >= visual_clustering_threshold:
-      if visual_features == None:
-        print_status("Reading visual features (colors and edges) from file.... ")
-        images = read_features_from_file(cluster, visual_features_filename, metadata_dir)
-        # print_status("Extracting visual features (colors and edges) from images.... ")
-        # images = extract_features(cluster, metadata_dir)
-      else:
-        print_status("Assign visual features (colors and edges).... ")
-        images = assign_visual_features(cluster, visual_features, metadata_dir)
+      print_status("Reading visual features (colors and edges) from file.... ")
+      images_data = read_features_from_file(cluster, metadata_dir)
       print "Done.\n"
 
       print_status("Clustering images by visual features via k-means algorithm.... ")
-      clusters = cluster_by_features(images)
+      clusters = cluster_by_features(images_data)
       representatives_and_cluster_dict["subcluster"] = clusters.values()
       print "Done. %d subclusters for " % len(clusters), tree_node.name
     else:
@@ -161,9 +154,9 @@ def cluster_visually(tree_node, visual_clustering_threshold=8, visual_features=N
 
   if tree_node.has_hyponyms():
     for child_hyponym_node in tree_node.hyponyms:
-      cluster_visually(child_hyponym_node, visual_clustering_threshold, visual_features)
+      cluster_visually(child_hyponym_node, visual_clustering_threshold)
   if tree_node.has_meronyms():
     for child_meronym_node in tree_node.meronyms:
-      cluster_visually(child_meronym_node, visual_clustering_threshold, visual_features)
+      cluster_visually(child_meronym_node, visual_clustering_threshold)
 
   return tree_node
