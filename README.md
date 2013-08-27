@@ -54,6 +54,8 @@ $ vim config.cfg
 #		-> folder structure should be: metadata/10-19/10/100210.json
 #	3. downloaded-images-dir: if Flickr-images are already downloaded, this is the path to the folder, where they can be found
 #	4. preprocessed-data-dir: should be the path to the folder, where preprocessed data can be stored, for example .../semmul2013-group1/data/preprocessed_data
+#	5. keywords-for-pictures-dir: should be the path to the folder, where the results of Synset detection can be stored, for example .../semmul2013-group1/data/preprocessed_data/keywords_for_pictures
+#	-> all folders have to exist before usage
 ```
 
 ### preprocessing and starting of program
