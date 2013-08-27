@@ -15,13 +15,12 @@ Current issues with tag-based search and clustering, for both documents and imag
 
 \bigskip
 There are already some approaches using WordNet for finding semantic similarities between different words.  \cite{richardson1994using} is a general introduction into the use of the WordNet knowledge base for dealing with common problems of the natural language. Without any specific use case, they identify the need for a disambiguator which automatically and correctly assign words to their WordNet meaning. Such a tool is claimed to be indispensable for all classification approaches. It is investigated how a word's meaning can be found. The presented technique spans a so-called hierarchical concept graph for a specific entity, consisting of its hyponymns and meronyms. The hierarchical concept graph is used to determine the semantic similarity between different words. \\
-The results of the presented semantic tagger are promising and support our decision to use the advantages of WordNet within our tool, e.g. to map tags of an image to their correct meaning, in relation to other tags of the image. 
+The results of the presented semantic tagger are promising and support our decision to use the advantages of WordNet within our tool, e.g. to map tags of an image to their correct meaning, in relation to other tags of the image.
 
 \bigskip
 WordNet has also been used as a foundation for a clustering technique for text documents, which is described in \cite{sedding2004wordnet}. The technique aims at solving the problem of synonymy and ambiguity of words within texts, while adding a part-of-speech tag to every word based on knowledge provided by WordNet. Their conclusion is that including synonyms and hypernyms does not improve the effectiveness of clustering, which is supposedly related to noise introduced by incorrect word interpretations when mapping terms to WordNet.
 
-\subsection{Image Annotation and Content-Based Image Retrieval}
-\todo{Refer to CBIR in the text (or remove it from the title)}
+\subsection{Automated Image Annotation}
 %% ?? http://ganges.usc.edu/pgroupW/images/6/6b/Cvm2012.pdf: detect objects and organize images based on the relations of the objects within.
 %% http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=718510: review of visual features for cbir
 
@@ -29,10 +28,11 @@ Ideas exist to use visual features to semantically analyze and classify images. 
 Often the automatic annotation of images is based on the existence of a training set of previously annotated images.  \cite{jeon2003automatic}	uses an approach to annotate images with the help of blobs generated from an image. The idea using formal information to tag images with their correct meaning differs from our basic idea to rely on the given metadata, annotated by users from Flickr.
 
 \bigskip
-Another approach is presented in \cite{wenyin2001semi}, where user feedback and automatic image annotation are combined in order to become both accurate and at the same time efficient. The idea is based on the automatic assignment of keywords for an image which receive positive user feedback. It is integrated into search mechanisms, where images that well fit to the user's query can be annotated with the query term. This is a way to face the problems which come with manual annotation (low efficiency) and automatic annotation (low accuracy). 
+Another approach is presented in \cite{wenyin2001semi}, where user feedback and automatic image annotation are combined in order to become both accurate and at the same time efficient. The idea is based on the automatic assignment of keywords for an image which receive positive user feedback. It is integrated into search mechanisms, where images that well fit to the user's query can be annotated with the query term. This is a way to face the problems which come with manual annotation (low efficiency) and automatic annotation (low accuracy).
 
 %% http://infolab.stanford.edu/~wangz/project/imsearch/review/MTA/neela.pdf: summary of semantic image interpretation; Overview of foundations
 
-\bigskip
+\subsection{Combination of Semantic and Visual Approaches}
+
 One work that has used the idea of combining semantics and visuals to analyze pictures in a so called \emph{visual folksonomy} is \cite{Lindstaedt2009}. The idea is trying to annotate images, with a controlled vocabulary, based on visual features and existing tags. Their goal, however, is to create additional annotations for not or poorly tagged images. \\
 Similar ideas are presented by \cite{cai2004hierarchical} with the aim to cluster images returned by a web image search. In contrast to pictures from a folksonomy, image search results are taken from ``regular'' web pages and connected with surrounding context and link information. This information is then used by their algorithm to cluster images and provide a more well-organized result overview.

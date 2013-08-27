@@ -45,7 +45,7 @@ Since, our clustering algorithm for visual features uses k-means which is based 
 \subsection{Results}
 \label{sec_results}
 
-\subsubsection*{Image Retrieval}
+\subsubsection{Image Retrieval}
 
 Our image retrieval has a precision of 50.2\% and recall of 85.9\% on the query ``food'', before execution of the semantic clustering that removes outliers. Without the use of co-occurring tags described in section \ref{sec_picturestonodes}, both values show no significant difference with p = 50.5\% and r = 85.4\%.
 After the semantic clustering, the measures depend on the  parameters \emph{minimal node size}, \emph{mcl clustering threshold}, and \emph{minimal mcl cluster size}, described in sections \ref{sec_picturestonodes} and \ref{sec_keywordclustering}. The results for different values of this parameters are presented in table \ref{tab_retrievalevaluation}.\\
@@ -67,7 +67,7 @@ After the semantic clustering, the measures depend on the  parameters \emph{mini
 \end{table}
 
 
-\subsubsection*{Semantic Hierarchy and Clusters}
+\subsubsection{Semantic Hierarchy and Clusters}
 
 The results of the semantic hierarchy and cluster evaluation also depend on the parameters mentioned for image retrieval. The measurements listed in table \ref{tab_treeevaluation} indicate that the best distinction between images showing the same objects and images showing different objects is achieved with low \emph{minimal mcl cluster size}, that is, without outlier removal. The other parameters' values correlate with those of the image retrieval evaluation above.\\
 
@@ -91,11 +91,11 @@ The results of the semantic hierarchy and cluster evaluation also depend on the 
 Varying the parameters most strongly influences the amount of the closeness measures, that is, all their values rise or drop somewhat consistently.
 
 
-\subsubsection*{Visual Clustering}
+\subsubsection{Visual Clustering}
 
 The 883 images, which our algorithm retrieves for the search term ``food'', and which users voted to contain food, were clustered into 21 visual clusters (see chapter \ref{sec_visualclustering}). After 10 passes, we gain an average precision of 84.7\% with a recall of 93.5\%. The F-Measure is 88.9\%.
 
-Since, our visual clustering algorithm is supposed to be processed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. We perform a second measurement with 100 randomly picked images which are then clustered 100 times into 7 buckets. Here, we can achieve a precision of 87.9\% while the recall falls to 82.2\%. The F-Measure is 84.9\%.
+Since, our visual clustering algorithm is supposed to be processed after the semantic clusters have already been formed, it is intended to be used on smaller sets of images. We perform a second measurement with 100 randomly picked images which are then clustered 100 times into 7 buckets. Here, we can achieve a precision of 87.9\% while the recall falls to 82.2\%. The F-Measure is 84.9\%. \todo{reduce to 3 pages, but not a must, we currently have 20 pages without abstract}
 
 
 \iffalse{begin comment}
