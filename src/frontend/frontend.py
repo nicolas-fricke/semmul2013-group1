@@ -1,14 +1,24 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+######################################################################################
+#
+# Starts the web frontend, based on Flask
+#
+# usage: python frontend.py
+#
+# authors: tino junge, nicolas fricke
+# mail: {tino.junge nicolas.fricke}@student.hpi.uni-potsdam.de
+######################################################################################
+
 import sys
 from flask import Flask, url_for, Response
 from flask import render_template
 from flask_assets import Environment, Bundle
 import string
-# from flask.ext.assets import Environment, Bundle
-# from flask import jsonify
 
 # import own modules
 from clustering.pipeline import get_clusters
-from clustering.semantic.wordnet_searchterm_analyzer import WordnetNodeJSONEncoder
 from helpers.general_helpers import print_status, load_visual_features, load_cluster_for_synsets, load_keywords_for_pictures
 from helpers.general_helpers import load_cluster_representatives
 
@@ -76,4 +86,4 @@ def search(searchterm):
   return render_template('index.html', tree=bufferedSearches[searchterm])
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run(debug=False)
