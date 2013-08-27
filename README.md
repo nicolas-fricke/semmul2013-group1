@@ -9,3 +9,7 @@ We're Group 1: Mandy Roick, Claudia Exeler, Tino Junge, and Nicolas Fricke
 
 Our objective is to analyze Images on Flickr and build homogenous clusters of the results.
 Read more: http://semmul2013.blogspot.de/2013/04/seminar-challenge.html [german]
+
+
+Installation instructions on Debian 7
+=================
