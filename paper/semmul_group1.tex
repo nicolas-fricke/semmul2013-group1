@@ -80,28 +80,16 @@
 \end{center}
 
 \noindent
-\todo{Write the abstract}
-Abstract goes here.
 
 \bigskip
-tool for collecting training data for semantic image analysis \\
-images from folksonomies (user annotated) with tag information and title and comments \\
-therefore using meta information for semantic analysis and image itself for visual analysis \\
-With the help of WordNet, create a hierarchy of hyponyms and meronyms \\
-each hierarchy element containing images are additionally clustered according to semantic meta information \\
-and after that also according to visual information \\
-evaluation with crowdsourcing \\
-issues with test set, definition of semantic clusters and only basic visual analysis \\
+This paper describes a tool for creating semantically and visually homogeneous image clusters that can be helpful to collect training data for semantic image analysis algorithms. The images and their semantic meta information are retrieved from a user annotated image collection. For a given term a search tree is spanned using WordNet's hyponym and meronym relationships and used to assign matching images. Each hierarchy element is divided into multiple semantic groups based on the images annotations. Visual homogeneity is achieved by clustering the semantic groups with previously extracted visual image features. \\
+The algorithm was evaluated against crowdsourced reference data on a set of test images. For both the semantic and the visual concept, the results are promising, although some aspects of the approach are not yet fully matured. This includes the definition of semantic clusters, the sophistication of the visual analysis, and the reliability of the reference data.
 
 \newpage
 
 % Dritte Seite = Inhaltsverzeichnis
 \setcounter{tocdepth}{2}
 \tableofcontents
-\newpage
-
-\listoftodos
-\todo{delete list of todos}
 \newpage
 
 \input{chapters/chapter_1.tex}
