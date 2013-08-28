@@ -1,9 +1,9 @@
 %
 \section{Conclusion and Future Work}
 \label{sec_future}
-
-Within this work we described a new approach to cluster images in homogeneous groups by extracting semantic and visual information. Our goal was to assign every image a semantic meaning based on their meta information retrieved from the MIRFLICKR-1M file set and matching these to their meaning based on Synsets from knowledge base WordNet.
-\\ We built a tool which creates a search tree containing hyponyms \index{Hyponym} and meronyms for a given search term and groups matching images into semantically and visually similar clusters.
+\index{Semantic Clustering}\index{Visual Clustering}\index{Synset}\index{WordNet}
+Within this work we described a new approach to cluster images in homogeneous groups by extracting semantic and visual information. Our goal was to assign every image a semantic meaning based on their meta information retrieved from the MIRFLICKR-1M file set and matching these to their meaning based on Synsets from knowledge base WordNet.\\ 
+We built a tool which creates a search tree containing hyponyms \index{Hyponym} and meronyms\index{Meronym} for a given search term and groups matching images into semantically and visually similar clusters.
 
 \bigskip
 The approach is a combination of algorithms which have not yet been combined in this way. Our aim was to retrieve training data for semantic image analysis. However, this work is only a starting point. Our tool permits a general differentiation of images. During our evaluation, we found out that, especially in the semantic analysis, challenges still exist concerning evaluation and level of granularity.
@@ -15,4 +15,4 @@ To continue our work, there are several points of action. One main issue is the 
 
 Because of the challenges in semantic clustering, our visual clustering remains on a basic level. Therefore, further improvements are feasible in the extraction of visual features. The usage of high level features for visual clustering could lead to better results, but the risk exists that clustering results are no longer intuitive. 
 
-Another point of action is the calculation of the number of clusters for k-means. A basic adaptive k algorithm does not increment the quality of our algorithm, but a new abort criterion could be an improvement. Additional enhancements can be achieved by using a more sophisticated approach for late fusion, like ... \todo{find the name of the late fusion algorithm, probably state why not yet used} 
+Another point of action is the calculation of the number of clusters for k-means\index{K-Means}. A basic adaptive k algorithm does not increment the quality of our algorithm, but a new abort criterion could be an improvement. Additional enhancements can be achieved by using a more sophisticated approach for late fusion, like ... \todo{find the name of the late fusion algorithm, probably state why not yet used} 

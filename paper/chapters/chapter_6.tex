@@ -2,7 +2,7 @@
 \section{Results Discussion}
 \label{sec_discussion}
 
-The results of our evaluation are not only affected by our algorithm, but also by the test set. The following sections give an inside to the reasons for unexpected and remarkable results. \todo{probably write a little bit more}
+The results obtained in the evaluation were partly expected, but also partly surprising. The following sections give an insight into the reasons for unexpected and remarkable results.
 
 \subsection{Test Set Quality}
 The evaluation results depend on the test set, which, unfortunately, cannot be clearly right or wrong. Different users will expect different images to be returned according to their definition of food: When some of the participants of the test set creation were asked which items they considered food, the answers ranged from ``Those that I would like to eat'' to ``Anything that some living organism would eat''. \\
@@ -11,16 +11,17 @@ It also has to be assumed that people have different opinions on what images are
 
 \subsection{Image Retrieval}
 One of the reasons for the generally poor precision of the image retrieval may lie in poorly annotated images.
-Other, more controllable reasons, whatsoever, are to be searched in the Synset detection mechanism.
+Other, more controllable reasons, whatsoever, are to be searched in the Synset\index{Synset} detection mechanism.
 First, the limitation to nouns leads to incorrectly identified Synsets because adjectives, adverbs and verbs are wrongly matched to nouns if such exist, e.g. \emph{fall} as a verb for falling under the influence of gravity and as a noun for autumn.
 Second, words in other languages than English may be incorrectly matched if they exist in a different meaning in English, e.g. \emph{gift} for present in English and poison in German.
 And third, the assumption that tags on the same picture are semantically close does not hold in all cases (like words with different meanings also known as homographs), e.g. a \emph{cherry} on a plate made of \emph{wood} would be assigned to the cherry tree meaning instead of cherry as a fruit. \\
-The first two reasons can be addressed by using a more sophisticated ontology and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
+The first two reasons can be addressed by using a more sophisticated ontology\index{Ontology} and similarity measure, but the third requires a rethinking of the Synset detection algorithm.
 
 \bigskip
 The evaluation also indicates the effectiveness of an additional semantic clustering via keyword clusters for the image retrieval. One assumption was, that if only few pictures are assigned to the same keyword cluster, they can be declared as outliers and therefore be deleted from the retrieval result. The parameter \emph{minimal mcl cluster size} determines which clusters are deleted. The results show that increasing the \emph{minimal mcl cluster size} parameter in fact also increases the F-Measure. The best results are achieved if the \emph{minimal mcl cluster size} is greater than \emph{minimal node size}. That means deleting pictures is more effective than merging with parent node.
 
 \subsection{Semantic Clusters}	
+\index{Semantic Clustering}
 The closeness of nodes shows, that images, which were annotated as semantically similar, are in the tree closer to each other than as semantically not similar annotated ones. However, all values are rather close to average tree distance. Furthermore, the varying of parameters influences only the average tree distance, not the difference between distances. In our opinion, pictures, annotated as showing same object, should at least be in the same node, which means closeness should have value greater than 0.5. Images with same context should be in the same cluster, therefore, closeness should be 1. Unfortunately the results are best with other parameters than for a good image retrieval.
 
 \bigskip
@@ -30,7 +31,7 @@ One problem, which we encountered, is the difficulty of defining ``semantically 
 Our semantic evaluation method is a good method to get a quality measure of the complete semantic hierarchy. However, this makes it hard to make statements about the individual semantic clustering steps. For example, the results of the keyword based clustering highly depend on the quality of the calculated keyword clusters. Those are hard to judge in isolation, though.\\	
 
 \subsection{Visual Clusters}
-
+\index{Visual Clustering}
 The visual clustering shows good results in the evaluation, i.e. the clustering puts images a human considers visually different in the majority of cases into different visual clusters. Yet, in the case of 883 images, our algorithm separates the pictures in 23 different clusters, which may be a lot for humans to differentiate. Fortunately, the visual clustering is intended to run on smaller image sets, since the image sets are already semantically pre-clustered. 
 
 \bigskip
