@@ -2,17 +2,19 @@
 \section{Conclusion and Future Work}
 \label{sec_future}
 \index{Semantic Clustering}\index{Visual Clustering}\index{Synset}\index{WordNet}
-Within this work we described a new approach to cluster images in homogeneous groups by extracting semantic and visual information. Our goal was to assign every image a semantic meaning based on their meta information retrieved from the MIRFLICKR-1M file set and matching these to their meaning based on Synsets from knowledge base WordNet.\\ 
-We built a tool which creates a search tree containing hyponyms \index{Hyponym} and meronyms\index{Meronym} for a given search term and groups matching images into semantically and visually similar clusters.
+Within this work a new approach to cluster images in homogeneous groups by extracting semantic and visual information was described. The goal was to assign all images a semantic meaning based on their meta information retrieved from the MIRFLICKR-1M file set and the WordNet knowledge base.\\ 
+A tool was built which creates a search tree containing hyponyms \index{Hyponym} and meronyms\index{Meronym} for a given search term and groups matching images into semantically and visually similar clusters.
 
 \bigskip
-The approach is a combination of algorithms which have not yet been combined in this way. Our aim was to retrieve training data for semantic image analysis. However, this work is only a starting point. Our tool permits a general differentiation of images. During our evaluation, we found out that, especially in the semantic analysis, challenges still exist concerning evaluation and level of granularity.
+The approach makes use of several algorithms which have not yet been combined in this way. Concerning the aim of retrieving training data for semantic image analysis, this work is only a starting point. The tool permits a general differentiation of images. During the evaluation, it became obvious that challenges still exist, especially in the level of granularity of semantic analysis. The evaluation method also has room for improvement, mostly concerning the visual clustering, which could only be analyzed in a different setting due to the lack of data.
 
 \subsection{Semantic Improvements}
-To continue our work, there are several points of action. One main issue is the fact that our keyword clusters are of different levels of abstraction. Some clusters are too large, and could be separated, and others are too small, and should be merged. Another challenge is the correct Synset detection. Additionally more meta information could be used for semantic clustering, like \emph{groups} and \emph{albums}. With the help of named-entity recognition, the \emph{description} can be also valuable. As an alternative to WordNet, it could be possible to use another knowledge base like DBpedia\footnote{http://dbpedia.org/About}. Probably, even a combination can be helpful.
+To continue our work, there are several points of action. One main issue is the fact that the keyword clusters are of different levels of abstraction. Some clusters are too large, and could be separated, while others are too small, and should be merged. \\
+Another challenge is the correct Synset detection, which should produce fewer false matchings and could include more than just nouns.
+Additional meta data might be used as semantic information, like \emph{groups} and \emph{albums}. With the help of named-entity recognition, the \emph{description} can be  valuable as well. As an alternative or addition to WordNet, it could be helpful to use another knowledge base, like DBpedia. 
 
 \subsection{Visual Improvements}
 
-Because of the challenges in semantic clustering, our visual clustering remains on a basic level. Therefore, further improvements are feasible in the extraction of visual features. The usage of high level features for visual clustering could lead to better results, but the risk exists that clustering results are no longer intuitive. 
+Because of the challenges in semantic clustering, our visual clustering remains on a basic level. Therefore, further improvements are imaginable in this part, e.g. the usage of high level features for visual clustering could lead to better results. The risk exists, though, that clustering results are no longer intuitive. 
 
-Another point of action is the calculation of the number of clusters for k-means\index{K-Means}. A basic adaptive k algorithm does not increment the quality of our algorithm, but a new abort criterion could be an improvement. Additional enhancements can be achieved by using a more sophisticated approach for late fusion, like ... \todo{find the name of the late fusion algorithm, probably state why not yet used} 
+Another point of action is the calculation of the number of clusters for k-means\index{K-Means}. A basic adaptive k algorithm does not increase the quality of our algorithm, but a new abort criterion could show improvement. Additional enhancements can be achieved by using a more sophisticated approach for late fusion.

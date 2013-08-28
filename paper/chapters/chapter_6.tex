@@ -2,7 +2,7 @@
 \section{Results Discussion}
 \label{sec_discussion}
 
-The results obtained in the evaluation were partly expected, but also partly surprising. The following sections give an insight into the reasons for unexpected and remarkable results.
+The results obtained in the evaluation were partly expected, but also partly surprising. The following sections give an assessment of the results as well as an insight into the reasons for unexpected and remarkable results.
 
 \subsection{Test Set Quality}
 The evaluation results depend on the test set, which, unfortunately, cannot be clearly right or wrong. Different users will expect different images to be returned according to their definition of food: When some of the participants of the test set creation were asked which items they considered food, the answers ranged from ``Those that I would like to eat'' to ``Anything that some living organism would eat''. \\
@@ -32,10 +32,10 @@ Our semantic evaluation method is a good method to get a quality measure of the 
 
 \subsection{Visual Clusters}
 \index{Visual Clustering}
-The visual clustering shows good results in the evaluation, i.e. the clustering puts images a human considers visually different in the majority of cases into different visual clusters. Yet, in the case of 883 images, our algorithm separates the pictures in 23 different clusters, which may be a lot for humans to differentiate. Fortunately, the visual clustering is intended to run on smaller image sets, since the image sets are already semantically pre-clustered. 
+The visual clustering shows good results in the evaluation, i.e. in most cases, the clustering puts images a human considers visually different into different visual clusters. Yet, with the 883 images, our algorithm separates the pictures in 23 different clusters, which may be a lot for humans to differentiate. Fortunately, the visual clustering is intended to run on smaller, semantically pre-clustered, image sets. 
 
 \bigskip
-When performing the analysis on a smaller subset with 100 images, the precision went up. Additionally, the images were clustered in only 7 clusters. But, the recall decreases , because less clusters lead to less differentiation. \todo{one sentence why falling recall not bad, see last point in notes}
+When performing the analysis on a smaller subset with 100 images, the precision increased. Additionally, the images were clustered in only 7 clusters. The decrease of the recall is to be expected because less clusters lead to less differentiation. However, we believe that for humans, the smaller number of clusters actually makes it easier to grasp the separations between and commonalities within the clusters.
 
 \iffalse{deprecated}
 \begin{enumerate}
