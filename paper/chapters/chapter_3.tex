@@ -75,7 +75,7 @@ Figure \ref{fig_nodestructure} shows the internal data structure of the tree. Ea
 Generally, assigning pictures to tree nodes is simple: Each node gets linked with all images that have been annotated with the Synset\index{Synset} it represents during Synset detection.
 
 In addition, co-occurring tags are used for a higher recall. Co-occurring tags are those keywords that could not be matched to any Synset. They may, however, be closely related to certain Synsets, with which they often occur together (\emph{strong} co-occurrence). When that is the case, the keyword is added to the list of \emph{co\_occurring\_tags} of the node. \\
-We define the strength of a co-occurrence based on term frequency and inverse document frequency (tf-idf) \index{Tf-idf} values. The term frequency describes a normalized frequency of a term $t_i$ in a document $d_i$:
+We define the strength of a co-occurrence based on term frequency and inverse document frequency (tf-idf) \index{Tf-idf} values as presented in \cite{baeza1999modern}. The term frequency describes a normalized frequency of a term $t_i$ in a document $d_i$:
 \[tf(t_i,d_i) = \frac{freq(t_i,d_i)}{\max_k freq(f_k,d_i)}\]
 In our case a Synset is regarded as document and an unmatched keyword as the term. The $freq(t_i,d_i)$ is the number of co-occurrences of that unmatched keyword and Synset. On the contrary, the inverse document frequency describes the inverted frequency of a term over all documents:
 \[idf(t_i, D) = \log \frac{\vert D\vert}{\vert \{d \in D; t_i \text{ occurs in }d\}\vert} \text{, with } D = \{d_1,..., d_n\}\]
