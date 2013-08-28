@@ -22,26 +22,25 @@ It provides ready-to-use semantically and visually homogeneous image clusters fo
 \begin{figure}[!htb]
   \minipage{0.49\textwidth}
     \includegraphics[width=\linewidth]{images/webfrontend-screenshot_1.pdf}
-    \caption{Overview of the web interface (1) search term entered by user (2) semantic hierarchy (3) each line represents one hyponym of the entered search term with associated images}\label{fig_webinerface_1}
+    \caption{Overview of the web interface (1) search term entered by user (2) semantic hierarchy (3) each line represents one node of the entered search term with associated images}\label{fig_webinerface_1}
   \endminipage\hfill
   \minipage{0.49\textwidth}
     \includegraphics[width=\linewidth]{images/webfrontend-screenshot_2.pdf}
-    \caption{Details view for one hyponym (1) selected hyponym with definition (2) dark cyan background groups different semantic clusters (3) white background groups visual clusters}\label{fig_webinerface_2}
+    \caption{Details view for one node (1) selected node with definition (2) dark cyan background groups different semantic clusters (3) white background groups visual clusters}\label{fig_webinerface_2}
   \endminipage\hfill
 \end{figure}
 
 \todo{could be more comprehensive for chapter 1}
 After users entered a search term on the web interface (figure \ref{fig_webinerface_1}.1), they will be presented with a result tree.
 Each meaning WordNet finds for the given search term will result in a root node.
-Hyponyms \todo{Describe, what a hyponym is!} of each node will then be rendered as sub nodes.
-This continues, until no more hyponyms can be found.
+Subordinate terms of each node will then be rendered as sub nodes.
+This continues, until no more subordinate terms can be found.
 As figure \ref{fig_webinerface_1}.2 shows, this hierarchy can then also be seen when hovering over the image rows.
 For each row, the users now see a preview of the images found for this particular meaning of their search term (\ref{fig_webinerface_1}.3). \\
-If one search term now strikes the user's attention, they can get detailed information by clicking on the images.
-Figure \ref{fig_webinerface_2} shows the \emph{details view}, where the definition of the particular hyponym can be found (\ref{fig_webinerface_2}.1).
+By clicking on the images of one node it shows the \emph{details view} (Figure \ref{fig_webinerface_2}), where the definition of the particular subordinate term can be found (\ref{fig_webinerface_2}.1).
 In the details view, the images now appear in more fine grained clusters.
 The dark cyan background groups semantically similar images (\ref{fig_webinerface_2}.2) which have many other tags in common. These most dominant tags are also shown for each semantic sub cluster.
-Within the semantic clusters, the white containers group visually similar images (\ref{fig_webinerface_2}.3). It is in these containers that users can find visually similar images belonging to one semantic topic of the given search term.
+Within the semantic clusters, the white containers group visually similar images (\ref{fig_webinerface_2}.3). 
 
 \bigskip
 
